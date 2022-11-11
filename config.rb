@@ -1,5 +1,7 @@
 require 'govuk_tech_docs'
 
+GovukTechDocs.configure(self)
+
 class PlantUML < Middleman::Extension
   def initialize( app, options_hash = {}, &block)
     super
@@ -23,4 +25,8 @@ end
 
 activate :plantuml
 
-GovukTechDocs.configure(self)
+configure :build do
+  activate :relative_assets
+  set :relative_links, true
+  set :site_url, "/technical-documentation"
+end
