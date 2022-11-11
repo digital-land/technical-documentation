@@ -1,0 +1,26 @@
+require 'govuk_tech_docs'
+
+class PlantUML < Middleman::Extension
+  def initialize( app, options_hash = {}, &block)
+    super
+  end
+  helpers do
+    def plantuml(diagram_path)
+      out, err, status = Open3.capture3(
+        "java -jar #{__dir__}/.bin/plantuml.jar -pipe -tsvg",
+        {
+        stdin_data: File.read("#{__dir__}/source/diagrams/#{diagram_path}"),
+        chdir: "#{__dir__}/source/diagrams/"
+        }
+      )
+      svg = out.gsub( /.*<svg/m, "<svg" ).gsub(/\n/, '').gsub(/<!--(.|\s)*?-->/m, "")
+      concat_content(svg.html_safe)
+    end
+  end
+end
+
+::Middleman::Extensions.register(:plantuml, PlantUML)
+
+activate :plantuml
+
+GovukTechDocs.configure(self)
