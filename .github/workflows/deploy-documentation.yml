@@ -1,0 +1,26 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1.2'
+      - run: gem install middleman
+      - run: git worktree add -B gh-pages build origin/gh-pages
+      - run: make build
+      - run: |
+          git add .
+          git config --global user.name "digital-land-bot"
+          git config --global user.email "digitalland@communities.gov.uk"
+          git commit -m "Publishing changes"
+          git push
+        working-directory: build
+
