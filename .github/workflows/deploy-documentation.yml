@@ -28,5 +28,5 @@ jobs:
           git config --global user.name "digital-land-bot"
           git config --global user.email "digitalland@communities.gov.uk"
           git commit -m "Publishing changes"
-#          git push
+          git push
         working-directory: build
