@@ -10,10 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1.2'
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt-openj9'
+          java-version: '17'
       - run: gem install middleman
+      - run: bundle install
       - run: git worktree add -B gh-pages build origin/gh-pages
       - run: make build
       - run: |
@@ -21,6 +28,5 @@ jobs:
           git config --global user.name "digital-land-bot"
           git config --global user.email "digitalland@communities.gov.uk"
           git commit -m "Publishing changes"
-          git push
+#          git push
         working-directory: build
-
