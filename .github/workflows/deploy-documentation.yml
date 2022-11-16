@@ -19,7 +19,7 @@ jobs:
         with:
           distribution: 'adopt-openj9'
           java-version: '17'
-      - run: apt-get update && apt-get install -y graphviz
+      - run: sudo apt-get update && sudo apt-get install -y graphviz
       - run: gem install middleman
       - run: bundle install
       - run: git worktree add -B gh-pages build origin/gh-pages
