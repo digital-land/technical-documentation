@@ -312,3 +312,166 @@ jobs:
 
 ### Add a new background task
 
+To create a new background task in the terraform configuration, you will need to know the following:
+
+* The **GitHub repository** (under the [digital-land](https://github.com/digital-land) organisation) hosting the task code.
+* A list of events that should trigger a background task run (currently only s3 events are supported).
+* An estimate of the **memory usage** of the task.
+* A list of the task **environment variables**.
+* If the task needs access to the SQLite or MBTiles files.
+
+Add a new section to `variables.tf` under `locals.task_defaults`, replacing attributes as required.
+
+```hcl
+<name> = {
+  // The GitHub repository that hosts the background task code
+  github_repository = "<organisation>/<repository>"
+
+  // Set to true if the GitHub repository contains both a
+  // background task and an application.
+  github_repository_dual = false
+
+  // The resources needed per background task invocation
+  resources = {
+    memory      = 8192
+    cpu_credits = 1024
+  }
+
+  // A map of the events that should trigger this task
+  triggers = {
+    entity-uploaded = {
+      // The events that trigger the task
+      events = ["PutObject", "CompleteMultipartUpload"]
+      // The S3 bucket to watch for events
+      bucket = "${var.stage}-collection-data"
+      // The keys of S3 objects to watch for
+      watch  = ["/entity-builder/dataset/entity.sqlite3"]
+    }
+  }
+}
+```
+
+* Add a new task block in `main_tasks.tf`, replacing attributes as required.
+
+```hcl
+module "task_<name>" {
+  source = "./modules/application-task"
+
+  // Application name
+  name                   = "<name>"
+
+  // The environment this task is deployed to (do not change)
+  stage                  = var.stage
+
+  // All resources created by this module with have their names
+  // prefixed with the string here.
+  resource_prefix        = "${var.stage}-<name>"
+
+  // The ECS cluster this task is deployed to
+  cluster                = module.cluster.cluster
+  // Tags associated with
+  tags                   = module.tags.computed
+  // The environment variables to expose to the task
+  environment            = merge(
+    module.storage.environment,
+    local.tasks["<name>"].environment,
+  )
+  // The stored secrets to inject into the task environment
+  secrets                = module.storage.secrets
+  // var.deployment_approval set to a list of users will enforce approvals
+  //   to deploy to this environment
+  deployment_approval    = var.deployment_approval
+
+  // These are set via the `locals.task_defaults` section in `variables.tf`
+  github_repository      = local.tasks["<name>"].github_repository
+  github_repository_dual = local.tasks["<name>"].github_repository_dual
+  triggers               = local.tasks["<name>"].triggers
+  instances              = local.tasks["<name>"].instances
+  resources              = local.tasks["<name>"].resources
+
+  // EFS volumes to mount for this task
+  volumes                = {
+    datasets = merge(
+      module.storage.files.datasets,
+      // Add this if you wish the volume to be mounted read-only
+      {
+          readonly = true
+      }
+    )
+  }
+
+  // Additional IAM permissions, see `outputs.tf` in `modules/storage`
+  //   for a list of permissions
+  additional_permissions = merge(module.storage.permissions.efs_read)
+
+  network = {
+    vpc_id          = module.network.vpc_id
+    subnets         = module.network.subnet_public_ids
+    security_groups = [module.network.security_group_public_id]
+  }
+}
+```
+
+* Run terraform apply
+* If configured with a GitHub repository add a deployment workflow to the repo,
+    otherwise you need only authenticate using the details under `/<environment>-<name>/deployer/access_*`
+    and push a built docker image to the
+
+**GitHub deployment workflow (Task Only)**
+
+```yaml
+name: Deploy
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: The environment to deploy to.
+
+jobs:
+  detect-environments:
+    runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.environments.outputs.result }}
+    steps:
+      - uses: actions/github-script@v6
+        id: environments
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: json
+          script: |
+            if (context.payload?.inputs?.environment) return [context.payload?.inputs?.environment];
+            const {data: {environments}} =
+              await github.request(`GET /repos/${process.env.GITHUB_REPOSITORY}/environments`);
+            return environments.map(e => e.name)
+
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_REPO: ${{ secrets.DEPLOY_DOCKER_REPOSITORY }}
+    needs: [detect-environments]
+    strategy:
+      matrix:
+        environment: ${{ fromJSON(needs.detect-environments.outputs.environments) }}
+    environment: ${{ matrix.environment }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y rsync
+      - uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+      - uses: aws-actions/amazon-ecr-login@v1
+      - run: docker pull $DOCKER_REPO:latest
+      - run: docker build -t $DOCKER_REPO:${{ steps.vars.outputs.sha_short }} .
+      - run: docker tag $DOCKER_REPO:${{ steps.vars.outputs.sha_short }} $DOCKER_REPO:latest
+      - run: docker push $DOCKER_REPO:${{ steps.vars.outputs.sha_short }}
+      - run: docker push $DOCKER_REPO:latest
+```
