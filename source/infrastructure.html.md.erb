@@ -135,30 +135,34 @@ Add a new section to `variables.tf` under `locals.application_defaults`, replaci
   access = {
     domain = "<subdomain>"
   }
+
   // Any static environment variables
   environment = {
     PORT = 5000 // Defaults to 80
   }
+
   // The GitHub repository that hosts the application code
   github_repository = "<organisation>/<repository>"
+
   // Set to true if the GitHub repository contains both an
   // application and a background task.
   github_repository_dual = false
+
   // The application healthcheck path and timeout
   healthcheck = {
     endpoint = "/"
     timeout = "30"
   }
+
   // Minimum and maximum number of application instances
   // The auto-scaling configuration scales the initial
-  // number on:
-  //  - 60% CPU Utilisation
-  //  - 80% Memory Utilisation
+  // number on 60% CPU Utilisation
   instances = {
     minimum = 1
     maximum = 2
     initial = 1
   }
+
   // The resources needed per application instance
   resources = {
     memory      = 1024
@@ -173,46 +177,63 @@ Add a new section to `variables.tf` under `locals.application_defaults`, replaci
 module "application_<name>" {
   source = "./modules/application"
 
-  name                = "<name>"
-  stage               = var.stage
-  resource_prefix     = "${var.stage}-<name>"
-  cluster             = module.cluster.cluster
-  tags                = module.tags.computed
-  environment         = merge(
+  // Application name
+  name                   = "<name>"
+
+  // The environment this application is deployed to (do not change)
+  stage                  = var.stage
+
+  // All resources created by this module with have their names
+  // prefixed with the string here.
+  resource_prefix        = "${var.stage}-<name>"
+
+  // The ECS cluster this application is deployed to
+  cluster                = module.cluster.cluster
+  // Tags associated with
+  tags                   = module.tags.computed
+  // The environment variables to expose to the application
+  environment            = merge(
     module.storage.environment,
+    local.applications["<name>"].environment,
+  )
+  // The stored secrets to inject into the application environment
+  secrets                = module.storage.secrets
+  // var.deployment_approval set to a list of users will enforce approvals
+  //   to deploy to this environment
+  deployment_approval    = var.deployment_approval
+
+  // These are set via the `locals.application_defaults` section in `variables.tf`
+  github_repository      = local.applications["<name>"].github_repository
+  github_repository_dual = local.applications["<name>"].github_repository_dual
+  healthcheck            = local.applications["<name>"].healthcheck
+  instances              = local.applications["<name>"].instances
+  resources              = local.applications["<name>"].resources
+  access                 = merge(
+    local.applications["<name>"].access,
     {
-      ENVIRONMENT = var.stage
-      PORT = 5000
+      certificate_arn = module.domain.certificate_arn
+      zone_id         = module.domain.zone_id
     }
   )
-  secrets             = merge(
-    module.storage.secrets
-  )
-  github_repository   = local.applications["<name>"].github_repository
-  github_repository_dual = local.applications["<name>"].github_repository_dual
-  deployment_approval = var.deployment_approval
-  healthcheck         = local.applications["<name>"].healthcheck
-  instances           = local.applications["<name>"].instances
-  resources           = local.applications["<name>"].resources
-  volumes             = {
+
+  // EFS volumes to mount for this application
+  //   (must set network mode to awsvpc)
+  volumes                = {
     datasets = merge(
       module.storage.files.datasets,
+      // Add this if you wish the volume to be mounted read-only
       {
           readonly = true
       }
     )
   }
 
-  additional_permissions = merge(
-    module.storage.permissions.efs_read
-  )
-
-  access = merge(local.applications["datasette"].access, {
-    certificate_arn = module.domain.certificate_arn
-    zone_id         = module.domain.zone_id
-  })
+  // Additional IAM permissions, see `outputs.tf` in `modules/storage`
+  //   for a list of permissions
+  additional_permissions = merge(module.storage.permissions.efs_read)
 
   network = {
+    // Set to awsvpc if you need to mount a volume, bridge otherwise
     mode            = "awsvpc"
     vpc_id          = module.network.vpc_id
     subnets         = module.network.subnet_public_ids
@@ -222,21 +243,53 @@ module "application_<name>" {
 ```
 
 * Run terraform apply
-* Check that the service is running on the appropriate domain name
-* Update the slackbot token at `/<environment>-<application>/notifications/slack-token` in SSM
-* If configured with a GitHub repository add a deployment workflow to the repo
+* Check that the service is running on the appropriate domain name, if it is you will see a holding page.
+* Update the slackbot token at `/<environment>-<application>/notifications/slack-token` in AWS SSM
+* If configured with a GitHub repository add a deployment workflow to the repo,
+    otherwise you need only authenticate using the details under `/<environment>-<name>/deployer/access_*`
+    and push a built docker image to the
+
+**GitHub deployment workflow (Application Only)**
 
 ```yaml
 name: Deploy
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: The environment to deploy to.
+
 jobs:
-  deploy-<environment>:
+  # Include any tests or audits in jobs prior to detect-environments.
+  detect-environments:
+    runs-on: ubuntu-latest
+    needs: [] # Add any previous jobs here
+    outputs:
+      environments: ${{ steps.environments.outputs.result }}
+    steps:
+      - uses: actions/github-script@v6
+        id: environments
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: json
+          script: |
+            if (context.payload?.inputs?.environment) return [context.payload?.inputs?.environment];
+            const {data: {environments}} =
+              await github.request(`GET /repos/${process.env.GITHUB_REPOSITORY}/environments`);
+            return environments.map(e => e.name)
+
+  deploy:
     runs-on: ubuntu-latest
     env:
       DOCKER_REPO: ${{ secrets.DEPLOY_DOCKER_REPOSITORY }}
-    environment: <environment>
+    needs: [detect-environments]
+    strategy:
+      matrix:
+        environment: ${{ fromJSON(needs.detect-environments.outputs.environments) }}
+    environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v3
       - id: vars
