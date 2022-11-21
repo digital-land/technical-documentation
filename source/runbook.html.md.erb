@@ -31,6 +31,15 @@ INCIDENT_RESPONSE_DOCUMENT
 Resolving an outage is an iterative process that should be improved with the lessons learnt from the previous outages.
 It is suggested that the outage document contain the following headers to direct work appropriately.
 
+* **Outage - APPLICATION - DATE (YYYY-MM-DD format)**
+* **In attendance** - a list of people who have responded to the outage and the roles they have taken.
+* **Description** - A brief description of the outage, including affected services
+* **Running log** - Put timestamped entries under here including actions, observations, etc.
+    * Action **TIME We did x.**
+    * Observation **TIME We observed that x happened.**
+* **Postmortem** - A few paragraphs explaining the root cause of the issue and what measures have been taken to mitigate
+further instances.
+
 Outage Roles:
 
 * **Scribe** The role of scribe is to maintain the incident report document during diagnosis and resolution of the outage.
@@ -44,20 +53,12 @@ Outage Roles:
   * Requires read-write access to the AWS account hosting the applications that are experiencing an outage.
   * Requires read-write access to any GitHub repositories hosting code for the applications that are experiencing an outage.
 
-* **Outage - APPLICATION - DATE (YYYY-MM-DD format)**
-* **In attendance** - a list of people who have responded to the outage and the roles they have taken.
-* **Description** - A brief description of the outage, including affected services
-* **Running log** - Put timestamped entries under here including actions, observations, etc.
-    * Action **TIME We did x, under advice from / because.**
-    * Observation **TIME We observed that x happened.**
-* **Postmortem** - A few paragraphs explaining the root cause of the issue and what measures have been taken to mitigate
-further instances.
-
 It is worth checking the [incident response history](#incident-response-history)
 
 Once the outage has been resolved it is a good idea to take a break before reflecting on the outage and completing the
 postmortem section of the document. Once the document is complete, the contents must be copied under the section
-[Incident Response History](#incident-response-history) for future reference.
+[Incident Response History](#incident-response-history) for future reference, taking care to remove any secret
+information from the document.
 
 ## Common Issues
 
