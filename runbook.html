@@ -90,6 +90,11 @@
       </li>
       <li>
         <a href="./runbook.html#incident-response-history"><span>Incident Response History</span></a>
+        <ul>
+          <li>
+            <a href="./runbook.html#all-applications-on-planning-data-gov-uk-2022-11-22"><span>All applications on planning.data.gov.uk - 2022-11-22</span></a>
+          </li>
+        </ul>
       </li>
     </ul>
   </li>
@@ -329,6 +334,64 @@ postmortem section of the document. Once the document is complete, the contents 
 information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <h2 id="incident-response-history">Incident Response History</h2>
+<h3 id="all-applications-on-planning-data-gov-uk-2022-11-22">All applications on planning.data.gov.uk - 2022-11-22</h3>
+<h4 id="in-attendance">In attendance</h4>
+<p>Async on slack:</p>
+
+<ul>
+<li>Paul Downey</li>
+<li>Lawrence Goldstien</li>
+<li>Paul Smith</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>On the morning of the 22nd the decision was taken to switch over to the new infrastructure setup in the production
+account. We made preparations by adding a service outage banner to the application as we were aware that some downtime
+would be experienced while DNS updated globally. After the switchover Lawrence was able to access the new infrastructure
+so assumed everything was going to plan. At 2:45pm Paul Downey noted that the site was not accessible and diagnostic
+procedures started at that point.</p>
+<h4 id="running-log">Running log</h4>
+
+<ul>
+<li>GDS contact confirmed the DNS change had been actioned at 2:15pm</li>
+<li>Lawrence observed that the datasette and datasette tiles applications were available on the new domain at 2:20pm</li>
+<li>Lawrence observed that the main application was available at 2:35pm</li>
+<li>Paul Downey observed that the site was still not accessible for him and posted the results of a dig on the main
+application domain at 2:50pm</li>
+<li>Lawrence used the site https://www.whatsmydns.net/#NS/planning.data.gov.uk to check for propagation and noted that
+most DNS servers had updated to the new environment at 3pm</li>
+<li>Paul Downey observed that the website worked for him at 4pm</li>
+<li>Lawrence and Paul Downey observed that the site was working intermittently from 4pm to 6pm.</li>
+</ul>
+<p><strong>NEXT DAY (2022-11-23)</strong></p>
+
+<ul>
+<li>Paul Downey observed that the site worked for him when tethered to his phone but saw that one in three runs of dig
+against the domain returned empty results at 9am</li>
+<li>Paul Downey posted into the digital planning slack to advise that we thought the change went through and to let the
+team know of any issues at 9am</li>
+<li>Lawrence observed that some DNS servers had longer TTLs for the domain compared to the current and old DNS records
+TTLs of 24 hours at 1pm</li>
+<li>The decision was made to wait out the full 48 hours of TTL and continue work to solve the issues afterwards at 1:30pm</li>
+</ul>
+<p><strong>NEXT DAY (2022-11-24)</strong></p>
+
+<ul>
+<li>Paul Downey noted that the DNS responses where still not returned consistently when running a dig command at 8:30am</li>
+<li>Lawrence ran some diagnostics against a selection of public DNS servers and noted that the data.gov.uk domain has two
+sets of DNS servers: AWS and Google Cloud. Lawrence found that running a dig against AWS servers for the domain
+returned details for the new domain whereas running a dig against the Google Cloud returned no results at 10am</li>
+<li>Lawrence drafted a message to be sent to GDS detailing the issues with the Google Cloud nameservers at 10am</li>
+<li>GDS confirmed the issue and confirmed they had synced AWS and Google Cloud nameservers at 11:50am</li>
+<li>Paul Downey observed that the site was up and running for him at 11:55am</li>
+<li>Lawrence completed further checks and noted that most global DNS servers had updated to the new infrastructure at 12pm</li>
+</ul>
+<h4 id="postmortem">Postmortem</h4>
+<p>We felt the team reacted well to this outage and stakeholders were understanding of the downtime.</p>
+<p>Paul Smith developed a pattern for service status messages to users and added feedback to the
+<a href="https://github.com/alphagov/govuk-design-system-backlog/issues/266">GOV.UK Design system</a>.</p>
+<p>In reflection the team could have recognised the issues sooner and checked more details of the DNS configuration.</p>
+<p>We could have offered the old address https://digital-land.info to OSL and other groups as a fallback while the system
+was down.</p>
 
             
           </main>

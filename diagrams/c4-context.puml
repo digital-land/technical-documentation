@@ -15,7 +15,7 @@ System(app_main, "[[https://www.planning.data.gov.uk Application]]", "Main appli
 System(app_datasette_tiles, "[[https://datasette-tiles.planning.data.gov.uk Map Tile API]]", "Map tile server, serving vectors for use the main application user interface.")
 System(app_datasette, "[[https://datasette.planning.data.gov.uk Data API]]", "Data server, responding to SQL queries from the main application.")
 
-SystemDb(data_static_files, "[[https://files.planning.data.gov.uk Archive Storage]]", "Stores data from publishers making it available for sync with other applications.")
+SystemDb(data_static_files, "[[https://files.planning.data.gov.uk/index.html Archive Storage]]", "Stores data from publishers making it available for sync with other applications.")
 
 Rel_Down(user_data_provider, app_data_provider, "Publishes Data")
 
