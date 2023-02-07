@@ -14,6 +14,7 @@ planning data system.
 <% plantuml("c4-context.puml") %>
 
 There are two repositories that handle our infrastructure:
+
 * Digital Land Infrastructure - this contains our primary infrastructure and allows the user to interact all environments and is what the instructions in this guide aim to help with.
 * Global Digital Land Infrastructure - this mainly contains infrastructure that needs to lie outside of the other repo such as nameserver records to subdomains as well as lagacy infrustructure such as s3 buckets who's content is stored in glacier
 
@@ -109,7 +110,7 @@ command to make this easier. Run with `--dryrun` to preview the files to be sync
 ```bash
 aws s3 sync s3://[source]-collection-data s3://[destination]-collection-data
 ```
-Note: may be worth deployed the main appliication once before deploying data and once after as the database schema is applied when the application is
+<strong>Note:</strong> It may be worth deployed the main appliication once before deploying data and once after as the database schema is applied when the application is
     
 #### Deploying applications
 
@@ -122,7 +123,7 @@ Now the new environment is up and running you should deploy the following applic
 * [datasette-tiles (application)](https://github.com/digital-land/tiles-builder/actions/workflows/deploy-application.yml)
     A web service that allows the main application's frontend to draw vector tiles on the map feature from our datasets.
 
-Note: data may need to be re-deployed to the postgres db once the application has been deployed due to the build failing if no data is found but the database schema only being deployed when the app is
+<strong>Note:</strong> data may need to be re-deployed to the postgres db once the application has been deployed due to the build failing if no data is found but the database schema only being deployed when the app is
 
 ## Configuration Changes
 
