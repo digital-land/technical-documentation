@@ -321,11 +321,14 @@ once delegation is complete.</p>
 resources. The new infrastructure is now set up, and all that remains is to deploy applications into the new
 environment. At this point all applications will serve a page stating that the service will shortly be resumed.</p>
 <p><strong>Note:</strong> The following slack bot token parameters required to be update manaully in the aws Parameter Store (SSM). 
-The slack bot token <code>(dl-github-actions)</code> values are the same across all envirnments and can be obtains from other environment notification slack token or from Slack direct.
-* /&lsquo;<environment>&rsquo;-datasette-tiles/notifications/slack-token
-* /&lsquo;<environment>&rsquo;-datasette/notifications/slack-token
-* /&lsquo;<environment>&rsquo;-main/notifications/slack-token
-* /&lsquo;<environment>&rsquo;-status/notifications/slack-token</p>
+The slack bot token <code>(dl-github-actions)</code> values are the same across all envirnments and can be obtains from other environment notification slack token or from Slack direct.</p>
+
+<ul>
+<li>/<environment>-datasette-tiles/notifications/slack-token</li>
+<li>/<environment>-datasette/notifications/slack-token</li>
+<li>/<environment>-main/notifications/slack-token</li>
+<li>/<environment>-status/notifications/slack-token</li>
+</ul>
 <h4 id="deploying-data">Deploying data</h4>
 <p>In order for the applications to start and run we must have data in the platform. Firstly we need both background tasks
 deployed to the environment prior to uploading data for processing.</p>
