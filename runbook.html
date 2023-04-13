@@ -94,6 +94,9 @@
           <li>
             <a href="./runbook.html#all-applications-on-planning-data-gov-uk-2022-11-22"><span>All applications on planning.data.gov.uk - 2022-11-22</span></a>
           </li>
+          <li>
+            <a href="./runbook.html#getting-error-500-on-planning-data-gov-uk-2023-04-11"><span>Getting error 500 on planning.data.gov.uk - 2023-04-11</span></a>
+          </li>
         </ul>
       </li>
     </ul>
@@ -392,6 +395,31 @@ returned details for the new domain whereas running a dig against the Google Clo
 <p>In reflection the team could have recognised the issues sooner and checked more details of the DNS configuration.</p>
 <p>We could have offered the old address https://digital-land.info to OSL and other groups as a fallback while the system
 was down.</p>
+<h3 id="getting-error-500-on-planning-data-gov-uk-2023-04-11">Getting error 500 on planning.data.gov.uk - 2023-04-11</h3>
+<h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-description">Description</h4>
+<p>On the morning of 11th April 2023 at 7:34a.m. Paul Downey noted that the site getting intermittent 500 error and diagnostic
+procedures started at that point.</p>
+<h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-running-log">Running log</h4>
+
+<ul>
+<li>Ernest and Owen have done a numbers of checks across the platform and noticed the postgres RDS database (Reader instance) was 
+maxed-out on CPU due to the following query. This may caused by someone trying to download lots of data. </li>
+</ul>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>2023-04-11 06:04:02 UTC:10.0.43.141(45314):root@planning:[22027]:STATEMENT: SELECT ST_AsGeoJSON(entity.geometry) AS “ST_AsGeoJSON_1", 
+ST_AsGeoJSON(entity.point) AS “ST_AsGeoJSON_2”, entity.entity AS entity_entity, entity.name AS entity_name, 
+entity.entry_date AS entity_entry_date, entity.start_date AS entity_start_date, entity.end_date AS entity_end_date, 
+entity.dataset AS entity_dataset, entity.json AS entity_json, entity.organisation_entity AS entity_organisation_entity, 
+entity.prefix AS entity_prefix, entity.reference AS entity_reference, entity.typology AS entity_typology, 
+ST_AsEWKB(entity.geometry) AS entity_geometry, ST_AsEWKB(entity.point) AS entity_point, count(entity.entity) OVER () AS count
+FROM entity ORDER BY entity.entity
+LIMIT 10 OFFSET 569100
+
+</code></pre></div><h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-postmortem">Postmortem</h4>
+
+<ul>
+<li>Ernest will implement aws alarm for the postgres database&rsquo;s CPU when it reached above 60% threshold.</li>
+<li>A new ticket have been created to look into this issue in more details. </li>
+</ul>
 
             
           </main>
