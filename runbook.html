@@ -402,7 +402,7 @@ procedures started at that point.</p>
 <h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-running-log">Running log</h4>
 
 <ul>
-<li>Ernest and Owen have done a numbers of checks across the platform and noticed the postgres RDS database (Reader instance) was 
+<li>Ernest and Owen have done a number of checks across the platform and noticed the postgres RDS database (Reader instance) was 
 maxed-out on CPU due to the following query. This may caused by someone trying to download lots of data. </li>
 </ul>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>2023-04-11 06:04:02 UTC:10.0.43.141(45314):root@planning:[22027]:STATEMENT: SELECT ST_AsGeoJSON(entity.geometry) AS “ST_AsGeoJSON_1", 
