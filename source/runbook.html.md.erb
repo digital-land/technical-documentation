@@ -155,3 +155,69 @@ LIMIT 10 OFFSET 569100
 
 * Ernest implemented an [aws alarm](https://eu-west-2.console.aws.amazon.com/cloudwatch/home?region=eu-west-2#alarmsV2:alarm/production-rds-alarm?) for the postgres database's CPU when it reached above 60% threshold.
 * A new [ticket](https://trello.com/c/DaXtE5v0) have been created to look into this issue in more details. 
+
+
+### Slowness reported on planning.data.gov.uk - 2023-06-01
+
+#### In attendance
+
+Async on slack:
+
+* Warren Hobden
+* Ernest Man
+* Mark Smith
+* Adam Shimali
+
+#### Description
+
+On the morning of 1st June 2023 at 10:15a.m. User reported the planning data site slowness and the Entity & Dataset API endpoints are also affected 
+by intermittent 500 error and diagnostic procedures started at that point. In addition, PlanX also seems impacted by the same issue and they reported
+on Friday 2nd June 2023.
+
+
+#### Running log
+* Ernest, Mark and Adam have done some detailed investigation as we are seeing this similiar issue second time. The first incident happened in April 2023
+we initially thought it was due to the auto minor databse version upgrade by aws as it happen around the same time when we have the outage.
+
+The postgres RDS database (Reader instance) was maxed-out on CPU due to the following error and query. 
+
+```
+ERROR:  could not write to file “base/pgsql_tmp/pgsql_tmp31290.8”: No space left on device
+2023-06-01 11:51:47 UTC:10.0.24.253(34156):root@planning:[31290]:ERROR: could not write to file 
+“base/pgsql_tmp/pgsql_tmp31290.8": No space left on device
+```
+
+```
+2023-06-01 11:51:47 UTC:10.0.24.253(34156):root@planning:[31290]:STATEMENT:  
+SELECT ST_AsGeoJSON(entity.geometry) AS “ST_AsGeoJSON_1”, ST_AsGeoJSON(entity.point) AS “ST_AsGeoJSON_2", 
+entity.entity AS entity_entity, entity.name AS entity_name, entity.entry_date AS entity_entry_date, 
+entity.start_date AS entity_start_date, entity.end_date AS entity_end_date, entity.dataset AS entity_dataset, 
+entity.json AS entity_json, entity.organisation_entity AS entity_organisation_entity, entity.prefix AS entity_prefix, 
+entity.reference AS entity_reference, entity.typology AS entity_typology, ST_AsEWKB(entity.geometry) AS entity_geometry, 
+ST_AsEWKB(entity.point) AS entity_point, count(entity.entity) OVER () AS count
+FROM entity ORDER BY entity.entity
+LIMIT 10 OFFSET 536990
+```
+
+Summary of the issue: We use a limit/offset query to provide paginated access to the data. 
+We're seeing very large offsets (greater than 500,000) which looks like a search engine or similar 
+is crawling through the entity pages. Large offsets cause inefficiencies for the database, 
+which is we believe the cause of the problem you are seeing with the site being down.
+
+#### Postmortem
+
+* We have temporary increased the number of database reader nodes in Production, which seems to have addressed the issue in the short term.
+* Adam has re-write the [entity query](https://github.com/digital-land/digital-land.info/pull/114/files) so it does not use limit/offset.
+* Mark has also added a robots.txt file which can be used to ask search engine crawlers to exclude certain parts of the web site.
+* [ticket](https://trello.com/c/QEGoMUqk) have been created to enabled databse auto scaling in production.
+* [Live incident ticket](https://trello.com/c/qmoKooTm) also created.
+
+**NEXT DAY (2023-06-02)**
+
+* After we have increases the number of reader nodes in the morning and it seesm the site ir running fine.
+* The team continous monitoring the production database server and logs.
+* We also deployed the robots.txt PR into Development for further testing.
+
+**On (2023-06-05)**
+* The planning data site seems back to normal
+* Testing database auto scaling in development environemt and ready for deploy into production.
