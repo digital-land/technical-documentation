@@ -208,7 +208,7 @@ which is we believe the cause of the problem you are seeing with the site being 
 
 * We have temporary increased the number of database reader nodes in Production, which seems to have addressed the issue in the short term.
 * Adam has re-write the [entity query](https://github.com/digital-land/digital-land.info/pull/114/files) so it does not use limit/offset.
-* Mark has also added a robots.txt file which can be used to ask search engine crawlers to exclude certain parts of the web site.
+* Mark has also added a [robots.txt](https://github.com/digital-land/digital-land.info/pull/116/files) file which can be used to ask search engine crawlers to exclude certain parts of the web site.
 * [ticket](https://trello.com/c/QEGoMUqk) have been created to enabled database auto scaling in production.
 * [Live incident ticket](https://trello.com/c/qmoKooTm) also created.
 
@@ -221,7 +221,7 @@ which is we believe the cause of the problem you are seeing with the site being 
 **On (2023-06-05)**
 
 * The planning data site seems back to normal
-* Testing database auto scaling in development environemt and ready for deploy into production.
+* Testing [database auto scaling](https://github.com/digital-land/digital-land-infrastructure/pull/65/files) in development environemt and ready for deploy into production.
 * Testing robots.txt in development environment
 * Paul Downey rasied a point about malicious usage, he mentioned datasette has similar restrictions on the size of a result set got returned. 
 we will look at this and put some restrictions around it.
