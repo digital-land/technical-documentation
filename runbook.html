@@ -485,6 +485,13 @@ which is we believe the cause of the problem you are seeing with the site being 
 <li>Paul Downey rasied a point about malicious usage, he mentioned datasette has similar restrictions on the size of a result set got returned. 
 we will look at this and put some restrictions around it.</li>
 </ul>
+<p><strong>On (2023-06-06)</strong></p>
+
+<ul>
+<li>The RDS database auto scaling is now deployed to production and the planning data site seems running fine.</li>
+<li>New <a href="https://trello.com/c/mNoSqt17">Synthetics Canaries ticket</a> created to included the following backend API endpoints. https://www.planning.data.gov.uk/entity.json?limit=10 
+and https://www.planning.data.gov.uk/dataset.json</li>
+</ul>
 
             
           </main>
