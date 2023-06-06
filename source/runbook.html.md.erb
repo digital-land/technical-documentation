@@ -225,3 +225,10 @@ which is we believe the cause of the problem you are seeing with the site being 
 * Testing robots.txt in development environment
 * Paul Downey rasied a point about malicious usage, he mentioned datasette has similar restrictions on the size of a result set got returned. 
 we will look at this and put some restrictions around it.
+
+**On (2023-06-06)**
+
+* The RDS database auto scaling is now deployed to production and the planning data site seems running fine.
+* New [Synthetics Canaries ticket](https://trello.com/c/mNoSqt17) created to included the following backend API endpoints. https://www.planning.data.gov.uk/entity.json?limit=10 
+and https://www.planning.data.gov.uk/dataset.json
+
