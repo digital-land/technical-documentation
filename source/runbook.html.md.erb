@@ -237,3 +237,36 @@ and https://www.planning.data.gov.uk/dataset.json
 * The planning site continous to run fine with averaging around 20% database CPU utilization and we have also included the robots.txt changes.
 
 
+### Documentation section on planning.data.gov.uk showing error - 2023-06-12
+
+#### In attendance
+
+Async on slack:
+
+* Swati Dash
+* Owen Eveleigh
+* Ernest Man
+* Mark Smith
+
+
+#### Description
+
+On the morning of 12th June 2023 at 09:55a.m. Swati reported the planning data site Documentation section is showing error. 
+
+
+#### Running log
+* Ernest and Mark started investigation at around 10am. We cannot see any issue from the infrastructure side and the error 
+seems to have appear in the lower environments (Dev and staging) too. So we suspect this is a coding issue and Mark have started 
+to investigate this matter further. 
+
+Summary of the issue: The robots.txt server route did not explicitly tell Fast API to exclude it from application API schema.
+Mark have rasied a PR to address the issue.
+
+#### Postmortem
+
+* Mark PR [hotfix](https://github.com/digital-land/digital-land.info/pull/119)
+* [Live incident ticket](https://trello.com/c/63K0MDi3) have been created.
+* Ernest now included "/docs" in the canary test [ticket](https://trello.com/c/mNoSqt17) also created.
+
+
+
