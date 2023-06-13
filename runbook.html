@@ -100,6 +100,9 @@
           <li>
             <a href="./runbook.html#slowness-reported-on-planning-data-gov-uk-2023-06-01"><span>Slowness reported on planning.data.gov.uk - 2023-06-01</span></a>
           </li>
+          <li>
+            <a href="./runbook.html#documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12"><span>Documentation section on planning.data.gov.uk showing error - 2023-06-12</span></a>
+          </li>
         </ul>
       </li>
     </ul>
@@ -496,6 +499,34 @@ and https://www.planning.data.gov.uk/dataset.json</li>
 
 <ul>
 <li>The planning site continous to run fine with averaging around 20% database CPU utilization and we have also included the robots.txt changes.</li>
+</ul>
+<h3 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12">Documentation section on planning.data.gov.uk showing error - 2023-06-12</h3>
+<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-in-attendance">In attendance</h4>
+<p>Async on slack:</p>
+
+<ul>
+<li>Swati Dash</li>
+<li>Owen Eveleigh</li>
+<li>Ernest Man</li>
+<li>Mark Smith</li>
+</ul>
+<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-description">Description</h4>
+<p>On the morning of 12th June 2023 at 09:55a.m. Swati reported the planning data site Documentation section is showing error.</p>
+<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-running-log">Running log</h4>
+
+<ul>
+<li>Ernest and Mark started investigation at around 10am. We cannot see any issue from the infrastructure side and the error 
+seems to have appear in the lower environments (Dev and staging) too. So we suspect this is a coding issue and Mark have started 
+to investigate this matter further. </li>
+</ul>
+<p>Summary of the issue: The robots.txt server route did not explicitly tell Fast API to exclude it from application API schema.
+Mark have rasied a PR to address the issue.</p>
+<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-postmortem">Postmortem</h4>
+
+<ul>
+<li>Mark PR <a href="https://github.com/digital-land/digital-land.info/pull/119">hotfix</a></li>
+<li><a href="https://trello.com/c/63K0MDi3">Live incident ticket</a> have been created.</li>
+<li>Ernest now included &ldquo;/docs&rdquo; in the canary test <a href="https://trello.com/c/mNoSqt17">ticket</a> also created.</li>
 </ul>
 
             
