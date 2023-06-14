@@ -92,16 +92,16 @@
         <a href="./runbook.html#incident-response-history"><span>Incident Response History</span></a>
         <ul>
           <li>
-            <a href="./runbook.html#all-applications-on-planning-data-gov-uk-2022-11-22"><span>All applications on planning.data.gov.uk - 2022-11-22</span></a>
-          </li>
-          <li>
-            <a href="./runbook.html#getting-error-500-on-planning-data-gov-uk-2023-04-11"><span>Getting error 500 on planning.data.gov.uk - 2023-04-11</span></a>
+            <a href="./runbook.html#documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12"><span>Documentation section on planning.data.gov.uk showing error - 2023-06-12</span></a>
           </li>
           <li>
             <a href="./runbook.html#slowness-reported-on-planning-data-gov-uk-2023-06-01"><span>Slowness reported on planning.data.gov.uk - 2023-06-01</span></a>
           </li>
           <li>
-            <a href="./runbook.html#documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12"><span>Documentation section on planning.data.gov.uk showing error - 2023-06-12</span></a>
+            <a href="./runbook.html#getting-error-500-on-planning-data-gov-uk-2023-04-11"><span>Getting error 500 on planning.data.gov.uk - 2023-04-11</span></a>
+          </li>
+          <li>
+            <a href="./runbook.html#all-applications-on-planning-data-gov-uk-2022-11-22"><span>All applications on planning.data.gov.uk - 2022-11-22</span></a>
           </li>
         </ul>
       </li>
@@ -343,99 +343,43 @@ postmortem section of the document. Once the document is complete, the contents 
 information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="all-applications-on-planning-data-gov-uk-2022-11-22">All applications on planning.data.gov.uk - 2022-11-22</h3>
+<h3 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12">Documentation section on planning.data.gov.uk showing error - 2023-06-12</h3>
 <h4 id="in-attendance">In attendance</h4>
-<p>Async on slack:</p>
-
-<ul>
-<li>Paul Downey</li>
-<li>Lawrence Goldstien</li>
-<li>Paul Smith</li>
-</ul>
+<p>Async on slack:
+* Swati Dash
+* Owen Eveleigh
+* Ernest Man
+* Mark Smith</p>
 <h4 id="description">Description</h4>
-<p>On the morning of the 22nd the decision was taken to switch over to the new infrastructure setup in the production
-account. We made preparations by adding a service outage banner to the application as we were aware that some downtime
-would be experienced while DNS updated globally. After the switchover Lawrence was able to access the new infrastructure
-so assumed everything was going to plan. At 2:45pm Paul Downey noted that the site was not accessible and diagnostic
-procedures started at that point.</p>
+<p>On the morning of 12th June 2023 at 09:55a.m. Swati reported the planning data site Documentation section is showing error.</p>
 <h4 id="running-log">Running log</h4>
 
 <ul>
-<li>GDS contact confirmed the DNS change had been actioned at 2:15pm</li>
-<li>Lawrence observed that the datasette and datasette tiles applications were available on the new domain at 2:20pm</li>
-<li>Lawrence observed that the main application was available at 2:35pm</li>
-<li>Paul Downey observed that the site was still not accessible for him and posted the results of a dig on the main
-application domain at 2:50pm</li>
-<li>Lawrence used the site https://www.whatsmydns.net/#NS/planning.data.gov.uk to check for propagation and noted that
-most DNS servers had updated to the new environment at 3pm</li>
-<li>Paul Downey observed that the website worked for him at 4pm</li>
-<li>Lawrence and Paul Downey observed that the site was working intermittently from 4pm to 6pm.</li>
+<li>Ernest and Mark started investigation at around 10am. We cannot see any issue from the infrastructure side and the error 
+seems to have appear in the lower environments (Dev and staging) too. So we suspect this is a coding issue and Mark have started 
+to investigate this matter further. </li>
 </ul>
-<p><strong>NEXT DAY (2022-11-23)</strong></p>
-
-<ul>
-<li>Paul Downey observed that the site worked for him when tethered to his phone but saw that one in three runs of dig
-against the domain returned empty results at 9am</li>
-<li>Paul Downey posted into the digital planning slack to advise that we thought the change went through and to let the
-team know of any issues at 9am</li>
-<li>Lawrence observed that some DNS servers had longer TTLs for the domain compared to the current and old DNS records
-TTLs of 24 hours at 1pm</li>
-<li>The decision was made to wait out the full 48 hours of TTL and continue work to solve the issues afterwards at 1:30pm</li>
-</ul>
-<p><strong>NEXT DAY (2022-11-24)</strong></p>
-
-<ul>
-<li>Paul Downey noted that the DNS responses where still not returned consistently when running a dig command at 8:30am</li>
-<li>Lawrence ran some diagnostics against a selection of public DNS servers and noted that the data.gov.uk domain has two
-sets of DNS servers: AWS and Google Cloud. Lawrence found that running a dig against AWS servers for the domain
-returned details for the new domain whereas running a dig against the Google Cloud returned no results at 10am</li>
-<li>Lawrence drafted a message to be sent to GDS detailing the issues with the Google Cloud nameservers at 10am</li>
-<li>GDS confirmed the issue and confirmed they had synced AWS and Google Cloud nameservers at 11:50am</li>
-<li>Paul Downey observed that the site was up and running for him at 11:55am</li>
-<li>Lawrence completed further checks and noted that most global DNS servers had updated to the new infrastructure at 12pm</li>
-</ul>
+<p>Summary of the issue: The robots.txt server route did not explicitly tell Fast API to exclude it from application API schema.
+Mark have rasied a PR to address the issue.</p>
 <h4 id="postmortem">Postmortem</h4>
-<p>We felt the team reacted well to this outage and stakeholders were understanding of the downtime.</p>
-<p>Paul Smith developed a pattern for service status messages to users and added feedback to the
-<a href="https://github.com/alphagov/govuk-design-system-backlog/issues/266">GOV.UK Design system</a>.</p>
-<p>In reflection the team could have recognised the issues sooner and checked more details of the DNS configuration.</p>
-<p>We could have offered the old address https://digital-land.info to OSL and other groups as a fallback while the system
-was down.</p>
-<h3 id="getting-error-500-on-planning-data-gov-uk-2023-04-11">Getting error 500 on planning.data.gov.uk - 2023-04-11</h3>
-<h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-description">Description</h4>
-<p>On the morning of 11th April 2023 at 7:34a.m. Paul Downey noted that the site getting intermittent 500 error and diagnostic
-procedures started at that point.</p>
-<h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-running-log">Running log</h4>
 
 <ul>
-<li>Ernest and Owen have done a number of checks across the platform and noticed the postgres RDS database (Reader instance) was 
-maxed-out on CPU due to the following query. This may caused by someone trying to download lots of data. </li>
+<li>Mark PR <a href="https://github.com/digital-land/digital-land.info/pull/119">hotfix</a></li>
+<li><a href="https://trello.com/c/63K0MDi3">Live incident ticket</a> have been created.</li>
+<li>Ernest now included &ldquo;/docs&rdquo; in the canary test, <a href="https://trello.com/c/mNoSqt17">ticket</a> also created.</li>
 </ul>
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>2023-04-11 06:04:02 UTC:10.0.43.141(45314):root@planning:[22027]:STATEMENT: SELECT ST_AsGeoJSON(entity.geometry) AS “ST_AsGeoJSON_1", 
-ST_AsGeoJSON(entity.point) AS “ST_AsGeoJSON_2”, entity.entity AS entity_entity, entity.name AS entity_name, 
-entity.entry_date AS entity_entry_date, entity.start_date AS entity_start_date, entity.end_date AS entity_end_date, 
-entity.dataset AS entity_dataset, entity.json AS entity_json, entity.organisation_entity AS entity_organisation_entity, 
-entity.prefix AS entity_prefix, entity.reference AS entity_reference, entity.typology AS entity_typology, 
-ST_AsEWKB(entity.geometry) AS entity_geometry, ST_AsEWKB(entity.point) AS entity_point, count(entity.entity) OVER () AS count
-FROM entity ORDER BY entity.entity
-LIMIT 10 OFFSET 569100
-
-</code></pre></div><h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-postmortem">Postmortem</h4>
+<p><strong>On (2023-06-14)</strong></p>
 
 <ul>
-<li>Ernest implemented an <a href="https://eu-west-2.console.aws.amazon.com/cloudwatch/home?region=eu-west-2#alarmsV2:alarm/production-rds-alarm?">aws alarm</a> for the postgres database&rsquo;s CPU when it reached above 60% threshold.</li>
-<li>A new <a href="https://trello.com/c/DaXtE5v0">ticket</a> have been created to look into this issue in more details. </li>
+<li>The Documentation section is showing without any error, we have also implemented canary test for checking the /doc endpoint.</li>
 </ul>
 <h3 id="slowness-reported-on-planning-data-gov-uk-2023-06-01">Slowness reported on planning.data.gov.uk - 2023-06-01</h3>
 <h4 id="slowness-reported-on-planning-data-gov-uk-2023-06-01-in-attendance">In attendance</h4>
-<p>Async on slack:</p>
-
-<ul>
-<li>Warren Hobden</li>
-<li>Ernest Man</li>
-<li>Mark Smith</li>
-<li>Adam Shimali</li>
-</ul>
+<p>Async on slack:
+* Warren Hobden
+* Ernest Man
+* Mark Smith
+* Adam Shimali</p>
 <h4 id="slowness-reported-on-planning-data-gov-uk-2023-06-01-description">Description</h4>
 <p>On the morning of 1st June 2023 at 10:15a.m. User reported the planning data site slowness and the Entity &amp; Dataset API endpoints are also affected 
 by intermittent 500 error and diagnostic procedures started at that point. In addition, PlanX also seems impacted by the same issue and they reported
@@ -500,39 +444,79 @@ and https://www.planning.data.gov.uk/dataset.json</li>
 <ul>
 <li>The planning site continous to run fine with averaging around 20% database CPU utilization and we have also included the robots.txt changes.</li>
 </ul>
-<h3 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12">Documentation section on planning.data.gov.uk showing error - 2023-06-12</h3>
-<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-in-attendance">In attendance</h4>
-<p>Async on slack:</p>
+<h3 id="getting-error-500-on-planning-data-gov-uk-2023-04-11">Getting error 500 on planning.data.gov.uk - 2023-04-11</h3>
+<h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-description">Description</h4>
+<p>On the morning of 11th April 2023 at 7:34a.m. Paul Downey noted that the site getting intermittent 500 error and diagnostic
+procedures started at that point.</p>
+<h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-running-log">Running log</h4>
 
 <ul>
-<li>Swati Dash</li>
-<li>Owen Eveleigh</li>
-<li>Ernest Man</li>
-<li>Mark Smith</li>
+<li>Ernest and Owen have done a number of checks across the platform and noticed the postgres RDS database (Reader instance) was 
+maxed-out on CPU due to the following query. This may caused by someone trying to download lots of data. </li>
 </ul>
-<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-description">Description</h4>
-<p>On the morning of 12th June 2023 at 09:55a.m. Swati reported the planning data site Documentation section is showing error.</p>
-<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-running-log">Running log</h4>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>2023-04-11 06:04:02 UTC:10.0.43.141(45314):root@planning:[22027]:STATEMENT: SELECT ST_AsGeoJSON(entity.geometry) AS “ST_AsGeoJSON_1", 
+ST_AsGeoJSON(entity.point) AS “ST_AsGeoJSON_2”, entity.entity AS entity_entity, entity.name AS entity_name, 
+entity.entry_date AS entity_entry_date, entity.start_date AS entity_start_date, entity.end_date AS entity_end_date, 
+entity.dataset AS entity_dataset, entity.json AS entity_json, entity.organisation_entity AS entity_organisation_entity, 
+entity.prefix AS entity_prefix, entity.reference AS entity_reference, entity.typology AS entity_typology, 
+ST_AsEWKB(entity.geometry) AS entity_geometry, ST_AsEWKB(entity.point) AS entity_point, count(entity.entity) OVER () AS count
+FROM entity ORDER BY entity.entity
+LIMIT 10 OFFSET 569100
+</code></pre></div><h4 id="getting-error-500-on-planning-data-gov-uk-2023-04-11-postmortem">Postmortem</h4>
 
 <ul>
-<li>Ernest and Mark started investigation at around 10am. We cannot see any issue from the infrastructure side and the error 
-seems to have appear in the lower environments (Dev and staging) too. So we suspect this is a coding issue and Mark have started 
-to investigate this matter further. </li>
+<li>Ernest implemented an <a href="https://eu-west-2.console.aws.amazon.com/cloudwatch/home?region=eu-west-2#alarmsV2:alarm/production-rds-alarm?">aws alarm</a> for the postgres database&rsquo;s CPU when it reached above 60% threshold.</li>
+<li>A new <a href="https://trello.com/c/DaXtE5v0">ticket</a> have been created to look into this issue in more details. </li>
 </ul>
-<p>Summary of the issue: The robots.txt server route did not explicitly tell Fast API to exclude it from application API schema.
-Mark have rasied a PR to address the issue.</p>
-<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-postmortem">Postmortem</h4>
+<h3 id="all-applications-on-planning-data-gov-uk-2022-11-22">All applications on planning.data.gov.uk - 2022-11-22</h3>
+<h4 id="all-applications-on-planning-data-gov-uk-2022-11-22-in-attendance">In attendance</h4>
+<p>Async on slack:
+* Paul Downey
+* Lawrence Goldstien
+* Paul Smith</p>
+<h4 id="all-applications-on-planning-data-gov-uk-2022-11-22-description">Description</h4>
+<p>On the morning of the 22nd the decision was taken to switch over to the new infrastructure setup in the production
+account. We made preparations by adding a service outage banner to the application as we were aware that some downtime
+would be experienced while DNS updated globally. After the switchover Lawrence was able to access the new infrastructure
+so assumed everything was going to plan. At 2:45pm Paul Downey noted that the site was not accessible and diagnostic
+procedures started at that point.</p>
+<h4 id="all-applications-on-planning-data-gov-uk-2022-11-22-running-log">Running log</h4>
 
 <ul>
-<li>Mark PR <a href="https://github.com/digital-land/digital-land.info/pull/119">hotfix</a></li>
-<li><a href="https://trello.com/c/63K0MDi3">Live incident ticket</a> have been created.</li>
-<li>Ernest now included &ldquo;/docs&rdquo; in the canary test, <a href="https://trello.com/c/mNoSqt17">ticket</a> also created.</li>
+<li>GDS contact confirmed the DNS change had been actioned at 2:15pm</li>
+<li>Lawrence observed that the datasette and datasette tiles applications were available on the new domain at 2:20pm</li>
+<li>Lawrence observed that the main application was available at 2:35pm</li>
+<li>Paul Downey observed that the site was still not accessible for him and posted the results of a dig on the main
+application domain at 2:50pm</li>
+<li>Lawrence used the site https://www.whatsmydns.net/#NS/planning.data.gov.uk to check for propagation and noted that
+most DNS servers had updated to the new environment at 3pm</li>
+<li>Paul Downey observed that the website worked for him at 4pm</li>
+<li>Lawrence and Paul Downey observed that the site was working intermittently from 4pm to 6pm.</li>
 </ul>
-<p><strong>On (2023-06-14)</strong></p>
-
-<ul>
-<li>The Documentation section is showing without any error, we have also implemented canary test for checking the &lsquo;/doc&rsquo; endpoint.</li>
-</ul>
+<p><strong>NEXT DAY (2022-11-23)</strong>
+* Paul Downey observed that the site worked for him when tethered to his phone but saw that one in three runs of dig
+    against the domain returned empty results at 9am
+* Paul Downey posted into the digital planning slack to advise that we thought the change went through and to let the
+    team know of any issues at 9am
+* Lawrence observed that some DNS servers had longer TTLs for the domain compared to the current and old DNS records
+    TTLs of 24 hours at 1pm
+* The decision was made to wait out the full 48 hours of TTL and continue work to solve the issues afterwards at 1:30pm</p>
+<p><strong>NEXT DAY (2022-11-24)</strong>
+* Paul Downey noted that the DNS responses where still not returned consistently when running a dig command at 8:30am
+* Lawrence ran some diagnostics against a selection of public DNS servers and noted that the data.gov.uk domain has two
+    sets of DNS servers: AWS and Google Cloud. Lawrence found that running a dig against AWS servers for the domain
+    returned details for the new domain whereas running a dig against the Google Cloud returned no results at 10am
+* Lawrence drafted a message to be sent to GDS detailing the issues with the Google Cloud nameservers at 10am
+* GDS confirmed the issue and confirmed they had synced AWS and Google Cloud nameservers at 11:50am
+* Paul Downey observed that the site was up and running for him at 11:55am
+* Lawrence completed further checks and noted that most global DNS servers had updated to the new infrastructure at 12pm</p>
+<h4 id="all-applications-on-planning-data-gov-uk-2022-11-22-postmortem">Postmortem</h4>
+<p>We felt the team reacted well to this outage and stakeholders were understanding of the downtime.</p>
+<p>Paul Smith developed a pattern for service status messages to users and added feedback to the
+<a href="https://github.com/alphagov/govuk-design-system-backlog/issues/266">GOV.UK Design system</a>.</p>
+<p>In reflection the team could have recognised the issues sooner and checked more details of the DNS configuration.</p>
+<p>We could have offered the old address https://digital-land.info to OSL and other groups as a fallback while the system
+was down.</p>
 
             
           </main>
