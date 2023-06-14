@@ -124,6 +124,9 @@
           <li>
             <a href="./infrastructure.html#a-new-environment"><span>A New Environment</span></a>
           </li>
+          <li>
+            <a href="./infrastructure.html#deploying-lambda-functions"><span>Deploying Lambda functions</span></a>
+          </li>
         </ul>
       </li>
       <li>
@@ -373,7 +376,114 @@ A web service that allows the main application&rsquo;s frontend to draw vector t
 A simple web page which show the digital land dependencies status.</li>
 </ul>
 <p><strong>Note:</strong> data may need to be re-deployed to the postgres db once the application has been deployed due to the build failing if no data is found but the database schema only being deployed when the app is</p>
-<h2 id="configuration-changes">Configuration Changes</h2>
+<h3 id="deploying-lambda-functions">Deploying Lambda functions</h3>
+
+<ul>
+<li>EFS Sync collection</li>
+<li>Slack Notification </li>
+</ul>
+<p>Althought the creation of the actual aws lambda functions are still in the <a href="https://github.com/digital-land/digital-land-infrastructure">infrastructure repo</a>, but the ambda function code are now located in this repo <code>https://github.com/digital-land/digital-land-lambda</code>.</p>
+<p><strong>GitHub deployment workflow (Lambda functions)</strong></p>
+<div class="highlight"><pre class="highlight yaml" tabindex="0"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Deploy</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+  <span class="na">workflow_dispatch</span><span class="pi">:</span>
+    <span class="na">inputs</span><span class="pi">:</span>
+      <span class="na">environment</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">environment</span>
+        <span class="na">description</span><span class="pi">:</span> <span class="s">The environment to deploy to.</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">detect-environments</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">outputs</span><span class="pi">:</span>
+      <span class="na">environments</span><span class="pi">:</span> <span class="s">${{ steps.environments.outputs.result }}</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/github-script@v6</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">environments</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">github-token</span><span class="pi">:</span> <span class="s">${{ secrets.GITHUB_TOKEN }}</span>
+          <span class="na">result-encoding</span><span class="pi">:</span> <span class="s">json</span>
+          <span class="na">script</span><span class="pi">:</span> <span class="pi">|</span>
+            <span class="s">if (context.payload?.inputs?.environment) return [context.payload?.inputs?.environment];</span>
+            <span class="s">const {data: {environments}} = </span>
+              <span class="s">await github.request(`GET /repos/${process.env.GITHUB_REPOSITORY}/environments`);</span>
+            <span class="s">return environments.map(e =&gt; e.name)</span>
+
+  <span class="na">deploy</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">needs</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">detect-environments</span><span class="pi">]</span>
+    <span class="na">strategy</span><span class="pi">:</span>
+      <span class="na">matrix</span><span class="pi">:</span>
+        <span class="na">environment</span><span class="pi">:</span> <span class="s">${{ fromJSON(needs.detect-environments.outputs.environments) }}</span>
+    <span class="na">environment</span><span class="pi">:</span> <span class="s">${{ matrix.environment }}</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v3</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install aws cli</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"</span>
+          <span class="s">unzip -q awscliv2.zip</span>
+          <span class="s">sudo ./aws/install --update</span>
+          <span class="s">sudo apt-get update</span>
+          <span class="s">sudo apt-get install -y rsync</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Build efs sync collection</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">rm -rf node_modules/</span>
+          <span class="s">docker build -t efs-sync-collection-lambda-builder ./efs-sync-collection</span>
+          <span class="s">docker run -i -v ${GITHUB_WORKSPACE}/efs-sync-collection:/var/task efs-sync-collection-lambda-builder</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Build Notification functions</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">rm -rf node_modules/</span>
+          <span class="s">docker build -t ${{ matrix.environment }}-notification-builder ./notification-code</span>
+          <span class="s">docker run -i -v ${GITHUB_WORKSPACE}/notification-code:/var/task ${{ matrix.environment }}-notification-builder</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set File Permissions</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">chmod 0666 ./efs-sync-collection</span>
+          <span class="s">chmod 0666 ./notification-code</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Create efs sync Archive</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">sudo -s sh -c 'cd efs-sync-collection &amp;&amp; zip -r ../efs-sync-collection.zip ./*'</span>
+          <span class="s">sudo -s sh -c  'pwd'</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Upload efs sync artifact for deployment job</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/upload-artifact@v3</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">efs-sync-collection</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s">efs-sync-collection.zip</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Create Notification Archive</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">sudo -s sh -c 'cd notification-code &amp;&amp; zip -r ../notification-code.zip ./*'</span>
+          <span class="s">sudo -s sh -c  'pwd'</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Upload Notification artifact for deployment job</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/upload-artifact@v3</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">notification-code</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s">notification-code.zip</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set up AWS credentials</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">aws-actions/configure-aws-credentials@v1-node16</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">aws-access-key-id</span><span class="pi">:</span> <span class="s">${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}</span>
+          <span class="na">aws-secret-access-key</span><span class="pi">:</span> <span class="s">${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}</span>
+          <span class="na">aws-region</span><span class="pi">:</span> <span class="s">eu-west-2</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Deploy aws Lambda functions</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">aws lambda update-function-code --function-name ${{ matrix.environment }}-efs-sync-collection --zip-file fileb://./efs-sync-collection.zip</span>
+          <span class="s">aws lambda update-function-code --function-name ${{ matrix.environment }}-main-slack-notifier --zip-file fileb://./notification-code.zip</span>
+          <span class="s">aws lambda update-function-code --function-name ${{ matrix.environment }}-status-slack-notifier --zip-file fileb://./notification-code.zip</span>
+          <span class="s">aws lambda update-function-code --function-name ${{ matrix.environment }}-datasette-tiles-slack-notifier --zip-file fileb://./notification-code.zip</span>
+          <span class="s">aws lambda update-function-code --function-name ${{ matrix.environment }}-datasette-slack-notifier --zip-file fileb://./notification-code.zip</span>
+</code></pre></div><h2 id="configuration-changes">Configuration Changes</h2>
 <h3 id="add-a-new-application">Add a new application</h3>
 <p>To create a new application in the terraform configuration, you will need to know the following:</p>
 
