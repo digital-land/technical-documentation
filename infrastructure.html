@@ -139,7 +139,7 @@
             <a href="./infrastructure.html#add-a-new-background-task"><span>Add a new background task</span></a>
           </li>
           <li>
-            <a href="./infrastructure.html#amazon-rds-autoscaling"><span>Amazon RDS autoscaling</span></a>
+            <a href="./infrastructure.html#aws-rds-autoscaling"><span>aws RDS autoscaling</span></a>
           </li>
         </ul>
       </li>
@@ -976,9 +976,9 @@ and push a built docker image to the</li>
       <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">docker push $DOCKER_REPO:${{ steps.vars.outputs.sha_short }}</span>
 
       <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">docker push $DOCKER_REPO:latest</span>
-</code></pre></div><h3 id="amazon-rds-autoscaling">Amazon RDS autoscaling</h3>
-<p>RDS database autoscaling is now enabled in all aws environements. The autoscaling_min_capacity &amp; autoscaling_max_capacity are 
-configure in the <code>.config.&lt;env&gt;.tfvars</code> terrform config file.</p>
+</code></pre></div><h3 id="aws-rds-autoscaling">aws RDS autoscaling</h3>
+<p>RDS database autoscaling is now enabled in all aws environments. The autoscaling_min_capacity &amp; autoscaling_max_capacity are 
+configure in the <code>.config.&lt;env&gt;.tfvars</code> terraform config file.</p>
 <p>The below config will create at least one writer and one reader node instance. A maximum of 3 additional reader node will be created 
 based on the autoscaling policy which default set to 70% CPUUtilization.</p>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>resources = {
