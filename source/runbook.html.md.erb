@@ -65,111 +65,47 @@ information from the document.
 
 ## Incident Response History
 
-### All applications on planning.data.gov.uk - 2022-11-22
+### Documentation section on planning.data.gov.uk showing error - 2023-06-12
 
 #### In attendance
-
 Async on slack:
-
-* Paul Downey
-* Lawrence Goldstien
-* Paul Smith
+* Swati Dash
+* Owen Eveleigh
+* Ernest Man
+* Mark Smith
 
 #### Description
-
-On the morning of the 22nd the decision was taken to switch over to the new infrastructure setup in the production
-account. We made preparations by adding a service outage banner to the application as we were aware that some downtime
-would be experienced while DNS updated globally. After the switchover Lawrence was able to access the new infrastructure
-so assumed everything was going to plan. At 2:45pm Paul Downey noted that the site was not accessible and diagnostic
-procedures started at that point.
+On the morning of 12th June 2023 at 09:55a.m. Swati reported the planning data site Documentation section is showing error. 
 
 #### Running log
+* Ernest and Mark started investigation at around 10am. We cannot see any issue from the infrastructure side and the error 
+seems to have appear in the lower environments (Dev and staging) too. So we suspect this is a coding issue and Mark have started 
+to investigate this matter further. 
 
-* GDS contact confirmed the DNS change had been actioned at 2:15pm
-* Lawrence observed that the datasette and datasette tiles applications were available on the new domain at 2:20pm
-* Lawrence observed that the main application was available at 2:35pm
-* Paul Downey observed that the site was still not accessible for him and posted the results of a dig on the main
-    application domain at 2:50pm
-* Lawrence used the site https://www.whatsmydns.net/#NS/planning.data.gov.uk to check for propagation and noted that
-    most DNS servers had updated to the new environment at 3pm
-* Paul Downey observed that the website worked for him at 4pm
-* Lawrence and Paul Downey observed that the site was working intermittently from 4pm to 6pm.
-
-**NEXT DAY (2022-11-23)**
-
-* Paul Downey observed that the site worked for him when tethered to his phone but saw that one in three runs of dig
-    against the domain returned empty results at 9am
-* Paul Downey posted into the digital planning slack to advise that we thought the change went through and to let the
-    team know of any issues at 9am
-* Lawrence observed that some DNS servers had longer TTLs for the domain compared to the current and old DNS records
-    TTLs of 24 hours at 1pm
-* The decision was made to wait out the full 48 hours of TTL and continue work to solve the issues afterwards at 1:30pm
-
-**NEXT DAY (2022-11-24)**
-
-* Paul Downey noted that the DNS responses where still not returned consistently when running a dig command at 8:30am
-* Lawrence ran some diagnostics against a selection of public DNS servers and noted that the data.gov.uk domain has two
-    sets of DNS servers: AWS and Google Cloud. Lawrence found that running a dig against AWS servers for the domain
-    returned details for the new domain whereas running a dig against the Google Cloud returned no results at 10am
-* Lawrence drafted a message to be sent to GDS detailing the issues with the Google Cloud nameservers at 10am
-* GDS confirmed the issue and confirmed they had synced AWS and Google Cloud nameservers at 11:50am
-* Paul Downey observed that the site was up and running for him at 11:55am
-* Lawrence completed further checks and noted that most global DNS servers had updated to the new infrastructure at 12pm
+Summary of the issue: The robots.txt server route did not explicitly tell Fast API to exclude it from application API schema.
+Mark have rasied a PR to address the issue.
 
 #### Postmortem
 
-We felt the team reacted well to this outage and stakeholders were understanding of the downtime.
+* Mark PR [hotfix](https://github.com/digital-land/digital-land.info/pull/119)
+* [Live incident ticket](https://trello.com/c/63K0MDi3) have been created.
+* Ernest now included "/docs" in the canary test, [ticket](https://trello.com/c/mNoSqt17) also created.
 
-Paul Smith developed a pattern for service status messages to users and added feedback to the
-[GOV.UK Design system](https://github.com/alphagov/govuk-design-system-backlog/issues/266).
+**On (2023-06-14)**
 
-In reflection the team could have recognised the issues sooner and checked more details of the DNS configuration.
-
-We could have offered the old address https://digital-land.info to OSL and other groups as a fallback while the system
-was down.
-
-### Getting error 500 on planning.data.gov.uk - 2023-04-11
-
-#### Description
-
-On the morning of 11th April 2023 at 7:34a.m. Paul Downey noted that the site getting intermittent 500 error and diagnostic
-procedures started at that point. 
-
-#### Running log
-* Ernest and Owen have done a number of checks across the platform and noticed the postgres RDS database (Reader instance) was 
-maxed-out on CPU due to the following query. This may caused by someone trying to download lots of data. 
-
-```
-2023-04-11 06:04:02 UTC:10.0.43.141(45314):root@planning:[22027]:STATEMENT: SELECT ST_AsGeoJSON(entity.geometry) AS “ST_AsGeoJSON_1", 
-ST_AsGeoJSON(entity.point) AS “ST_AsGeoJSON_2”, entity.entity AS entity_entity, entity.name AS entity_name, 
-entity.entry_date AS entity_entry_date, entity.start_date AS entity_start_date, entity.end_date AS entity_end_date, 
-entity.dataset AS entity_dataset, entity.json AS entity_json, entity.organisation_entity AS entity_organisation_entity, 
-entity.prefix AS entity_prefix, entity.reference AS entity_reference, entity.typology AS entity_typology, 
-ST_AsEWKB(entity.geometry) AS entity_geometry, ST_AsEWKB(entity.point) AS entity_point, count(entity.entity) OVER () AS count
-FROM entity ORDER BY entity.entity
-LIMIT 10 OFFSET 569100
-
-```
-
-#### Postmortem
-
-* Ernest implemented an [aws alarm](https://eu-west-2.console.aws.amazon.com/cloudwatch/home?region=eu-west-2#alarmsV2:alarm/production-rds-alarm?) for the postgres database's CPU when it reached above 60% threshold.
-* A new [ticket](https://trello.com/c/DaXtE5v0) have been created to look into this issue in more details. 
+* The Documentation section is showing without any error, we have also implemented canary test for checking the /doc endpoint.
 
 
 ### Slowness reported on planning.data.gov.uk - 2023-06-01
 
 #### In attendance
-
 Async on slack:
-
 * Warren Hobden
 * Ernest Man
 * Mark Smith
 * Adam Shimali
 
 #### Description
-
 On the morning of 1st June 2023 at 10:15a.m. User reported the planning data site slowness and the Entity & Dataset API endpoints are also affected 
 by intermittent 500 error and diagnostic procedures started at that point. In addition, PlanX also seems impacted by the same issue and they reported
 on Friday 2nd June 2023.
@@ -237,37 +173,84 @@ and https://www.planning.data.gov.uk/dataset.json
 * The planning site continous to run fine with averaging around 20% database CPU utilization and we have also included the robots.txt changes.
 
 
-### Documentation section on planning.data.gov.uk showing error - 2023-06-12
-
-#### In attendance
-
-Async on slack:
-
-* Swati Dash
-* Owen Eveleigh
-* Ernest Man
-* Mark Smith
-
+### Getting error 500 on planning.data.gov.uk - 2023-04-11
 
 #### Description
-
-On the morning of 12th June 2023 at 09:55a.m. Swati reported the planning data site Documentation section is showing error. 
-
+On the morning of 11th April 2023 at 7:34a.m. Paul Downey noted that the site getting intermittent 500 error and diagnostic
+procedures started at that point. 
 
 #### Running log
-* Ernest and Mark started investigation at around 10am. We cannot see any issue from the infrastructure side and the error 
-seems to have appear in the lower environments (Dev and staging) too. So we suspect this is a coding issue and Mark have started 
-to investigate this matter further. 
+* Ernest and Owen have done a number of checks across the platform and noticed the postgres RDS database (Reader instance) was 
+maxed-out on CPU due to the following query. This may caused by someone trying to download lots of data. 
 
-Summary of the issue: The robots.txt server route did not explicitly tell Fast API to exclude it from application API schema.
-Mark have rasied a PR to address the issue.
+```
+2023-04-11 06:04:02 UTC:10.0.43.141(45314):root@planning:[22027]:STATEMENT: SELECT ST_AsGeoJSON(entity.geometry) AS “ST_AsGeoJSON_1", 
+ST_AsGeoJSON(entity.point) AS “ST_AsGeoJSON_2”, entity.entity AS entity_entity, entity.name AS entity_name, 
+entity.entry_date AS entity_entry_date, entity.start_date AS entity_start_date, entity.end_date AS entity_end_date, 
+entity.dataset AS entity_dataset, entity.json AS entity_json, entity.organisation_entity AS entity_organisation_entity, 
+entity.prefix AS entity_prefix, entity.reference AS entity_reference, entity.typology AS entity_typology, 
+ST_AsEWKB(entity.geometry) AS entity_geometry, ST_AsEWKB(entity.point) AS entity_point, count(entity.entity) OVER () AS count
+FROM entity ORDER BY entity.entity
+LIMIT 10 OFFSET 569100
+```
 
 #### Postmortem
+* Ernest implemented an [aws alarm](https://eu-west-2.console.aws.amazon.com/cloudwatch/home?region=eu-west-2#alarmsV2:alarm/production-rds-alarm?) for the postgres database's CPU when it reached above 60% threshold.
+* A new [ticket](https://trello.com/c/DaXtE5v0) have been created to look into this issue in more details. 
 
-* Mark PR [hotfix](https://github.com/digital-land/digital-land.info/pull/119)
-* [Live incident ticket](https://trello.com/c/63K0MDi3) have been created.
-* Ernest now included "/docs" in the canary test, [ticket](https://trello.com/c/mNoSqt17) also created.
 
-**On (2023-06-14)**
+### All applications on planning.data.gov.uk - 2022-11-22
 
-* The Documentation section is showing without any error, we have also implemented canary test for checking the '/doc' endpoint.
+#### In attendance
+Async on slack:
+* Paul Downey
+* Lawrence Goldstien
+* Paul Smith
+
+#### Description
+On the morning of the 22nd the decision was taken to switch over to the new infrastructure setup in the production
+account. We made preparations by adding a service outage banner to the application as we were aware that some downtime
+would be experienced while DNS updated globally. After the switchover Lawrence was able to access the new infrastructure
+so assumed everything was going to plan. At 2:45pm Paul Downey noted that the site was not accessible and diagnostic
+procedures started at that point.
+
+#### Running log
+* GDS contact confirmed the DNS change had been actioned at 2:15pm
+* Lawrence observed that the datasette and datasette tiles applications were available on the new domain at 2:20pm
+* Lawrence observed that the main application was available at 2:35pm
+* Paul Downey observed that the site was still not accessible for him and posted the results of a dig on the main
+    application domain at 2:50pm
+* Lawrence used the site https://www.whatsmydns.net/#NS/planning.data.gov.uk to check for propagation and noted that
+    most DNS servers had updated to the new environment at 3pm
+* Paul Downey observed that the website worked for him at 4pm
+* Lawrence and Paul Downey observed that the site was working intermittently from 4pm to 6pm.
+
+**NEXT DAY (2022-11-23)**
+* Paul Downey observed that the site worked for him when tethered to his phone but saw that one in three runs of dig
+    against the domain returned empty results at 9am
+* Paul Downey posted into the digital planning slack to advise that we thought the change went through and to let the
+    team know of any issues at 9am
+* Lawrence observed that some DNS servers had longer TTLs for the domain compared to the current and old DNS records
+    TTLs of 24 hours at 1pm
+* The decision was made to wait out the full 48 hours of TTL and continue work to solve the issues afterwards at 1:30pm
+
+**NEXT DAY (2022-11-24)**
+* Paul Downey noted that the DNS responses where still not returned consistently when running a dig command at 8:30am
+* Lawrence ran some diagnostics against a selection of public DNS servers and noted that the data.gov.uk domain has two
+    sets of DNS servers: AWS and Google Cloud. Lawrence found that running a dig against AWS servers for the domain
+    returned details for the new domain whereas running a dig against the Google Cloud returned no results at 10am
+* Lawrence drafted a message to be sent to GDS detailing the issues with the Google Cloud nameservers at 10am
+* GDS confirmed the issue and confirmed they had synced AWS and Google Cloud nameservers at 11:50am
+* Paul Downey observed that the site was up and running for him at 11:55am
+* Lawrence completed further checks and noted that most global DNS servers had updated to the new infrastructure at 12pm
+
+#### Postmortem
+We felt the team reacted well to this outage and stakeholders were understanding of the downtime.
+
+Paul Smith developed a pattern for service status messages to users and added feedback to the
+[GOV.UK Design system](https://github.com/alphagov/govuk-design-system-backlog/issues/266).
+
+In reflection the team could have recognised the issues sooner and checked more details of the DNS configuration.
+
+We could have offered the old address https://digital-land.info to OSL and other groups as a fallback while the system
+was down.
