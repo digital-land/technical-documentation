@@ -136,12 +136,12 @@ Now the new environment is up and running you should deploy the following applic
 <strong>Note:</strong> data may need to be re-deployed to the postgres db once the application has been deployed due to the build failing if no data is found but the database schema only being deployed when the app is
 
 
-### Deploying Lambda functions
+### Lambda functions
 
 * EFS Sync collection
 * Slack Notification 
 
-Althought the creation of the actual aws lambda functions are still in the [infrastructure repo](https://github.com/digital-land/digital-land-infrastructure), but the ambda function code are now located in this repo `https://github.com/digital-land/digital-land-lambda`.
+The creation of the actual aws lambda functions are still in the [infrastructure repo](https://github.com/digital-land/digital-land-infrastructure), but the function code are now located in this repo `https://github.com/digital-land/digital-land-lambda`.
 
 **GitHub deployment workflow (Lambda functions)**
 
@@ -761,4 +761,24 @@ jobs:
       - run: docker push $DOCKER_REPO:${{ steps.vars.outputs.sha_short }}
 
       - run: docker push $DOCKER_REPO:latest
+```
+
+### Amazon RDS autoscaling
+
+RDS database autoscaling is now enabled in all aws environements. The autoscaling_min_capacity & autoscaling_max_capacity are 
+configure in the `.config.<env>.tfvars` terrform config file.
+
+The below config will create at least one writer and one reader node instance. A maximum of 3 additional reader node will be created 
+based on the autoscaling policy which default set to 70% CPUUtilization. 
+
+```
+resources = {
+  database = {
+    count                        = 2
+    class                        = "db.t4g.large"
+    autoscaling_enabled          = true
+    autoscaling_min              = 0
+    autoscaling_max              = 3
+    performance_insights_enabled = true
+  }
 ```
