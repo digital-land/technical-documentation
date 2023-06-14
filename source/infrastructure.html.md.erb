@@ -135,6 +135,119 @@ Now the new environment is up and running you should deploy the following applic
 
 <strong>Note:</strong> data may need to be re-deployed to the postgres db once the application has been deployed due to the build failing if no data is found but the database schema only being deployed when the app is
 
+
+### Deploying Lambda functions
+
+* EFS Sync collection
+* Slack Notification 
+
+Althought the creation of the actual aws lambda functions are still in the [infrastructure repo](https://github.com/digital-land/digital-land-infrastructure), but the ambda function code are now located in this repo `https://github.com/digital-land/digital-land-lambda`.
+
+**GitHub deployment workflow (Lambda functions)**
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: The environment to deploy to.
+
+jobs:
+  detect-environments:
+    runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.environments.outputs.result }}
+    steps:
+      - uses: actions/github-script@v6
+        id: environments
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: json
+          script: |
+            if (context.payload?.inputs?.environment) return [context.payload?.inputs?.environment];
+            const {data: {environments}} = 
+              await github.request(`GET /repos/${process.env.GITHUB_REPOSITORY}/environments`);
+            return environments.map(e => e.name)
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [detect-environments]
+    strategy:
+      matrix:
+        environment: ${{ fromJSON(needs.detect-environments.outputs.environments) }}
+    environment: ${{ matrix.environment }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install aws cli
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          sudo ./aws/install --update
+          sudo apt-get update
+          sudo apt-get install -y rsync
+
+      - name: Build efs sync collection
+        run: |
+          rm -rf node_modules/
+          docker build -t efs-sync-collection-lambda-builder ./efs-sync-collection
+          docker run -i -v ${GITHUB_WORKSPACE}/efs-sync-collection:/var/task efs-sync-collection-lambda-builder
+
+      - name: Build Notification functions
+        run: |
+          rm -rf node_modules/
+          docker build -t ${{ matrix.environment }}-notification-builder ./notification-code
+          docker run -i -v ${GITHUB_WORKSPACE}/notification-code:/var/task ${{ matrix.environment }}-notification-builder
+
+      - name: Set File Permissions
+        run: |
+          chmod 0666 ./efs-sync-collection
+          chmod 0666 ./notification-code
+  
+      - name: Create efs sync Archive
+        run: |
+          sudo -s sh -c 'cd efs-sync-collection && zip -r ../efs-sync-collection.zip ./*'
+          sudo -s sh -c  'pwd'
+
+      - name: Upload efs sync artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: efs-sync-collection
+          path: efs-sync-collection.zip
+
+      - name: Create Notification Archive
+        run: |
+          sudo -s sh -c 'cd notification-code && zip -r ../notification-code.zip ./*'
+          sudo -s sh -c  'pwd'
+  
+      - name: Upload Notification artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: notification-code
+          path: notification-code.zip
+      
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+      
+      - name: Deploy aws Lambda functions
+        run: |
+          aws lambda update-function-code --function-name ${{ matrix.environment }}-efs-sync-collection --zip-file fileb://./efs-sync-collection.zip
+          aws lambda update-function-code --function-name ${{ matrix.environment }}-main-slack-notifier --zip-file fileb://./notification-code.zip
+          aws lambda update-function-code --function-name ${{ matrix.environment }}-status-slack-notifier --zip-file fileb://./notification-code.zip
+          aws lambda update-function-code --function-name ${{ matrix.environment }}-datasette-tiles-slack-notifier --zip-file fileb://./notification-code.zip
+          aws lambda update-function-code --function-name ${{ matrix.environment }}-datasette-slack-notifier --zip-file fileb://./notification-code.zip
+```
+
+
 ## Configuration Changes
 
 ### Add a new application
