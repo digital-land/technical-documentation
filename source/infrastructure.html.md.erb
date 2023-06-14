@@ -763,10 +763,10 @@ jobs:
       - run: docker push $DOCKER_REPO:latest
 ```
 
-### Amazon RDS autoscaling
+### aws RDS autoscaling
 
-RDS database autoscaling is now enabled in all aws environements. The autoscaling_min_capacity & autoscaling_max_capacity are 
-configure in the `.config.<env>.tfvars` terrform config file.
+RDS database autoscaling is now enabled in all aws environments. The autoscaling_min_capacity & autoscaling_max_capacity are 
+configure in the `.config.<env>.tfvars` terraform config file.
 
 The below config will create at least one writer and one reader node instance. A maximum of 3 additional reader node will be created 
 based on the autoscaling policy which default set to 70% CPUUtilization. 
