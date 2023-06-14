@@ -125,7 +125,7 @@
             <a href="./infrastructure.html#a-new-environment"><span>A New Environment</span></a>
           </li>
           <li>
-            <a href="./infrastructure.html#deploying-lambda-functions"><span>Deploying Lambda functions</span></a>
+            <a href="./infrastructure.html#lambda-functions"><span>Lambda functions</span></a>
           </li>
         </ul>
       </li>
@@ -137,6 +137,9 @@
           </li>
           <li>
             <a href="./infrastructure.html#add-a-new-background-task"><span>Add a new background task</span></a>
+          </li>
+          <li>
+            <a href="./infrastructure.html#amazon-rds-autoscaling"><span>Amazon RDS autoscaling</span></a>
           </li>
         </ul>
       </li>
@@ -376,13 +379,13 @@ A web service that allows the main application&rsquo;s frontend to draw vector t
 A simple web page which show the digital land dependencies status.</li>
 </ul>
 <p><strong>Note:</strong> data may need to be re-deployed to the postgres db once the application has been deployed due to the build failing if no data is found but the database schema only being deployed when the app is</p>
-<h3 id="deploying-lambda-functions">Deploying Lambda functions</h3>
+<h3 id="lambda-functions">Lambda functions</h3>
 
 <ul>
 <li>EFS Sync collection</li>
 <li>Slack Notification </li>
 </ul>
-<p>Althought the creation of the actual aws lambda functions are still in the <a href="https://github.com/digital-land/digital-land-infrastructure">infrastructure repo</a>, but the ambda function code are now located in this repo <code>https://github.com/digital-land/digital-land-lambda</code>.</p>
+<p>The creation of the actual aws lambda functions are still in the <a href="https://github.com/digital-land/digital-land-infrastructure">infrastructure repo</a>, but the function code are now located in this repo <code>https://github.com/digital-land/digital-land-lambda</code>.</p>
 <p><strong>GitHub deployment workflow (Lambda functions)</strong></p>
 <div class="highlight"><pre class="highlight yaml" tabindex="0"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Deploy</span>
 
@@ -973,6 +976,20 @@ and push a built docker image to the</li>
       <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">docker push $DOCKER_REPO:${{ steps.vars.outputs.sha_short }}</span>
 
       <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">docker push $DOCKER_REPO:latest</span>
+</code></pre></div><h3 id="amazon-rds-autoscaling">Amazon RDS autoscaling</h3>
+<p>RDS database autoscaling is now enabled in all aws environements. The autoscaling_min_capacity &amp; autoscaling_max_capacity are 
+configure in the <code>.config.&lt;env&gt;.tfvars</code> terrform config file.</p>
+<p>The below config will create at least one writer and one reader node instance. A maximum of 3 additional reader node will be created 
+based on the autoscaling policy which default set to 70% CPUUtilization.</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>resources = {
+  database = {
+    count                        = 2
+    class                        = "db.t4g.large"
+    autoscaling_enabled          = true
+    autoscaling_min              = 0
+    autoscaling_max              = 3
+    performance_insights_enabled = true
+  }
 </code></pre></div>
             
           </main>
