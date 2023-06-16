@@ -139,10 +139,10 @@
             <a href="./infrastructure.html#add-a-new-background-task"><span>Add a new background task</span></a>
           </li>
           <li>
-            <a href="./infrastructure.html#aws-rds-autoscaling"><span>aws RDS autoscaling</span></a>
+            <a href="./infrastructure.html#rds-autoscaling"><span>RDS autoscaling</span></a>
           </li>
           <li>
-            <a href="./infrastructure.html#aws-synthetics-canaries"><span>aws Synthetics Canaries</span></a>
+            <a href="./infrastructure.html#synthetics-canaries"><span>Synthetics Canaries</span></a>
           </li>
         </ul>
       </li>
@@ -979,7 +979,7 @@ and push a built docker image to the</li>
       <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">docker push $DOCKER_REPO:${{ steps.vars.outputs.sha_short }}</span>
 
       <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">docker push $DOCKER_REPO:latest</span>
-</code></pre></div><h3 id="aws-rds-autoscaling">aws RDS autoscaling</h3>
+</code></pre></div><h3 id="rds-autoscaling">RDS autoscaling</h3>
 <p>RDS database autoscaling is now enabled in all aws environments. The autoscaling_min_capacity &amp; autoscaling_max_capacity are 
 configure in the <code>.config.&lt;env&gt;.tfvars</code> terraform config file.</p>
 <p>The below config will create at least one writer and one reader node instance. A maximum of 3 additional reader node will be created 
@@ -993,8 +993,8 @@ based on the autoscaling policy which default set to 70% CPUUtilization.</p>
     autoscaling_max              = 3
     performance_insights_enabled = true
   }
-</code></pre></div><h3 id="aws-synthetics-canaries">aws Synthetics Canaries</h3>
-<p>There are 4 canaries in each aws environment. <code>datasette</code> , <code>datasette-tiles</code>, <code>status</code>, <code>www</code></p>
+</code></pre></div><h3 id="synthetics-canaries">Synthetics Canaries</h3>
+<p>There are 4 canaries created in each aws environment. <code>datasette</code> , <code>datasette-tiles</code>, <code>status</code>, <code>www</code></p>
 <p>These are healthchecks to ensure the defined endpoints are returning status code within the range of <code>200 - 299</code>, otherwise it will raised an aws alarm.</p>
 <p>The canary template is written in node.js</p>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>const { URL } = require('url');
@@ -1113,7 +1113,10 @@ let hostnames = [];
 exports.handler = async () =&gt; {
     return await loadBlueprint();
 };
-</code></pre></div><p>aws alarm condition is set to <code>SuccessPercent &lt; 100 for 2 datapoints within 10 minutes</code></p>
+</code></pre></div><p>aws alarm status
+* <code>OK</code> - The metric or expression is within the defined threshold.
+* <code>ALARM</code> - The metric or expression is outside of the defined threshold.</p>
+<p>The canary alarm condition is currently set to <code>SuccessPercent &lt; 100 for 2 datapoints within 10 minutes</code></p>
 
             
           </main>
