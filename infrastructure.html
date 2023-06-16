@@ -1113,9 +1113,12 @@ let hostnames = [];
 exports.handler = async () =&gt; {
     return await loadBlueprint();
 };
-</code></pre></div><p>aws alarm status
-* <code>OK</code> - The metric or expression is within the defined threshold.
-* <code>ALARM</code> - The metric or expression is outside of the defined threshold.</p>
+</code></pre></div><p><code>aws alarm status</code></p>
+
+<ul>
+<li>OK - The metric or expression is within the defined threshold.</li>
+<li>ALARM - The metric or expression is outside of the defined threshold.</li>
+</ul>
 <p>The canary alarm condition is currently set to <code>SuccessPercent &lt; 100 for 2 datapoints within 10 minutes</code></p>
 
             
