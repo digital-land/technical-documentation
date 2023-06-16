@@ -994,8 +994,8 @@ based on the autoscaling policy which default set to 70% CPUUtilization.</p>
     performance_insights_enabled = true
   }
 </code></pre></div><h3 id="aws-synthetics-canaries">aws Synthetics Canaries</h3>
-<p>There are 4 canaries in each aws environement. <code>datasette</code> , <code>datasette-tiles</code>, <code>status</code>, <code>wwww</code></p>
-<p>These are HealthChecks to ensure the defined endpoints are returning status 200, otherwise it will raised an aws alarm.</p>
+<p>There are 4 canaries in each aws environment. <code>datasette</code> , <code>datasette-tiles</code>, <code>status</code>, <code>www</code></p>
+<p>These are healthchecks to ensure the defined endpoints are returning status code within the range of <code>200 - 299</code>, otherwise it will raised an aws alarm.</p>
 <p>The canary template is written in node.js</p>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>const { URL } = require('url');
 const synthetics = require('Synthetics');
@@ -1113,7 +1113,8 @@ let hostnames = [];
 exports.handler = async () =&gt; {
     return await loadBlueprint();
 };
-</code></pre></div>
+</code></pre></div><p>aws alarm condition is set to <code>SuccessPercent &lt; 100 for 2 datapoints within 10 minutes</code></p>
+
             
           </main>
 
