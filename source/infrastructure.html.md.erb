@@ -784,11 +784,12 @@ resources = {
 ```
 
 
+
 ### aws Synthetics Canaries
 
-There are 4 canaries in each aws environement. `datasette` , `datasette-tiles`, `status`, `wwww`
+There are 4 canaries in each aws environment. `datasette` , `datasette-tiles`, `status`, `www`
 
-These are HealthChecks to ensure the defined endpoints are returning status 200, otherwise it will raised an aws alarm.
+These are healthchecks to ensure the defined endpoints are returning status code within the range of `200 - 299`, otherwise it will raised an aws alarm.
 
 The canary template is written in node.js
 
@@ -910,3 +911,5 @@ exports.handler = async () => {
     return await loadBlueprint();
 };
 ```
+
+aws alarm condition is set to `SuccessPercent < 100 for 2 datapoints within 10 minutes`
