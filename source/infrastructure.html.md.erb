@@ -763,7 +763,7 @@ jobs:
       - run: docker push $DOCKER_REPO:latest
 ```
 
-### aws RDS autoscaling
+### RDS autoscaling
 
 RDS database autoscaling is now enabled in all aws environments. The autoscaling_min_capacity & autoscaling_max_capacity are 
 configure in the `.config.<env>.tfvars` terraform config file.
@@ -785,9 +785,9 @@ resources = {
 
 
 
-### aws Synthetics Canaries
+### Synthetics Canaries
 
-There are 4 canaries in each aws environment. `datasette` , `datasette-tiles`, `status`, `www`
+There are 4 canaries created in each aws environment. `datasette` , `datasette-tiles`, `status`, `www`
 
 These are healthchecks to ensure the defined endpoints are returning status code within the range of `200 - 299`, otherwise it will raised an aws alarm.
 
@@ -912,4 +912,8 @@ exports.handler = async () => {
 };
 ```
 
-aws alarm condition is set to `SuccessPercent < 100 for 2 datapoints within 10 minutes`
+aws alarm status
+* `OK` - The metric or expression is within the defined threshold.
+* `ALARM` - The metric or expression is outside of the defined threshold.
+
+The canary alarm condition is currently set to `SuccessPercent < 100 for 2 datapoints within 10 minutes`
