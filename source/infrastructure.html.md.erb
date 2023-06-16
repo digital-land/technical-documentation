@@ -912,8 +912,9 @@ exports.handler = async () => {
 };
 ```
 
-aws alarm status
-* `OK` - The metric or expression is within the defined threshold.
-* `ALARM` - The metric or expression is outside of the defined threshold.
+`aws alarm status`
+
+* OK - The metric or expression is within the defined threshold.
+* ALARM - The metric or expression is outside of the defined threshold.
 
 The canary alarm condition is currently set to `SuccessPercent < 100 for 2 datapoints within 10 minutes`
