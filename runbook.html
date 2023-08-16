@@ -364,17 +364,17 @@ information from the document.</p>
 <li>Owen Eveleigh</li>
 </ul>
 <h4 id="description">Description</h4>
-<p>On the morning of 14th August 2023 when Ernest logged on around 9am in the morning and noticed the aws alarms was rasied in our 
+<p>On the morning of 14th August 2023 when Ernest logged on around 9am in the morning and noticed the aws alarms was raised in our 
 slcak channel for datasette and datasette-tiles. Getting 502 error for both endpoints and diagnostic procedures started at that point.</p>
 <h4 id="running-log">Running log</h4>
 
 <ul>
 <li><p>Ernest and Owen started investigation at around 9am. We getting 502 when we hit those endpoints directly. The issue seems only 
-affecting Production envirnment as we cannot see the same in the lower environments (Dev and staging). So we suspect this is more of 
-an platform issue.</p></li>
-<li><p>Ernest and Owen have look at varies areas in the production platform, inclued ECS, collection pipeline, RDS postgres database etc.</p></li>
+affecting Production environment as we cannot see the same in the lower environments (Dev and staging). So we suspect this is more of 
+a platform related issue.</p></li>
+<li><p>Ernest and Owen have look at varies area in the production platform, inclued ECS, collection pipeline, RDS postgres database etc.</p></li>
 </ul>
-<p>Main symptons of the issue:</p>
+<p>Main symptoms:</p>
 
 <ul>
 <li>both datasette and datasette-tiles applications crashed in prod leading to a 502 bad gateway</li>
@@ -383,7 +383,7 @@ an platform issue.</p></li>
 <li>Fact pages on the site will be unavailable</li>
 <li>Reporting may be affected as cannot access production datasette</li>
 </ul>
-<p>Summary of the issue: The EFS throughput is too high during the nightly data update. This is caused by the 
+<p>Summary of the issue: The EFS throughput is too high during the nightly data update. This caused by the 
 pipeline dumped files and datasette applications restarting.</p>
 <h4 id="postmortem">Postmortem</h4>
 
@@ -399,9 +399,12 @@ pipeline dumped files and datasette applications restarting.</p>
 move to a normal throughput, an then reinstate the applications. Both datasette and datasette-tiles seems to back online
 in the evening and canaries also reported positive test results.</li>
 </ul>
-<p><strong>On (2023-08-15)</strong>
-* The datasette alarms was also rasied around 1:05am and it seems the EFS throughput still very high in Production when the 
-collection pipleine run, so we start looking for a more permanant solutions.</p>
+<p><strong>On (2023-08-15)</strong></p>
+
+<ul>
+<li>The datasette alarms was also rasied around 1:05am and it seems the EFS throughput still very high in Production when the 
+collection pipleine run, so we start looking for a more permanant solution.</li>
+</ul>
 <p>The current EFS file system is using “Bursting“ throughput mode. It means the application is throughput-constrained 
 (i.e. if it uses more than 80% of the permitted throughput or we have used up all burst credits). 
 The burst credits was used up (near 0) when the collection pipeline runs.</p>
@@ -413,7 +416,7 @@ per file system.</p>
 <p><strong>On (2023-08-16)</strong></p>
 
 <ul>
-<li>No alarms have been rasied this morning and all canaries seems running fine.</li>
+<li>No alarms have been raised this morning and all canaries seems running fine.</li>
 <li>The EFS throughput are healthy too</li>
 <li>ECS tasks are all running fine</li>
 <li>We will continous monitoring the platform and the additional cost implications if any.</li>
