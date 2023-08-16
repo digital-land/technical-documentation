@@ -66,6 +66,75 @@ information from the document.
 
 ## Incident Response History
 
+### aws alarms raised for datasette and datasette-tiles canaries - 2023-08-14
+
+#### In attendance
+
+Async on slack:
+
+* Ernest Man
+* Owen Eveleigh
+
+#### Description
+
+On the morning of 14th August 2023 when Ernest logged on around 9am in the morning and noticed the aws alarms was rasied in our 
+slcak channel for datasette and datasette-tiles. Getting 502 error for both endpoints and diagnostic procedures started at that point.
+
+#### Running log
+
+* Ernest and Owen started investigation at around 9am. We getting 502 when we hit those endpoints directly. The issue seems only 
+affecting Production envirnment as we cannot see the same in the lower environments (Dev and staging). So we suspect this is more of 
+an platform issue.
+
+* Ernest and Owen have look at varies areas in the production platform, inclued ECS, collection pipeline, RDS postgres database etc.
+
+Main symptons of the issue:
+
+* both datasette and datasette-tiles applications crashed in prod leading to a 502 bad gateway
+* ECS task is unable to launch any new instances as they do not pass health checks
+* National map may not be able to access our tiles
+* Fact pages on the site will be unavailable
+* Reporting may be affected as cannot access production datasette
+
+Summary of the issue: The EFS throughput is too high during the nightly data update. This is caused by the 
+pipeline dumped files and datasette applications restarting.
+
+#### Postmortem
+
+* [Live incident ticket](https://trello.com/c/KNB7k4ee) have been created.
+* EFS have now upgraded to use "Elastic" throughput mode.
+* Ernest will continous monitoring any cost implications in aws Cost Explorer
+
+**On (2023-08-14)**
+
+* a temporary fix have been implemented by reducing the 2 ECS services which uses the EFS storage to 0, allow EFS to 
+move to a normal throughput, an then reinstate the applications. Both datasette and datasette-tiles seems to back online
+in the evening and canaries also reported positive test results.
+
+**On (2023-08-15)**
+* The datasette alarms was also rasied around 1:05am and it seems the EFS throughput still very high in Production when the 
+collection pipleine run, so we start looking for a more permanant solutions.
+
+The current EFS file system is using “Bursting“ throughput mode. It means the application is throughput-constrained 
+(i.e. if it uses more than 80% of the permitted throughput or we have used up all burst credits). 
+The burst credits was used up (near 0) when the collection pipeline runs.
+
+We decided to upgrade the EFS to use “Elastic” throughput mode instead. In contrasts to the burst credits way of Bursting 
+throughput mode, Elastic throughput mode of EFS automatically scales throughput performance up or down to meet the needs 
+of the workload activity. Elastic throughput can drive up to 3 GiBps for read operations and 1 GiBps for write operations 
+per file system.
+
+We upgraded the EFS to use “Elastic” throughput mode in the afternoon.
+
+**On (2023-08-16)**
+
+* No alarms have been rasied this morning and all canaries seems running fine.
+* The EFS throughput are healthy too
+* ECS tasks are all running fine
+* We will continous monitoring the platform and the additional cost implications if any.
+
+
+
 ### Documentation section on planning.data.gov.uk showing error - 2023-06-12
 
 #### In attendance
