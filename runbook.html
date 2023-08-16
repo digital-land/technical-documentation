@@ -92,6 +92,9 @@
         <a href="./runbook.html#incident-response-history"><span>Incident Response History</span></a>
         <ul>
           <li>
+            <a href="./runbook.html#aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14"><span>aws alarms raised for datasette and datasette-tiles canaries - 2023-08-14</span></a>
+          </li>
+          <li>
             <a href="./runbook.html#documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12"><span>Documentation section on planning.data.gov.uk showing error - 2023-06-12</span></a>
           </li>
           <li>
@@ -352,8 +355,71 @@ postmortem section of the document. Once the document is complete, the contents 
 information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12">Documentation section on planning.data.gov.uk showing error - 2023-06-12</h3>
+<h3 id="aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14">aws alarms raised for datasette and datasette-tiles canaries - 2023-08-14</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>Async on slack:</p>
+
+<ul>
+<li>Ernest Man</li>
+<li>Owen Eveleigh</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>On the morning of 14th August 2023 when Ernest logged on around 9am in the morning and noticed the aws alarms was rasied in our 
+slcak channel for datasette and datasette-tiles. Getting 502 error for both endpoints and diagnostic procedures started at that point.</p>
+<h4 id="running-log">Running log</h4>
+
+<ul>
+<li><p>Ernest and Owen started investigation at around 9am. We getting 502 when we hit those endpoints directly. The issue seems only 
+affecting Production envirnment as we cannot see the same in the lower environments (Dev and staging). So we suspect this is more of 
+an platform issue.</p></li>
+<li><p>Ernest and Owen have look at varies areas in the production platform, inclued ECS, collection pipeline, RDS postgres database etc.</p></li>
+</ul>
+<p>Main symptons of the issue:</p>
+
+<ul>
+<li>both datasette and datasette-tiles applications crashed in prod leading to a 502 bad gateway</li>
+<li>ECS task is unable to launch any new instances as they do not pass health checks</li>
+<li>National map may not be able to access our tiles</li>
+<li>Fact pages on the site will be unavailable</li>
+<li>Reporting may be affected as cannot access production datasette</li>
+</ul>
+<p>Summary of the issue: The EFS throughput is too high during the nightly data update. This is caused by the 
+pipeline dumped files and datasette applications restarting.</p>
+<h4 id="postmortem">Postmortem</h4>
+
+<ul>
+<li><a href="https://trello.com/c/KNB7k4ee">Live incident ticket</a> have been created.</li>
+<li>EFS have now upgraded to use &ldquo;Elastic&rdquo; throughput mode.</li>
+<li>Ernest will continous monitoring any cost implications in aws Cost Explorer</li>
+</ul>
+<p><strong>On (2023-08-14)</strong></p>
+
+<ul>
+<li>a temporary fix have been implemented by reducing the 2 ECS services which uses the EFS storage to 0, allow EFS to 
+move to a normal throughput, an then reinstate the applications. Both datasette and datasette-tiles seems to back online
+in the evening and canaries also reported positive test results.</li>
+</ul>
+<p><strong>On (2023-08-15)</strong>
+* The datasette alarms was also rasied around 1:05am and it seems the EFS throughput still very high in Production when the 
+collection pipleine run, so we start looking for a more permanant solutions.</p>
+<p>The current EFS file system is using “Bursting“ throughput mode. It means the application is throughput-constrained 
+(i.e. if it uses more than 80% of the permitted throughput or we have used up all burst credits). 
+The burst credits was used up (near 0) when the collection pipeline runs.</p>
+<p>We decided to upgrade the EFS to use “Elastic” throughput mode instead. In contrasts to the burst credits way of Bursting 
+throughput mode, Elastic throughput mode of EFS automatically scales throughput performance up or down to meet the needs 
+of the workload activity. Elastic throughput can drive up to 3 GiBps for read operations and 1 GiBps for write operations 
+per file system.</p>
+<p>We upgraded the EFS to use “Elastic” throughput mode in the afternoon.</p>
+<p><strong>On (2023-08-16)</strong></p>
+
+<ul>
+<li>No alarms have been rasied this morning and all canaries seems running fine.</li>
+<li>The EFS throughput are healthy too</li>
+<li>ECS tasks are all running fine</li>
+<li>We will continous monitoring the platform and the additional cost implications if any.</li>
+</ul>
+<h3 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12">Documentation section on planning.data.gov.uk showing error - 2023-06-12</h3>
+<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-in-attendance">In attendance</h4>
 <p>Async on slack:</p>
 
 <ul>
@@ -362,9 +428,9 @@ information from the document.</p>
 <li>Ernest Man</li>
 <li>Mark Smith</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-description">Description</h4>
 <p>On the morning of 12th June 2023 at 09:55a.m. Swati reported the planning data site Documentation section is showing error.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-running-log">Running log</h4>
 
 <ul>
 <li>Ernest and Mark started investigation at around 10am. We cannot see any issue from the infrastructure side and the error 
@@ -373,7 +439,7 @@ to investigate this matter further. </li>
 </ul>
 <p>Summary of the issue: The robots.txt server route did not explicitly tell Fast API to exclude it from application API schema.
 Mark have rasied a PR to address the issue.</p>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12-postmortem">Postmortem</h4>
 
 <ul>
 <li>Mark PR <a href="https://github.com/digital-land/digital-land.info/pull/119">hotfix</a></li>
