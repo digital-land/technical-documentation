@@ -66,6 +66,29 @@ information from the document.
 
 ## Incident Response History
 
+### maptiler started returning 403 errors - 2023-08-16
+
+#### In attendance
+
+Async on slack:
+
+* George Goodall
+* Martin Grey
+
+#### Description
+
+Early afternoon on 16th October 2023, Martin noted that the national map was not loading correctly. George then investigated further and found that the maptiler service was returning 403 errors.
+
+#### Running log
+
+**on (2023-08-16)**
+
+* George started investigations around 3pm. He found that the maptiler service was returning 403 errors. with attached body ```Invalid key - Get your FREE key at https://cloud.maptiler.com/account/keys/```
+
+* Paul Smith is the only person with access to the maptiler account. As he is on leave we can not investigate further to discover the cause of this issue.
+
+* A [temporary fix](https://github.com/digital-land/digital-land.info/pull/140) was merged  by George that swapped out the paid map for an open one and replaced the key with his own personal one. 
+
 ### aws alarms raised for datasette and datasette-tiles canaries - 2023-08-14
 
 #### In attendance
