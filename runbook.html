@@ -92,6 +92,9 @@
         <a href="./runbook.html#incident-response-history"><span>Incident Response History</span></a>
         <ul>
           <li>
+            <a href="./runbook.html#maptiler-started-returning-403-errors-2023-08-16"><span>maptiler started returning 403 errors - 2023-08-16</span></a>
+          </li>
+          <li>
             <a href="./runbook.html#aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14"><span>aws alarms raised for datasette and datasette-tiles canaries - 2023-08-14</span></a>
           </li>
           <li>
@@ -355,18 +358,36 @@ postmortem section of the document. Once the document is complete, the contents 
 information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14">aws alarms raised for datasette and datasette-tiles canaries - 2023-08-14</h3>
+<h3 id="maptiler-started-returning-403-errors-2023-08-16">maptiler started returning 403 errors - 2023-08-16</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>Async on slack:</p>
+
+<ul>
+<li>George Goodall</li>
+<li>Martin Grey</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>Early afternoon on 16th October 2023, Martin noted that the national map was not loading correctly. George then investigated further and found that the maptiler service was returning 403 errors.</p>
+<h4 id="running-log">Running log</h4>
+<p><strong>on (2023-08-16)</strong></p>
+
+<ul>
+<li><p>George started investigations around 3pm. He found that the maptiler service was returning 403 errors. with attached body <code>Invalid key - Get your FREE key at https://cloud.maptiler.com/account/keys/</code></p></li>
+<li><p>Paul Smith is the only person with access to the maptiler account. As he is on leave we can not investigate further to discover the cause of this issue.</p></li>
+<li><p>A <a href="https://github.com/digital-land/digital-land.info/pull/140">temporary fix</a> was merged  by George that swapped out the paid map for an open one and replaced the key with his own personal one.</p></li>
+</ul>
+<h3 id="aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14">aws alarms raised for datasette and datasette-tiles canaries - 2023-08-14</h3>
+<h4 id="aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14-in-attendance">In attendance</h4>
 <p>Async on slack:</p>
 
 <ul>
 <li>Ernest Man</li>
 <li>Owen Eveleigh</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14-description">Description</h4>
 <p>On the morning of 14th August 2023 when Ernest logged on around 9am in the morning and noticed the aws alarms was raised in our 
 slcak channel for datasette and datasette-tiles. Getting 502 error for both endpoints and diagnostic procedures started at that point.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14-running-log">Running log</h4>
 
 <ul>
 <li><p>Ernest and Owen started investigation at around 9am. We getting 502 when we hit those endpoints directly. The issue seems only 
