@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en" class="govuk-template no-js">
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <title>Data Operations Manual - Planning Data</title>
+
+    <link href="stylesheets/manifest.css" rel="stylesheet" />
+
+    <link rel="canonical" href="digital-land.github.io/data-operations-manual.html">
+
+      <meta name="robots" content="noindex" />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
+      <meta name="twitter:title" content="Data Operations Manual - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual.html" />
+
+      <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
+      <meta property="og:site_name" content="Planning Data" />
+      <meta property="og:title" content="Data Operations Manual" />
+      <meta property="og:type" content="object" />
+      <meta property="og:url" content="digital-land.github.io/data-operations-manual.html" />
+
+    
+  </head>
+
+  <body class="govuk-template__body">
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+
+    <div class="app-pane">
+      <div class="app-pane__header toc-open-disabled">
+        <a href="#content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+
+        <header class="govuk-header app-header" role="banner" data-module="govuk-header">
+  <div class="govuk-header__container govuk-header__container--full-width">
+    <div class="govuk-header__logo">
+      <a href="https://planning.data.gov.uk" class="govuk-header__link govuk-header__link--homepage">
+        <span class="govuk-header__product-name">
+          Planning Data
+        </span>
+      </a>
+        <strong class="govuk-tag">Beta</strong>
+    </div>
+  </div>
+</header>
+
+      </div>
+
+        <div id="toc-heading" class="toc-show fixedsticky">
+          <button type="button" class="toc-show__label js-toc-show" aria-controls="toc">
+            Table of contents <span class="toc-show__icon"></span>
+          </button>
+        </div>
+
+      <div class="app-pane__body" data-module="in-page-navigation">
+          <div class="app-pane__toc">
+            <div class="toc" data-module="table-of-contents" tabindex="-1" aria-label="Table of contents" role="dialog">
+              <div class="search" data-module="search" data-path-to-site-root="./">
+  <form action="https://www.google.co.uk/search" method="get" role="search" class="search__form govuk-!-margin-bottom-4">
+    <input type="hidden" name="as_sitesearch" value="digital-land.github.io"/>
+    <label class="govuk-label search__label" for="search" aria-hidden="true">
+      Search (via Google)
+    </label>
+    <input
+      type="text"
+      id="search" name="q"
+      class="govuk-input govuk-!-margin-bottom-0 search__input"
+      aria-controls="search-results"
+      placeholder="Search">
+    <button type="submit" class="search__button">Search</button>
+  </form>
+</div>
+
+              <button type="button" class="toc__close js-toc-close" aria-controls="toc" aria-label="Hide table of contents"></button>
+              <nav id="toc" class="js-toc-list toc__list" aria-labelledby="toc-heading" data-module="collapsible-navigation">
+                      <ul>
+  <li>
+    <a href="./index.html"><span>Planning Data Service</span></a>
+  </li>
+  <li>
+    <a href="./runbook.html"><span>Run Book</span></a>
+    <ul>
+      <li>
+        <a href="./runbook.html#outage-procedure"><span>Outage Procedure</span></a>
+      </li>
+      <li>
+        <a href="./runbook.html#common-issues"><span>Common Issues</span></a>
+      </li>
+      <li>
+        <a href="./runbook.html#incident-response-history"><span>Incident Response History</span></a>
+        <ul>
+          <li>
+            <a href="./runbook.html#maptiler-started-returning-403-errors-2023-08-16"><span>maptiler started returning 403 errors - 2023-08-16</span></a>
+          </li>
+          <li>
+            <a href="./runbook.html#aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14"><span>aws alarms raised for datasette and datasette-tiles canaries - 2023-08-14</span></a>
+          </li>
+          <li>
+            <a href="./runbook.html#documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12"><span>Documentation section on planning.data.gov.uk showing error - 2023-06-12</span></a>
+          </li>
+          <li>
+            <a href="./runbook.html#slowness-reported-on-planning-data-gov-uk-2023-06-01"><span>Slowness reported on planning.data.gov.uk - 2023-06-01</span></a>
+          </li>
+          <li>
+            <a href="./runbook.html#getting-error-500-on-planning-data-gov-uk-2023-04-11"><span>Getting error 500 on planning.data.gov.uk - 2023-04-11</span></a>
+          </li>
+          <li>
+            <a href="./runbook.html#all-applications-on-planning-data-gov-uk-2022-11-22"><span>All applications on planning.data.gov.uk - 2022-11-22</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="./infrastructure.html"><span>Infrastructure</span></a>
+    <ul>
+      <li>
+        <a href="./infrastructure.html#overview"><span>Overview</span></a>
+      </li>
+      <li>
+        <a href="./infrastructure.html#deploying"><span>Deploying</span></a>
+        <ul>
+          <li>
+          </li>
+          <li>
+            <a href="./infrastructure.html#an-existing-environment"><span>An Existing Environment</span></a>
+          </li>
+          <li>
+            <a href="./infrastructure.html#a-new-environment"><span>A New Environment</span></a>
+          </li>
+          <li>
+            <a href="./infrastructure.html#lambda-functions"><span>Lambda functions</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./infrastructure.html#configuration-changes"><span>Configuration Changes</span></a>
+        <ul>
+          <li>
+            <a href="./infrastructure.html#add-a-new-application"><span>Add a new application</span></a>
+          </li>
+          <li>
+            <a href="./infrastructure.html#add-a-new-background-task"><span>Add a new background task</span></a>
+          </li>
+          <li>
+            <a href="./infrastructure.html#rds-autoscaling"><span>RDS autoscaling</span></a>
+          </li>
+          <li>
+            <a href="./infrastructure.html#synthetics-canaries"><span>Synthetics Canaries</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="./data-operations-manual.html"><span>Data Operations Manual</span></a>
+    <ul>
+      <li>
+        <a href="./data-operations-manual.html#key-processes"><span>Key Processes</span></a>
+        <ul>
+          <li>
+            <a href="./data-operations-manual.html#validating-an-endpoint"><span>Validating an endpoint</span></a>
+          </li>
+          <li>
+            <a href="./data-operations-manual.html#adding-a-new-endpoint-with-a-new-source-to-the-system"><span>Adding a new endpoint (with a new source) to the system</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="./decision-record.html"><span>Architecture Decision Record</span></a>
+    <ul>
+      <li>
+        <a href="./decision-record.html#1-record-architecture-decisions"><span>1. Record architecture decisions</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#2-floating-package-dependencies"><span>2. floating-package-dependencies</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#3-use-the-repository-pattern-to-access-a-database"><span>3. Use the repository-pattern to access a database</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#4-implement-plugins-using-pluggy"><span>4. Implement plugins using pluggy</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#5-load-external-frontend-assets-first"><span>5. Load external frontend assets first</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#6-use-github-pages-for-our-content"><span>6. Use Github pages for our content</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#7-provide-unique-ids-for-dataset-entries"><span>7. Provide unique IDs for dataset entries</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#8-use-files-for-repositories-databases-as-indexes"><span>8. Use files for repositories, databases as indexes</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#9-use-sqlite-for-data-packages"><span>9. Use SQLite for data packages</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#10-use-the-entity-value-attribute-pattern-for-our-data-model"><span>10. Use the Entity-Value-Attribute pattern for our data model</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#11-avoid-git-submodules-wherever-possible"><span>11. Avoid git submodules wherever possible</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#12-collection-names-should-be-singular"><span>12. Collection names should be singular</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#13-use-github-lfs-for-large-git-files"><span>13. Use Github LFS for large git files</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#14-use-kebab-case-for-names-in-data"><span>14. Use kebab-case for names in data</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#15-write-new-tests-at-the-lowest-possible-levels"><span>15. Write new tests at the lowest possible levels</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#16-missing-entry-dates"><span>16. Missing entry-dates</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./decision-record.html#17-use-vector-tiles-to-display-geographic-data-on-a-map"><span>17. Use vector tiles to display geographic data on a map</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+              </nav>
+            </div>
+          </div>
+
+        <div class="app-pane__content toc-open-disabled">
+          <main id="content" class="technical-documentation" data-module="anchored-headings">
+            <h1 id="data-operations-manual">Data Operations Manual</h1>
+<p>The planning data service relies upon a set of data workflows. The main
+goal is to collect data from external organisations published in accordance with data specifications published by
+digital land and make it available as part of a national dataset.</p>
+<h2 id="key-processes">Key Processes</h2>
+<p>This is our list of key processes that the team will need to perform to maintain the service. They primarily rely on running CLI tools from our
+digital-land-python python package</p>
+<h3 id="validating-an-endpoint">Validating an endpoint</h3>
+<h3 id="adding-a-new-endpoint-with-a-new-source-to-the-system">Adding a new endpoint (with a new source) to the system</h3>
+<p>This is a fairly common process. As time goes on and we encourage LPAs to have a single constant endpoint per dataset we won&rsquo;t require it as often.</p>
+<p>Optional - before adding it may be worth validating the endpoint this will allow you to check that the data is processed correvtly before including it in the system.</p>
+
+<ol>
+<li>Clone the relevant collection repository from Github. You will need to have at least contributer access to push your changes at the end. Once downloaded ensure dependencies have been installed and the repo has been initialised using <code>gake init</code></li>
+<li>Run the command:<br>
+<code>digital-land collection-add-source &lt;collection-name&gt; &lt;endpoint-url&gt; organisation &lt;organisation-name&gt;</code> <br></li>
+<li>Edit source.csv
+
+<ol>
+<li>add any pipelines (equivalent name as the dataset) that any collected resources should be ran through.</li>
+<li>check organisation has been provided (it should&rsquo;ve been in the above command)</li>
+<li>add a documentation-url of the webpage which lists the the endpoint-url</li>
+<li>ad a reference name for the licence and attribution</li>
+</ol></li>
+<li>Assign new entity numbers using the first resource you can collect from the endpoint</li>
+<li>run the pipeline and check the resulting sqlite to see if the data is correctly process. Running <code>make datasette</code> will spin up a local datasette server contianing the sqlite db created. This can be useful for investigating the data. </li>
+</ol>
+
+            
+          </main>
+
+          <aside>
+          </aside>
+
+          <footer class="govuk-footer app-footer" role="contentinfo">
+  <div class="govuk-footer__meta">
+    <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+
+
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        class="govuk-footer__licence-logo"
+        xmlns="http://www.w3.org/2000/svg"
+        viewbox="0 0 483.2 195.7"
+        height="17"
+        width="41"
+      >
+        <path
+          fill="currentColor"
+          d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
+        />
+      </svg>
+      <span class="govuk-footer__licence-description">
+        All content is available under the
+        <a
+          class="govuk-footer__link"
+          href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+          rel="license"
+        >Open Government Licence v3.0</a>, except where otherwise stated
+      </span>
+    </div>
+    <div class="govuk-footer__meta-item">
+      <a
+        class="govuk-footer__link govuk-footer__copyright-logo"
+        href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
+      >© Crown copyright</a>
+    </div>
+  </div>
+</footer>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <script src="javascripts/application.js"></script>
+  </body>
+</html>
