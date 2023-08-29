@@ -1,0 +1,36 @@
+---
+title: Data Operations Manual
+weight: 0
+---
+
+# Data Operations Manual
+
+The planning data service relies upon a set of data workflows. The main
+goal is to collect data from external organisations published in accordance with data specifications published by
+digital land and make it available as part of a national dataset.
+
+## Key Processes
+
+This is our list of key processes that the team will need to perform to maintain the service. They primarily rely on running CLI tools from our
+digital-land-python python package
+
+### Adding a new endpoint (with a new source) to the system
+
+This is a fairly common process. As time goes on and we encourage LPAs to have a single constant endpoint per dataset we won't require it as often. 
+
+Optional - before adding it may be worth validating the endpoint this will allow you to check that the data is processed correvtly before including it in the system.
+
+1. Clone the relevant collection repository from Github. You will need to have at least contributer access to push your changes at the end. Once downloaded ensure dependencies have been installed and the repo has been initialised using `gake init`
+2. Run the command:<br>
+`digital-land collection-add-source <collection-name> <endpoint-url> organisation <organisation-name>` <br>
+3. Edit source.csv
+    1. add any pipelines (equivalent name as the dataset) that any collected resources should be ran through.
+    2. check organisation has been provided (it should've been in the above command)
+    3. add a documentation-url of the webpage which lists the the endpoint-url
+    4. ad a reference name for the licence and attribution
+4. Assign new entity numbers using the first resource you can collect from the endpoint
+5. run the pipeline and check the resulting sqlite to see if the data is correctly process. Running `make datasette` will spin up a local datasette server contianing the sqlite db created. This can be useful for investigating the data. 
+
+
+
+
