@@ -37,13 +37,15 @@ Run the following line from the **digital-land-python** repository, using a virt
 python dependencies required by **digital-land-python**
 (line broken up for readability)
 ```
+python -m digital_land
 -n [DATASET-NAME] \
--p [COLL-DIR]/pipeline \
 -s [SPECIFICATION-DIR] \
-add_endpoint_and_lookups_cmd \
+add-endpoints-and-lookups \
 [CSV-PATH]/[FILE_NAME].csv] \
+[COLLECTION_NAME]
 -c [COLL-DIR]/collection \
--o [ORGANISATION-DIR]
+-o [ORGANISATION.CSV FILE PATH]
+-p [COLL-DIR]/pipeline
 ```
 
 #### 5. check assigned entities are normal
@@ -51,9 +53,9 @@ After running the command, the following Collection repo
 files will be modified:
 
 ```
-collection/source.csv
-collection/endpoints.csv
-pipeline/lookup.csv
+[COLL-DIR]/collection/source.csv
+[COLL-DIR]/collection/endpoints.csv
+[COLL-DIR]/pipeline/lookup.csv
 ```
 
 The console output will show a list of new lookup entries
