@@ -12,17 +12,19 @@ digital land and make it available as part of a national dataset.
 ## Key Processes
 
 This is our list of key processes that the team will need to perform to maintain the service. They primarily rely on running CLI tools from our
-digital-land-python python package
+digital-land-python python package. 
 
-### CLI Command: add_endpoint_and_lookups_cmd
+### Adding Endpoints To A Collection
+
+This is a fairly common process for us especially as we initially grow the data on the site.
 
 #### 1. Checkout repo
 From Github, checkout the Collection repo you wish to add endpoints to.
-Make a note of the location [COLL-DIR].
 
 #### 2. run collection init
 Run the following lines from a virtual env containing the required
 python dependencies required by the collection repo
+
 ```
 make makerules
 make init
@@ -30,22 +32,32 @@ make init
 
 #### 3. get your csv of endpoints to add
 Find or generate a csv file of the entries that need to be added
-to the collection. Make a note of the location [CSV-PATH] / *FILE_NAME*.csv].
+to the collection. Make a note of the location. The following columns need to be included in the csv:
+- `endpoint-url` - the url that the collector needs to extract data from
+- `documentation-url` - a url on a government related domain which contain information regarding the data
+- `start-date` - the date that the collector should start from (this can be in the past)
+- `plugins` - if a plugin is required to extract that data then it can be noted here othwerwise leave blank
+- `pipelines` - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is neccessaary they should be separated by `;`
+- `organisation` - the organisation which the endpoint belongs to. The name should be in [this list](https://datasette.planning.data.gov.uk/digital-land/organisation)
 
 #### 4. run add_endpoint_and_lookups_cmd
-Run the following line from the **digital-land-python** repository, using a virtual env containing the required
-python dependencies required by **digital-land-python**
+Run the following line from the **digital-land-python** repository, using the virtual env created in step 2.
+As a minimum you'll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.
+This won't need to include `collection` in it. So if your working in the `conservation-area-collection` then you would use `conservation-area` 
 (line broken up for readability)
 ```
-python -m digital_land
--n [DATASET-NAME] \
--s [SPECIFICATION-DIR] \
-add-endpoints-and-lookups \
-[CSV-PATH]/[FILE_NAME].csv] \
+digital_land add-endpoints-and-lookups \
+[INPUT-CSV-PATH] \
 [COLLECTION_NAME]
--c [COLL-DIR]/collection \
--o [ORGANISATION.CSV FILE PATH]
--p [COLL-DIR]/pipeline
+```
+
+The above command will work for the default collection set-up however you can set set the location
+of the key dependenciess if any of the directories or files are in a different location.
+```
+-c, --collection-dir [COLLECTION-DIRECTORY; default="/collection"] The directory containing the collection configuration files, collection logs and resources
+-o, --organisation-path [ORGANISATION-CSV-PATH; default="var/cache/organisation.csv"] The path to the csv containing the list of organisations
+-s, --specification-dir [SPECIFICATION-DIR; default="/specification"] The directory containing the specification files
+-p, --pipeline-dir [PIPELINE-DIRECTORY; default="/pipeline"] The direcotry contianing pipeline configuration files
 ```
 
 #### 5. check assigned entities are normal
@@ -53,9 +65,9 @@ After running the command, the following Collection repo
 files will be modified:
 
 ```
-[COLL-DIR]/collection/source.csv
-[COLL-DIR]/collection/endpoints.csv
-[COLL-DIR]/pipeline/lookup.csv
+collection/source.csv
+collection/endpoints.csv
+pipeline/lookup.csv
 ```
 
 The console output will show a list of new lookup entries
@@ -82,7 +94,7 @@ organisation and reference.
 Run the following line from a virtual env containing the required
 python dependencies required by the collection repo
 ```
-make collect
+make
 ```
 
 #### 7. perform final checks of the data for any anomalies
@@ -92,3 +104,10 @@ One approach might be to identify a new (or newly updated) entry in the
 .csv file, and search for this entry in the digital_land website.
 Navigating through to the Entity screen will show information that may
 be compared to the data in the collection/source.csv
+
+Once the pipeline is ran you can also use the following command to interrogate 
+the local datasets (in the sqlite files) using datasette
+
+## Technical Glossary
+We use a lot of terms that are very specific to our system. Sometimes these also vary based on context so this is an attempt
+to build a collective understanding in one place.
