@@ -161,12 +161,22 @@
         <a href="./data-operations-manual.html#key-processes"><span>Key Processes</span></a>
         <ul>
           <li>
-            <a href="./data-operations-manual.html#validating-an-endpoint"><span>Validating an endpoint</span></a>
-          </li>
-          <li>
-            <a href="./data-operations-manual.html#adding-a-new-endpoint-with-a-new-source-to-the-system"><span>Adding a new endpoint (with a new source) to the system</span></a>
+            <a href="./data-operations-manual.html#adding-endpoints-to-a-collection"><span>Adding Endpoints To A Collection</span></a>
           </li>
         </ul>
+      </li>
+      <li>
+        <a href="./data-operations-manual.html#"><span>“`</span></a>
+      </li>
+      <li>
+        <a href="./data-operations-manual.html#resource-6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1"><span>resource:6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./data-operations-manual.html#technical-glossary"><span>Technical Glossary</span></a>
       </li>
     </ul>
   </li>
@@ -309,27 +319,94 @@ goal is to collect data from external organisations published in accordance with
 digital land and make it available as part of a national dataset.</p>
 <h2 id="key-processes">Key Processes</h2>
 <p>This is our list of key processes that the team will need to perform to maintain the service. They primarily rely on running CLI tools from our
-digital-land-python python package</p>
-<h3 id="validating-an-endpoint">Validating an endpoint</h3>
-<h3 id="adding-a-new-endpoint-with-a-new-source-to-the-system">Adding a new endpoint (with a new source) to the system</h3>
-<p>This is a fairly common process. As time goes on and we encourage LPAs to have a single constant endpoint per dataset we won&rsquo;t require it as often.</p>
-<p>Optional - before adding it may be worth validating the endpoint this will allow you to check that the data is processed correvtly before including it in the system.</p>
+digital-land-python python package.</p>
+<h3 id="adding-endpoints-to-a-collection">Adding Endpoints To A Collection</h3>
+<p>This is a fairly common process for us especially as we initially grow the data on the site.</p>
+<h4 id="1-checkout-repo">1. Checkout repo</h4>
+<p>From Github, checkout the Collection repo you wish to add endpoints to.</p>
+<h4 id="2-run-collection-init">2. run collection init</h4>
+<p>Run the following lines from a virtual env containing the required
+python dependencies required by the collection repo</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>make makerules
+make init
+</code></pre></div><h4 id="3-get-your-csv-of-endpoints-to-add">3. get your csv of endpoints to add</h4>
+<p>Find or generate a csv file of the entries that need to be added
+to the collection. Make a note of the location. The following columns need to be included in the csv:
+- <code>endpoint-url</code> - the url that the collector needs to extract data from
+- <code>documentation-url</code> - a url on a government related domain which contain information regarding the data
+- <code>start-date</code> - the date that the collector should start from (this can be in the past)
+- <code>plugins</code> - if a plugin is required to extract that data then it can be noted here othwerwise leave blank
+- <code>pipelines</code> - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is neccessaary they should be separated by <code>;</code>
+- <code>organisation</code> - the organisation which the endpoint belongs to. The name should be in <a href="https://datasette.planning.data.gov.uk/digital-land/organisation">this list</a></p>
+<h4 id="4-run-add-endpoint-and-lookups-cmd">4. run add_endpoint_and_lookups_cmd</h4>
+<p>Run the following line from the <strong>digital-land-python</strong> repository, using the virtual env created in step 2.
+As a minimum you&rsquo;ll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.
+This won&rsquo;t need to include <code>collection</code> in it. So if your working in the <code>conservation-area-collection</code> then you would use <code>conservation-area</code> 
+(line broken up for readability)
+<code>
+digital_land add-endpoints-and-lookups \
+[INPUT-CSV-PATH] \
+[COLLECTION_NAME]
+</code></p>
+<p>The above command will work for the default collection set-up however you can set set the location
+of the key dependenciess if any of the directories or files are in a different location.
+<code>
+-c, --collection-dir [COLLECTION-DIRECTORY; default=&quot;/collection&quot;] The directory containing the collection configuration files, collection logs and resources
+-o, --organisation-path [ORGANISATION-CSV-PATH; default=&quot;var/cache/organisation.csv&quot;] The path to the csv containing the list of organisations
+-s, --specification-dir [SPECIFICATION-DIR; default=&quot;/specification&quot;] The directory containing the specification files
+-p, --pipeline-dir [PIPELINE-DIRECTORY; default=&quot;/pipeline&quot;] The direcotry contianing pipeline configuration files
+</code></p>
+<h4 id="5-check-assigned-entities-are-normal">5. check assigned entities are normal</h4>
+<p>After running the command, the following Collection repo
+files will be modified:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>collection/source.csv
+collection/endpoints.csv
+pipeline/lookup.csv
+</code></pre></div><p>The console output will show a list of new lookup entries
+organised by organisation and resource-hash.
+E.g.</p>
+<h2 id="">&ldquo;`</h2>
 
-<ol>
-<li>Clone the relevant collection repository from Github. You will need to have at least contributer access to push your changes at the end. Once downloaded ensure dependencies have been installed and the repo has been initialised using <code>gake init</code></li>
-<li>Run the command:<br>
-<code>digital-land collection-add-source &lt;collection-name&gt; &lt;endpoint-url&gt; organisation &lt;organisation-name&gt;</code> <br></li>
-<li>Edit source.csv
-
-<ol>
-<li>add any pipelines (equivalent name as the dataset) that any collected resources should be ran through.</li>
-<li>check organisation has been provided (it should&rsquo;ve been in the above command)</li>
-<li>add a documentation-url of the webpage which lists the the endpoint-url</li>
-<li>ad a reference name for the licence and attribution</li>
-</ol></li>
-<li>Assign new entity numbers using the first resource you can collect from the endpoint</li>
-<li>run the pipeline and check the resulting sqlite to see if the data is correctly process. Running <code>make datasette</code> will spin up a local datasette server contianing the sqlite db created. This can be useful for investigating the data. </li>
-</ol>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>organisations:[&lsquo;local-authority-eng:ARU&rsquo;]</p>
+<h2 id="resource-6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1">resource:6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1</h2>
+<p>brownfield-land,,local-authority-eng:ARU,BR23911,1729345
+brownfield-land,,local-authority-eng:ARU,BR19811,1729346
+&hellip;
+&rdquo;`
+Find the first lookup entry in the console output,
+make a note of the entity id (the number at the end),
+and find this in pipeline/lookup.csv.</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>Check this and all subsequent lines in lookup.csv for
+any anomalies. Each record should have, as a minimum, a prefix,
+organisation and reference.</p>
+<h4 id="6-run-pipeline">6. run pipeline</h4>
+<p>Run the following line from a virtual env containing the required
+python dependencies required by the collection repo
+<code>
+make
+</code></p>
+<h4 id="7-perform-final-checks-of-the-data-for-any-anomalies">7. perform final checks of the data for any anomalies</h4>
+<p>How this step is performed will largely rely on the level of the operator&rsquo;s
+system knowledge.
+One approach might be to identify a new (or newly updated) entry in the
+.csv file, and search for this entry in the digital_land website.
+Navigating through to the Entity screen will show information that may
+be compared to the data in the collection/source.csv</p>
+<p>Once the pipeline is ran you can also use the following command to interrogate 
+the local datasets (in the sqlite files) using datasette</p>
+<h2 id="technical-glossary">Technical Glossary</h2>
+<p>We use a lot of terms that are very specific to our system. Sometimes these also vary based on context so this is an attempt
+to build a collective understanding in one place.
+|Term|Defition|
+|:&mdash;-|:&mdash;-|
+|Collection Repository| This referes to one of our 30+ repos in GitHub which contains all of the configuration to run a collection each night|
+|Collection Directory|This is different to a collection repo and is used to ddescribe the colleciton directory in each of the collection repos which contians both the config files for a collector to run and also the logs and collected resources from previous collector runs|</p>
 
             
           </main>
