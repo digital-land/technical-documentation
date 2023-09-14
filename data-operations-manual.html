@@ -287,6 +287,9 @@
           <li>
             <a href="./data-operations-manual.html#adding-endpoints-to-a-collection"><span>Adding Endpoints To A Collection</span></a>
           </li>
+          <li>
+            <a href="./data-operations-manual.html#creating-a-new-collection"><span>Creating a new collection</span></a>
+          </li>
         </ul>
       </li>
       <li>
@@ -381,6 +384,33 @@ Navigating through to the Entity screen will show information that may
 be compared to the data in the collection/source.csv</p>
 <p>Once the pipeline is ran you can also use the following command to interrogate 
 the local datasets (in the sqlite files) using datasette</p>
+<h3 id="creating-a-new-collection">Creating a new collection</h3>
+<p>This is needed when adding a dataset that doesn&rsquo;t belong to one of the collections
+that already exist.</p>
+<h4 id="1-ensure-the-collection-is-noted-in-the-specification">1 Ensure the collection is noted in the specification</h4>
+<p>Not doing this won&rsquo;t result in any specific errors but it should be done to ensure that the list of collections in the specification is up to date. This should be done with some visiability from the standards team</p>
+<h4 id="2-use-the-collection-template-to-create-a-repository">2 Use the <a href="https://github.com/digital-land/collection-template">collection-template</a> to create a repository</h4>
+<p>The <code>collection-template</code> repo is a template repository which can be used to create
+new collection repos. This is fairly simple using the Github UI. there is an option
+to use the template to create a new repo if you navigate to the <code>collection-template</code>
+page</p>
+<h4 id="3-update-readme">3 Update <code>.README</code></h4>
+<p>update the details in the readme file</p>
+<h4 id="4-deactivate-actions">4 deactivate actions</h4>
+<p>The collection comes with the action ready to run every night. This should be paused until
+your ready for it to be ran. This can be done by commenting out the following lines in the  <code>.github
+/workflows/run_caller.yaml</code> :</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>schedule:
+    - cron: 0 0 * * *
+</code></pre></div><h4 id="5-add-endpoints-edit-pipeline-config-files-and-test-locally">5 Add endpoints, edit pipeline config files and test locally.</h4>
+<p>This is where you need to get the pipeline running locally. see our other 
+processes on this page for how to add data</p>
+<h4 id="6-re-activate-actions">6 re-activate actions</h4>
+<p>Once the collection is ready to be ran nightly uncomment the line from above in 
+the git workflow yaml file and it will start running nightly!</p>
+<h4 id="7-process-review">7 process review</h4>
+<p>Everything else is done so it&rsquo;s worth reviewing this process and seeing if there&rsquo;s
+anyway we can improve it!</p>
 <h2 id="technical-glossary">Technical Glossary</h2>
 <p>We use a lot of terms that are very specific to our system. Sometimes these also vary based on context so this is an attempt
 to build a collective understanding in one place.</p>
