@@ -119,6 +119,52 @@ be compared to the data in the collection/source.csv
 Once the pipeline is ran you can also use the following command to interrogate 
 the local datasets (in the sqlite files) using datasette
 
+### Creating a new collection
+
+This is needed when adding a dataset that doesn't belong to one of the collections
+that already exist.
+
+#### 1 Ensure the collection is noted in the specification
+
+Not doing this won't result in any specific errors but it should be done to ensure that the list of collections in the specification is up to date. This should be done with some visiability from the standards team
+
+#### 2 Use the [collection-template](https://github.com/digital-land/collection-template) to create a repository
+
+The `collection-template` repo is a template repository which can be used to create
+new collection repos. This is fairly simple using the Github UI. there is an option
+to use the template to create a new repo if you navigate to the `collection-template`
+page
+
+#### 3 Update `.README`
+
+update the details in the readme file
+
+#### 4 deactivate actions
+
+The collection comes with the action ready to run every night. This should be paused until
+your ready for it to be ran. This can be done by commenting out the following lines in the  `.github
+/workflows/run_caller.yaml` :
+
+```
+schedule:
+    - cron: 0 0 * * *
+```
+
+#### 5 Add endpoints, edit pipeline config files and test locally.
+
+This is where you need to get the pipeline running locally. see our other 
+processes on this page for how to add data 
+
+#### 6 re-activate actions
+
+Once the collection is ready to be ran nightly uncomment the line from above in 
+the git workflow yaml file and it will start running nightly!
+
+#### 7 process review
+
+Everything else is done so it's worth reviewing this process and seeing if there's
+anyway we can improve it!
+
 ## Technical Glossary
 
 We use a lot of terms that are very specific to our system. Sometimes these also vary based on context so this is an attempt
