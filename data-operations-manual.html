@@ -155,32 +155,6 @@
     </ul>
   </li>
   <li>
-    <a href="./data-operations-manual.html"><span>Data Operations Manual</span></a>
-    <ul>
-      <li>
-        <a href="./data-operations-manual.html#key-processes"><span>Key Processes</span></a>
-        <ul>
-          <li>
-            <a href="./data-operations-manual.html#adding-endpoints-to-a-collection"><span>Adding Endpoints To A Collection</span></a>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <a href="./data-operations-manual.html#"><span>“`</span></a>
-      </li>
-      <li>
-        <a href="./data-operations-manual.html#resource-6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1"><span>resource:6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1</span></a>
-        <ul>
-          <li>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <a href="./data-operations-manual.html#technical-glossary"><span>Technical Glossary</span></a>
-      </li>
-    </ul>
-  </li>
-  <li>
     <a href="./decision-record.html"><span>Architecture Decision Record</span></a>
     <ul>
       <li>
@@ -304,6 +278,22 @@
       </li>
     </ul>
   </li>
+  <li>
+    <a href="./data-operations-manual.html"><span>Data Operations Manual</span></a>
+    <ul>
+      <li>
+        <a href="./data-operations-manual.html#key-processes"><span>Key Processes</span></a>
+        <ul>
+          <li>
+            <a href="./data-operations-manual.html#adding-endpoints-to-a-collection"><span>Adding Endpoints To A Collection</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="./data-operations-manual.html#technical-glossary"><span>Technical Glossary</span></a>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 
@@ -323,7 +313,7 @@ digital-land-python python package.</p>
 <h3 id="adding-endpoints-to-a-collection">Adding Endpoints To A Collection</h3>
 <p>This is a fairly common process for us especially as we initially grow the data on the site.</p>
 <h4 id="1-checkout-repo">1. Checkout repo</h4>
-<p>From Github, checkout the Collection repo you wish to add endpoints to.</p>
+<p>From Github, clone the collection repo you wish to add endpoints to.</p>
 <h4 id="2-run-collection-init">2. run collection init</h4>
 <p>Run the following lines from a virtual env containing the required
 python dependencies required by the collection repo</p>
@@ -331,25 +321,25 @@ python dependencies required by the collection repo</p>
 make init
 </code></pre></div><h4 id="3-get-your-csv-of-endpoints-to-add">3. get your csv of endpoints to add</h4>
 <p>Find or generate a csv file of the entries that need to be added
-to the collection. Make a note of the location. The following columns need to be included in the csv:
-- <code>endpoint-url</code> - the url that the collector needs to extract data from
-- <code>documentation-url</code> - a url on a government related domain which contain information regarding the data
-- <code>start-date</code> - the date that the collector should start from (this can be in the past)
-- <code>plugins</code> - if a plugin is required to extract that data then it can be noted here othwerwise leave blank
-- <code>pipelines</code> - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is neccessaary they should be separated by <code>;</code>
-- <code>organisation</code> - the organisation which the endpoint belongs to. The name should be in <a href="https://datasette.planning.data.gov.uk/digital-land/organisation">this list</a></p>
-<h4 id="4-run-add-endpoint-and-lookups-cmd">4. run add_endpoint_and_lookups_cmd</h4>
-<p>Run the following line from the <strong>digital-land-python</strong> repository, using the virtual env created in step 2.
-As a minimum you&rsquo;ll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.
-This won&rsquo;t need to include <code>collection</code> in it. So if your working in the <code>conservation-area-collection</code> then you would use <code>conservation-area</code> 
-(line broken up for readability)
-<code>
-digital_land add-endpoints-and-lookups \
-[INPUT-CSV-PATH] \
-[COLLECTION_NAME]
-</code></p>
-<p>The above command will work for the default collection set-up however you can set set the location
+to the collection. Make a note of the location. The following columns need to be included in the csv:</p>
+
+<ul>
+<li><code>endpoint-url</code> - the url that the collector needs to extract data from</li>
+<li><code>documentation-url</code> - a url on a government related domain which contain information regarding the data</li>
+<li><code>start-date</code> - the date that the collector should start from (this can be in the past)</li>
+<li><code>plugins</code> - if a plugin is required to extract that data then it can be noted here othwerwise leave blank</li>
+<li><code>pipelines</code> - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is neccessaary they should be separated by <code>;</code></li>
+<li><code>organisation</code> - the organisation which the endpoint belongs to. The name should be in <a href="https://datasette.planning.data.gov.uk/digital-land/organisation">this list</a></li>
+</ul>
+<p>If you haven&rsquo;t been given some of the above information then reach out to the data manager or tech lead for advise.</p>
+<h4 id="4-run-add-endpoint-and-lookups-cmd">4. run <code>add_endpoint_and_lookups_cmd</code></h4>
+<p>Run the following command from inside the repository with the virtual env created in step 2 activated.
+As a minimum you&rsquo;ll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.</p>
+<p>Note: collection name can be retrieved from the repository name. if your working in the <code>conservation-area-collection</code> repo then you would use <code>conservation-area</code></p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>digital_land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME]
+</code></pre></div><p>The above command will work for the default collection set-up however you can set set the location
 of the key dependenciess if any of the directories or files are in a different location.
+this is unnessary the majority of the time
 <code>
 -c, --collection-dir [COLLECTION-DIRECTORY; default=&quot;/collection&quot;] The directory containing the collection configuration files, collection logs and resources
 -o, --organisation-path [ORGANISATION-CSV-PATH; default=&quot;var/cache/organisation.csv&quot;] The path to the csv containing the list of organisations
@@ -365,33 +355,24 @@ pipeline/lookup.csv
 </code></pre></div><p>The console output will show a list of new lookup entries
 organised by organisation and resource-hash.
 E.g.</p>
-<h2 id="">&ldquo;`</h2>
-
-<blockquote>
-<blockquote>
-<blockquote>
-<p>organisations:[&lsquo;local-authority-eng:ARU&rsquo;]</p>
-<h2 id="resource-6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1">resource:6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1</h2>
-<p>brownfield-land,,local-authority-eng:ARU,BR23911,1729345
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>----------------------------------------------------------------------
+&gt;&gt;&gt; organisations:['local-authority-eng:ARU']
+&gt;&gt;&gt; resource:6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1
+----------------------------------------------------------------------
+brownfield-land,,local-authority-eng:ARU,BR23911,1729345
 brownfield-land,,local-authority-eng:ARU,BR19811,1729346
-&hellip;
-&rdquo;`
-Find the first lookup entry in the console output,
+...
+</code></pre></div><p>Find the first lookup entry in the console output,
 make a note of the entity id (the number at the end),
 and find this in pipeline/lookup.csv.</p>
-</blockquote>
-</blockquote>
-</blockquote>
 <p>Check this and all subsequent lines in lookup.csv for
 any anomalies. Each record should have, as a minimum, a prefix,
 organisation and reference.</p>
 <h4 id="6-run-pipeline">6. run pipeline</h4>
 <p>Run the following line from a virtual env containing the required
-python dependencies required by the collection repo
-<code>
-make
-</code></p>
-<h4 id="7-perform-final-checks-of-the-data-for-any-anomalies">7. perform final checks of the data for any anomalies</h4>
+python dependencies required by the collection repo</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>make
+</code></pre></div><h4 id="7-perform-final-checks-of-the-data-for-any-anomalies">7. perform final checks of the data for any anomalies</h4>
 <p>How this step is performed will largely rely on the level of the operator&rsquo;s
 system knowledge.
 One approach might be to identify a new (or newly updated) entry in the
@@ -402,12 +383,21 @@ be compared to the data in the collection/source.csv</p>
 the local datasets (in the sqlite files) using datasette</p>
 <h2 id="technical-glossary">Technical Glossary</h2>
 <p>We use a lot of terms that are very specific to our system. Sometimes these also vary based on context so this is an attempt
-to build a collective understanding in one place.
-|Term|Defition|
-|:&mdash;-|:&mdash;-|
-|Collection Repository| This referes to one of our 30+ repos in GitHub which contains all of the configuration to run a collection each night|
-|Collection Directory|This is different to a collection repo and is used to ddescribe the colleciton directory in each of the collection repos which contians both the config files for a collector to run and also the logs and collected resources from previous collector runs|</p>
-
+to build a collective understanding in one place.</p>
+<div class="table-container">
+        <table>
+          <tr>
+<th style="text-align: left">Term</th>
+<th style="text-align: left">Defition</th>
+</tr><tr>
+<td style="text-align: left">Collection Repository</td>
+<td style="text-align: left">This referes to one of our 30+ repos in GitHub which contains all of the configuration to run a collection each night</td>
+</tr><tr>
+<td style="text-align: left">Collection Directory</td>
+<td style="text-align: left">This is different to a collection repo and is used to ddescribe the colleciton directory in each of the collection repos which contians both the config files for a collector to run and also the logs and collected resources from previous collector runs</td>
+</tr>
+        </table>
+      </div>
             
           </main>
 
