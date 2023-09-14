@@ -19,9 +19,11 @@ digital-land-python python package.
 This is a fairly common process for us especially as we initially grow the data on the site.
 
 #### 1. Checkout repo
-From Github, checkout the Collection repo you wish to add endpoints to.
+
+From Github, clone the collection repo you wish to add endpoints to.
 
 #### 2. run collection init
+
 Run the following lines from a virtual env containing the required
 python dependencies required by the collection repo
 
@@ -31,8 +33,10 @@ make init
 ```
 
 #### 3. get your csv of endpoints to add
+
 Find or generate a csv file of the entries that need to be added
 to the collection. Make a note of the location. The following columns need to be included in the csv:
+
 - `endpoint-url` - the url that the collector needs to extract data from
 - `documentation-url` - a url on a government related domain which contain information regarding the data
 - `start-date` - the date that the collector should start from (this can be in the past)
@@ -40,19 +44,22 @@ to the collection. Make a note of the location. The following columns need to be
 - `pipelines` - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is neccessaary they should be separated by `;`
 - `organisation` - the organisation which the endpoint belongs to. The name should be in [this list](https://datasette.planning.data.gov.uk/digital-land/organisation)
 
-#### 4. run add_endpoint_and_lookups_cmd
-Run the following line from the **digital-land-python** repository, using the virtual env created in step 2.
+If you haven't been given some of the above information then reach out to the data manager or tech lead for advise. 
+
+#### 4. run `add_endpoint_and_lookups_cmd`
+
+Run the following command from inside the repository with the virtual env created in step 2 activated.
 As a minimum you'll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.
-This won't need to include `collection` in it. So if your working in the `conservation-area-collection` then you would use `conservation-area` 
-(line broken up for readability)
+
+Note: collection name can be retrieved from the repository name. if your working in the `conservation-area-collection` repo then you would use `conservation-area` 
+
 ```
-digital_land add-endpoints-and-lookups \
-[INPUT-CSV-PATH] \
-[COLLECTION_NAME]
+digital_land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME]
 ```
 
 The above command will work for the default collection set-up however you can set set the location
 of the key dependenciess if any of the directories or files are in a different location.
+this is unnessary the majority of the time
 ```
 -c, --collection-dir [COLLECTION-DIRECTORY; default="/collection"] The directory containing the collection configuration files, collection logs and resources
 -o, --organisation-path [ORGANISATION-CSV-PATH; default="var/cache/organisation.csv"] The path to the csv containing the list of organisations
@@ -73,6 +80,7 @@ pipeline/lookup.csv
 The console output will show a list of new lookup entries
 organised by organisation and resource-hash.
 E.g.
+
 ```
 ----------------------------------------------------------------------
 >>> organisations:['local-authority-eng:ARU']
@@ -82,6 +90,7 @@ brownfield-land,,local-authority-eng:ARU,BR23911,1729345
 brownfield-land,,local-authority-eng:ARU,BR19811,1729346
 ...
 ```
+
 Find the first lookup entry in the console output,
 make a note of the entity id (the number at the end),
 and find this in pipeline/lookup.csv.
@@ -91,8 +100,10 @@ any anomalies. Each record should have, as a minimum, a prefix,
 organisation and reference.
 
 #### 6. run pipeline
+
 Run the following line from a virtual env containing the required
 python dependencies required by the collection repo
+
 ```
 make
 ```
@@ -109,8 +120,10 @@ Once the pipeline is ran you can also use the following command to interrogate
 the local datasets (in the sqlite files) using datasette
 
 ## Technical Glossary
+
 We use a lot of terms that are very specific to our system. Sometimes these also vary based on context so this is an attempt
 to build a collective understanding in one place.
+
 |Term|Defition|
 |:----|:----|
 |Collection Repository| This referes to one of our 30+ repos in GitHub which contains all of the configuration to run a collection each night|
