@@ -14,7 +14,7 @@ digital land and make it available as part of a national dataset.
 This is our list of key processes that the team will need to perform to maintain the service. They primarily rely on running CLI tools from our
 digital-land-python python package. 
 
-### Adding Endpoints To A Collection
+### Adding Endpoints To A Collection Manually
 
 This is a fairly common process for us especially as we initially grow the data on the site.
 
@@ -27,7 +27,7 @@ From Github, clone the collection repo you wish to add endpoints to.
 Run the following lines from a virtual env containing the required
 python dependencies required by the collection repo
 
-```
+```bash
 make makerules
 make init
 ```
@@ -125,22 +125,22 @@ the local datasets (in the sqlite files) using datasette
 This is needed when adding a dataset that doesn't belong to one of the collections
 that already exist.
 
-#### 1 Ensure the collection is noted in the specification
+#### 1. Ensure the collection is noted in the specification
 
 Not doing this won't result in any specific errors but it should be done to ensure that the list of collections in the specification is up to date. This should be done with some visiability from the standards team
 
-#### 2 Use the [collection-template](https://github.com/digital-land/collection-template) to create a repository
+#### 2. Use the [collection-template](https://github.com/digital-land/collection-template) to create a repository
 
 The `collection-template` repo is a template repository which can be used to create
 new collection repos. This is fairly simple using the Github UI. there is an option
 to use the template to create a new repo if you navigate to the `collection-template`
 page
 
-#### 3 Update `.README`
+#### 3. Update `.README`
 
-update the details in the readme file
+Update the details in the readme file.
 
-#### 4 deactivate actions
+#### 4. Deactivate actions
 
 The collection comes with the action ready to run every night. This should be paused until
 your ready for it to be ran. This can be done by commenting out the following lines in the  `.github
@@ -151,20 +151,25 @@ schedule:
     - cron: 0 0 * * *
 ```
 
-#### 5 Add endpoints, edit pipeline config files and test locally.
+#### 5. Add endpoints, edit pipeline config files and test locally.
 
 This is where you need to get the pipeline running locally. see our other 
 processes on this page for how to add data 
 
-#### 6 re-activate actions
+#### 6. Re-activate actions
 
 Once the collection is ready to be ran nightly uncomment the line from above in 
 the git workflow yaml file and it will start running nightly!
 
-#### 7 process review
+
+---
+**Process Review**
 
 Everything else is done so it's worth reviewing this process and seeing if there's
 anyway we can improve it!
+
+---
+
 
 ### Adding a new dataset
 
@@ -200,21 +205,25 @@ Note: if you are adding a dataset that is 'hosted' by us then it can be put in a
 
 it's worth testing the dataset locally and in the GHA. this ensures that everything is working as expected. configuratino files can be altered to ensure it works as expected.
 
-#### 5. add the collection to the dataset in the specification
+#### 5. Add the collection to the dataset in the specification
 
 This will signal that the dataset should be loaded into the postgresql DB behind the platform. once this step is done when the collection is ran it'll upload to the platform.
 
-#### 6. Review this process and documentation
+---
+**Process Review**
 
-Everything else is done so it’s worth reviewing this process and seeing if there’s anyway we can improve it!
+Everything else is done so it's worth reviewing this process and seeing if there's
+anyway we can improve it!
+
+---
 
 ## Technical Glossary
 
 We use a lot of terms that are very specific to our system. Sometimes these also vary based on context so this is an attempt
 to build a collective understanding in one place.
 
-|Term|Defition|
+|Term|Definition|
 |:----|:----|
-|Collection Repository| This referes to one of our 30+ repos in GitHub which contains all of the configuration to run a collection each night|
-|Collection Directory|This is different to a collection repo and is used to ddescribe the colleciton directory in each of the collection repos which contians both the config files for a collector to run and also the logs and collected resources from previous collector runs|
+|Collection Repository| This refers to one of our 30+ repos in GitHub which contain all of the configuration to run a collection each night.|
+|Collection Directory|This is different to a collection repo and is used to ddescribe the colleciton directory in each of the collection repos which contian both the config files for a collector to run and also the logs and collected resources from previous collector runs.|
 
