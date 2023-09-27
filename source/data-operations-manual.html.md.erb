@@ -223,6 +223,47 @@ anyway we can improve it!
 
 ---
 
+### Ending an endpoint
+This is needed whenever an endpoint is consistently failing or an LPA want’s to change to us getting the data from a different source.
+this process does not remove the record of an endpoint but it stops the collector from attempting to retrieve new resources from it.
+
+#### 1. Identify and end endpoint
+You’ll need to identify the endpoint your looking to remove. The minimum information you’ll need is either the `endpoint-url` e.g. `https://raw.githubusercontent.com/digital-land/ancient-woodland-collection/main/data/ancient-woodland-status.csv` or the `endpoint` (hash) e.g. `f22b13c88a6c367b06e4c80aa61cb1620d7ca03193daeb6c5f65d014d16c6d2e`
+Using either fo these fields you can navigate to the the appropriate endpoint.csv and add an end-date to the line.
+The end-date must have the format `YYYY-MM-DD` otherwise it can cause errors further down the pipeline.
+Note: editing the endpoint.csv can either be done by cloning the specific collection repo or by editing it in the browser via github’s ui
+
+#### 2. Identify and end sources
+Sources are dependant on endpoints so they should have end-dates added as well. This can easily be done by locating the relevant lines in the `source.csv` which have the endpoint hash associated with them.
+As above the end-date must have the format `YYYY-MM-DD` otherwise it can cause errors further down the pipeline.
+Note: remember there may be multiple sources for one endpoint!
+
+#### 3. Optional - Stop old resources processing
+When removing an endpoint there is an important question that needs to be asked. Should we still process resources collected from this endpoint?
+The majority of the time the answer to this will be yes. For example if we have collected 2022 brownfield land data for an LPA and we need to change to a 2023 endpoint then we still want to keep the 2022 data in our system.
+Identify the resource hashes for the endpoint your removing and follow the retire a resource process1
+
+#### 4. Review this process and documentation
+Everything else is done so it’s worth reviewing this process and seeing if there’s anyway we can improve it!
+
+### Retiring a resource
+Sometimes a resource should not continue to be processed and included in the platform. this can happen for a few different reasons an example would be that it contains significant errors and therefore should be removed.
+
+#### 1. Identify resource hashes
+In order to remove a resource the main thing you’ll need is the hash value for the resource. There are a number of ways to find this by examining tables in datasette or running `make collection` and examining the resource.csv
+
+#### 2. add rows to `old-resource.csv`
+for each resource you want to retire you’ll need to to create a row in the csv. For each row you’ll need the following information:
+* `old-resource` - the resource hash you identified above
+* `status` - for retiring a resource this should be `410`
+* `resource` - not needed for retiring an endpoint
+* `notes` - details on why the resource should no longer be processed
+
+#### 4. Review this process and documentation
+Everything else is done so it’s worth reviewing this process and seeing if there’s anyway we can improve it!
+
+
+
 ## Validating an Endpoint
 
 We offer two complimentary ways of doing this - a quick way using the Endpoint Checker, and a more thorough manual method.
