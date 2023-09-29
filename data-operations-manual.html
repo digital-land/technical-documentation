@@ -282,10 +282,17 @@
     <a href="./data-operations-manual.html"><span>Data Operations Manual</span></a>
     <ul>
       <li>
+        <ul>
+          <li>
+            <a href="./data-operations-manual.html#audience-for-this-document"><span>Audience for this document</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
         <a href="./data-operations-manual.html#key-processes"><span>Key Processes</span></a>
         <ul>
           <li>
-            <a href="./data-operations-manual.html#adding-endpoints-to-a-collection"><span>Adding Endpoints To A Collection</span></a>
+            <a href="./data-operations-manual.html#adding-endpoints-to-a-collection-manually"><span>Adding Endpoints To A Collection Manually</span></a>
           </li>
           <li>
             <a href="./data-operations-manual.html#creating-a-new-collection"><span>Creating a new collection</span></a>
@@ -293,10 +300,35 @@
           <li>
             <a href="./data-operations-manual.html#adding-a-new-dataset"><span>Adding a new dataset</span></a>
           </li>
+          <li>
+            <a href="./data-operations-manual.html#ending-an-endpoint"><span>Ending an endpoint</span></a>
+          </li>
+          <li>
+            <a href="./data-operations-manual.html#retiring-a-resource"><span>Retiring a resource</span></a>
+          </li>
         </ul>
       </li>
       <li>
+        <a href="./data-operations-manual.html#validating-an-endpoint"><span>Validating an Endpoint</span></a>
+        <ul>
+          <li>
+            <a href="./data-operations-manual.html#validating-an-endpoint-with-the-endpoint-checker"><span>Validating an Endpoint with the Endpoint Checker</span></a>
+          </li>
+          <li>
+            <a href="./data-operations-manual.html#validating-an-endpoint-using-the-command-line"><span>Validating an Endpoint using the command-line</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="./data-operations-manual.html"><span>Reference</span></a>
+    <ul>
+      <li>
         <a href="./data-operations-manual.html#technical-glossary"><span>Technical Glossary</span></a>
+      </li>
+      <li>
+        <a href="./data-operations-manual.html#key-repositories"><span>Key Repositories</span></a>
       </li>
     </ul>
   </li>
@@ -310,20 +342,23 @@
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
             <h1 id="data-operations-manual">Data Operations Manual</h1>
-<p>The planning data service relies upon a set of data workflows. The main
-goal is to collect data from external organisations published in accordance with data specifications published by
-digital land and make it available as part of a national dataset.</p>
+<p>We have two main goals:
+* To collect data from external organisations published in accordance with data specifications we created,
+* and make it available as part of a national dataset.</p>
+<p>The planning data service relies upon a set of data workflows to achieve that goal.</p>
+<h3 id="audience-for-this-document">Audience for this document</h3>
+<p>This document is ultimately intended for people who need to run data operations for the Planning Data Platform. It is not intended as a manual for software developers.</p>
 <h2 id="key-processes">Key Processes</h2>
 <p>This is our list of key processes that the team will need to perform to maintain the service. They primarily rely on running CLI tools from our
 digital-land-python python package.</p>
-<h3 id="adding-endpoints-to-a-collection">Adding Endpoints To A Collection</h3>
+<h3 id="adding-endpoints-to-a-collection-manually">Adding Endpoints To A Collection Manually</h3>
 <p>This is a fairly common process for us especially as we initially grow the data on the site.</p>
 <h4 id="1-checkout-repo">1. Checkout repo</h4>
 <p>From Github, clone the collection repo you wish to add endpoints to.</p>
 <h4 id="2-run-collection-init">2. run collection init</h4>
 <p>Run the following lines from a virtual env containing the required
 python dependencies required by the collection repo</p>
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>make makerules
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>make makerules
 make init
 </code></pre></div><h4 id="3-get-your-csv-of-endpoints-to-add">3. get your csv of endpoints to add</h4>
 <p>Find or generate a csv file of the entries that need to be added
@@ -383,38 +418,42 @@ One approach might be to identify a new (or newly updated) entry in the
 .csv file, and search for this entry in the digital_land website.
 Navigating through to the Entity screen will show information that may
 be compared to the data in the collection/source.csv</p>
-<p>Once the pipeline is ran you can also use the following command to interrogate 
+<p>Once the pipeline is ran you can also use the following command to interrogate
 the local datasets (in the sqlite files) using datasette</p>
 <h3 id="creating-a-new-collection">Creating a new collection</h3>
 <p>This is needed when adding a dataset that doesn&rsquo;t belong to one of the collections
 that already exist.</p>
-<h4 id="1-ensure-the-collection-is-noted-in-the-specification">1 Ensure the collection is noted in the specification</h4>
+<h4 id="1-ensure-the-collection-is-noted-in-the-specification">1. Ensure the collection is noted in the specification</h4>
 <p>Not doing this won&rsquo;t result in any specific errors but it should be done to ensure that the list of collections in the specification is up to date. This should be done with some visiability from the standards team</p>
-<h4 id="2-use-the-collection-template-to-create-a-repository">2 Use the <a href="https://github.com/digital-land/collection-template">collection-template</a> to create a repository</h4>
+<h4 id="2-use-the-collection-template-to-create-a-repository">2. Use the <a href="https://github.com/digital-land/collection-template">collection-template</a> to create a repository</h4>
 <p>The <code>collection-template</code> repo is a template repository which can be used to create
 new collection repos. This is fairly simple using the Github UI. there is an option
 to use the template to create a new repo if you navigate to the <code>collection-template</code>
 page</p>
-<h4 id="3-update-readme">3 Update <code>.README</code></h4>
-<p>update the details in the readme file</p>
-<h4 id="4-deactivate-actions">4 deactivate actions</h4>
+<h4 id="3-update-readme">3. Update <code>.README</code></h4>
+<p>Update the details in the readme file.</p>
+<h4 id="4-deactivate-actions">4. Deactivate actions</h4>
 <p>The collection comes with the action ready to run every night. This should be paused until
-your ready for it to be ran. This can be done by commenting out the following lines in the  <code>.github
+your ready for it to be ran. This can be done by commenting out the following lines in the <code>.github
 /workflows/run_caller.yaml</code> :</p>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>schedule:
-    - cron: 0 0 * * *
-</code></pre></div><h4 id="5-add-endpoints-edit-pipeline-config-files-and-test-locally">5 Add endpoints, edit pipeline config files and test locally.</h4>
-<p>This is where you need to get the pipeline running locally. see our other 
+- cron: 0 0 * * *
+</code></pre></div><h4 id="5-add-endpoints-edit-pipeline-config-files-and-test-locally">5. Add endpoints, edit pipeline config files and test locally.</h4>
+<p>This is where you need to get the pipeline running locally. see our other
 processes on this page for how to add data</p>
-<h4 id="6-re-activate-actions">6 re-activate actions</h4>
-<p>Once the collection is ready to be ran nightly uncomment the line from above in 
+<h4 id="6-re-activate-actions">6. Re-activate actions</h4>
+<p>Once the collection is ready to be ran nightly uncomment the line from above in
 the git workflow yaml file and it will start running nightly!</p>
-<h4 id="7-process-review">7 process review</h4>
+
+<hr>
+<p><strong>Process Review</strong></p>
 <p>Everything else is done so it&rsquo;s worth reviewing this process and seeing if there&rsquo;s
 anyway we can improve it!</p>
+
+<hr>
 <h3 id="adding-a-new-dataset">Adding a new dataset</h3>
-<p>These requests will likely be few and far between but will happen and will require 
-co-ordination between both the operations and standards teams. Requests will likely 
+<p>These requests will likely be few and far between but will happen and will require
+co-ordination between both the operations and standards teams. Requests will likely
 come from both the data manager and the standards team.</p>
 <h4 id="1-ensure-the-dataset-has-been-added-to-the-specification">1. Ensure the dataset has been added to the specification</h4>
 <p>Before resources can be processed for a dataset the dataset itself needs to be registered
@@ -433,24 +472,125 @@ then view the process to add a collection and follow the initial steps.</p>
 <p>Note: if you are adding a dataset that is &lsquo;hosted&rsquo; by us then it can be put in a data folder of the repo and the raw github link e.g. <code>https://raw.githubusercontent.com/digital-land/ancient-woodland-collection/main/data/ancient-woodland-status.csv</code> can then be used as an endpoint.</p>
 <h4 id="4-test-locally-and-in-gha">4. Test locally and in GHA</h4>
 <p>it&rsquo;s worth testing the dataset locally and in the GHA. this ensures that everything is working as expected. configuratino files can be altered to ensure it works as expected.</p>
-<h4 id="5-add-the-collection-to-the-dataset-in-the-specification">5. add the collection to the dataset in the specification</h4>
+<h4 id="5-add-the-collection-to-the-dataset-in-the-specification">5. Add the collection to the dataset in the specification</h4>
 <p>This will signal that the dataset should be loaded into the postgresql DB behind the platform. once this step is done when the collection is ran it&rsquo;ll upload to the platform.</p>
-<h4 id="6-review-this-process-and-documentation">6. Review this process and documentation</h4>
+
+<hr>
+<p><strong>Process Review</strong></p>
+<p>Everything else is done so it&rsquo;s worth reviewing this process and seeing if there&rsquo;s
+anyway we can improve it!</p>
+
+<hr>
+<h3 id="ending-an-endpoint">Ending an endpoint</h3>
+<p>This is needed whenever an endpoint is consistently failing or an LPA want’s to change to us getting the data from a different source.
+this process does not remove the record of an endpoint but it stops the collector from attempting to retrieve new resources from it.</p>
+<h4 id="1-identify-and-end-endpoint">1. Identify and end endpoint</h4>
+<p>You’ll need to identify the endpoint your looking to remove. The minimum information you’ll need is either the <code>endpoint-url</code> e.g. <code>https://raw.githubusercontent.com/digital-land/ancient-woodland-collection/main/data/ancient-woodland-status.csv</code> or the <code>endpoint</code> (hash) e.g. <code>f22b13c88a6c367b06e4c80aa61cb1620d7ca03193daeb6c5f65d014d16c6d2e</code>
+Using either fo these fields you can navigate to the the appropriate endpoint.csv and add an end-date to the line.
+The end-date must have the format <code>YYYY-MM-DD</code> otherwise it can cause errors further down the pipeline.
+Note: editing the endpoint.csv can either be done by cloning the specific collection repo or by editing it in the browser via github’s ui</p>
+<h4 id="2-identify-and-end-sources">2. Identify and end sources</h4>
+<p>Sources are dependant on endpoints so they should have end-dates added as well. This can easily be done by locating the relevant lines in the <code>source.csv</code> which have the endpoint hash associated with them.
+As above the end-date must have the format <code>YYYY-MM-DD</code> otherwise it can cause errors further down the pipeline.
+Note: remember there may be multiple sources for one endpoint!</p>
+<h4 id="3-optional-stop-old-resources-processing">3. Optional - Stop old resources processing</h4>
+<p>When removing an endpoint there is an important question that needs to be asked. Should we still process resources collected from this endpoint?
+The majority of the time the answer to this will be yes. For example if we have collected 2022 brownfield land data for an LPA and we need to change to a 2023 endpoint then we still want to keep the 2022 data in our system.
+Identify the resource hashes for the endpoint your removing and follow the retire a resource process1</p>
+<h4 id="4-review-this-process-and-documentation">4. Review this process and documentation</h4>
 <p>Everything else is done so it’s worth reviewing this process and seeing if there’s anyway we can improve it!</p>
+<h3 id="retiring-a-resource">Retiring a resource</h3>
+<p>Sometimes a resource should not continue to be processed and included in the platform. this can happen for a few different reasons an example would be that it contains significant errors and therefore should be removed.</p>
+<h4 id="1-identify-resource-hashes">1. Identify resource hashes</h4>
+<p>In order to remove a resource the main thing you’ll need is the hash value for the resource. There are a number of ways to find this by examining tables in datasette or running <code>make collection</code> and examining the resource.csv</p>
+<h4 id="2-add-rows-to-old-resource-csv">2. add rows to <code>old-resource.csv</code></h4>
+<p>for each resource you want to retire you’ll need to to create a row in the csv. For each row you’ll need the following information:
+* <code>old-resource</code> - the resource hash you identified above
+* <code>status</code> - for retiring a resource this should be <code>410</code>
+* <code>resource</code> - not needed for retiring an endpoint
+* <code>notes</code> - details on why the resource should no longer be processed</p>
+<h4 id="retiring-a-resource-4-review-this-process-and-documentation">4. Review this process and documentation</h4>
+<p>Everything else is done so it’s worth reviewing this process and seeing if there’s anyway we can improve it!</p>
+<h2 id="validating-an-endpoint">Validating an Endpoint</h2>
+<p>We offer two complimentary ways of doing this - a quick way using the Endpoint Checker, and a more thorough manual method.</p>
+<h3 id="validating-an-endpoint-with-the-endpoint-checker">Validating an Endpoint with the Endpoint Checker</h3>
+<p>The <a href="https://github.com/digital-land/jupyter-analysis/tree/main/endpoint_checker">Endpoint Checker</a> is a Jupyter notebook that you can use to get an idea of the level of usability of the data offered on the web by an LPA. The notebook summarises all the details related to an endpoint in one place, and is a good first place to look when validating a new endpoint.</p>
+<h3 id="validating-an-endpoint-using-the-command-line">Validating an Endpoint using the command-line</h3>
+<p>This gives a fuller view of how the endpoint will be handled by the pipeline.</p>
+<h4 id="prerequisites">Prerequisites</h4>
+
+<ol>
+<li>Clone the collection repository locally.</li>
+<li>Create and activate a virtual environment within the collection folder you just cloned.</li>
+<li>Run these commands:</li>
+</ol>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>make makerules
+make init
+make
+</code></pre></div><p>If you&rsquo;re looking at large endpoint, you can speed things up a bit by removing all the folders in collection/log and all entries from collection/endpoint.csv.</p>
+<h4 id="validating-an-endpoint-locally">Validating an endpoint locally</h4>
+<p>The command takes the form shown below:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>digital-land collection-add-source &lt;collection-name&gt; &lt;endpoint-url&gt; organisation &lt;organisation-name&gt; documentation-url &lt;documentation url&gt;
+</code></pre></div><p>All the fields given above are required, as shown in the example below:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>digital-land collection-add-source brownfield-land htts://data.fulchester.gov.uk/brownfield/brownfield20230922.csv organisation &lt;organisation-name&gt; documentation-url &lt;documentation url&gt;
+</code></pre></div><p>optional fields:
+pipelines <dataset/pipeline> use this when dataset name is different from the collection name
+licence <licence>
+attribution <attribution></p>
+<p>Note :
+Organisation-name format - local-authority-eng:ABC
+If there is an error saying command not found make sure prerequisite steps are followed.</p>
+
+<ol>
+<li>Run pipeline by running the ‘make’ command – this ensures that the resource has been downloaded by the collector</li>
+<li>Go to collection/log -&gt; search for endpoint hash you added (can be found from collection/endpoint.csv) -&gt; open file
+Make sure the status parameter has value 200 which means that the end endpoint link is valid.
+If not then raise this as an issue by creating a new card</li>
+</ol>
+<h1 id="reference">Reference</h1>
+<p>This section of our documentation provides authoritative information about the software.</p>
+<p>NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term &lsquo;collection&rsquo; with a small C then we mean the <strong>activity</strong> of getting the data for a Collection. The collector is a term we sometimes use for the software that collects the data.</p>
 <h2 id="technical-glossary">Technical Glossary</h2>
-<p>We use a lot of terms that are very specific to our system. Sometimes these also vary based on context so this is an attempt
-to build a collective understanding in one place.</p>
+<p>We use a lot of terms that are very specific to our system. We have listed some of them below.</p>
 <div class="table-container">
         <table>
           <tr>
-<th style="text-align: left">Term</th>
-<th style="text-align: left">Defition</th>
+<th>Term</th>
+<th>Definition</th>
 </tr><tr>
-<td style="text-align: left">Collection Repository</td>
-<td style="text-align: left">This referes to one of our 30+ repos in GitHub which contains all of the configuration to run a collection each night</td>
+<td>Collection Repository</td>
+<td>This refers to one of our 30+ repositories in GitHub which contain all of the configuration to run collection, usually every night.</td>
 </tr><tr>
-<td style="text-align: left">Collection Directory</td>
-<td style="text-align: left">This is different to a collection repo and is used to ddescribe the colleciton directory in each of the collection repos which contians both the config files for a collector to run and also the logs and collected resources from previous collector runs</td>
+<td>Collection Directory</td>
+<td>The Collection directory contains both the configuration files for a collector to run and also the logs and collected resources from previous collector runs. It is inside the Collection Repository.</td>
+</tr><tr>
+<td>Resource</td>
+<td>//TODO</td>
+</tr><tr>
+<td>Endpoint</td>
+<td>An endpoint is a link to the data from an Organisation within a Collection.</td>
+</tr>
+        </table>
+      </div><h2 id="key-repositories">Key Repositories</h2>
+<p>There are a lot of repositories within the project, many of them relating to Collections or to prototypes. The table below lists some of the key ones.</p>
+<div class="table-container">
+        <table>
+          <tr>
+<th>Repository</th>
+<th>Description</th>
+</tr><tr>
+<td><a href="https://github.com/digital-land/specification">Specification</a></td>
+<td>Contains the key documents that define the data we are collecting.</td>
+</tr><tr>
+<td><a href="https://github.com/digital-land/digital-land.info">Web Application</a></td>
+<td>The Python code for the <a href="https://www.planning.data.gov.uk/">web site</a>.</td>
+</tr><tr>
+<td>
+<a href="https://github.com/digital-land/digital-land-python">Digital Land Pipeline</a> (Digital Land Python)</td>
+<td>Python command-line tools for collecting and converting resources into a dataset, code library that supports other applications.</td>
+</tr><tr>
+<td><a href="https://github.com/digital-land/jupyter-analysis">Digital Jupyter Analysis</a></td>
+<td>Pieces of analysis of the platform as jupyter notebooks.</td>
 </tr>
         </table>
       </div>
