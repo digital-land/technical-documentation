@@ -5,16 +5,22 @@ weight: 30
 
 # Data Operations Manual
 
-The planning data service relies upon a set of data workflows. The main
-goal is to collect data from external organisations published in accordance with data specifications published by
-digital land and make it available as part of a national dataset.
+We have two main goals:
+* To collect data from external organisations published in accordance with data specifications we created,
+* and make it available as part of a national dataset.
+
+The planning data service relies upon a set of data workflows to achieve that goal.
+
+### Audience for this document
+This document is ultimately intended for people who need to run data operations for the Planning Data Platform. It is not intended as a manual for software developers.
+
 
 ## Key Processes
 
 This is our list of key processes that the team will need to perform to maintain the service. They primarily rely on running CLI tools from our
-digital-land-python python package. 
+digital-land-python python package.
 
-### Adding Endpoints To A Collection
+### Adding Endpoints To A Collection Manually
 
 This is a fairly common process for us especially as we initially grow the data on the site.
 
@@ -27,7 +33,7 @@ From Github, clone the collection repo you wish to add endpoints to.
 Run the following lines from a virtual env containing the required
 python dependencies required by the collection repo
 
-```
+```bash
 make makerules
 make init
 ```
@@ -44,14 +50,14 @@ to the collection. Make a note of the location. The following columns need to be
 - `pipelines` - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is neccessaary they should be separated by `;`
 - `organisation` - the organisation which the endpoint belongs to. The name should be in [this list](https://datasette.planning.data.gov.uk/digital-land/organisation)
 
-If you haven't been given some of the above information then reach out to the data manager or tech lead for advise. 
+If you haven't been given some of the above information then reach out to the data manager or tech lead for advise.
 
 #### 4. run `add_endpoint_and_lookups_cmd`
 
 Run the following command from inside the repository with the virtual env created in step 2 activated.
 As a minimum you'll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.
 
-Note: collection name can be retrieved from the repository name. if your working in the `conservation-area-collection` repo then you would use `conservation-area` 
+Note: collection name can be retrieved from the repository name. if your working in the `conservation-area-collection` repo then you would use `conservation-area`
 
 ```
 digital_land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME]
@@ -117,7 +123,7 @@ One approach might be to identify a new (or newly updated) entry in the
 Navigating through to the Entity screen will show information that may
 be compared to the data in the collection/source.csv
 
-Once the pipeline is ran you can also use the following command to interrogate 
+Once the pipeline is ran you can also use the following command to interrogate
 the local datasets (in the sqlite files) using datasette
 
 ### Creating a new collection
@@ -125,51 +131,56 @@ the local datasets (in the sqlite files) using datasette
 This is needed when adding a dataset that doesn't belong to one of the collections
 that already exist.
 
-#### 1 Ensure the collection is noted in the specification
+#### 1. Ensure the collection is noted in the specification
 
 Not doing this won't result in any specific errors but it should be done to ensure that the list of collections in the specification is up to date. This should be done with some visiability from the standards team
 
-#### 2 Use the [collection-template](https://github.com/digital-land/collection-template) to create a repository
+#### 2. Use the [collection-template](https://github.com/digital-land/collection-template) to create a repository
 
 The `collection-template` repo is a template repository which can be used to create
 new collection repos. This is fairly simple using the Github UI. there is an option
 to use the template to create a new repo if you navigate to the `collection-template`
 page
 
-#### 3 Update `.README`
+#### 3. Update `.README`
 
-update the details in the readme file
+Update the details in the readme file.
 
-#### 4 deactivate actions
+#### 4. Deactivate actions
 
 The collection comes with the action ready to run every night. This should be paused until
-your ready for it to be ran. This can be done by commenting out the following lines in the  `.github
+your ready for it to be ran. This can be done by commenting out the following lines in the `.github
 /workflows/run_caller.yaml` :
 
 ```
 schedule:
-    - cron: 0 0 * * *
+- cron: 0 0 * * *
 ```
 
-#### 5 Add endpoints, edit pipeline config files and test locally.
+#### 5. Add endpoints, edit pipeline config files and test locally.
 
-This is where you need to get the pipeline running locally. see our other 
-processes on this page for how to add data 
+This is where you need to get the pipeline running locally. see our other
+processes on this page for how to add data
 
-#### 6 re-activate actions
+#### 6. Re-activate actions
 
-Once the collection is ready to be ran nightly uncomment the line from above in 
+Once the collection is ready to be ran nightly uncomment the line from above in
 the git workflow yaml file and it will start running nightly!
 
-#### 7 process review
+
+---
+**Process Review**
 
 Everything else is done so it's worth reviewing this process and seeing if there's
 anyway we can improve it!
 
+---
+
+
 ### Adding a new dataset
 
-These requests will likely be few and far between but will happen and will require 
-co-ordination between both the operations and standards teams. Requests will likely 
+These requests will likely be few and far between but will happen and will require
+co-ordination between both the operations and standards teams. Requests will likely
 come from both the data manager and the standards team.
 
 #### 1. Ensure the dataset has been added to the specification
@@ -200,21 +211,138 @@ Note: if you are adding a dataset that is 'hosted' by us then it can be put in a
 
 it's worth testing the dataset locally and in the GHA. this ensures that everything is working as expected. configuratino files can be altered to ensure it works as expected.
 
-#### 5. add the collection to the dataset in the specification
+#### 5. Add the collection to the dataset in the specification
 
 This will signal that the dataset should be loaded into the postgresql DB behind the platform. once this step is done when the collection is ran it'll upload to the platform.
 
-#### 6. Review this process and documentation
+---
+**Process Review**
 
+Everything else is done so it's worth reviewing this process and seeing if there's
+anyway we can improve it!
+
+---
+
+### Ending an endpoint
+This is needed whenever an endpoint is consistently failing or an LPA want’s to change to us getting the data from a different source.
+this process does not remove the record of an endpoint but it stops the collector from attempting to retrieve new resources from it.
+
+#### 1. Identify and end endpoint
+You’ll need to identify the endpoint your looking to remove. The minimum information you’ll need is either the `endpoint-url` e.g. `https://raw.githubusercontent.com/digital-land/ancient-woodland-collection/main/data/ancient-woodland-status.csv` or the `endpoint` (hash) e.g. `f22b13c88a6c367b06e4c80aa61cb1620d7ca03193daeb6c5f65d014d16c6d2e`
+Using either fo these fields you can navigate to the the appropriate endpoint.csv and add an end-date to the line.
+The end-date must have the format `YYYY-MM-DD` otherwise it can cause errors further down the pipeline.
+Note: editing the endpoint.csv can either be done by cloning the specific collection repo or by editing it in the browser via github’s ui
+
+#### 2. Identify and end sources
+Sources are dependant on endpoints so they should have end-dates added as well. This can easily be done by locating the relevant lines in the `source.csv` which have the endpoint hash associated with them.
+As above the end-date must have the format `YYYY-MM-DD` otherwise it can cause errors further down the pipeline.
+Note: remember there may be multiple sources for one endpoint!
+
+#### 3. Optional - Stop old resources processing
+When removing an endpoint there is an important question that needs to be asked. Should we still process resources collected from this endpoint?
+The majority of the time the answer to this will be yes. For example if we have collected 2022 brownfield land data for an LPA and we need to change to a 2023 endpoint then we still want to keep the 2022 data in our system.
+Identify the resource hashes for the endpoint your removing and follow the retire a resource process1
+
+#### 4. Review this process and documentation
 Everything else is done so it’s worth reviewing this process and seeing if there’s anyway we can improve it!
+
+### Retiring a resource
+Sometimes a resource should not continue to be processed and included in the platform. this can happen for a few different reasons an example would be that it contains significant errors and therefore should be removed.
+
+#### 1. Identify resource hashes
+In order to remove a resource the main thing you’ll need is the hash value for the resource. There are a number of ways to find this by examining tables in datasette or running `make collection` and examining the resource.csv
+
+#### 2. add rows to `old-resource.csv`
+for each resource you want to retire you’ll need to to create a row in the csv. For each row you’ll need the following information:
+* `old-resource` - the resource hash you identified above
+* `status` - for retiring a resource this should be `410`
+* `resource` - not needed for retiring an endpoint
+* `notes` - details on why the resource should no longer be processed
+
+#### 4. Review this process and documentation
+Everything else is done so it’s worth reviewing this process and seeing if there’s anyway we can improve it!
+
+
+
+## Validating an Endpoint
+
+We offer two complimentary ways of doing this - a quick way using the Endpoint Checker, and a more thorough manual method.
+
+### Validating an Endpoint with the Endpoint Checker
+
+The [Endpoint Checker](https://github.com/digital-land/jupyter-analysis/tree/main/endpoint_checker) is a Jupyter notebook that you can use to get an idea of the level of usability of the data offered on the web by an LPA. The notebook summarises all the details related to an endpoint in one place, and is a good first place to look when validating a new endpoint.
+
+### Validating an Endpoint using the command-line
+
+This gives a fuller view of how the endpoint will be handled by the pipeline.
+
+#### Prerequisites
+1. Clone the collection repository locally.
+1. Create and activate a virtual environment within the collection folder you just cloned.
+1. Run these commands:
+
+```bash
+make makerules
+make init
+make
+```
+
+If you're looking at large endpoint, you can speed things up a bit by removing all the folders in collection/log and all entries from collection/endpoint.csv.
+
+#### Validating an endpoint locally
+The command takes the form shown below: 
+
+```
+digital-land collection-add-source <collection-name> <endpoint-url> organisation <organisation-name> documentation-url <documentation url>
+```
+
+All the fields given above are required, as shown in the example below:
+
+```
+digital-land collection-add-source brownfield-land htts://data.fulchester.gov.uk/brownfield/brownfield20230922.csv organisation <organisation-name> documentation-url <documentation url>
+```
+
+ 
+optional fields:
+pipelines <dataset/pipeline> use this when dataset name is different from the collection name
+licence <licence>
+attribution <attribution>
+ 
+Note :
+Organisation-name format - local-authority-eng:ABC
+If there is an error saying command not found make sure prerequisite steps are followed.
+
+
+1. Run pipeline by running the ‘make’ command – this ensures that the resource has been downloaded by the collector
+1. Go to collection/log -> search for endpoint hash you added (can be found from collection/endpoint.csv) -> open file
+Make sure the status parameter has value 200 which means that the end endpoint link is valid.
+If not then raise this as an issue by creating a new card
+
+
+# Reference
+
+This section of our documentation provides authoritative information about the software.
+
+NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term 'collection' with a small C then we mean the __activity__ of getting the data for a Collection. The collector is a term we sometimes use for the software that collects the data.
 
 ## Technical Glossary
 
-We use a lot of terms that are very specific to our system. Sometimes these also vary based on context so this is an attempt
-to build a collective understanding in one place.
+We use a lot of terms that are very specific to our system. We have listed some of them below.
 
-|Term|Defition|
-|:----|:----|
-|Collection Repository| This referes to one of our 30+ repos in GitHub which contains all of the configuration to run a collection each night|
-|Collection Directory|This is different to a collection repo and is used to ddescribe the colleciton directory in each of the collection repos which contians both the config files for a collector to run and also the logs and collected resources from previous collector runs|
+|Term|Definition|
+|----|----|
+|Collection Repository| This refers to one of our 30+ repositories in GitHub which contain all of the configuration to run collection, usually every night.|
+|Collection Directory|The Collection directory contains both the configuration files for a collector to run and also the logs and collected resources from previous collector runs. It is inside the Collection Repository.|
+|Resource|//TODO|
+|Endpoint|An endpoint is a link to the data from an Organisation within a Collection.|
 
+## Key Repositories
+
+There are a lot of repositories within the project, many of them relating to Collections or to prototypes. The table below lists some of the key ones.
+
+|Repository|Description|
+|----|----|
+|[Specification](https://github.com/digital-land/specification)|Contains the key documents that define the data we are collecting.|
+|[Web Application](https://github.com/digital-land/digital-land.info)|The Python code for the [web site](https://www.planning.data.gov.uk/).|
+|[Digital Land Pipeline](https://github.com/digital-land/digital-land-python) (Digital Land Python)|Python command-line tools for collecting and converting resources into a dataset, code library that supports other applications.|
+[Digital Jupyter Analysis](https://github.com/digital-land/jupyter-analysis)|Pieces of analysis of the platform as jupyter notebooks.|
