@@ -81,8 +81,8 @@ At 5.09 on Friday the 29th of september, Paul Downey posted in the main Slack ch
 
 #### Running log
 
-* George started investigations at 9.11am, founding that the specified key for the dataset param had
-been overwritten as part of the refactor/mapComponent update: https://github.com/digital-land/digital-land.info/pull/133
+* George started investigations at 9.11am on the 2nd October, finding that the specified key for the dataset param had
+been overwritten as part of the refactor/map component updatem here: https://github.com/digital-land/digital-land.info/pull/133
 
 * An initial fix was deployed at 10.35am that reverted the key back to dataset, and added a function to change any urls with the old key to the new key. 
 
@@ -97,7 +97,7 @@ When applying updates to the map code, we overwrote the code that specified the 
 
 #### Lessons to be learned
 
-The original change came in as part of a much largeer set of code changes. Code reviews are not as effective in that settings Next time, let us find ways to not create large pull-requests with hundreds of lines of changes. 
+The original change came in as part of a much largeer set of code changes. It was not noticed in code review. Code reviews are not as effective when dealingh with extensive changes. Next time, let us find ways to not create large pull-requests with hundreds of lines of changes. 
 
 
 ### maptiler started returning 403 errors - 2023-08-16
