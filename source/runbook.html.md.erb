@@ -66,6 +66,46 @@ information from the document.
 
 ## Incident Response History
 
+### Planning.data.gov.uk outage - 2023-10-05
+
+#### In attendance
+
+Async on slack:
+
+* Ernest Man
+* Owen Eveleigh
+
+#### Description
+
+During the Bug Party on the morning of 05th October 2023, the Development and Design teams (around 11 people) were carried out some testing for the planning data site 
+with different browser/device. Slowness of the site first reported around 15mins in and the first aws canary test failed at 11:27am. The outage was 
+around 10-15 mins.
+
+#### Running log
+
+* Ernest and Owen started investigation at around 11:30am. We getting time out error for the site. The issue seems related to the aws rds database.
+* Ernest and Owen have look at varies area in the production platform, inclued ECS, RDS postgres database etc.
+
+Main symptoms:
+
+* Slowness of the planning data site
+* time out error on the site
+* Search doesn't work
+
+
+Summary of the issue: The aws rds reader instance is running out of local storage. With the current DB instance class "db.t4g.large" which 
+has 16GB maximum temporary storage available. More info [here](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Managing.html#AuroraPostgreSQL.Managing.TempStorage)
+
+ERROR: could not write to file "base/pgsql_tmp/pgsql_tmp13706.0": No space left on device
+
+#### Postmortem
+
+* [Bug ticket](https://trello.com/c/chJL4wsR) have been created.
+* Additional reader instance have been temporary added to production cluster.
+* Dev team is looking at optimize the search query
+* Ernest will continous monitoring any databse issue.
+
+
 ### National map url 'dataset' parameter key changed to 'layer' - 2023-10-02
 
 #### In attendance
