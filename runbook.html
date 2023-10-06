@@ -92,6 +92,9 @@
         <a href="./runbook.html#incident-response-history"><span>Incident Response History</span></a>
         <ul>
           <li>
+            <a href="./runbook.html#national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02"><span>National map url ‘dataset’ parameter key changed to ‘layer’ - 2023-10-02</span></a>
+          </li>
+          <li>
             <a href="./runbook.html#maptiler-started-returning-403-errors-2023-08-16"><span>maptiler started returning 403 errors - 2023-08-16</span></a>
           </li>
           <li>
@@ -411,18 +414,43 @@ postmortem section of the document. Once the document is complete, the contents 
 <a href="#incident-response-history">Incident Response History</a> for future reference, taking care to remove any secret
 information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
+<p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="maptiler-started-returning-403-errors-2023-08-16">maptiler started returning 403 errors - 2023-08-16</h3>
+<h3 id="national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02">National map url &lsquo;dataset&rsquo; parameter key changed to &lsquo;layer&rsquo; - 2023-10-02</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>Async on slack:</p>
+
+<ul>
+<li>George Goodall</li>
+<li>Paul Downey</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>At 5.09 on Friday the 29th of September, Paul Downey posted in the main Slack channel that the url param key for the dataset has changed from dataset to layer. He advised that this needed reverting, and any urls pointing to the old key needed to be redirected.</p>
+<h4 id="running-log">Running log</h4>
+
+<ul>
+<li><p>George started investigations at 9.11am on the 2nd October, finding that the specified key for the dataset param had
+been overwritten as part of the refactor/map component update here: https://github.com/digital-land/digital-land.info/pull/133</p></li>
+<li><p>An initial fix was deployed at 10.35am that reverted the key back to dataset, and added a function to change any urls with the old key to the new key.</p></li>
+<li><p>A second PR was deployed at 11.08am that added a test to check that the url param key was correct and that the old key was correctly changed to the new key.</p></li>
+<li><p>These changes were reviewed, approved and merged by Mark at 11:08 and available on the live site a few minutes later.</p></li>
+</ul>
+<h4 id="analysis">Analysis</h4>
+<p>We did not appreciate that people were using the direct link off the browser to access the map.</p>
+<p>When applying updates to the map code, we overwrote the code that specified the dataset url param key. This change was not picked up in manual testing or code reviews. There were no automated tests covering this case, and as the change was inadvertent, we did not write any new ones.</p>
+<h4 id="lessons-to-be-learned">Lessons to be learned</h4>
+<p>The original change came in as part of a much largeer set of code changes. It was not noticed in code review. Code reviews are not as effective when dealing with extensive changes. Next time, let us find ways to not create large pull-requests with hundreds of lines of changes.</p>
+<h3 id="maptiler-started-returning-403-errors-2023-08-16">maptiler started returning 403 errors - 2023-08-16</h3>
+<h4 id="maptiler-started-returning-403-errors-2023-08-16-in-attendance">In attendance</h4>
 <p>Async on slack:</p>
 
 <ul>
 <li>George Goodall</li>
 <li>Martin Grey</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="maptiler-started-returning-403-errors-2023-08-16-description">Description</h4>
 <p>Early afternoon on 16th October 2023, Martin noted that the national map was not loading correctly. George then investigated further and found that the maptiler service was returning 403 errors.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="maptiler-started-returning-403-errors-2023-08-16-running-log">Running log</h4>
 <p><strong>on (2023-08-16)</strong></p>
 
 <ul>
