@@ -92,6 +92,9 @@
         <a href="./runbook.html#incident-response-history"><span>Incident Response History</span></a>
         <ul>
           <li>
+            <a href="./runbook.html#planning-data-gov-uk-outage-2023-10-05"><span>Planning.data.gov.uk outage - 2023-10-05</span></a>
+          </li>
+          <li>
             <a href="./runbook.html#national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02"><span>National map url ‘dataset’ parameter key changed to ‘layer’ - 2023-10-02</span></a>
           </li>
           <li>
@@ -416,17 +419,53 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02">National map url &lsquo;dataset&rsquo; parameter key changed to &lsquo;layer&rsquo; - 2023-10-02</h3>
+<h3 id="planning-data-gov-uk-outage-2023-10-05">Planning.data.gov.uk outage - 2023-10-05</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>Async on slack:</p>
+
+<ul>
+<li>Ernest Man</li>
+<li>Owen Eveleigh</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>During the Bug Party on the morning of 05th October 2023, the Development and Design teams (around 11 people) were carried out some testing for the planning data site 
+with different browser/device. Slowness of the site first reported around 15mins in and the first aws canary test failed at 11:27am. The outage was 
+around 10-15 mins.</p>
+<h4 id="running-log">Running log</h4>
+
+<ul>
+<li>Ernest and Owen started investigation at around 11:30am. We getting time out error for the site. The issue seems related to the aws rds database.</li>
+<li>Ernest and Owen have look at varies area in the production platform, inclued ECS, RDS postgres database etc.</li>
+</ul>
+<p>Main symptoms:</p>
+
+<ul>
+<li>Slowness of the planning data site</li>
+<li>time out error on the site</li>
+<li>Search doesn&rsquo;t work</li>
+</ul>
+<p>Summary of the issue: The aws rds reader instance is running out of local storage. With the current DB instance class &ldquo;db.t4g.large&rdquo; which 
+has 16GB maximum temporary storage available. More info <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Managing.html#AuroraPostgreSQL.Managing.TempStorage">here</a></p>
+<p>ERROR: could not write to file &ldquo;base/pgsql_tmp/pgsql_tmp13706.0&rdquo;: No space left on device</p>
+<h4 id="postmortem">Postmortem</h4>
+
+<ul>
+<li><a href="https://trello.com/c/chJL4wsR">Bug ticket</a> have been created.</li>
+<li>Additional reader instance have been temporary added to production cluster.</li>
+<li>Dev team is looking at optimize the search query</li>
+<li>Ernest will continous monitoring any databse issue.</li>
+</ul>
+<h3 id="national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02">National map url &lsquo;dataset&rsquo; parameter key changed to &lsquo;layer&rsquo; - 2023-10-02</h3>
+<h4 id="national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02-in-attendance">In attendance</h4>
 <p>Async on slack:</p>
 
 <ul>
 <li>George Goodall</li>
 <li>Paul Downey</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02-description">Description</h4>
 <p>At 5.09 on Friday the 29th of September, Paul Downey posted in the main Slack channel that the url param key for the dataset has changed from dataset to layer. He advised that this needed reverting, and any urls pointing to the old key needed to be redirected.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02-running-log">Running log</h4>
 
 <ul>
 <li><p>George started investigations at 9.11am on the 2nd October, finding that the specified key for the dataset param had
@@ -488,7 +527,7 @@ a platform related issue.</p></li>
 </ul>
 <p>Summary of the issue: The EFS throughput is too high during the nightly data update. This caused by the 
 pipeline dumped files and datasette applications restarting.</p>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14-postmortem">Postmortem</h4>
 
 <ul>
 <li><a href="https://trello.com/c/KNB7k4ee">Live incident ticket</a> have been created.</li>
