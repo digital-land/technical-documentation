@@ -62,9 +62,43 @@ information from the document.
 
 ## Common Issues
 
-
+ TBA 
 
 ## Incident Response History
+
+### National map url 'dataset' parameter key changed to 'layer' - 2023-10-02
+
+#### In attendance
+
+Async on slack:
+
+* George Goodall
+* Paul Downey
+
+#### Description
+
+At 5.09 on Friday the 29th of September, Paul Downey posted in the main Slack channel that the url param key for the dataset has changed from dataset to layer. He advised that this needed reverting, and any urls pointing to the old key needed to be redirected.
+
+#### Running log
+
+* George started investigations at 9.11am on the 2nd October, finding that the specified key for the dataset param had
+been overwritten as part of the refactor/map component update here: https://github.com/digital-land/digital-land.info/pull/133
+
+* An initial fix was deployed at 10.35am that reverted the key back to dataset, and added a function to change any urls with the old key to the new key. 
+
+* A second PR was deployed at 11.08am that added a test to check that the url param key was correct and that the old key was correctly changed to the new key.
+
+* These changes were reviewed, approved and merged by Mark at 11:08 and available on the live site a few minutes later.
+
+#### Analysis
+We did not appreciate that people were using the direct link off the browser to access the map.
+
+When applying updates to the map code, we overwrote the code that specified the dataset url param key. This change was not picked up in manual testing or code reviews. There were no automated tests covering this case, and as the change was inadvertent, we did not write any new ones.
+
+#### Lessons to be learned
+
+The original change came in as part of a much largeer set of code changes. It was not noticed in code review. Code reviews are not as effective when dealing with extensive changes. Next time, let us find ways to not create large pull-requests with hundreds of lines of changes. 
+
 
 ### maptiler started returning 403 errors - 2023-08-16
 
