@@ -50,11 +50,16 @@ to the collection. Make a note of the location. The following columns need to be
 - `pipelines` - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is neccessaary they should be separated by `;`
 - `organisation` - the organisation which the endpoint belongs to. The name should be in [this list](https://datasette.planning.data.gov.uk/digital-land/organisation)
 
-If you haven't been given some of the above information then reach out to the data manager or tech lead for advise.
+If you haven't been given some of the above information then reach out to the data manager or tech lead for advice. You can use the below to get you started:
+
+```text
+organisation, endpoint-url, documentation-url, start-date, pipelines, plugins
+```
 
 #### 4. run `add_endpoint_and_lookups_cmd`
 
 Run the following command from inside the repository with the virtual env created in step 2 activated.
+
 As a minimum you'll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.
 
 Note: collection name can be retrieved from the repository name. if your working in the `conservation-area-collection` repo then you would use `conservation-area`
