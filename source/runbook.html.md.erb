@@ -119,6 +119,15 @@ Async on slack:
 
 At 5.09 on Friday the 29th of September, Paul Downey posted in the main Slack channel that the url param key for the dataset has changed from dataset to layer. He advised that this needed reverting, and any urls pointing to the old key needed to be redirected.
 
+Example of original format:
+
+`https://www.planning.data.gov.uk/map/?dataset=infrastructure-project`
+
+Example of new, unexpected format:
+
+`https://www.planning.data.gov.uk/map/?layer=infrastructure-project`
+
+
 #### Running log
 
 * George started investigations at 9.11am on the 2nd October, finding that the specified key for the dataset param had
@@ -130,15 +139,25 @@ been overwritten as part of the refactor/map component update here: https://gith
 
 * These changes were reviewed, approved and merged by Mark at 11:08 and available on the live site a few minutes later.
 
-#### Analysis
-We did not appreciate that people were using the direct link off the browser to access the map.
+#### Impact
 
-When applying updates to the map code, we overwrote the code that specified the dataset url param key. This change was not picked up in manual testing or code reviews. There were no automated tests covering this case, and as the change was inadvertent, we did not write any new ones.
+Links with the now non-functioning format had gone out as a part of the weeknote shared by senior management, including to a minister-level audience. Matt Lucht identified a quick workaround, to make a new URL that included both sets of data:
+
+`https://www.planning.data.gov.uk/map/?dataset=infrastructure-project&layer=infrastructure-project`
+
+#### Analysis
+
+We did not appreciate that people were using and sharing the direct link off the browser to access the map.
+
+When applying updates to the map code, we overwrote the section that specified the `dataset` url param key and replaced it with `layer`. This change was not picked up in manual testing or code reviews. There were no automated tests covering this case, and as the change was inadvertent, we did not write any new ones.
+
+### Post incident actions
+
+We are implementing a better set of automated tests to reduce the likelihood of this happening again. 
 
 #### Lessons to be learned
 
 The original change came in as part of a much largeer set of code changes. It was not noticed in code review. Code reviews are not as effective when dealing with extensive changes. Next time, let us find ways to not create large pull-requests with hundreds of lines of changes. 
-
 
 ### maptiler started returning 403 errors - 2023-08-16
 
