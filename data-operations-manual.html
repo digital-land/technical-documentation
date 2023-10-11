@@ -98,6 +98,9 @@
             <a href="./runbook.html#national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02"><span>National map url ‘dataset’ parameter key changed to ‘layer’ - 2023-10-02</span></a>
           </li>
           <li>
+            <a href="./runbook.html#post-incident-actions"><span>Post incident actions</span></a>
+          </li>
+          <li>
             <a href="./runbook.html#maptiler-started-returning-403-errors-2023-08-16"><span>maptiler started returning 403 errors - 2023-08-16</span></a>
           </li>
           <li>
@@ -378,10 +381,11 @@ to the collection. Make a note of the location. The following columns need to be
 <li><code>pipelines</code> - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is neccessaary they should be separated by <code>;</code></li>
 <li><code>organisation</code> - the organisation which the endpoint belongs to. The name should be in <a href="https://datasette.planning.data.gov.uk/digital-land/organisation">this list</a></li>
 </ul>
-<p>If you haven&rsquo;t been given some of the above information then reach out to the data manager or tech lead for advise.</p>
-<h4 id="4-run-add-endpoint-and-lookups-cmd">4. run <code>add_endpoint_and_lookups_cmd</code></h4>
-<p>Run the following command from inside the repository with the virtual env created in step 2 activated.
-As a minimum you&rsquo;ll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.</p>
+<p>If you haven&rsquo;t been given some of the above information then reach out to the data manager or tech lead for advice. You can use the below to get you started:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>organisation, endpoint-url, documentation-url, start-date, pipelines, plugins
+</code></pre></div><h4 id="4-run-add-endpoint-and-lookups-cmd">4. run <code>add_endpoint_and_lookups_cmd</code></h4>
+<p>Run the following command from inside the repository with the virtual env created in step 2 activated.</p>
+<p>As a minimum you&rsquo;ll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.</p>
 <p>Note: collection name can be retrieved from the repository name. if your working in the <code>conservation-area-collection</code> repo then you would use <code>conservation-area</code></p>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>digital_land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME]
 </code></pre></div><p>The above command will work for the default collection set-up however you can set set the location

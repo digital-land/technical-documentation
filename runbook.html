@@ -98,6 +98,9 @@
             <a href="./runbook.html#national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02"><span>National map url ‘dataset’ parameter key changed to ‘layer’ - 2023-10-02</span></a>
           </li>
           <li>
+            <a href="./runbook.html#post-incident-actions"><span>Post incident actions</span></a>
+          </li>
+          <li>
             <a href="./runbook.html#maptiler-started-returning-403-errors-2023-08-16"><span>maptiler started returning 403 errors - 2023-08-16</span></a>
           </li>
           <li>
@@ -465,6 +468,10 @@ has 16GB maximum temporary storage available. More info <a href="https://docs.aw
 </ul>
 <h4 id="national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02-description">Description</h4>
 <p>At 5.09 on Friday the 29th of September, Paul Downey posted in the main Slack channel that the url param key for the dataset has changed from dataset to layer. He advised that this needed reverting, and any urls pointing to the old key needed to be redirected.</p>
+<p>Example of original format:</p>
+<p><code>https://www.planning.data.gov.uk/map/?dataset=infrastructure-project</code></p>
+<p>Example of new, unexpected format:</p>
+<p><code>https://www.planning.data.gov.uk/map/?layer=infrastructure-project</code></p>
 <h4 id="national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02-running-log">Running log</h4>
 
 <ul>
@@ -474,9 +481,14 @@ been overwritten as part of the refactor/map component update here: https://gith
 <li><p>A second PR was deployed at 11.08am that added a test to check that the url param key was correct and that the old key was correctly changed to the new key.</p></li>
 <li><p>These changes were reviewed, approved and merged by Mark at 11:08 and available on the live site a few minutes later.</p></li>
 </ul>
+<h4 id="impact">Impact</h4>
+<p>Links with the now non-functioning format had gone out as a part of the weeknote shared by senior management, including to a minister-level audience. Matt Lucht identified a quick workaround, to make a new URL that included both sets of data:</p>
+<p><code>https://www.planning.data.gov.uk/map/?dataset=infrastructure-project&amp;layer=infrastructure-project</code></p>
 <h4 id="analysis">Analysis</h4>
-<p>We did not appreciate that people were using the direct link off the browser to access the map.</p>
-<p>When applying updates to the map code, we overwrote the code that specified the dataset url param key. This change was not picked up in manual testing or code reviews. There were no automated tests covering this case, and as the change was inadvertent, we did not write any new ones.</p>
+<p>We did not appreciate that people were using and sharing the direct link off the browser to access the map.</p>
+<p>When applying updates to the map code, we overwrote the section that specified the <code>dataset</code> url param key and replaced it with <code>layer</code>. This change was not picked up in manual testing or code reviews. There were no automated tests covering this case, and as the change was inadvertent, we did not write any new ones.</p>
+<h3 id="post-incident-actions">Post incident actions</h3>
+<p>We are implementing a better set of automated tests to reduce the likelihood of this happening again.</p>
 <h4 id="lessons-to-be-learned">Lessons to be learned</h4>
 <p>The original change came in as part of a much largeer set of code changes. It was not noticed in code review. Code reviews are not as effective when dealing with extensive changes. Next time, let us find ways to not create large pull-requests with hundreds of lines of changes.</p>
 <h3 id="maptiler-started-returning-403-errors-2023-08-16">maptiler started returning 403 errors - 2023-08-16</h3>
