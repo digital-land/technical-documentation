@@ -528,3 +528,24 @@ source url that is compatible with vector-based map libraries.
 - The tile server simply serves the tile requested - there is no expensive logic or spatial queries required.
 - The generation of the tilesets is an added time cost to our CI/CD pipeline. 
 - We should be careful not to use conversion options that change the underlying data (e.g. removing polygons/points)
+
+## 18. Use NodeJS to serve the frontend of the new data validation tool and interact with other APIs
+
+Date: 2023-10-24
+
+#### Status
+
+Pending
+
+#### Context
+
+We need some way to serve our frontend to users, and handle forwarding requests onto our other APIs needed for validation. at the moment the requirements on this are fairly limited, but we want the room to grow if needed.
+
+#### Decision
+
+We are using fastAPI for our other services such as Planning.data.gov.uk, but we feel nodeJS may be a better fit due to its compatibility with nunjucks and the gds component library.
+We will start with a simple nodeJS application, that isn't responsible for handling too much of the business logic. we will review if this was the right call a couple of weeks from now.
+#### Consequences
+- This approach would have slight performance improvements over fastAPI.
+- Prototypes produced by our designer Adam Silver can be easily used as a starting point as they are built with nunjucks and the gds.
+- We should be careful not to include too much business logic within the nodeJS application, or risk needing our developers to upskill in nodejs and fastapi.
