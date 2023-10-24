@@ -553,3 +553,30 @@ All the buisness logic should be delegated to other APIs, and exception to this 
 - Frontend developers may find it easier to onboard as they will be familiar with the tech stack. and wont need to upskill in python.
 - We should be careful not to include too much business logic within the nodeJS application, or risk needing our developers to upskill in nodejs and fastapi.
 - We will be able to use the official GDS frontend toolkit, which will make it easier to build a consistent UI. as opposed to using the unofficial python port / nunjucks implementation of the GDS frontend toolkit.
+
+
+## 19. Use PyTest and JSONSchema as the Contract validation and testing solution
+Date: 2023-10-24
+#### Status
+Pending
+#### Context
+Ideally, we would like to:
+- test messages flowing in and out of our API endpoints - Requests & Responses
+- establish message schemas for the service-oriented elements of the Products we create
+#### Decision
+We will develop a suite of tests (over time) that will typically
+be run by the CI/CD pipeline.
+
+The tests will be based on the PyTest framework as it has proven to
+be an effective testing framework, and is already used extensively in our code base.
+
+The tests will focus on:
+- validating that correct messages produce valid,
+and expected responses.
+- validating that incorrect messages produce a suitable error response
+#### Consequences
+- The approach assumes that the API front end is capable of injecting the validation service as a dependency.
+- The approach may prove too simplistic and need replacing with something better suited to the purpose.
+- The first tests will be based on the FastAPI framework. If we later decide to use another framework,
+the tests will extensive re-factoring to continue working
+
