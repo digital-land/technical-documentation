@@ -543,9 +543,13 @@ We need some way to serve our frontend to users, and handle forwarding requests 
 
 #### Decision
 
-We are using fastAPI for our other services such as Planning.data.gov.uk, but we feel nodeJS may be a better fit due to its compatibility with nunjucks and the gds component library.
-We will start with a simple nodeJS application, that isn't responsible for handling too much of the business logic. we will review if this was the right call a couple of weeks from now.
+We will start with a simple nodeJS application and will review if this was the right call a couple of weeks from now.
+All the buisness logic should be delegated to other APIs, and exception to this will be documented.
+
 #### Consequences
+
 - This approach would have slight performance improvements over fastAPI.
 - Prototypes produced by our designer Adam Silver can be easily used as a starting point as they are built with nunjucks and the gds.
+- Frontend developers may find it easier to onboard as they will be familiar with the tech stack. and wont need to upskill in python.
 - We should be careful not to include too much business logic within the nodeJS application, or risk needing our developers to upskill in nodejs and fastapi.
+- We will be able to use the official GDS frontend toolkit, which will make it easier to build a consistent UI. as opposed to using the unofficial python port / nunjucks implementation of the GDS frontend toolkit.
