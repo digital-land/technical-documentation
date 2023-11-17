@@ -3,7 +3,7 @@ title: Data Operations Manual
 weight: 30
 ---
 
-# Data Operations Manual
+# Data Operations
 
 We have two main goals:
 * To collect data from external organisations published in accordance with data specifications we created,
@@ -12,10 +12,134 @@ We have two main goals:
 The planning data service relies upon a set of data workflows to achieve that goal.
 
 ### Audience for this document
-This document is ultimately intended for people who need to run data operations for the Planning Data Platform. It is not intended as a manual for software developers.
+This document is intended for people who need to run data operations for the Planning Data Platform. It is not intended as a manual for software developers on the project, but it does occasionally stray into the world of programming. This doc links out to repositories on [github](https://github.com/digital-land) where we host a mix of code and data.
+
+## Key Concepts
+
+We have a number of different Collections of data, such as [Conservation Areas (CA)](https://digital-land.github.io/specification/specification/conservation-area/). The data and configuration for each Collection is stored in Github. For example, the CA repository is at [`https://github.com/digital-land/conservation-area-collection`](https://github.com/digital-land/conservation-area-collection). 
+
+In each Collection there is a `collection` folder that contains some key files that control the collection of data from LPAs and other publishers. The first two to look at are `source.csv` and `endpoint.csv`.
+
+### Source
+the source.csv file lists all of the publishers we have data for in this Collection:
+
+|Field|Usage|
+|---|---|
+|source|Identifier for this row in the file|
+|attribution|Statement about the source of the data|
+|collection|Repeats the name of the thing we are collecting.|
+|documentation-url|The web link to the providers documentation about the data|
+|endpoint|A link to a line in the endpoint CSV (see below)|
+|licence|The kind of license
+|organisation|A short code linking to the [organisation](https://datasette.planning.data.gov.uk/digital-land?sql=select+entity%2C+name%2C+organisation%2C+website+from+organisation+order+by+organisation+limit+100) table|
+|pipelines|What specific data we are getting from the endpoint|
+|entry-date|When the record was added|
+|start-date|When the record becomes active|
+|end-date|When the record becomes inactive|
+
+### Endpoint
+|Field|Usage|
+|---|---|
+|endpoint|Identifier for this row in the file|
+|endpoint-url|Link to the data itself|
+|parameters|(unused?)
+|plugin|We have different plugins for reading different kinds of data.|
+|entry-date|The date we added this record to the system|
+|start-date|When the download becomes valid|
+|end-date|When the download stops being valid|
+
+ **_NOTE_**: The relationship between Source and Endpoint does not follow a traditional entity-relationship 1:M model. Every time we add a new Endpoint for an organisation+Collection, we add a new Source as well, referencing that endpoint. 
+
+### Entity
+Data gets imported and eventually emerges as an Entity. This is used as a catch-all [record](https://datasette.planning.data.gov.uk/entity?sql=select+dataset%2C+end_date%2C+entity%2C+entry_date%2C+geojson%2C+geometry%2C+json%2C+name%2C+organisation_entity%2C+point%2C+prefix%2C+reference%2C+start_date%2C+typology%2C+geometry_geom%2C+point_geom+from+entity+where+entity+%3E+12345+order+by+entity+limit+101) for pretty much everything we hold.
+
+Each entity has a field called `entity` which is its identifier. Another important field is the `reference` which is what the data publisher uses to refer to the thing we are holding information about. The rest of the fields act as you might expect with the exception of the entry_date field.
+
+> **_entry_date_**: Normally in this system, entry_date is the date upon which a record was added to the system. A bit like __created_date_ in other systems. However, for data we import from a publisher, it can **either** be the date we imported it, **or** a date value provided by the publisher. We have no way of distinguishing between those two cases.
+
+### Lookups
+Now you know about Entity, we can look at another file, `lookup.csv` in the [`pipeline`](https://github.com/digital-land/conservation-area-collection/blob/main/pipeline/lookup.csv) folder. 
+
+There is a complex relationship between Entities we hold. Some entities give us data. Other entities ARE the things you see on the map. Sometimes more than one publisher gives us information about a single thing on the map. To manage this complexity we have a table called Lookup which maps from 'what the provider calls a thing' to our entity. 
+
+This relationship occasionally requires manual intervention, but for the time being you just need to understand that allocating 'entity' identifier values for stuff we import is an operation done when we import the data rather than something done by a database. 
+
+|Field|Usage|
+|---|---|
+|prefix|The dataset this entity is a part of|
+|resource|(not used?)|
+|organisation|Who has data referring to this entity|
+|reference|And what they use as a reference when talking about this entity|
+|entity|What **we** use to talk about the entity|
+
+As you can see, this gives us a Many-to-One relationship between organisation and entity. 
+
+#### Plugins
+Most publishers either give us link to a CSV file or a link to an `HTTP get` that returns data in a geographical format. The [plugin](https://github.com/digital-land/digital-land-python/tree/main/digital_land/plugins) converts the data to a csv format we can use in the rest of the ingest process. 
 
 
 ## Key Processes
+
+There are two operations we need to do almost every day - checking the acceptability of data on the platform, and actually setting up so that it loads. 
+
+### Checking Data before loading it onto the platform with Endpoint Checker
+
+The [Endpoint Checker](https://github.com/digital-land/jupyter-analysis/tree/main/endpoint_checker) is a Jupyter notebook that you can use to get an idea of the level of usability of the data offered on the web by an LPA. The notebook summarises all the details related to an endpoint in one place, and is a good first place to look when validating a new endpoint.
+
+#### pre-requisites
+
+You need to know 
+
+* The collection you are checking against
+* The organisation code for the [data publisher](https://datasette.planning.data.gov.uk/digital-land?sql=select%0D%0A++entity%2C%0D%0A++name%2C%0D%0A++organisation%2C%0D%0A++website%0D%0Afrom%0D%0A++organisation%0D%0Aorder+by%0D%0A++organisation%0D%0Alimit%0D%0A++1000)
+* The URL where their documentation is (optional but **highly** recommended)
+* The URL where the data lives
+* what data it is you are getting
+* The start_date for this data. This can be in the future, for checking at least.
+
+If the file is a CSV, download it first and have a look to make sure that it meets the basic sanity-checks:
+
+* Is there a reference value for every row?
+* Are the mandatory fields for that Collection provided?
+* Are there any formatting problems, like multi-line fields (eg addresses) or misplaced commas?
+* Are there any rows at the end of the data that are going to cause problems? There is sometimes text or other content that isn't going to work for us.
+
+If the link is for a geographic system, again download it and have a look at the data to ensure that there's a reference field and that the mandatory fields are present. You can use the guidance in [Working with LPA GIS Systems](WorkingWithLPA_GIS.html) to help deal with any issues. A common one is that the publisher might provide a query with a list of output fields. These have commas in so tends to break the import process. You can usually safely replace all the fields with a single * character to get all the fields.
+
+The endpoint checker gives you a lot of information about the chances of successfully loading the data. I suggest you pick some URLs from existing endpoint.csv files and try them out to get a flavour of what it does but in general you will see
+
+1. Can we get the data downloaded? If so, you'll see information about the size of the download etc
+1. Can we convert it to a CSV structure?
+1. Can we match the columns provided with what we expect according to the standard for that Collection? In the past we have been quite lenient with column mapping for LPAs. As we move towards a more standardised approach, publishers should be using the standards.
+1. Does our system generate lookup values that make sense for the data given?
+1. Are we seeing the right number of rows being brought in vs the original input?
+1. Does the final representation of what the imported data look right? 
+
+If the data passes those tests you can move on to loading it onto the platform, below.
+
+### Loading data onto the platform 
+
+If you're happy with the results of validating your new endpoint you can use the final part of the notebook to find some convenient scripts to help set up the new download.
+
+1. Download the repository for the Collection you need to add to, or get the latest from it
+1. Set up and activate your virtual environment for it
+1. Run `make makerules` and `make init`
+1. Create an `import.csv` file per the notes in the Jupyter notebook
+1. Copy the two lines from the notebook into the file
+1. Save it and run the command line example from the notebook, in the Collection repository
+1. Run `make` to run the pipeline locally.
+
+Depending on the amount of data present in the Collection, the import process may take some time. Once it completes, review the `source.csv`, `endpoint.csv` and `lookup.csv` files to make sure they make sense. 
+
+#### Confirming it all worked
+
+The `make` process generates some files in the `dataset` folder in the Collection. You can examine these files for problem in the '-issue.csv' file and see what waa generated in the other csv file. You might need to use notepad++ to open these files as they can be tens of megabytes in size. You can also open the SQLITE file using and application called 'DB Browser for SQLite', though you may need to coy the SQLITE file locally before you can open it. 
+
+#### Saving changes back
+
+You can push the the `source.csv`, `endpoint.csv` and `lookup.csv` files files back to github, alongside the `import.csv`, having discarded any changes to other files not needed but changed by the process. It is a good idea to name the commit after the organisation you are importing. I've been using the name of the organisation plus the three letter code.
+
+## Other Processes
 
 This is our list of key processes that the team will need to perform to maintain the service. They primarily rely on running CLI tools from our
 digital-land-python python package.
@@ -46,8 +170,8 @@ to the collection. Make a note of the location. The following columns need to be
 - `endpoint-url` - the url that the collector needs to extract data from
 - `documentation-url` - a url on a government related domain which contain information regarding the data
 - `start-date` - the date that the collector should start from (this can be in the past)
-- `plugins` - if a plugin is required to extract that data then it can be noted here othwerwise leave blank
-- `pipelines` - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is neccessaary they should be separated by `;`
+- `plugins` - if a plugin is required to extract that data then it can be noted here otherwise leave blank
+- `pipelines` - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is necessary they should be separated by `;`
 - `organisation` - the organisation which the endpoint belongs to. The name should be in [this list](https://datasette.planning.data.gov.uk/digital-land/organisation)
 
 If you haven't been given some of the above information then reach out to the data manager or tech lead for advice. You can use the below to get you started:
@@ -76,13 +200,13 @@ digital_land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME]
 ```
 
 The above command will work for the default collection set-up however you can set set the location
-of the key dependenciess if any of the directories or files are in a different location. This should not be necessary most of the time.
+of the key dependencies if any of the directories or files are in a different location. This should not be necessary most of the time.
 
 ```
 -c, --collection-dir [COLLECTION-DIRECTORY; default="/collection"] The directory containing the collection configuration files, collection logs and resources
 -o, --organisation-path [ORGANISATION-CSV-PATH; default="var/cache/organisation.csv"] The path to the csv containing the list of organisations
 -s, --specification-dir [SPECIFICATION-DIR; default="/specification"] The directory containing the specification files
--p, --pipeline-dir [PIPELINE-DIRECTORY; default="/pipeline"] The direcotry contianing pipeline configuration files
+-p, --pipeline-dir [PIPELINE-DIRECTORY; default="/pipeline"] The directory containing pipeline configuration files
 ```
 
 #### 5. check assigned entities are normal
@@ -279,9 +403,7 @@ Everything else is done so it’s worth reviewing this process and seeing if the
 
 We offer two complimentary ways of doing this - a quick way using the Endpoint Checker, and a more thorough manual method.
 
-### Validating an Endpoint with the Endpoint Checker
 
-The [Endpoint Checker](https://github.com/digital-land/jupyter-analysis/tree/main/endpoint_checker) is a Jupyter notebook that you can use to get an idea of the level of usability of the data offered on the web by an LPA. The notebook summarises all the details related to an endpoint in one place, and is a good first place to look when validating a new endpoint.
 
 ### Validating an Endpoint using the command-line
 
@@ -334,7 +456,7 @@ If not then raise this as an issue by creating a new card
 
 This section of our documentation provides authoritative information about the software.
 
-NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term 'collection' with a small C then we mean the __activity__ of getting the data for a Collection. The collector is a term we sometimes use for the software that collects the data.
+NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term 'collection' with a small c then we mean the __activity__ of getting the data for a Collection. The collector is a term we sometimes use for the part of the software that collects the data.
 
 ## Technical Glossary
 

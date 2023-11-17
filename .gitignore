@@ -20,3 +20,4 @@ build/
 Staticfile.auth
 
 .bin/
+.venv
