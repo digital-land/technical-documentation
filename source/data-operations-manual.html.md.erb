@@ -78,6 +78,46 @@ As you can see, this gives us a Many-to-One relationship between organisation an
 Most publishers either give us link to a CSV file or a link to an `HTTP get` that returns data in a geographical format. The [plugin](https://github.com/digital-land/digital-land-python/tree/main/digital_land/plugins) converts the data to a csv format we can use in the rest of the ingest process. 
 
 
+## Exchange of information between data standards and data operations
+
+When a new dataset is ready to be added to the platform there is a set of agreed information that the data standards team will provide data operations.
+
+### Prerequisites to adding the data
+
+Prior to data being added to the platform there are a number of checkpoints in place to ensure that we’re adding the right data and the right time. More information around the governance framework will be published in the [data standards manual](https://standards.planning-data.dev/) however there are two key checkpoints to call out:
+
+1. Prior to investing time and effort in modelling a data standard the standards team will provide evidence to the planning data programme as to why it ought to be added to planning.data.gov.uk
+2. When a new dataset is ready to be added to planning.data.gov.uk we’ll review with data operations and the platform team to ensure everyone understands and agrees what will be added to the platform and when
+
+### Adding a new national dataset
+
+National datasets are typically datasets that come from a single authoritative source. On occasions there may be other supplementary sources of the data that we want to collect on planning.data.gov.uk that are non-authoritative. For example, we collect [conservation area](https://www.planning.data.gov.uk/dataset/conservation-area) data from [Historic England](https://opendata-historicengland.hub.arcgis.com/datasets/historicengland::conservation-areas/explore?location=52.783541%2C-2.491828%2C6.62) and supplement it with data from local planning authorities.
+
+#### What information will be provided per dataset
+
+For each national dataset we will provide:
+
+* evidence of user needs and the value of the data as rationale for why it should be added to planning.data.gov.uk within a [Github discussion](https://github.com/digital-land/data-standards-backlog/discussions/)
+* links to our documented design history, also in a [Github discussion](https://github.com/digital-land/data-standards-backlog/discussions/)
+* a link to a published [schema](https://github.com/digital-land/specification/tree/main/content/dataset) which includes the assigned entity range
+* a URL for the dataset’s `documentaion-page`
+* the `endpoint-url`(s)
+* the expected number of records to be collected and processed via planning.data.gov.uk
+* any required field mappings
+* a set of sample data
+* an indication of the frequency that we expect the data to be updated by the authoritative source
+* details of the data licence and attribution
+
+We’ll use the [Trello card template](https://trello.com/c/BQoiyKtj/865-add-a-new-dataset-to-the-platform-title-boundaries) to provide this information in a consistent way.
+
+#### Acceptance criteria
+
+Once a new national dataset has been added to planning.data.gov.uk data standards and data operations will do a joint review to check everything appears as expected.
+
+### Adding a new LPA dataset
+
+Much of the information exchanged will be the same as with national datasets, but there will be additional items such as which organisations we expect to collect data from. As we work on the next new local planning authority dataset we’ll update this section of the operations manual. 
+
 ## Key Processes
 
 There are two operations we need to do almost every day - checking the acceptability of data on the platform, and actually setting up so that it loads. 
