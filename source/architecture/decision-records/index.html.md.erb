@@ -349,15 +349,25 @@ Proposed
 
 #### Context
 
-TODO
+Git submodules allow you to keep a Git repository as a subdirectory of another Git repository.
+Git submodules are simply a reference to another repository at a particular snapshot in time.
+Git submodules enable a Git repository to incorporate and track version history of external code.
+(taken from https://www.atlassian.com/git/tutorials/git-submodule)
+
+Unfortunately, git submodules are a very rudimentary way to share code between projects and is
+very clumsy and cumbersome to work with in practice.  In reality, code sharing should be via
+distributable packages rather than sharing whole source code repositories.
 
 #### Decision
 
-TODO
+Instead of git submodules, make use of appropriate dependency management (i.e. Pip for Python, Bundler for Ruby,
+NPM for Javascript) in order to use external code in a controlled, versioned manner.
 
 #### Consequences
 
-TODO
+ * New projects should not use git submodules
+ * Existing or adopted projects using git submodules should be migrated where possible
+
 
 ## 12. Collection names should be singular
 
@@ -369,7 +379,7 @@ Proposed
 
 #### Context
 
-TODO
+ * Is this referring to python collection names or database table entities?
 
 #### Decision
 
@@ -413,7 +423,8 @@ Proposed
 
 #### Context
 
-TODO
+Kebab case -- or kebab-case -- is a programming variable naming convention where a developer replaces the spaces
+between words with a dash.
 
 #### Decision
 
