@@ -666,17 +666,31 @@ pacakges: see <a href="0009-use-sqlite-for-data-packages.md">9. Use SQLite for d
 <h4 id="11-avoid-git-submodules-wherever-possible-status">Status</h4>
 <p>Proposed</p>
 <h4 id="11-avoid-git-submodules-wherever-possible-context">Context</h4>
-<p>TODO</p>
+<p>Git submodules allow you to keep a Git repository as a subdirectory of another Git repository.
+Git submodules are simply a reference to another repository at a particular snapshot in time.
+Git submodules enable a Git repository to incorporate and track version history of external code.
+(taken from https://www.atlassian.com/git/tutorials/git-submodule)</p>
+<p>Unfortunately, git submodules are a very rudimentary way to share code between projects and is
+very clumsy and cumbersome to work with in practice.  In reality, code sharing should be via
+distributable packages rather than sharing whole source code repositories.</p>
 <h4 id="11-avoid-git-submodules-wherever-possible-decision">Decision</h4>
-<p>TODO</p>
+<p>Instead of git submodules, make use of appropriate dependency management (i.e. Pip for Python, Bundler for Ruby,
+NPM for Javascript) in order to use external code in a controlled, versioned manner.</p>
 <h4 id="11-avoid-git-submodules-wherever-possible-consequences">Consequences</h4>
-<p>TODO</p>
+
+<ul>
+<li>New projects should not use git submodules</li>
+<li>Existing or adopted projects using git submodules should be migrated where possible</li>
+</ul>
 <h2 id="12-collection-names-should-be-singular">12. Collection names should be singular</h2>
 <p>Date: 2021-03-08</p>
 <h4 id="12-collection-names-should-be-singular-status">Status</h4>
 <p>Proposed</p>
 <h4 id="12-collection-names-should-be-singular-context">Context</h4>
-<p>TODO</p>
+
+<ul>
+<li>Is this referring to python collection names or database table entities?</li>
+</ul>
 <h4 id="12-collection-names-should-be-singular-decision">Decision</h4>
 <p>TODO</p>
 <h4 id="12-collection-names-should-be-singular-consequences">Consequences</h4>
@@ -700,7 +714,8 @@ retrieve large files.</p>
 <h4 id="14-use-kebab-case-for-names-in-data-status">Status</h4>
 <p>Proposed</p>
 <h4 id="14-use-kebab-case-for-names-in-data-context">Context</h4>
-<p>TODO</p>
+<p>Kebab case &ndash; or kebab-case &ndash; is a programming variable naming convention where a developer replaces the spaces
+between words with a dash.</p>
 <h4 id="14-use-kebab-case-for-names-in-data-decision">Decision</h4>
 <p>TODO</p>
 <h4 id="14-use-kebab-case-for-names-in-data-consequences">Consequences</h4>
