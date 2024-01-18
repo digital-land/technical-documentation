@@ -21,3 +21,5 @@ Staticfile.auth
 
 .bin/
 .venv
+
+.idea
