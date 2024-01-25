@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Search - Planning Data</title>
+    <title>Documentation - Planning Data</title>
 
     <link href="../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/search/">
+    <link rel="canonical" href="digital-land.github.io/documentation/">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Search - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/search/" />
+      <meta name="twitter:title" content="Documentation - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/documentation/" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Search" />
+      <meta property="og:title" content="Documentation" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/search/" />
+      <meta property="og:url" content="digital-land.github.io/documentation/" />
 
     
   </head>
@@ -580,29 +580,270 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <div id="search-help" class="search-help">
-  <h1 id="how-to-search">Search</h1>
+            <h1 id="documentation">Documentation</h1>
+<h2 id="overview">Overview</h2>
+<p>The core value proposition of Digital Land is to present Geographical Information System (GIS) data, in the form of static artifacts and API endpoints, to relevant consumers. The data served will primarily be focused around that which would impact UK planning applications in the short or long term.</p>
+<p>This data is ingested from various third parties, including central government, local government and third party sources (e.g. ordinance survey). This data is ingested via HTTP/S polling and transformed into a data set artifacts which are then served through the <a href="https://www.digital-land.info/dataset/">digital land website</a> and <a href="https://www.digital-land.info/docs">digital land API</a>. The frequency of this polling is currently once per day, and is triggered via <a href="https://github.com/features/actions">Github Actions</a> run against the Github repository for a <a href="https://github.com/orgs/digital-land/repositories?q=collection&amp;type=&amp;language=&amp;sort=">specific collection</a></p>
+<h2 id="architecture">Architecture</h2>
+<p>View the <a href="../architecture/design/latest/">latest architecture page</a> for system architecture models.</p>
+<h2 id="infrastructure">Infrastructure</h2>
 
-  <p class="govuk-body search-help__no-js">
-    You need to turn on JavaScript in your browser to search this site. You can either:
+<ul>
+<li>Heroku (dashboard, design system, performance dashboard, data manager)</li>
+<li>AWS (digital-land.info, datasettee, image repositories, S3, databases)</li>
+</ul>
+<p>View the <a href="../infrastructure.html">infrastructure page</a> for more details.</p>
+<h2 id="data-collection">Data Collection</h2>
+<p><a href="./images/HighLevelArchitectureDiagram.png" rel="noopener noreferrer"><img src="../images/images/HighLevelArchitectureDiagram.png" alt="Image High Level Architectural Diagram" /></a></p>
+<h3 id="pipeline-run-process">Pipeline run process</h3>
+<p>For a collection that executes via Github Actions, the execution flow is defined within <a href="https://github.com/digital-land/brownfield-land-collection/blob/main/.github/workflows/run.yml"><code>./.github/workflows/run.yml</code></a></p>
+<p>The typical execution flow for a pipeline might look like:
+1. <a href="#update-and-commit-makerules">Update makerules</a>
+2. <a href="#update-and-commit-makerules">Commit updated makerules</a>
+3. <a href="#install-dependencies">Install dependencies</a>
+4. <a href="#fetch-dataset-files-from-s3">Fetch dataset files from S3</a>
+5. <a href="#run-the-collector">Run the collector</a>
+6. <a href="#commit-collection">Commit collection</a>
+7. <a href="#update-the-collection-dataset">Update the collection dataset</a>
+8. <a href="#commit-updated-collection">Commit updated collection</a>
+9. <a href="#push-collection-files-to-s3">Push collection files to S3</a>
+10. <a href="#run-the-pipeline-to-make-the-dataset">Run the pipeline to make the dataset</a>
+11. <a href="#commit-harmonised-files">Commit harmonised files</a>
+12. <a href="#push-dataset-files-to-s3">Push dataset files to S3</a></p>
+<h4 id="update-and-commit-makerules">Update and commit makerules</h4>
 
-    <ul>
-      <li>turn on JavaScript in your browser</li>
-      <li>search this site using Google</li>
-    </ul>
-  </p>
+<ul>
+<li>Makefile rules are version controlled within https://github.com/digital-land/makerules/</li>
+<li>For the collection repos these definitions are refreshed as the first stage of the pipeline run, and committed to the collection repository</li>
+</ul>
+<h4 id="install-dependencies">Install dependencies</h4>
 
-  <p class="govuk-body">
-    Enter a search term in the search box, then select the search button.
-  </p>
-</div>
+<ul>
+<li>Install the collector and associated python dependencies defined within the collector repository (typically within <code>requirements.txt</code> or <code>setup.py</code>)</li>
+<li>If <code>specification</code> files are defined for this collector, they are also refreshed from <a href="https://github.com/digital-land/specification/">the specification repo</a> on Github.</li>
+</ul>
+<h4 id="fetch-dataset-files-from-s3">Fetch dataset files from S3</h4>
 
-<div id="search-results" class="search-results" hidden aria-labelledby="search-results-title">
-  <div class="search-results__inner">
-    <h1 id="search-results-title" class="search-results__title" aria-live="assertive">Results</h1>
-    <div class="search-results__content"></div>
-  </div>
-</div>
+<ul>
+<li>Existing dataset files are fetched from S3 via <code>aws s3 sync</code></li>
+<li>These represent the output of previous pipeline runs</li>
+</ul>
+<h4 id="run-the-collector">Run the collector</h4>
+
+<ul>
+<li>Entrypoint for collector is typically in <code>makerules/collection.mk</code>
+
+<ul>
+<li>This will call through to the <code>collect</code> entrypoint contained within the <a href="https://github.com/digital-land/digital-land-python"><code>digital-land</code> cli</a></li>
+</ul></li>
+<li>Passed into this command will be the path to the CSV file containing endpoints to be polled for this collection.</li>
+<li>For each poll, if the poll doesn&rsquo;t terminate in an error condition, the raw payloads fetched will be saved in <code>collection/log/&lt;iso-date&gt;/&lt;hash&gt;.&lt;extension&gt;</code>
+
+<ul>
+<li>where <code>&lt;iso-date&gt;</code> is the <a href="https://en.wikipedia.org/wiki/ISO_8601#Calendar_dates">ISO 8601 Calendar date with day of month</a> and <code>&lt;hash&gt;</code> is the <code>SHA256</code> hash of the content returned from the poll.</li>
+</ul></li>
+</ul>
+<h4 id="commit-collection">Commit collection</h4>
+
+<ul>
+<li>The <code>collection</code> folder, containing the raw payloads fetched in the previous step are committed to the collection repository, and pushed to the upstream remote in Github</li>
+</ul>
+<h4 id="update-the-collection-dataset">Update the collection dataset</h4>
+
+<ul>
+<li>This step updates the <code>collection/log.csv</code> and <code>collection/resource.csv</code> files
+
+<ul>
+<li><code>collection/resource.csv</code> contains a record of the latest attempt to update a collection, with the hash and size of the result, along with organization type, endpoints polled and start and end date</li>
+<li><code>collection/log.csv</code> contains records corresponding to every attempt made to poll and endpoint, the content type, status code, start date, end date and time taken</li>
+</ul></li>
+<li>A new make entrypoint is added to the local <code>collection/pipeline.mk</code> which serves this dataset</li>
+</ul>
+<h4 id="commit-updated-collection">Commit updated collection</h4>
+
+<ul>
+<li>The <code>collection</code> folder, containing the files modified in the previous step are committed to the collection repository, and pushed to the upstream remote in Github</li>
+</ul>
+<h4 id="push-collection-files-to-s3">Push collection files to S3</h4>
+
+<ul>
+<li>The <code>collection</code> folder, containing the files modified in the previous steps are pushed up to the collection S3 bucket</li>
+</ul>
+<h4 id="run-the-pipeline-to-make-the-dataset">Run the pipeline to make the dataset</h4>
+
+<ul>
+<li>The <code>make dataset</code> target is defined in <code>collection/pipeline.mk</code> in the collection, and dynamically generated by <code>digital-land collection-pipeline-makerules</code> in the <a href="https://github.com/digital-land/digital-land-python"><code>digital-land</code> CLI</a>
+
+<ul>
+<li>If the pipeline runs in AWS Batch then the Makefile will probably invoke <code>make dataset</code> via <a href="https://github.com/digital-land/aws-batch-docker/blob/main/pipeline_run.sh#L18">this script</a></li>
+</ul></li>
+<li><code>make dataset</code> invokes the <code>build-dataset</code> and <code>run-pipeline</code> make macros (defined in <code>makerules/pipeline.mk</code>) on each resource existing for that collection</li>
+<li><p>Each makefile target invokes a particular <a href="https://github.com/digital-land/digital-land-python"><code>digital-land</code> CLI</a> entrypoint</p>
+
+<ul>
+<li><code>run-pipeline</code> make macro -&gt; <code>digital-land pipeline</code>: orchestrates the transformation pipeline that runs on the data
+&lt;!&ndash; * It will instantiate pipeline-specific instances of: &ndash;&gt;
+&lt;!&ndash; * <code>Organisation</code> &ndash;&gt;
+&lt;!&ndash; * <code>Issues</code> &ndash;&gt;
+&lt;!&ndash; * <code>Collection</code> &ndash;&gt;
+&lt;!&ndash; * <code>patches</code> &ndash;&gt;
+&lt;!&ndash; * <code>Converter</code> &ndash;&gt;
+&lt;!&ndash; * <code>Normaliser</code> &ndash;&gt;
+&lt;!&ndash; * <code>Mapper</code> &ndash;&gt;
+&lt;!&ndash; * <code>Filterer</code> &ndash;&gt;
+&lt;!&ndash; * <code>Harmoniser</code> &ndash;&gt;
+&lt;!&ndash; * <code>Transformer</code> &ndash;&gt;
+&lt;!&ndash; * <code>Lookup</code> &ndash;&gt;
+&lt;!&ndash; * <code>Slugger</code> &ndash;&gt;</li>
+<li>It will operate on the data using the following (in-order) operations:
+
+<ul>
+<li><a href="https://digital-land.github.io/guidance/pipeline/#2-convert"><code>convert</code></a> - Converts all data to CSV format and exposes as a stream</li>
+<li><a href="https://digital-land.github.io/guidance/pipeline/#3-normalise"><code>normalise</code></a> - Normalise whitespace, strip null characters &amp; blank lines</li>
+<li><code>line_conversion</code> - Standardise CSV line endings as <code>CRLF</code> as defined in CSV specification</li>
+<li><a href="https://digital-land.github.io/guidance/pipeline/#4-map-the-headers"><code>mapping</code></a> - Map field names to those of desired outputs</li>
+<li>Also contains hard-coded hack for GeoX and GeoY some people get them the wrong way round (only co-constraint here)</li>
+<li><code>filtering</code> - Filter data based on pipeline-specific regex filter patterns</li>
+<li><a href="https://digital-land.github.io/guidance/pipeline/#5-harmonise"><code>harmonisation</code></a> - Fix value types</li>
+<li>Apply co-constraints</li>
+<li>Apply patches to values</li>
+<li>Produces <code>issue.csv</code></li>
+<li><a href="https://digital-land.github.io/guidance/pipeline/#6-transform"><code>transform</code></a> - migration of fields</li>
+<li><code>lookup</code> - Looking up entity numbers from <code>pipeline/lookup.csv</code></li>
+<li><code>slugger</code> - Generate slug for row</li>
+</ul></li>
+<li><code>build-dataset</code> make macro -&gt;</li>
+<li><code>digital-land load-entries</code> will load the artifacts and insert them into a local sqlite3 database</li>
+<li><code>digital-land build-dataset</code> is an interface to serialize data from a local sqlite3 database
+
+<ul>
+<li>It queries the database via the <code>slugs</code> table to discover which data sources it will attempt to update</li>
+<li>It then rebuilds the <code>Entity</code> instances from <code>Slug</code>&lsquo;s added to the sqlite database from a snapshot.</li>
+<li>Some pipelines will have schema added from within <code>specification/schema.csv</code>.
+&lt;!&ndash; This doesn&rsquo;t seem to do anything right now but might do something in the subclassed <code>Entity</code> instances? &ndash;&gt;</li>
+<li>The <code>Entity</code> instances are then serialized to disk as a CSV file</li>
+</ul></li>
+</ul></li>
+</ul>
+<h4 id="commit-harmonised-files">Commit harmonised files</h4>
+<p>If <code>harmonised</code> stage is run (currently only run against <code>brownfield-land-collection</code>) output files are commited to the collection repository</p>
+<h4 id="push-dataset-files-to-s3">Push dataset files to S3</h4>
+<p>Files generated by the pipeline run are pushed to:
+* collection S3 bucket:
+  * CSV output: <code>s3://{collection bucket name}/{collection repository}/{dataset}/{dataset}.csv</code>
+  * sqlite3 output: <code>s3://{collection bucket name}/{collection repository}/{dataset}/{dataset}.sqlite3</code>
+* hoisted S3 bucket
+  * CSV output with <code>json</code> keys as top-level CSV fields: <code>s3://{hoisted bucket name}/{dataset}-hoisted.csv</code></p>
+<h3 id="anatomy-of-a-collection-repository">Anatomy of a collection repository</h3>
+<h4 id="inputs">Inputs</h4>
+
+<ul>
+<li><a href="https://github.com/digital-land/brownfield-land/blob/main/collection/source.csv">collection/source.csv</a> — the list of data sources by organisation, see <a href="https://digital-land.github.io/specification/schema/source/">specification/source</a></li>
+<li><a href="https://github.com/digital-land/brownfield-land/blob/main/collection/endpoint.csv">collection/endpoint.csv</a> — the list of endpoint URLs for the collection, see <a href="https://digital-land.github.io/specification/schema/endpoint">specification/endpoint</a></li>
+<li><a href="https://github.com/digital-land/brownfield-land/blob/main/collection/resource/">collection/resource/</a> — collected resources</li>
+<li><a href="https://github.com/digital-land/brownfield-land/blob/main/collection/resource.csv">collection/resource.csv</a> — a list of collected resources, see <a href="https://digital-land.github.io/specification/schema/resource">specification/resource</a></li>
+</ul>
+<h4 id="outputs">Outputs</h4>
+
+<ul>
+<li><a href="https://github.com/digital-land/brownfield-land/blob/main/collection/log/">collection/log/</a> — individual log JSON files, created by the collection process</li>
+<li><a href="https://github.com/digital-land/brownfield-land/blob/main/collection/log.csv">collection/log.csv</a> — a collection log assembled from the individual log files, see <a href="https://digital-land.github.io/specification/schema/log">specification/log</a></li>
+<li><a href="https://github.com/digital-land/brownfield-land/blob/main/collection/resource.csv">collection/resource.csv</a> — a list of collected resources, see <a href="https://digital-land.github.io/specification/schema/resource">specification/resource</a></li>
+<li><a href="https://github.com/digital-land/brownfield-land/blob/main/fixed/">fixed/</a> — contains amended resources that previously could not be processed</li>
+<li><a href="https://github.com/digital-land/brownfield-land/blob/main/harmonised/">harmonised/</a> — The output of the <a href="#run-the-pipeline-to-make-the-dataset"><code>harmonise</code> stage of the pipeline</a></li>
+<li><code>/var/converted/</code> - contains CSV files (named by hash of resource) with outputs of intermediary steps to create <code>transformed/</code> file</li>
+</ul>
+<h4 id="execution-environment">Execution Environment</h4>
+<p>Currently most of the pipeline is triggered via Github Actions which are triggered on a daily basis.</p>
+<p>The collection repositories each have a workflow defined in <code>.github/workflows/run.yml</code> that is triggered at 00:00 (UTC)</p>
+<p>The builder repositories have a workflow defined in <code>.github/workflows/run.yml</code> that is triggered on the assumption that the collection repositories have finished. The <code>entity-builder</code> is triggered at <a href="https://github.com/digital-land/entity-builder/blob/eebf8ec78ac5586656f94a3f55b2a055002929d8/.github/workflows/run.yml#L4">04:45 (UTC)</a> and the <code>digital-land-builder</code> is triggered at <a href="https://github.com/digital-land/digital-land-builder/blob/a480221481fb9956556e2d1eedc7748ea5be75ea/.github/workflows/run.yml#L4">05.00 (UTC)</a></p>
+<p>Some of these more long-running jobs have been moved over to AWS Batch, but most of these have been migrated back to Github Actions</p>
+
+<!-- Output of each pipeline is a CSV -->
+<h2 id="monitoring">Monitoring</h2>
+
+<ul>
+<li>Pipeline status dashboard: https://digital-land-dashboard.herokuapp.com/</li>
+<li><code>digital-land.info</code> service is also instrumented with <a href="https://sentry.io/organizations/dluhc-digital-land/issues/">Sentry</a></li>
+</ul>
+<h2 id="services">Services</h2>
+<h3 id="user-facing-services">User-Facing Services</h3>
+
+<ul>
+<li><a href="https://github.com/digital-land/digital-land.info">digital-land.info service repo</a></li>
+<li><a href="https://github.com/digital-land/performance-prototype">performance.digital-land.info service repo</a></li>
+<li><a href="https://github.com/digital-land/data-manager">data-manager.digital-land.info service repo</a></li>
+<li><a href="https://github.com/digital-land/feedback-prototype">feedback.digital-land.info service repo</a></li>
+</ul>
+<h3 id="user-facing-service-libraries">User-Facing Service Libraries</h3>
+
+<ul>
+<li>https://github.com/digital-land/digital-land-frontend</li>
+</ul>
+<h3 id="datasettee">Datasettee</h3>
+
+<ul>
+<li>Self-hosted</li>
+<li>Built via https://github.com/digital-land/datasette-builder/</li>
+<li>Ingests pipeline outputs as <code>.sqlite3</code> database artifacts</li>
+</ul>
+<h2 id="data-model">Data model</h2>
+<h3 id="domain-terminology">Domain Terminology</h3>
+
+<ul>
+<li>Entity</li>
+<li>Fact</li>
+</ul>
+<h4 id="entity">Entity</h4>
+<p>An Entity is the basic unit of data within the platform. It can take on one of many types <a href="https://github.com/digital-land/specification/blob/40c777610a8e292145635ff875203145ee5f1e49/specification/typology.csv">defined by <code>digital-land/specification/typology.csv</code></a>. An entity has the following attributes:</p>
+
+<ul>
+<li><code>entity</code> - incrementing numeric ID, manually assigned on ingest, different numeric ranges represent different datasets, primary key on <code>entity</code> table in SQLite and Postgis databases</li>
+<li><code>start-date</code> - optional, date at which entity comes into existence (not date at which entity is created within data platform)</li>
+<li><code>end-date</code> - optional, date at which entity ceases to exists</li>
+<li><code>entry-date</code> - optional, date at which entity was first collected</li>
+<li><code>dataset</code> - optional, name of <code>dataset</code> (which should correspond to <a href="https://github.com/digital-land/specification/blob/40c777610a8e292145635ff875203145ee5f1e49/specification/dataset.csv"><code>dataset</code> field in <code>digital-land/specification/dataset.csv</code></a> to which entity belongs</li>
+<li><code>geojson</code> - optional, a JSON object conforming to <a href="https://datatracker.ietf.org/doc/html/rfc7946">RFC 7946 specification</a> which specifies the geographical bounds of the entity</li>
+<li><code>typology</code> - optional, the type of the entity which should correspond to <a href="https://github.com/digital-land/specification/blob/40c777610a8e292145635ff875203145ee5f1e49/specification/typology.csv">the <code>typoology</code> field in <code>digital-land/specification/typology.csv</code></a></li>
+<li><code>json</code> - optional, a JSON object containing metadata relating to the entity</li>
+</ul>
+<h4 id="fact">Fact</h4>
+<p>A Fact is a piece of information relating to an entity. Entities are generated from a list of facts relating to an entity, in the future these will be applied by an order of prescidence according to their source. A fact has the following attributes:</p>
+
+<!-- TODO find where this uuid is generated and add which version it is here  -->
+
+<ul>
+<li><code>fact</code> - UUID, primary key on <code>fact</code> table in database</li>
+<li><code>entity</code> - optional, numeric ID, <code>entity</code>to which fact applies</li>
+<li><code>start-date</code> - optional, date at which fact begins to apply (not date at which fact is created within data platform)</li>
+<li><code>end-date</code> - optional, date at which fact ceases to apply</li>
+<li><code>entry-date</code> - optional, date at which fact was first collected</li>
+</ul>
+<h3 id="processes">Processes</h3>
+<h4 id="wkt-boundary-validation">WKT Boundary Validation</h4>
+<p>When <a href="https://github.com/digital-land/digital-land-python/blob/main/digital_land/datatype/wkt.py">normalising a WKT</a> entity, it is validated by checking whether it lies within a boundary. The default boundary is a bounding box of England, but a custom boundary can be input into the normalise function to be used instead. The custom boundary is required to be a WKT of type Polygon or MultiPolygon. If there is no custom boundary, or if the custom boundary is of the wrong type, the default bounding box of England is used for validation.</p>
+<h2 id="list-of-datasets">List of Datasets</h2>
+<h2 id="external-links">External Links</h2>
+<h3 id="live-site">Live Site</h3>
+
+<ul>
+<li><a href="https://www.digital-land.info/">Digital Land homepage</a></li>
+<li><a href="https://www.digital-land.info/docs">Digital Land API Documentation</a></li>
+<li><a href="https://digital-land.github.io/guidance/">Digital Land Guidance</a></li>
+</ul>
+<h3 id="useful-repositories">Useful Repositories</h3>
+
+<ul>
+<li><a href="https://github.com/digital-land/digital-land-python">Digital Land CLI Repository</a></li>
+<li><a href="https://github.com/digital-land/makerules/">Digital Land Makerules Repository</a></li>
+<li><a href="https://github.com/digital-land/specification/">Digital Land Specification Repository</a></li>
+<li><a href="https://github.com/digital-land/aws-batch-docker">Digital Land AWS batch Dockerfile and entrypoints</a></li>
+</ul>
+<h3 id="other-documentation">Other Documentation</h3>
+
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1kwbPaEcKrRej2ckVFibwu1YYDfh5SdKIXNZradcbEaM/edit#slide=id.ge28ee0d90f_0_34">Living Document</a></li>
+</ul>
 
             
           </main>
