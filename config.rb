@@ -11,8 +11,8 @@ class PlantUML < Middleman::Extension
       out, err, status = Open3.capture3(
         "java -jar #{__dir__}/.bin/plantuml.jar -pipe -tsvg",
         {
-        stdin_data: File.read("#{__dir__}/source/diagrams/#{diagram_path}"),
-        chdir: "#{__dir__}/source/diagrams/"
+        stdin_data: File.read("#{__dir__}/source/#{diagram_path}"),
+        chdir: "#{__dir__}/source/#{File.dirname(diagram_path)}"
         }
       )
       svg = out.gsub( /.*<svg/m, "<svg" ).gsub(/\n/, '').gsub(/<!--(.|\s)*?-->/m, "")
