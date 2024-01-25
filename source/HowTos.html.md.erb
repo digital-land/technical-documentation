@@ -1,0 +1,48 @@
+---
+title: How-to Guides
+weight: 10
+---
+
+# How-to Guides
+
+This document contains some useful how-to guides.
+
+## Python versions on WSL2
+
+While these notes are mainly aimed at WSL2 users, these notes equally apply to any recent Ubuntu installation.
+
+The pipeline currently runs on Python 3.8, so this is the version developers should run. Ubuntu 22.04
+(Jammy Jellyfish) - which is the latest version used by WSL2 at the time of writing (January 2024) does not include
+a package for python 3.8.
+
+### Using Python 3.8
+
+The easiest way to install python 3.8 is from the [deadsnakes](https://github.com/deadsnakes) repository.
+
+    $ sudo add-apt-repository ppa:deadsnakes/ppa
+    $ sudo apt install python3.8
+    $ sudo apt install python3.8-venv
+
+Then create [virtual environment](https://docs.python.org/3/library/venv.html) for Python 3.8 with
+```python3.8 -m venv``` such as
+
+    $ python3.8 -m venv .venv --clear --prompt $(basename $(pwd))
+    
+To check that the virtual environment is indeed using Python 3.8 run
+
+    $ source .venv/bin/activate
+    $ python -V
+
+Which should display ```Python 3.8.18```
+
+
+### Using a later version too
+
+Even with python3.8 installed, the later (system) version of python will still be installed. In fact, this
+will be the default version of python (unless someone has tinkered with the system). From ouside of any
+virtual environment ```python -V``` should report the later version (currently ```Python 3.10.12```).
+
+Virtual environments can be created for this version with ```python -m venv``` as usual.
+
+It's worth noting that the system version of python can change with a Ubuntu update. If a specific version is required,
+it would be best to install it from deadsnakes in a similar way to installing 3.8.
