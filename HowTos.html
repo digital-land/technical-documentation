@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Working with LPA GIS Systems - Planning Data</title>
+    <title>How-to Guides - Planning Data</title>
 
     <link href="stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/WorkingWithLPA_GIS.html">
+    <link rel="canonical" href="digital-land.github.io/HowTos.html">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Working with LPA GIS Systems - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/WorkingWithLPA_GIS.html" />
+      <meta name="twitter:title" content="How-to Guides - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/HowTos.html" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Working with LPA GIS Systems" />
+      <meta property="og:title" content="How-to Guides" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/WorkingWithLPA_GIS.html" />
+      <meta property="og:url" content="digital-land.github.io/HowTos.html" />
 
     
   </head>
@@ -510,110 +510,32 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="working-with-lpa-gis-systems">Working with LPA GIS Systems</h1>
-<p>Generally LPAs run one of a small number of GIS platforms. Most are compatible with some version of the OGC spec.</p>
-<p>You need a small amount of info to work with these servers. This page is intended to give you some guidance.</p>
-<h2 id="core-concepts">Core Concepts</h2>
-<p>LPAs often provide data directly from a standards-compliant web server. You can query the server for data by building relatively simple query strings.</p>
-<h2 id="terminology">Terminology</h2>
-
-<ul>
-<li>OGC - Open Geospatial Consortium. They define the standards. </li>
-<li>WFS - Web Feature Service. Use this service to get data in eg csv or json formats</li>
-<li>WMS - Web Map Service. Use this service to get maps as images etc</li>
-<li>Feature - a thing on a map. You get them from making calls to WFS.</li>
-<li>Feature Type - information about the features above. </li>
-<li>QGIS - open-source mapping tools. Their desktop tool is great if you need to visualize your map data.</li>
-</ul>
-<p>There&rsquo;s broadly two kinds of query - one for maps -  (wms) and one for data that comprises maps, (wfs). We are going to focus on wfs.</p>
-<p>You might get a suggested endpoint like <code>https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&amp;version=2.0.0</code> from an LPA. This is a pointer to their GIS. See &lsquo;WFS&rsquo; in there? We can also see that they&rsquo;re providing version 2.0.0 of the OGC spec.</p>
-<p>What can you do with it?</p>
-<h2 id="get-the-servers-cabilities">Get the servers cabilities</h2>
-<p>If you add <code>&amp;request=GetCapabilities</code> onto the query, you will get back some XML that describes what the server can do.</p>
-<p><a href="https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&amp;version=2.0.0&amp;request=GetCapabilities">Try it! - click <code>https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&amp;version=2.0.0&amp;request=GetCapabilities</code></a></p>
-<p>This is important to us since it gives us some insight into what their server can provide. When you ran the query above you got some XML. As is typical for an XML document there&rsquo;s a lot of stuff in there but there&rsquo;s no need to understand all of it.</p>
-<h3 id="interesting-useful-items-in-a-servers-capabilties">Interesting / useful items in a servers capabilties</h3>
-<p>Look for the strings below in the XML:</p>
-
-<ul>
-<li>outputFormat - lets us know what the server claimes to produicve if requested</li>
-<li>ImplementsResultPaging - some servers hold massive amounts of data that we might want to download in chunks</li>
-<li>FeatureTypeList - super important. A FeatureType names the kind of data the server can offer. Eg <code>&lt;Name&gt;ns:DVL_ARTICLE_4&lt;/Name&gt;</code> is a clue we will be able to get Article 4 direction info.</li>
-</ul>
-<p>I scanned down the file looking for <code>FeatureTypeList</code> and found the Article 4 info - the first entry.</p>
-<div class="highlight"><pre class="highlight xml" tabindex="0"><code><span class="nt">&lt;FeatureType&gt;</span>
-    <span class="nt">&lt;Name&gt;</span>ns:DVL_ARTICLE_4<span class="nt">&lt;/Name&gt;</span>
-    <span class="nt">&lt;Title&gt;</span>DVL_ARTICLE_4<span class="nt">&lt;/Title&gt;</span>
-    <span class="nt">&lt;DefaultCRS&gt;</span>urn:ogc:def:crs:EPSG::27700<span class="nt">&lt;/DefaultCRS&gt;</span>
-    <span class="nt">&lt;OtherCRS&gt;</span>urn:ogc:def:crs:EPSG::3857<span class="nt">&lt;/OtherCRS&gt;</span>
-    <span class="nt">&lt;OtherCRS&gt;</span>urn:ogc:def:crs:EPSG::4277<span class="nt">&lt;/OtherCRS&gt;</span>
-    <span class="nt">&lt;OtherCRS&gt;</span>urn:ogc:def:crs:EPSG::4326<span class="nt">&lt;/OtherCRS&gt;</span>
-        <span class="nt">&lt;ows:WGS84BoundingBox&gt;</span>
-            <span class="nt">&lt;ows:LowerCorner&gt;</span>-180 -89.9999<span class="nt">&lt;/ows:LowerCorner&gt;</span>
-            <span class="nt">&lt;ows:UpperCorner&gt;</span>180 89.9999<span class="nt">&lt;/ows:UpperCorner&gt;</span>
-        <span class="nt">&lt;/ows:WGS84BoundingBox&gt;</span>
-<span class="nt">&lt;/FeatureType&gt;</span>
-</code></pre></div><p>Not <em>massively</em> useful. The Name and Title and some stuff about coordinate systems and boundaries.</p>
-<p>You can get more.</p>
-<h3 id="getting-info-about-a-feature-type">Getting info about a Feature Type</h3>
-<p><code>DescribeFeatureType</code> gives you the definition of a given feature type. You just need to provide the name of the Feature Type you want, without the <code>ns:</code> prefix:</p>
-<p><code>&amp;request=DescribeFeatureType&amp;TypeNames=DVL_ARTICLE_4</code></p>
-<p>For example</p>
-<p><code>https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&amp;version=2.0.0&amp;request=DescribeFeatureType&amp;TypeNames=DVL_ARTICLE_4</code></p>
-<p>Gives us a type definition. The best bit is that there is some info about the fields that Features of this FeatureType have:</p>
-<div class="highlight"><pre class="highlight xml" tabindex="0"><code><span class="nt">&lt;xsd:complexType</span> <span class="na">name=</span><span class="s">"DVL_ARTICLE_4_Type"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;xsd:complexContent&gt;</span>
-        <span class="nt">&lt;xsd:extension</span> <span class="na">base=</span><span class="s">"gml:AbstractFeatureType"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;xsd:sequence&gt;</span>
-            <span class="nt">&lt;xsd:element</span> <span class="na">maxOccurs=</span><span class="s">"1"</span> <span class="na">minOccurs=</span><span class="s">"0"</span> <span class="na">name=</span><span class="s">"GML_Geometry"</span> <span class="na">nillable=</span><span class="s">"false"</span> <span class="na">type=</span><span class="s">"gml:GeometryPropertyType"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;xsd:element</span> <span class="na">maxOccurs=</span><span class="s">"1"</span> <span class="na">minOccurs=</span><span class="s">"0"</span> <span class="na">name=</span><span class="s">"ARTICLE"</span> <span class="na">nillable=</span><span class="s">"false"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;xsd:element</span> <span class="na">maxOccurs=</span><span class="s">"1"</span> <span class="na">minOccurs=</span><span class="s">"0"</span> <span class="na">name=</span><span class="s">"DATE122"</span> <span class="na">nillable=</span><span class="s">"false"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;xsd:element</span> <span class="na">maxOccurs=</span><span class="s">"1"</span> <span class="na">minOccurs=</span><span class="s">"0"</span> <span class="na">name=</span><span class="s">"NAME"</span> <span class="na">nillable=</span><span class="s">"false"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;xsd:element</span> <span class="na">maxOccurs=</span><span class="s">"1"</span> <span class="na">minOccurs=</span><span class="s">"0"</span> <span class="na">name=</span><span class="s">"REFERENCE"</span> <span class="na">nillable=</span><span class="s">"false"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;/xsd:sequence&gt;</span>
-        <span class="nt">&lt;/xsd:extension&gt;</span>
-    <span class="nt">&lt;/xsd:complexContent&gt;</span>
-    <span class="nt">&lt;/xsd:complexType&gt;</span>
-<span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"DVL_ARTICLE_4"</span> <span class="na">substitutionGroup=</span><span class="s">"gml:AbstractFeature"</span> <span class="na">type=</span><span class="s">"ns:DVL_ARTICLE_4_Type"</span><span class="nt">/&gt;</span>
-</code></pre></div><p>This gives you some guidance on what column mappings you need to set up. In the above, NAME and REFERENCE are going to get automatically mapped. DATE122 though? We do not know which <a href="https://digital-land.github.io/specification/dataset/article-4-direction-area/">Article 4</a> Date that maps onto. To determine what we&rsquo;re going to do about that we can go and get the actual data.</p>
-<h2 id="getting-some-map-data-for-a-feature-type">Getting some map data for a Feature Type</h2>
-<p><a href="https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&amp;version=2.0.0&amp;request=GetFeature&amp;TypeNames=DVL_ARTICLE_4">Get the actual data - Click here! https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&amp;version=2.0.0&amp;request=GetFeature&amp;TypeNames=DVL_ARTICLE_4</a></p>
-<p>This gives you the data in full XML format. Here&rsquo;s a single Feature - Upper Upnor(4):</p>
-<div class="highlight"><pre class="highlight xml" tabindex="0"><code><span class="nt">&lt;wfs:member&gt;</span>
-    <span class="nt">&lt;ns:DVL_ARTICLE_4</span> <span class="na">gml:id=</span><span class="s">"DVL_ARTICLE_4.1.1"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;gml:description&gt;</span>Polygon<span class="nt">&lt;/gml:description&gt;</span>
-    <span class="nt">&lt;gml:name&gt;</span>Polygon<span class="nt">&lt;/gml:name&gt;</span>
-    <span class="nt">&lt;gml:boundedBy&gt;</span>
-        <span class="nt">&lt;gml:Envelope</span> <span class="na">srsName=</span><span class="s">"EPSG:27700"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;gml:lowerCorner&gt;</span>575760.15 170442.45<span class="nt">&lt;/gml:lowerCorner&gt;</span>
-            <span class="nt">&lt;gml:upperCorner&gt;</span>575810.78 170477.32<span class="nt">&lt;/gml:upperCorner&gt;</span>
-        <span class="nt">&lt;/gml:Envelope&gt;</span>
-    <span class="nt">&lt;/gml:boundedBy&gt;</span>
-    <span class="nt">&lt;ns:GML_Geometry&gt;</span>
-    <span class="nt">&lt;gml:Polygon</span> <span class="na">gml:id=</span><span class="s">"DVL_ARTICLE_4.1.1.Geometry"</span> <span class="na">srsName=</span><span class="s">"EPSG:27700"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;gml:exterior&gt;</span>
-            <span class="nt">&lt;gml:LinearRing&gt;</span>
-                <span class="nt">&lt;gml:coordinates&gt;</span>575777.46,170476.57 575781.07,170475.62 575781.74,170477.32
-                ...
-                 575776.35,170472.7 575777.46,170476.57<span class="nt">&lt;/gml:coordinates&gt;</span>
-            <span class="nt">&lt;/gml:LinearRing&gt;</span>
-        <span class="nt">&lt;/gml:exterior&gt;</span>
-    <span class="nt">&lt;/gml:Polygon&gt;</span>
-    <span class="nt">&lt;/ns:GML_Geometry&gt;</span>
-    <span class="nt">&lt;ns:ARTICLE&gt;</span>Article 4(2)<span class="nt">&lt;/ns:ARTICLE&gt;</span>
-    <span class="nt">&lt;ns:NAME&gt;</span>Upper Upnor(4)<span class="nt">&lt;/ns:NAME&gt;</span>
-    <span class="nt">&lt;ns:REFERENCE&gt;</span>UPNOR04<span class="nt">&lt;/ns:REFERENCE&gt;</span>
-    <span class="nt">&lt;/ns:DVL_ARTICLE_4&gt;</span>
-<span class="nt">&lt;/wfs:member&gt;</span>
-</code></pre></div><p>We can see NAME and REFERENCE but DATA122 is missing! Scanning the file for <code>ns:DATE122</code> leads to a number of occurrences. Not every Feature hasd a date, but where it is present the value is consitently associated with a particular NAME format. Examples below.</p>
-<div class="highlight"><pre class="highlight xml" tabindex="0"><code><span class="nt">&lt;ns:DATE122&gt;</span>05/09/05<span class="nt">&lt;/ns:DATE122&gt;</span>
-<span class="nt">&lt;ns:NAME&gt;</span>Upper Upnor(1)<span class="nt">&lt;/ns:NAME&gt;</span>
-...
-<span class="nt">&lt;ns:DATE122&gt;</span>05/09/05<span class="nt">&lt;/ns:DATE122&gt;</span>
-<span class="nt">&lt;ns:NAME&gt;</span>Upper Upnor(2)<span class="nt">&lt;/ns:NAME&gt;</span>
-</code></pre></div><p>And so forth. At this point I might believe that this is the start data for the articl 4 direction item. We don&rsquo;t have a documentation URL though so I cannot check. This is the end of the road for this particular dataset until we get some clarity from Medway about the meaning of DATE122!</p>
-<h1 id="useful-links">Useful links</h1>
-<p><a href="https://docs.qgis.org/3.28/en/docs/server_manual/services.html">QGIS services reference</a></p>
+            <h1 id="how-to-guides">How-to Guides</h1>
+<p>This document contains some useful how-to guides.</p>
+<h2 id="python-versions-on-wsl2">Python versions on WSL2</h2>
+<p>While these notes are mainly aimed at WSL2 users, these notes equally apply to any recent Ubuntu installation.</p>
+<p>The pipeline currently runs on Python 3.8, so this is the version developers should run. Ubuntu 22.04
+(Jammy Jellyfish) - which is the latest version used by WSL2 at the time of writing (January 2024) does not include
+a package for python 3.8.</p>
+<h3 id="using-python-3-8">Using Python 3.8</h3>
+<p>The easiest way to install python 3.8 is from the <a href="https://github.com/deadsnakes">deadsnakes</a> repository.</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>$ sudo add-apt-repository ppa:deadsnakes/ppa
+$ sudo apt install python3.8
+$ sudo apt install python3.8-venv
+</code></pre></div><p>Then create <a href="https://docs.python.org/3/library/venv.html">virtual environment</a> for Python 3.8 with
+<code>python3.8 -m venv</code> such as</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>$ python3.8 -m venv .venv --clear --prompt $(basename $(pwd))
+</code></pre></div><p>To check that the virtual environment is indeed using Python 3.8 run</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>$ source .venv/bin/activate
+$ python -V
+</code></pre></div><p>Which should display <code>Python 3.8.18</code></p>
+<h3 id="using-a-later-version-too">Using a later version too</h3>
+<p>Even with python3.8 installed, the later (system) version of python will still be installed. In fact, this
+will be the default version of python (unless someone has tinkered with the system). From ouside of any
+virtual environment <code>python -V</code> should report the later version (currently <code>Python 3.10.12</code>).</p>
+<p>Virtual environments can be created for this version with <code>python -m venv</code> as usual.</p>
+<p>It&rsquo;s worth noting that the system version of python can change with a Ubuntu update. If a specific version is required,
+it would be best to install it from deadsnakes in a similar way to installing 3.8.</p>
 
             
           </main>
