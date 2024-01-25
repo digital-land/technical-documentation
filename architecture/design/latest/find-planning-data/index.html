@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en" class="govuk-template no-js">
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <title>Solution design - Find Planning Data - Planning Data</title>
+
+    <link href="../../../../stylesheets/manifest.css" rel="stylesheet" />
+
+    <link rel="canonical" href="digital-land.github.io/architecture/design/latest/find-planning-data/">
+
+      <meta name="robots" content="noindex" />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
+      <meta name="twitter:title" content="Solution design - Find Planning Data - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/architecture/design/latest/find-planning-data/" />
+
+      <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
+      <meta property="og:site_name" content="Planning Data" />
+      <meta property="og:title" content="Solution design - Find Planning Data" />
+      <meta property="og:type" content="object" />
+      <meta property="og:url" content="digital-land.github.io/architecture/design/latest/find-planning-data/" />
+
+    
+  </head>
+
+  <body class="govuk-template__body">
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+
+    <div class="app-pane">
+      <div class="app-pane__header toc-open-disabled">
+        <a href="#content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+
+        <header class="govuk-header app-header" role="banner" data-module="govuk-header">
+  <div class="govuk-header__container govuk-header__container--full-width">
+    <div class="govuk-header__logo">
+      <a href="https://planning.data.gov.uk" class="govuk-header__link govuk-header__link--homepage">
+        <span class="govuk-header__product-name">
+          Planning Data
+        </span>
+      </a>
+        <strong class="govuk-tag">Beta</strong>
+    </div>
+  </div>
+</header>
+
+      </div>
+
+        <div id="toc-heading" class="toc-show fixedsticky">
+          <button type="button" class="toc-show__label js-toc-show" aria-controls="toc">
+            Table of contents <span class="toc-show__icon"></span>
+          </button>
+        </div>
+
+      <div class="app-pane__body" data-module="in-page-navigation">
+          <div class="app-pane__toc">
+            <div class="toc" data-module="table-of-contents" tabindex="-1" aria-label="Table of contents" role="dialog">
+              <div class="search" data-module="search" data-path-to-site-root="../../../../">
+  <form action="https://www.google.co.uk/search" method="get" role="search" class="search__form govuk-!-margin-bottom-4">
+    <input type="hidden" name="as_sitesearch" value="digital-land.github.io"/>
+    <label class="govuk-label search__label" for="search" aria-hidden="true">
+      Search (via Google)
+    </label>
+    <input
+      type="text"
+      id="search" name="q"
+      class="govuk-input govuk-!-margin-bottom-0 search__input"
+      aria-controls="search-results"
+      placeholder="Search">
+    <button type="submit" class="search__button">Search</button>
+  </form>
+</div>
+
+              <button type="button" class="toc__close js-toc-close" aria-controls="toc" aria-label="Hide table of contents"></button>
+              <nav id="toc" class="js-toc-list toc__list" aria-labelledby="toc-heading" data-module="collapsible-navigation">
+                      <ul>
+  <li>
+    <a href="../../../../index.html"><span>Planning Data Service</span></a>
+  </li>
+  <li>
+    <a href="../../../../runbook.html"><span>Run Book</span></a>
+    <ul>
+      <li>
+        <a href="../../../../runbook.html#outage-procedure"><span>Outage Procedure</span></a>
+      </li>
+      <li>
+        <a href="../../../../runbook.html#common-issues"><span>Common Issues</span></a>
+      </li>
+      <li>
+        <a href="../../../../runbook.html#incident-response-history"><span>Incident Response History</span></a>
+        <ul>
+          <li>
+            <a href="../../../../runbook.html#planning-data-gov-uk-outage-2023-10-05"><span>Planning.data.gov.uk outage - 2023-10-05</span></a>
+          </li>
+          <li>
+            <a href="../../../../runbook.html#national-map-url-39-dataset-39-parameter-key-changed-to-39-layer-39-2023-10-02"><span>National map url ‘dataset’ parameter key changed to ‘layer’ - 2023-10-02</span></a>
+          </li>
+          <li>
+            <a href="../../../../runbook.html#post-incident-actions"><span>Post incident actions</span></a>
+          </li>
+          <li>
+            <a href="../../../../runbook.html#maptiler-started-returning-403-errors-2023-08-16"><span>maptiler started returning 403 errors - 2023-08-16</span></a>
+          </li>
+          <li>
+            <a href="../../../../runbook.html#aws-alarms-raised-for-datasette-and-datasette-tiles-canaries-2023-08-14"><span>aws alarms raised for datasette and datasette-tiles canaries - 2023-08-14</span></a>
+          </li>
+          <li>
+            <a href="../../../../runbook.html#documentation-section-on-planning-data-gov-uk-showing-error-2023-06-12"><span>Documentation section on planning.data.gov.uk showing error - 2023-06-12</span></a>
+          </li>
+          <li>
+            <a href="../../../../runbook.html#slowness-reported-on-planning-data-gov-uk-2023-06-01"><span>Slowness reported on planning.data.gov.uk - 2023-06-01</span></a>
+          </li>
+          <li>
+            <a href="../../../../runbook.html#getting-error-500-on-planning-data-gov-uk-2023-04-11"><span>Getting error 500 on planning.data.gov.uk - 2023-04-11</span></a>
+          </li>
+          <li>
+            <a href="../../../../runbook.html#all-applications-on-planning-data-gov-uk-2022-11-22"><span>All applications on planning.data.gov.uk - 2022-11-22</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="../../../../infrastructure.html"><span>Infrastructure</span></a>
+    <ul>
+      <li>
+        <a href="../../../../infrastructure.html#overview"><span>Overview</span></a>
+      </li>
+      <li>
+        <a href="../../../../infrastructure.html#deploying"><span>Deploying</span></a>
+        <ul>
+          <li>
+          </li>
+          <li>
+            <a href="../../../../infrastructure.html#an-existing-environment"><span>An Existing Environment</span></a>
+          </li>
+          <li>
+            <a href="../../../../infrastructure.html#a-new-environment"><span>A New Environment</span></a>
+          </li>
+          <li>
+            <a href="../../../../infrastructure.html#lambda-functions"><span>Lambda functions</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../infrastructure.html#configuration-changes"><span>Configuration Changes</span></a>
+        <ul>
+          <li>
+            <a href="../../../../infrastructure.html#add-a-new-application"><span>Add a new application</span></a>
+          </li>
+          <li>
+            <a href="../../../../infrastructure.html#add-a-new-background-task"><span>Add a new background task</span></a>
+          </li>
+          <li>
+            <a href="../../../../infrastructure.html#rds-autoscaling"><span>RDS autoscaling</span></a>
+          </li>
+          <li>
+            <a href="../../../../infrastructure.html#synthetics-canaries"><span>Synthetics Canaries</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+<li><a href="../../../../architecture/index.html"><span>Architecture</span></a>
+<ul>
+<li><a href="../../../../architecture/design/index.html"><span>Solution design</span></a>
+<ul>
+<li><a href="../../../../architecture/design/archive/index.html"><span>Solution design archive</span></a>
+<ul>
+  <li>
+    <a href="../../../../architecture/design/archive/2022-11/index.html"><span>Solution design - November 2022</span></a>
+    <ul>
+      <li>
+        <a href="../../../../architecture/design/archive/2022-11/index.html#system-context"><span>System Context</span></a>
+      </li>
+    </ul>
+  </li>
+</ul>
+</li>
+<li><a href="../../../../architecture/design/latest/index.html"><span>Solution design</span></a>
+<ul>
+  <li>
+    <a href="../../../../architecture/design/latest/data-pipelines/index.html"><span>Solution design - Data Pipelines</span></a>
+    <ul>
+      <li>
+        <a href="../../../../architecture/design/latest/data-pipelines/index.html#solution-design-data-pipelines-containers"><span>Containers</span></a>
+        <ul>
+          <li>
+            <a href="../../../../architecture/design/latest/data-pipelines/index.html#solution-design-data-pipelines-containers-structure"><span>Structure</span></a>
+          </li>
+          <li>
+            <a href="../../../../architecture/design/latest/data-pipelines/index.html#interaction"><span>Interaction</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/design/latest/data-pipelines/index.html#code"><span>Code</span></a>
+        <ul>
+          <li>
+            <a href="../../../../architecture/design/latest/data-pipelines/index.html#classes-wip"><span>Classes (WIP)</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="../../../../architecture/design/latest/find-planning-data/index.html"><span>Solution design - Find Planning Data service</span></a>
+    <ul>
+      <li>
+        <a href="../../../../architecture/design/latest/find-planning-data/index.html#containers"><span>Containers</span></a>
+        <ul>
+          <li>
+            <a href="../../../../architecture/design/latest/find-planning-data/index.html#structure"><span>Structure</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="../../../../architecture/design/latest/publish-service/index.html"><span>Solution design - Publish Service</span></a>
+    <ul>
+      <li>
+        <a href="../../../../architecture/design/latest/publish-service/index.html#solution-design-publish-service-containers"><span>Containers</span></a>
+        <ul>
+          <li>
+            <a href="../../../../architecture/design/latest/publish-service/index.html#solution-design-publish-service-containers-structure"><span>Structure</span></a>
+          </li>
+          <li>
+            <a href="../../../../architecture/design/latest/publish-service/index.html#solution-design-publish-service-containers-interaction"><span>Interaction</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+</li>
+</ul>
+</li>
+  <li>
+    <a href="../../../../architecture/decision-records/index.html"><span>Architecture Decision Records (ADRs)</span></a>
+    <ul>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#1-record-architecture-decisions"><span>1. Record architecture decisions</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#2-floating-package-dependencies"><span>2. floating-package-dependencies</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#3-use-the-repository-pattern-to-access-a-database"><span>3. Use the repository-pattern to access a database</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#4-implement-plugins-using-pluggy"><span>4. Implement plugins using pluggy</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#5-load-external-frontend-assets-first"><span>5. Load external frontend assets first</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#6-use-github-pages-for-our-content"><span>6. Use Github pages for our content</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#7-provide-unique-ids-for-dataset-entries"><span>7. Provide unique IDs for dataset entries</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#8-use-files-for-repositories-databases-as-indexes"><span>8. Use files for repositories, databases as indexes</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#9-use-sqlite-for-data-packages"><span>9. Use SQLite for data packages</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#10-use-the-entity-value-attribute-pattern-for-our-data-model"><span>10. Use the Entity-Value-Attribute pattern for our data model</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#11-avoid-git-submodules-wherever-possible"><span>11. Avoid git submodules wherever possible</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#12-collection-names-should-be-singular"><span>12. Collection names should be singular</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#13-use-github-lfs-for-large-git-files"><span>13. Use Github LFS for large git files</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#14-use-kebab-case-for-names-in-data"><span>14. Use kebab-case for names in data</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#15-write-new-tests-at-the-lowest-possible-levels"><span>15. Write new tests at the lowest possible levels</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#16-missing-entry-dates"><span>16. Missing entry-dates</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#17-use-vector-tiles-to-display-geographic-data-on-a-map"><span>17. Use vector tiles to display geographic data on a map</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#18-use-nodejs-to-serve-the-frontend-of-the-new-data-validation-tool-and-interact-with-other-apis"><span>18. Use NodeJS to serve the frontend of the new data validation tool and interact with other APIs</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../architecture/decision-records/index.html#19-use-pytest-and-jsonschema-as-the-contract-validation-and-testing-solution"><span>19. Use PyTest and JSONSchema as the Contract validation and testing solution</span></a>
+        <ul>
+          <li>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+</li>
+  <li>
+    <a href="../../../../WorkingWithLPA_GIS.html"><span>Working with LPA GIS Systems</span></a>
+    <ul>
+      <li>
+        <a href="../../../../WorkingWithLPA_GIS.html#core-concepts"><span>Core Concepts</span></a>
+      </li>
+      <li>
+        <a href="../../../../WorkingWithLPA_GIS.html#terminology"><span>Terminology</span></a>
+      </li>
+      <li>
+        <a href="../../../../WorkingWithLPA_GIS.html#get-the-servers-cabilities"><span>Get the servers cabilities</span></a>
+        <ul>
+          <li>
+            <a href="../../../../WorkingWithLPA_GIS.html#interesting-useful-items-in-a-servers-capabilties"><span>Interesting / useful items in a servers capabilties</span></a>
+          </li>
+          <li>
+            <a href="../../../../WorkingWithLPA_GIS.html#getting-info-about-a-feature-type"><span>Getting info about a Feature Type</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../WorkingWithLPA_GIS.html#getting-some-map-data-for-a-feature-type"><span>Getting some map data for a Feature Type</span></a>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="../../../../WorkingWithLPA_GIS.html"><span>Useful links</span></a>
+  </li>
+  <li>
+    <a href="../../../../data-operations-manual.html"><span>Data Operations</span></a>
+    <ul>
+      <li>
+        <ul>
+          <li>
+            <a href="../../../../data-operations-manual.html#audience-for-this-document"><span>Audience for this document</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../data-operations-manual.html#key-concepts"><span>Key Concepts</span></a>
+        <ul>
+          <li>
+            <a href="../../../../data-operations-manual.html#source"><span>Source</span></a>
+          </li>
+          <li>
+            <a href="../../../../data-operations-manual.html#endpoint"><span>Endpoint</span></a>
+          </li>
+          <li>
+            <a href="../../../../data-operations-manual.html#entity"><span>Entity</span></a>
+          </li>
+          <li>
+            <a href="../../../../data-operations-manual.html#lookups"><span>Lookups</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../data-operations-manual.html#key-processes"><span>Key Processes</span></a>
+        <ul>
+          <li>
+            <a href="../../../../data-operations-manual.html#checking-data-before-loading-it-onto-the-platform-with-endpoint-checker"><span>Checking Data before loading it onto the platform with Endpoint Checker</span></a>
+          </li>
+          <li>
+            <a href="../../../../data-operations-manual.html#loading-data-onto-the-platform"><span>Loading data onto the platform</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../data-operations-manual.html#other-processes"><span>Other Processes</span></a>
+        <ul>
+          <li>
+            <a href="../../../../data-operations-manual.html#adding-endpoints-to-a-collection-manually"><span>Adding Endpoints To A Collection Manually</span></a>
+          </li>
+          <li>
+            <a href="../../../../data-operations-manual.html#creating-a-new-collection"><span>Creating a new collection</span></a>
+          </li>
+          <li>
+            <a href="../../../../data-operations-manual.html#adding-a-new-dataset"><span>Adding a new dataset</span></a>
+          </li>
+          <li>
+            <a href="../../../../data-operations-manual.html#ending-an-endpoint"><span>Ending an endpoint</span></a>
+          </li>
+          <li>
+            <a href="../../../../data-operations-manual.html#retiring-a-resource"><span>Retiring a resource</span></a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="../../../../data-operations-manual.html#validating-an-endpoint"><span>Validating an Endpoint</span></a>
+        <ul>
+          <li>
+            <a href="../../../../data-operations-manual.html#validating-an-endpoint-using-the-command-line"><span>Validating an Endpoint using the command-line</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="../../../../data-operations-manual.html"><span>Reference</span></a>
+    <ul>
+      <li>
+        <a href="../../../../data-operations-manual.html#technical-glossary"><span>Technical Glossary</span></a>
+      </li>
+      <li>
+        <a href="../../../../data-operations-manual.html#key-repositories"><span>Key Repositories</span></a>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+              </nav>
+            </div>
+          </div>
+
+        <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
+          <main id="content" class="technical-documentation" data-module="anchored-headings">
+            <h1 id="solution-design-find-planning-data-service">Solution design - Find Planning Data service</h1>
+<h2 id="containers">Containers</h2>
+<h3 id="structure">Structure</h3>
+<p><a href="images/containers.drawio.png" rel="noopener noreferrer"><img src="images/containers.drawio.png" alt="Find Planning Data container structure" /></a></p>
+
+            
+          </main>
+
+          <aside>
+          </aside>
+
+          <footer class="govuk-footer app-footer" role="contentinfo">
+  <div class="govuk-footer__meta">
+    <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+
+
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        class="govuk-footer__licence-logo"
+        xmlns="http://www.w3.org/2000/svg"
+        viewbox="0 0 483.2 195.7"
+        height="17"
+        width="41"
+      >
+        <path
+          fill="currentColor"
+          d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
+        />
+      </svg>
+      <span class="govuk-footer__licence-description">
+        All content is available under the
+        <a
+          class="govuk-footer__link"
+          href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+          rel="license"
+        >Open Government Licence v3.0</a>, except where otherwise stated
+      </span>
+    </div>
+    <div class="govuk-footer__meta-item">
+      <a
+        class="govuk-footer__link govuk-footer__copyright-logo"
+        href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
+      >© Crown copyright</a>
+    </div>
+  </div>
+</footer>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <script src="../../../../javascripts/application.js"></script>
+  </body>
+</html>

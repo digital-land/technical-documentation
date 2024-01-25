@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Solution design - Data Pipelines - Planning Data</title>
+    <title>Solution design - Planning Data</title>
 
     <link href="../../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/architecture/design/data-pipelines/">
+    <link rel="canonical" href="digital-land.github.io/architecture/design/latest/">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Solution design - Data Pipelines - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/architecture/design/data-pipelines/" />
+      <meta name="twitter:title" content="Solution design - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/architecture/design/latest/" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Solution design - Data Pipelines" />
+      <meta property="og:title" content="Solution design" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/architecture/design/data-pipelines/" />
+      <meta property="og:url" content="digital-land.github.io/architecture/design/latest/" />
 
     
   </head>
@@ -167,46 +167,75 @@
 <ul>
 <li><a href="../../../architecture/design/index.html"><span>Solution design</span></a>
 <ul>
+<li><a href="../../../architecture/design/archive/index.html"><span>Solution design archive</span></a>
+<ul>
   <li>
-    <a href="../../../architecture/design/data-pipelines/index.html"><span>Solution design - Data Pipelines</span></a>
+    <a href="../../../architecture/design/archive/2022-11/index.html"><span>Solution design - November 2022</span></a>
     <ul>
       <li>
-        <a href="../../../architecture/design/data-pipelines/index.html#containers"><span>Containers</span></a>
+        <a href="../../../architecture/design/archive/2022-11/index.html#solution-design-november-2022-system-context"><span>System Context</span></a>
+      </li>
+    </ul>
+  </li>
+</ul>
+</li>
+<li><a href="../../../architecture/design/latest/index.html"><span>Solution design</span></a>
+<ul>
+  <li>
+    <a href="../../../architecture/design/latest/data-pipelines/index.html"><span>Solution design - Data Pipelines</span></a>
+    <ul>
+      <li>
+        <a href="../../../architecture/design/latest/data-pipelines/index.html#solution-design-data-pipelines-containers"><span>Containers</span></a>
         <ul>
           <li>
-            <a href="../../../architecture/design/data-pipelines/index.html#structure"><span>Structure</span></a>
+            <a href="../../../architecture/design/latest/data-pipelines/index.html#structure"><span>Structure</span></a>
           </li>
           <li>
-            <a href="../../../architecture/design/data-pipelines/index.html#interaction"><span>Interaction</span></a>
+            <a href="../../../architecture/design/latest/data-pipelines/index.html#interaction"><span>Interaction</span></a>
           </li>
         </ul>
       </li>
       <li>
-        <a href="../../../architecture/design/data-pipelines/index.html#code"><span>Code</span></a>
+        <a href="../../../architecture/design/latest/data-pipelines/index.html#code"><span>Code</span></a>
         <ul>
           <li>
-            <a href="../../../architecture/design/data-pipelines/index.html#classes-wip"><span>Classes (WIP)</span></a>
+            <a href="../../../architecture/design/latest/data-pipelines/index.html#classes-wip"><span>Classes (WIP)</span></a>
           </li>
         </ul>
       </li>
     </ul>
   </li>
   <li>
-    <a href="../../../architecture/design/publish-service/index.html"><span>Solution design - Publish Service</span></a>
+    <a href="../../../architecture/design/latest/find-planning-data/index.html"><span>Solution design - Find Planning Data service</span></a>
     <ul>
       <li>
-        <a href="../../../architecture/design/publish-service/index.html#solution-design-publish-service-containers"><span>Containers</span></a>
+        <a href="../../../architecture/design/latest/find-planning-data/index.html#solution-design-find-planning-data-service-containers"><span>Containers</span></a>
         <ul>
           <li>
-            <a href="../../../architecture/design/publish-service/index.html#solution-design-publish-service-containers-structure"><span>Structure</span></a>
-          </li>
-          <li>
-            <a href="../../../architecture/design/publish-service/index.html#solution-design-publish-service-containers-interaction"><span>Interaction</span></a>
+            <a href="../../../architecture/design/latest/find-planning-data/index.html#solution-design-find-planning-data-service-containers-structure"><span>Structure</span></a>
           </li>
         </ul>
       </li>
     </ul>
   </li>
+  <li>
+    <a href="../../../architecture/design/latest/publish-service/index.html"><span>Solution design - Publish Service</span></a>
+    <ul>
+      <li>
+        <a href="../../../architecture/design/latest/publish-service/index.html#solution-design-publish-service-containers"><span>Containers</span></a>
+        <ul>
+          <li>
+            <a href="../../../architecture/design/latest/publish-service/index.html#solution-design-publish-service-containers-structure"><span>Structure</span></a>
+          </li>
+          <li>
+            <a href="../../../architecture/design/latest/publish-service/index.html#solution-design-publish-service-containers-interaction"><span>Interaction</span></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+</li>
 </ul>
 </li>
   <li>
@@ -465,15 +494,16 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="solution-design-data-pipelines">Solution design - Data Pipelines</h1>
+            <h1 id="solution-design">Solution design</h1>
+<p>The solution architecture has been modelled using the <a href="https://c4model.com/">C4 approach</a>.</p>
+<h2 id="system-context">System Context</h2>
+<p><a href="images/system-context.drawio.png" rel="noopener noreferrer"><img src="images/system-context.drawio.png" alt="Data Platform System Context" /></a></p>
 <h2 id="containers">Containers</h2>
-<h3 id="structure">Structure</h3>
-<p><a href="images/containers.drawio.png" rel="noopener noreferrer"><img src="images/containers.drawio.png" alt="Data Pipelines container structure" /></a></p>
-<h3 id="interaction">Interaction</h3>
-<p><a href="images/container-interaction.drawio.png" rel="noopener noreferrer"><img src="images/container-interaction.drawio.png" alt="Data Pipelines container interaction" /></a></p>
-<h2 id="code">Code</h2>
-<h3 id="classes-wip">Classes (WIP)</h3>
-<p><a href="images/classes.drawio.png" rel="noopener noreferrer"><img src="images/classes.drawio.png" alt="Data Pipelines classes" /></a></p>
+
+<ul>
+<li><a href="data-pipelines/">Data Pipelines</a></li>
+<li><a href="publish-service/">Publish service</a></li>
+</ul>
 
             
           </main>
