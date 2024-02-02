@@ -592,14 +592,12 @@
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
             <h1 id="infrastructure">Infrastructure</h1>
-<p>The planning data <a href="https://github.com/digital-land/digital-land-infrastructure">infrastructure repository</a> contains
-terraform configuration files that create the necessary services to deploy applications and background tasks for the
-planning data system.</p>
 <h2 id="overview">Overview</h2>
 <p>There are two repositories that handle our infrastructure:</p>
 
 <ul>
-<li><a href="https://github.com/digital-land/digital-land-infrastructure">Digital Land Infrastructure</a> - this contains our primary infrastructure and allows the user to interact all environments and is what the instructions in this guide aim to help with.</li>
+<li><a href="https://github.com/digital-land/digital-land-infrastructure">Digital Land Infrastructure</a> - this contains our primary infrastructure and allows the user to interact all environments and is what the instructions in this guide aim to help with.
+This repository contains Terraform configuration files that create the necessary services to deploy applications and background tasks for the planning data service.</li>
 <li><a href="https://github.com/digital-land/global-digital-land-infrastructure">Global Digital Land Infrastructure</a> - this mainly contains infrastructure that needs to lie outside of the other repo such as nameserver records to subdomains as well as lagacy infrustructure such as s3 buckets who&rsquo;s content is stored in glacier</li>
 </ul>
 <h3 id="planning-data-platform-deployment-diagram">Planning Data Platform - Deployment Diagram</h3>
