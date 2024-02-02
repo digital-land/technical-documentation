@@ -5,15 +5,12 @@ weight: 3
 
 # Infrastructure
 
-The planning data [infrastructure repository](https://github.com/digital-land/digital-land-infrastructure) contains
-terraform configuration files that create the necessary services to deploy applications and background tasks for the
-planning data system.
-
 ## Overview
 
 There are two repositories that handle our infrastructure:
 
 * [Digital Land Infrastructure](https://github.com/digital-land/digital-land-infrastructure) - this contains our primary infrastructure and allows the user to interact all environments and is what the instructions in this guide aim to help with.
+This repository contains Terraform configuration files that create the necessary services to deploy applications and background tasks for the planning data service.
 * [Global Digital Land Infrastructure](https://github.com/digital-land/global-digital-land-infrastructure) - this mainly contains infrastructure that needs to lie outside of the other repo such as nameserver records to subdomains as well as lagacy infrustructure such as s3 buckets who's content is stored in glacier
 
 ### Planning Data Platform - Deployment Diagram
