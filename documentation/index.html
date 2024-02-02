@@ -153,6 +153,18 @@
 <ul>
 <li><a href="../architecture/design/index.html"><span>Solution design index</span></a>
 <ul>
+<li><a href="../architecture/design/archive/index.html"><span>Solution design archive</span></a>
+<ul>
+  <li>
+    <a href="../architecture/design/archive/2022-11/index.html"><span>Solution design - November 2022</span></a>
+    <ul>
+      <li>
+        <a href="../architecture/design/archive/2022-11/index.html#system-context"><span>System Context</span></a>
+      </li>
+    </ul>
+  </li>
+</ul>
+</li>
 <li><a href="../architecture/design/latest/index.html"><span>Solution design</span></a>
 <ul>
   <li>
@@ -205,18 +217,6 @@
             <a href="../architecture/design/latest/publish-service/index.html#solution-design-publish-service-containers-interaction"><span>Interaction</span></a>
           </li>
         </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-</li>
-<li><a href="../architecture/design/archive/index.html"><span>Solution design archive</span></a>
-<ul>
-  <li>
-    <a href="../architecture/design/archive/2022-11/index.html"><span>Solution design - November 2022</span></a>
-    <ul>
-      <li>
-        <a href="../architecture/design/archive/2022-11/index.html#solution-design-november-2022-system-context"><span>System Context</span></a>
       </li>
     </ul>
   </li>
@@ -369,6 +369,17 @@
     <ul>
       <li>
         <a href="../infrastructure.html#infrastructure-2-overview"><span>Overview</span></a>
+        <ul>
+          <li>
+            <a href="../infrastructure.html#planning-data-platform-deployment-diagram"><span>Planning Data Platform - Deployment Diagram</span></a>
+          </li>
+          <li>
+            <a href="../infrastructure.html#data-collection-pipeline-deployment-diagram"><span>Data Collection Pipeline - Deployment Diagram</span></a>
+          </li>
+          <li>
+            <a href="../infrastructure.html#publish-service-deployment-diagram"><span>Publish Service - Deployment Diagram</span></a>
+          </li>
+        </ul>
       </li>
       <li>
         <a href="../infrastructure.html#deploying"><span>Deploying</span></a>
@@ -602,7 +613,7 @@
 </ul>
 <p>View the <a href="../infrastructure.html">infrastructure page</a> for more details.</p>
 <h2 id="data-collection">Data Collection</h2>
-<p><a href="./images/HighLevelArchitectureDiagram.png" rel="noopener noreferrer"><img src="../images/images/HighLevelArchitectureDiagram.png" alt="Image High Level Architectural Diagram" /></a></p>
+<p><a href="./images/pipelines.png" rel="noopener noreferrer"><img src="images/pipelines.png" alt="Image High Level Architectural Diagram" /></a></p>
 <h3 id="pipeline-run-process">Pipeline run process</h3>
 <p>For a collection that executes via Github Actions, the execution flow is defined within <a href="https://github.com/digital-land/brownfield-land-collection/blob/main/.github/workflows/run.yml"><code>./.github/workflows/run.yml</code></a></p>
 <p>The typical execution flow for a pipeline might look like:

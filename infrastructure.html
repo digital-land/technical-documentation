@@ -153,6 +153,18 @@
 <ul>
 <li><a href="./architecture/design/index.html"><span>Solution design index</span></a>
 <ul>
+<li><a href="./architecture/design/archive/index.html"><span>Solution design archive</span></a>
+<ul>
+  <li>
+    <a href="./architecture/design/archive/2022-11/index.html"><span>Solution design - November 2022</span></a>
+    <ul>
+      <li>
+        <a href="./architecture/design/archive/2022-11/index.html#system-context"><span>System Context</span></a>
+      </li>
+    </ul>
+  </li>
+</ul>
+</li>
 <li><a href="./architecture/design/latest/index.html"><span>Solution design</span></a>
 <ul>
   <li>
@@ -205,18 +217,6 @@
             <a href="./architecture/design/latest/publish-service/index.html#solution-design-publish-service-containers-interaction"><span>Interaction</span></a>
           </li>
         </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-</li>
-<li><a href="./architecture/design/archive/index.html"><span>Solution design archive</span></a>
-<ul>
-  <li>
-    <a href="./architecture/design/archive/2022-11/index.html"><span>Solution design - November 2022</span></a>
-    <ul>
-      <li>
-        <a href="./architecture/design/archive/2022-11/index.html#solution-design-november-2022-system-context"><span>System Context</span></a>
       </li>
     </ul>
   </li>
@@ -369,6 +369,17 @@
     <ul>
       <li>
         <a href="./infrastructure.html#overview"><span>Overview</span></a>
+        <ul>
+          <li>
+            <a href="./infrastructure.html#planning-data-platform-deployment-diagram"><span>Planning Data Platform - Deployment Diagram</span></a>
+          </li>
+          <li>
+            <a href="./infrastructure.html#data-collection-pipeline-deployment-diagram"><span>Data Collection Pipeline - Deployment Diagram</span></a>
+          </li>
+          <li>
+            <a href="./infrastructure.html#publish-service-deployment-diagram"><span>Publish Service - Deployment Diagram</span></a>
+          </li>
+        </ul>
       </li>
       <li>
         <a href="./infrastructure.html#deploying"><span>Deploying</span></a>
@@ -585,13 +596,18 @@
 terraform configuration files that create the necessary services to deploy applications and background tasks for the
 planning data system.</p>
 <h2 id="overview">Overview</h2>
-<p><a href="architecture/design/latest/images/system-context.drawio.png" rel="noopener noreferrer"><img src="architecture/design/latest/images/system-context.drawio.png" alt="Data Platform System Context" /></a></p>
 <p>There are two repositories that handle our infrastructure:</p>
 
 <ul>
-<li>Digital Land Infrastructure - this contains our primary infrastructure and allows the user to interact all environments and is what the instructions in this guide aim to help with.</li>
-<li>Global Digital Land Infrastructure - this mainly contains infrastructure that needs to lie outside of the other repo such as nameserver records to subdomains as well as lagacy infrustructure such as s3 buckets who&rsquo;s content is stored in glacier</li>
+<li><a href="https://github.com/digital-land/digital-land-infrastructure">Digital Land Infrastructure</a> - this contains our primary infrastructure and allows the user to interact all environments and is what the instructions in this guide aim to help with.</li>
+<li><a href="https://github.com/digital-land/global-digital-land-infrastructure">Global Digital Land Infrastructure</a> - this mainly contains infrastructure that needs to lie outside of the other repo such as nameserver records to subdomains as well as lagacy infrustructure such as s3 buckets who&rsquo;s content is stored in glacier</li>
 </ul>
+<h3 id="planning-data-platform-deployment-diagram">Planning Data Platform - Deployment Diagram</h3>
+<p><a href="/images/planning-data-platform-deployment.png" rel="noopener noreferrer"><img src="images/planning-data-platform-deployment.png" alt="Planning Data Platform Deployment" /></a></p>
+<h3 id="data-collection-pipeline-deployment-diagram">Data Collection Pipeline - Deployment Diagram</h3>
+<p>Coming soon</p>
+<h3 id="publish-service-deployment-diagram">Publish Service - Deployment Diagram</h3>
+<p>Coming soon</p>
 <h2 id="deploying">Deploying</h2>
 <h4 id="authentication">Authentication</h4>
 <p><a href="https://github.com/99designs/aws-vault">aws-vault</a> is recommended to assume the correct role for deploying resources to
