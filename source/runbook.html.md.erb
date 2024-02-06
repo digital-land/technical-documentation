@@ -66,6 +66,36 @@ information from the document.
 
 ## Incident Response History
 
+### Datasette & Datasette Tiles outage - 2024-02-06
+
+#### In attendance
+
+* Ernest Man
+* Chris Cundill
+
+#### Description
+Failed canaries was first reported in the planning-data-platform slack channel on 06 Feb 2024 around 1am when the Collection ran. 
+Users also reported 502 error around 9am. in the morning.
+
+#### Running log
+
+* Ernest started investigation at around 9am. I think is related to the EFS throguhtput mode changes on 05 Feb 2024 [ticket](https://trello.com/c/HcQDkZf4). We have downgraded 
+the throguhtput mode from "Elastic" to "Bursting".
+
+Main symptoms:
+
+* Slowness and error 502 for datasette and datasette tiles 
+* EFS Throughput utilization reached 100%
+
+Summary of the issue: The datasette outage was caused by the EFS throughtput reached 100% threshold. We have roll back the throguhtput
+mode and both datasette servcies are back online at 9.20am.
+
+#### Postmortem
+
+* Discussion between Owen, Chris and Ernest already started last week on a long term solution for this EFS issue.
+
+
+
 ### Planning.data.gov.uk outage - 2023-10-05
 
 #### In attendance
