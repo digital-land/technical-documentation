@@ -508,6 +508,9 @@
         <a href="./runbook.html#incident-response-history"><span>Incident Response History</span></a>
         <ul>
           <li>
+            <a href="./runbook.html#datasette-amp-datasette-tiles-outage-2024-02-06"><span>Datasette & Datasette Tiles outage - 2024-02-06</span></a>
+          </li>
+          <li>
             <a href="./runbook.html#planning-data-gov-uk-outage-2023-10-05"><span>Planning.data.gov.uk outage - 2023-10-05</span></a>
           </li>
           <li>
@@ -663,19 +666,48 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="planning-data-gov-uk-outage-2023-10-05">Planning.data.gov.uk outage - 2023-10-05</h3>
+<h3 id="datasette-amp-datasette-tiles-outage-2024-02-06">Datasette &amp; Datasette Tiles outage - 2024-02-06</h3>
 <h4 id="in-attendance">In attendance</h4>
+
+<ul>
+<li>Ernest Man</li>
+<li>Chris Cundill</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>Failed canaries was first reported in the planning-data-platform slack channel on 06 Feb 2024 around 1am when the Collection ran. 
+Users also reported 502 error around 9am. in the morning.</p>
+<h4 id="running-log">Running log</h4>
+
+<ul>
+<li>Ernest started investigation at around 9am. I think is related to the EFS throguhtput mode changes on 05 Feb 2024 <a href="https://trello.com/c/HcQDkZf4">ticket</a>. We have downgraded 
+the throguhtput mode from &ldquo;Elastic&rdquo; to &ldquo;Bursting&rdquo;.</li>
+</ul>
+<p>Main symptoms:</p>
+
+<ul>
+<li>Slowness and error 502 for datasette and datasette tiles </li>
+<li>EFS Throughput utilization reached 100%</li>
+</ul>
+<p>Summary of the issue: The datasette outage was caused by the EFS throughtput reached 100% threshold. We have roll back the throguhtput
+mode and both datasette servcies are back online at 9.20am.</p>
+<h4 id="postmortem">Postmortem</h4>
+
+<ul>
+<li>Discussion between Owen, Chris and Ernest already started last week on a long term solution for this EFS issue.</li>
+</ul>
+<h3 id="planning-data-gov-uk-outage-2023-10-05">Planning.data.gov.uk outage - 2023-10-05</h3>
+<h4 id="planning-data-gov-uk-outage-2023-10-05-in-attendance">In attendance</h4>
 <p>Async on slack:</p>
 
 <ul>
 <li>Ernest Man</li>
 <li>Owen Eveleigh</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="planning-data-gov-uk-outage-2023-10-05-description">Description</h4>
 <p>During the Bug Party on the morning of 05th October 2023, the Development and Design teams (around 11 people) were carried out some testing for the planning data site 
 with different browser/device. Slowness of the site first reported around 15mins in and the first aws canary test failed at 11:27am. The outage was 
 around 10-15 mins.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="planning-data-gov-uk-outage-2023-10-05-running-log">Running log</h4>
 
 <ul>
 <li>Ernest and Owen started investigation at around 11:30am. We getting time out error for the site. The issue seems related to the aws rds database.</li>
@@ -691,7 +723,7 @@ around 10-15 mins.</p>
 <p>Summary of the issue: The aws rds reader instance is running out of local storage. With the current DB instance class &ldquo;db.t4g.large&rdquo; which 
 has 16GB maximum temporary storage available. More info <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Managing.html#AuroraPostgreSQL.Managing.TempStorage">here</a></p>
 <p>ERROR: could not write to file &ldquo;base/pgsql_tmp/pgsql_tmp13706.0&rdquo;: No space left on device</p>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="planning-data-gov-uk-outage-2023-10-05-postmortem">Postmortem</h4>
 
 <ul>
 <li><a href="https://trello.com/c/chJL4wsR">Bug ticket</a> have been created.</li>
