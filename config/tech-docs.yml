@@ -6,7 +6,7 @@ phase: Beta
 enable_search: yes
 multipage_nav: true
 collapsible_nav: true
-max_toc_heading_level: 3
+max_toc_heading_level: 1
 prevent_indexing: true
 show_contribution_banner: false
 
