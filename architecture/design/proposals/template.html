@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Solution design - Planning Data</title>
+    <title>Open Design Proposal Template - Planning Data</title>
 
     <link href="../../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/architecture/design/latest/">
+    <link rel="canonical" href="digital-land.github.io/architecture/design/proposals/template.html">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Solution design - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/architecture/design/latest/" />
+      <meta name="twitter:title" content="Open Design Proposal Template - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/architecture/design/proposals/template.html" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Solution design" />
+      <meta property="og:title" content="Open Design Proposal Template" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/architecture/design/latest/" />
+      <meta property="og:url" content="digital-land.github.io/architecture/design/proposals/template.html" />
 
     
   </head>
@@ -147,17 +147,100 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="solution-design">Solution design</h1>
-<p>The solution architecture for the Planning Data Service has been modelled using the <a href="https://c4model.com/">C4 approach</a>.</p>
-<h2 id="system-context">System Context</h2>
-<p><a href="images/system-context.drawio.png" rel="noopener noreferrer"><img src="images/system-context.drawio.png" alt="Planning Data Service System Context" /></a></p>
-<h2 id="containers">Containers</h2>
+            <h1 id="open-design-proposal-00x-title-template">Open Design Proposal - 00X - Title (Template)</h1>
+<p>Author(s) - Ray Hannity (include Authors here with mailto: links)</p>
+<h2 id="introduction">Introduction</h2>
+<p>Introduction to design change, including context of decision. State briefly the user need being met.</p>
+<h2 id="status">Status</h2>
+<p>Open | Closed | On Hold</p>
 
 <ul>
-<li><a href="data-pipelines/">Data Pipelines</a></li>
-<li><a href="planning-data-platform/">Planning Data Platform</a></li>
-<li><a href="publish-service/">Publish service</a></li>
+<li>Open: proposal is open for comment</li>
+<li>Closed: proposal is closed for comment with implementation expected</li>
+<li>On Hold: proposal is on hold due to concerns raised/project changes with implementation not expected</li>
 </ul>
+<h2 id="detail">Detail</h2>
+<h3 id="section">Section</h3>
+<p>Detail of design section. You <strong>might</strong> want to think about including:</p>
+<p>:+1: A picture of the components affected by the design. Extra marks for nicely drawn cartoon pictures.
+:+1: A description of how you are going to deploy and test the design.</p>
+
+<blockquote>
+<p>If you&rsquo;re about to include any of the following in your design, think again, then once more to be sure:</p>
+<p>:-1: Code. You haven&rsquo;t written any code yet :)
+:-1: Pseudocode. If you find yourself writing a complex algorithm then there&rsquo;s a slim chance you might need this. If in doubt, don&rsquo;t.
+:-1: Specification. This is about how it works (design), not about what is is (specification).</p>
+</blockquote>
+<h4 id="sub-section">Sub Section</h4>
+<p>Sub section of design</p>
+
+<ul>
+<li>Include Supporting Files, e.g. json/xml/whatever in sub folder</li>
+<li>Include links to relevant repos or external resources</li>
+<li>Include supporting images in sub-folder</li>
+</ul>
+<h3 id="how-much-detail-should-i-put-in">How much detail should I put in?</h3>
+<p>How much of the system does your change affect? For application changes, familiarise yourself with <a href="http://static.codingthearchitecture.com/c4.pdf">Simon Brown&rsquo;s useful 4Cs diagram style</a>. If the design of this functionality changes the Context diagram you [should] have of the system then provide an updated Context diagram. If the design changes the Containers diagram you have then provide an updated Containers diagram. Any change sufficient in size or complexity to demand an ODP should imply a Component level diagram for the design.</p>
+<p>A Class diagram <em>should</em> be unnecessary at this stage unless the design deals specifically with some complex low level details. Bear in mind that supplying a Class diagram before the team have started implementation may prescribe the decisions that should be delegated to the people implementing the change.</p>
+<p>A diagram doesn&rsquo;t have to be a perfect keynote-worthy Visio artefact, it just needs to be clear enough and consistent enough to convey the information required. Phone camera and whiteboard &amp; marker or paper &amp; sharpie are usually good, especially if you are capturing a diagram that has changed frequently under discussion.</p>
+<p><img src="images/d-notice-toggle.jpg" alt="Diagram from feature toggle ODP" width="640" height="426">
+<em>An example diagram, by rory80hz</em></p>
+
+<blockquote>
+<p>Some Useful Tools</p>
+
+<ul>
+<li><a href="https://github.com/gitlabhq/gitlabhq/blob/master/doc/markdown/markdown.md">This Markdown cheatsheet</a></li>
+<li>For sequence diagrams <a href="https://www.websequencediagrams.com/">https://www.websequencediagrams.com/</a></li>
+<li>If you really want fancy boxes <a href="https://www.draw.io/">Draw.io</a></li>
+<li>If you want to edit markdown try <a href="http://dillinger.io/">http://dillinger.io/</a> or <a href="http://www.ashokgelal.com/lightpaper-for-mac/">Light Paper</a></li>
+</ul>
+</blockquote>
+<h2 id="questions-to-consider">Questions to consider</h2>
+<p>For new components:</p>
+
+<ul>
+<li>do we need a new code repository?</li>
+<li>what is the project structure (e.g. subprojects, client/API/service split)?</li>
+<li>what are the recommended techs?
+
+<ul>
+<li>summarise techs and purpose, e.g. &ldquo;JerseyClient, for HTTP API client calls&rdquo;</li>
+<li>include brief justification for different techs for same behaviours we already have</li>
+<li>flag up any commercial or GPL licenses for new techs</li>
+</ul></li>
+<li>how will the project be built as part of CI, and where does it fit in the pipeline?</li>
+</ul>
+<p>For downstream interface points:</p>
+
+<ul>
+<li>does this need new endpoints or updates to existing ones?</li>
+<li>do we need new request/response objects?</li>
+<li>are we following project convention with paths, params and HTTP verbs?</li>
+<li>how can we handle failure, or unacceptably slow responses of the downstream endpoint?</li>
+<li><em>has this actually been agreed with the team/organisation responsible for the downstream client/service?</em></li>
+</ul>
+<p>Also ask yourself these questions about your design:</p>
+
+<ul>
+<li>has everyone been involved in the discussion (dev, ops, qa, sec, ba etc.)?</li>
+<li>how does this meet the user need?</li>
+<li>does this design change the physical architecture?</li>
+<li>how will this change be deployed and configured?</li>
+<li>how will this be performance tested against realistic demand/live data?</li>
+<li>how can this be scaled to handle double the demand? (Up? Out?)</li>
+<li>how do the components involved react to individual or wholesale failure?</li>
+<li>how will errors and exceptions be handled and logged?</li>
+<li>how will this part of the service be maintained, debugged or operated while live?</li>
+<li>have you tied in to centralised logging and monitoring?</li>
+<li>do we need new firewall rules or other changes to existing infrastructure?</li>
+<li>will there be DB updates or data migrations?</li>
+</ul>
+<h2 id="design-comments">Design Comments</h2>
+<p>1 - Track questions and issues including person asking question, and responses.</p>
+<p>RH: Should we include tags for task tracker stories / journeys? Worth thinking about&hellip;</p>
+<p>HC: Where do we track options/technologies which were considered and rejected and why they were rejected? Useful to have a history.
+In comments, or by creating an ODP with a status of &lsquo;on hold&rsquo;</p>
 
             
           </main>
