@@ -451,6 +451,27 @@ If there is an error saying command not found make sure prerequisite steps are f
 Make sure the status parameter has value 200 which means that the end endpoint link is valid.
 If not then raise this as an issue by creating a new card
 
+---
+
+### Assigning unknown entities (Existing endpoint updated)
+
+For our service to recognise data from a provider, it must be assigned an entity number in the lookup.csv for the collection.
+This happens automatically when running the add-endpoints-and-lookups script, but sometimes you may want to run this process by itself.
+For instance, if an endpoint already on the system is updated with a new resource with new entries, these new entries will need to be assigned entity numbers.
+The command for this process is as follows:
+
+```
+digital-land assign-entities <path-to-resource> <collection-name>
+```
+
+For example:
+```
+digital-land assign-entities collection/resource/1b8ee25a45cf6e874e4822f2e9b0e83c01df18a73d962b4d376dae1288018b4c article-4-direction
+```
+
+Note that the resource must have been processed by the pipeline for this process to work. 
+
+---
 
 # Reference
 
