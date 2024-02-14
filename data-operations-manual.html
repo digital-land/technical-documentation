@@ -535,6 +535,31 @@ digital-land assign-entities collection/resource/1b8ee25a45cf6e874e4822f2e9b0e83
 <p>Note that the resource must have been processed by the pipeline for this process to work.</p>
 
 <hr>
+<h3 id="merge-existing-duplicated-entities-by-adding-redirections">Merge existing duplicated entities by adding redirections</h3>
+<p>add-directions command redirects given entities using the entity numbers by adding entries in the old-entity.csv file.</p>
+<h4 id="1-create-a-csv-file-with-duplicated-entity-numbers">1. create a csv file with duplicated entity numbers</h4>
+<p>Find or generate a csv file of the entries that need to be added
+to the collection. Make a note of the location. The following columns need to be included in the csv:</p>
+
+<ul>
+<li><code>entity_source</code> - entity number to redirect</li>
+<li><code>entity_destination</code> - entity number to which the entity_source should point to</li>
+</ul>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>entity_source,entity_destination
+</code></pre></div><p>For example:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>entity_source,entity_destination
+100,200
+101,201
+</code></pre></div><h4 id="2-run-command">2. run command</h4>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>digital-land add-redirections &lt;csv-file-path&gt;
+</code></pre></div><p>For example:
+<code>
+digital-land add-redirections import.csv
+</code></p>
+<p>This will add entries in the old-entity.csv file in the required format.
+The entity number provided in entity_source will get redirected to entity_destination.</p>
+
+<hr>
 <h2 id="reference">Reference</h2>
 <p>This section of our documentation provides authoritative information about the software.</p>
 <p>NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term &lsquo;collection&rsquo; with a small c then we mean the <strong>activity</strong> of getting the data for a Collection. The collector is a term we sometimes use for the part of the software that collects the data.</p>
