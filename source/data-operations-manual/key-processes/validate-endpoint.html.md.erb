@@ -1,0 +1,58 @@
+---
+title: Data Operations Manual - Key Processes - Validating An Endpoint
+weight: 40101
+---
+
+# Validating an Endpoint
+
+We offer two complimentary ways of doing this - a quick way using the Endpoint Checker, and a more thorough manual method.
+
+
+
+### Validating an Endpoint using the command-line
+
+This gives a fuller view of how the endpoint will be handled by the pipeline.
+
+#### Prerequisites
+1. Clone the collection repository locally.
+1. Create and activate a virtual environment within the collection folder you just cloned.
+1. Run these commands:
+
+```bash
+make makerules
+make init
+make
+```
+
+If you're looking at large endpoint, you can speed things up a bit by removing all the folders in collection/log and all entries from collection/endpoint.csv.
+
+#### Validating an endpoint locally
+The command takes the form shown below: 
+
+```
+digital-land collection-add-source <collection-name> <endpoint-url> organisation <organisation-name> documentation-url <documentation url>
+```
+
+All the fields given above are required, as shown in the example below:
+
+```
+digital-land collection-add-source brownfield-land htts://data.fulchester.gov.uk/brownfield/brownfield20230922.csv organisation <organisation-name> documentation-url <documentation url>
+```
+
+    
+optional fields:
+pipelines <dataset/pipeline> use this when dataset name is different from the collection name
+licence <licence>
+attribution <attribution>
+    
+Note :
+Organisation-name format - local-authority-eng:ABC
+If there is an error saying command not found make sure prerequisite steps are followed.
+
+
+1. Run pipeline by running the ‘make’ command – this ensures that the resource has been downloaded by the collector
+1. Go to collection/log -> search for endpoint hash you added (can be found from collection/endpoint.csv) -> open file
+Make sure the status parameter has value 200 which means that the end endpoint link is valid.
+If not then raise this as an issue by creating a new card
+
+---
