@@ -18,4 +18,4 @@ dev: init
 	@bundle exec middleman server
 
 build: init
-	@bundle exec middleman build
+	@bundle exec middleman build --verbose
