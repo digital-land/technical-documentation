@@ -520,6 +520,21 @@ If there is an error saying command not found make sure prerequisite steps are f
 Make sure the status parameter has value 200 which means that the end endpoint link is valid.
 If not then raise this as an issue by creating a new card</li>
 </ol>
+
+<hr>
+<h3 id="assigning-unknown-entities-existing-endpoint-updated">Assigning unknown entities (Existing endpoint updated)</h3>
+<p>For our service to recognise data from a provider, it must be assigned an entity number in the lookup.csv for the collection.
+This happens automatically when running the add-endpoints-and-lookups script, but sometimes you may want to run this process by itself.
+For instance, if an endpoint already on the system is updated with a new resource with new entries, these new entries will need to be assigned entity numbers.
+The command for this process is as follows:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>digital-land assign-entities &lt;path-to-resource&gt; &lt;collection-name&gt;
+</code></pre></div><p>For example:
+<code>
+digital-land assign-entities collection/resource/1b8ee25a45cf6e874e4822f2e9b0e83c01df18a73d962b4d376dae1288018b4c article-4-direction
+</code></p>
+<p>Note that the resource must have been processed by the pipeline for this process to work.</p>
+
+<hr>
 <h2 id="reference">Reference</h2>
 <p>This section of our documentation provides authoritative information about the software.</p>
 <p>NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term &lsquo;collection&rsquo; with a small c then we mean the <strong>activity</strong> of getting the data for a Collection. The collector is a term we sometimes use for the part of the software that collects the data.</p>
