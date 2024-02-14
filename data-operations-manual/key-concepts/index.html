@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Solution design index - Planning Data</title>
+    <title>Data Operations Manual - Key Concepts - Planning Data</title>
 
     <link href="../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/architecture/design/">
+    <link rel="canonical" href="digital-land.github.io/data-operations-manual/key-concepts/">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Solution design index - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/architecture/design/" />
+      <meta name="twitter:title" content="Data Operations Manual - Key Concepts - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/key-concepts/" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Solution design index" />
+      <meta property="og:title" content="Data Operations Manual - Key Concepts" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/architecture/design/" />
+      <meta property="og:url" content="digital-land.github.io/data-operations-manual/key-concepts/" />
 
     
   </head>
@@ -160,25 +160,117 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="solution-design-index">Solution design index</h1>
-<h3 id="latest">Latest</h3>
-<p>The latest solution designs are available here:</p>
+            <h1 id="key-concepts">Key Concepts</h1>
+<p>We have a number of different Collections of data, such as <a href="https://digital-land.github.io/specification/specification/conservation-area/">Conservation Areas (CA)</a>. The data and configuration for each Collection is stored in Github. For example, the CA repository is at <a href="https://github.com/digital-land/conservation-area-collection"><code>https://github.com/digital-land/conservation-area-collection</code></a>.</p>
+<p>In each Collection there is a <code>collection</code> folder that contains some key files that control the collection of data from LPAs and other publishers. The first two to look at are <code>source.csv</code> and <code>endpoint.csv</code>.</p>
+<h3 id="source">Source</h3>
+<p>the source.csv file lists all of the publishers we have data for in this Collection:</p>
+<div class="table-container">
+        <table>
+          <tr>
+<th>Field</th>
+<th>Usage</th>
+</tr><tr>
+<td>source</td>
+<td>Identifier for this row in the file</td>
+</tr><tr>
+<td>attribution</td>
+<td>Statement about the source of the data</td>
+</tr><tr>
+<td>collection</td>
+<td>Repeats the name of the thing we are collecting.</td>
+</tr><tr>
+<td>documentation-url</td>
+<td>The web link to the providers documentation about the data</td>
+</tr><tr>
+<td>endpoint</td>
+<td>A link to a line in the endpoint CSV (see below)</td>
+</tr><tr>
+<td>licence</td>
+<td>The kind of license</td>
+</tr><tr>
+<td>organisation</td>
+<td>A short code linking to the <a href="https://datasette.planning.data.gov.uk/digital-land?sql=select+entity%2C+name%2C+organisation%2C+website+from+organisation+order+by+organisation+limit+100">organisation</a> table</td>
+</tr><tr>
+<td>pipelines</td>
+<td>What specific data we are getting from the endpoint</td>
+</tr><tr>
+<td>entry-date</td>
+<td>When the record was added</td>
+</tr><tr>
+<td>start-date</td>
+<td>When the record becomes active</td>
+</tr><tr>
+<td>end-date</td>
+<td>When the record becomes inactive</td>
+</tr>
+        </table>
+      </div><h3 id="endpoint">Endpoint</h3>
+<div class="table-container">
+        <table>
+          <tr>
+<th>Field</th>
+<th>Usage</th>
+</tr><tr>
+<td>endpoint</td>
+<td>Identifier for this row in the file</td>
+</tr><tr>
+<td>endpoint-url</td>
+<td>Link to the data itself</td>
+</tr><tr>
+<td>parameters</td>
+<td>(unused?)</td>
+</tr><tr>
+<td>plugin</td>
+<td>We have different plugins for reading different kinds of data.</td>
+</tr><tr>
+<td>entry-date</td>
+<td>The date we added this record to the system</td>
+</tr><tr>
+<td>start-date</td>
+<td>When the download becomes valid</td>
+</tr><tr>
+<td>end-date</td>
+<td>When the download stops being valid</td>
+</tr>
+        </table>
+      </div><p><strong><em>NOTE</em></strong>: The relationship between Source and Endpoint does not follow a traditional entity-relationship 1:M model. Every time we add a new Endpoint for an organisation+Collection, we add a new Source as well, referencing that endpoint.</p>
+<h3 id="entity">Entity</h3>
+<p>Data gets imported and eventually emerges as an Entity. This is used as a catch-all <a href="https://datasette.planning.data.gov.uk/entity?sql=select+dataset%2C+end_date%2C+entity%2C+entry_date%2C+geojson%2C+geometry%2C+json%2C+name%2C+organisation_entity%2C+point%2C+prefix%2C+reference%2C+start_date%2C+typology%2C+geometry_geom%2C+point_geom+from+entity+where+entity+%3E+12345+order+by+entity+limit+101">record</a> for pretty much everything we hold.</p>
+<p>Each entity has a field called <code>entity</code> which is its identifier. Another important field is the <code>reference</code> which is what the data publisher uses to refer to the thing we are holding information about. The rest of the fields act as you might expect with the exception of the entry_date field.</p>
 
-<ul>
-<li><a href="latest/">Latest Solution Design</a></li>
-</ul>
-<h3 id="proposals">Proposals</h3>
-<p>Proposed solution designs are available here:</p>
-
-<ul>
-<li><a href="proposals/">Open Design Proposals</a></li>
-</ul>
-<h3 id="archive">Archive</h3>
-<p>Previous solution designs are available via this index:</p>
-
-<ul>
-<li><a href="archive/">Archived Solution Designs index</a></li>
-</ul>
+<blockquote>
+<p><strong><em>entry_date</em></strong>: Normally in this system, entry_date is the date upon which a record was added to the system. A bit like _<em>created_date</em> in other systems. However, for data we import from a publisher, it can <strong>either</strong> be the date we imported it, <strong>or</strong> a date value provided by the publisher. We have no way of distinguishing between those two cases.</p>
+</blockquote>
+<h3 id="lookups">Lookups</h3>
+<p>Now you know about Entity, we can look at another file, <code>lookup.csv</code> in the <a href="https://github.com/digital-land/conservation-area-collection/blob/main/pipeline/lookup.csv"><code>pipeline</code></a> folder.</p>
+<p>There is a complex relationship between Entities we hold. Some entities give us data. Other entities ARE the things you see on the map. Sometimes more than one publisher gives us information about a single thing on the map. To manage this complexity we have a table called Lookup which maps from &lsquo;what the provider calls a thing&rsquo; to our entity.</p>
+<p>This relationship occasionally requires manual intervention, but for the time being you just need to understand that allocating &lsquo;entity&rsquo; identifier values for stuff we import is an operation done when we import the data rather than something done by a database.</p>
+<div class="table-container">
+        <table>
+          <tr>
+<th>Field</th>
+<th>Usage</th>
+</tr><tr>
+<td>prefix</td>
+<td>The dataset this entity is a part of</td>
+</tr><tr>
+<td>resource</td>
+<td>(not used?)</td>
+</tr><tr>
+<td>organisation</td>
+<td>Who has data referring to this entity</td>
+</tr><tr>
+<td>reference</td>
+<td>And what they use as a reference when talking about this entity</td>
+</tr><tr>
+<td>entity</td>
+<td>What <strong>we</strong> use to talk about the entity</td>
+</tr>
+        </table>
+      </div><p>As you can see, this gives us a Many-to-One relationship between organisation and entity.</p>
+<h4 id="plugins">Plugins</h4>
+<p>Most publishers either give us link to a CSV file or a link to an <code>HTTP get</code> that returns data in a geographical format. The <a href="https://github.com/digital-land/digital-land-python/tree/main/digital_land/plugins">plugin</a> converts the data to a csv format we can use in the rest of the ingest process.</p>
 
             
           </main>
