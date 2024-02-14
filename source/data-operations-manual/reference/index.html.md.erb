@@ -1,0 +1,32 @@
+---
+title: Data Operations Manual - Reference
+weight: 3
+---
+
+## Reference
+
+This section of our documentation provides authoritative information about the software.
+
+NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term 'collection' with a small c then we mean the __activity__ of getting the data for a Collection. The collector is a term we sometimes use for the part of the software that collects the data.
+
+### Technical Glossary
+
+We use a lot of terms that are very specific to our system. We have listed some of them below.
+
+|Term|Definition|
+|----|----|
+|Collection Repository| This refers to one of our 30+ repositories in GitHub which contain all of the configuration to run collection, usually every night.|
+|Collection Directory|The Collection directory contains both the configuration files for a collector to run and also the logs and collected resources from previous collector runs. It is inside the Collection Repository.|
+|Resource|//TODO|
+|Endpoint|An endpoint is a link to the data from an Organisation within a Collection.|
+
+### Key Repositories
+
+There are a lot of repositories within the project, many of them relating to Collections or to prototypes. The table below lists some of the key ones.
+
+|Repository|Description|
+|----|----|
+|[Specification](https://github.com/digital-land/specification)|Contains the key documents that define the data we are collecting.|
+|[Web Application](https://github.com/digital-land/digital-land.info)|The Python code for the [web site](https://www.planning.data.gov.uk/).|
+|[Digital Land Pipeline](https://github.com/digital-land/digital-land-python) (Digital Land Python)|Python command-line tools for collecting and converting resources into a dataset, code library that supports other applications.|
+[Digital Jupyter Analysis](https://github.com/digital-land/jupyter-analysis)|Pieces of analysis of the platform as jupyter notebooks.|

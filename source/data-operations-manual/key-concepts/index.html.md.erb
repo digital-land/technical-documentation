@@ -1,0 +1,67 @@
+---
+title: Data Operations Manual - Key Concepts
+weight: 2
+---
+
+# Key Concepts
+
+We have a number of different Collections of data, such as [Conservation Areas (CA)](https://digital-land.github.io/specification/specification/conservation-area/). The data and configuration for each Collection is stored in Github. For example, the CA repository is at [`https://github.com/digital-land/conservation-area-collection`](https://github.com/digital-land/conservation-area-collection). 
+
+In each Collection there is a `collection` folder that contains some key files that control the collection of data from LPAs and other publishers. The first two to look at are `source.csv` and `endpoint.csv`.
+
+### Source
+the source.csv file lists all of the publishers we have data for in this Collection:
+
+|Field|Usage|
+|---|---|
+|source|Identifier for this row in the file|
+|attribution|Statement about the source of the data|
+|collection|Repeats the name of the thing we are collecting.|
+|documentation-url|The web link to the providers documentation about the data|
+|endpoint|A link to a line in the endpoint CSV (see below)|
+|licence|The kind of license
+|organisation|A short code linking to the [organisation](https://datasette.planning.data.gov.uk/digital-land?sql=select+entity%2C+name%2C+organisation%2C+website+from+organisation+order+by+organisation+limit+100) table|
+|pipelines|What specific data we are getting from the endpoint|
+|entry-date|When the record was added|
+|start-date|When the record becomes active|
+|end-date|When the record becomes inactive|
+
+### Endpoint
+|Field|Usage|
+|---|---|
+|endpoint|Identifier for this row in the file|
+|endpoint-url|Link to the data itself|
+|parameters|(unused?)
+|plugin|We have different plugins for reading different kinds of data.|
+|entry-date|The date we added this record to the system|
+|start-date|When the download becomes valid|
+|end-date|When the download stops being valid|
+
+ **_NOTE_**: The relationship between Source and Endpoint does not follow a traditional entity-relationship 1:M model. Every time we add a new Endpoint for an organisation+Collection, we add a new Source as well, referencing that endpoint. 
+
+### Entity
+Data gets imported and eventually emerges as an Entity. This is used as a catch-all [record](https://datasette.planning.data.gov.uk/entity?sql=select+dataset%2C+end_date%2C+entity%2C+entry_date%2C+geojson%2C+geometry%2C+json%2C+name%2C+organisation_entity%2C+point%2C+prefix%2C+reference%2C+start_date%2C+typology%2C+geometry_geom%2C+point_geom+from+entity+where+entity+%3E+12345+order+by+entity+limit+101) for pretty much everything we hold.
+
+Each entity has a field called `entity` which is its identifier. Another important field is the `reference` which is what the data publisher uses to refer to the thing we are holding information about. The rest of the fields act as you might expect with the exception of the entry_date field.
+
+> **_entry_date_**: Normally in this system, entry_date is the date upon which a record was added to the system. A bit like __created_date_ in other systems. However, for data we import from a publisher, it can **either** be the date we imported it, **or** a date value provided by the publisher. We have no way of distinguishing between those two cases.
+
+### Lookups
+Now you know about Entity, we can look at another file, `lookup.csv` in the [`pipeline`](https://github.com/digital-land/conservation-area-collection/blob/main/pipeline/lookup.csv) folder. 
+
+There is a complex relationship between Entities we hold. Some entities give us data. Other entities ARE the things you see on the map. Sometimes more than one publisher gives us information about a single thing on the map. To manage this complexity we have a table called Lookup which maps from 'what the provider calls a thing' to our entity. 
+
+This relationship occasionally requires manual intervention, but for the time being you just need to understand that allocating 'entity' identifier values for stuff we import is an operation done when we import the data rather than something done by a database. 
+
+|Field|Usage|
+|---|---|
+|prefix|The dataset this entity is a part of|
+|resource|(not used?)|
+|organisation|Who has data referring to this entity|
+|reference|And what they use as a reference when talking about this entity|
+|entity|What **we** use to talk about the entity|
+
+As you can see, this gives us a Many-to-One relationship between organisation and entity. 
+
+#### Plugins
+Most publishers either give us link to a CSV file or a link to an `HTTP get` that returns data in a geographical format. The [plugin](https://github.com/digital-land/digital-land-python/tree/main/digital_land/plugins) converts the data to a csv format we can use in the rest of the ingest process. 
