@@ -1,0 +1,44 @@
+---
+title: Data Operations Manual - Key Processes - Merge Entities
+weight: 40108
+---
+
+# Merging Entities
+
+add-directions command redirects given entities using the entity numbers by adding entries in the old-entity.csv file.
+
+#### 1. create a csv file with duplicated entity numbers
+
+Find or generate a csv file of the entries that need to be added
+to the collection. Make a note of the location. The following columns need to be included in the csv:
+
+- `entity_source` - entity number to redirect
+- `entity_destination` - entity number to which the entity_source should point to
+
+```
+entity_source,entity_destination
+```
+
+For example:
+
+```
+entity_source,entity_destination
+100,200
+101,201
+```
+
+#### 2. run command
+
+```
+digital-land add-redirections <csv-file-path>
+```
+
+For example:
+```
+digital-land add-redirections import.csv
+```
+
+This will add entries in the old-entity.csv file in the required format.
+The entity number provided in entity_source will get redirected to entity_destination.
+
+---

@@ -1,0 +1,25 @@
+---
+title: Data Operations Manual - Key Processes - Retiring A Resource
+weight: 40106
+---
+
+# Retiring A Resource
+Sometimes a resource should not continue to be processed and included in the platform. this can happen for a few different reasons an example would be that it contains significant errors and therefore should be removed.
+
+#### 1. Identify resource hashes
+In order to remove a resource the main thing you’ll need is the hash value for the resource. There are a number of ways to find this by examining tables in datasette or running `make collection` and examining the resource.csv
+
+#### 2. add rows to `old-resource.csv`
+for each resource you want to retire you’ll need to to create a row in the csv. For each row you’ll need the following information:
+* `old-resource` - the resource hash you identified above
+* `status` - for retiring a resource this should be `410`
+* `resource` - not needed for retiring an endpoint
+* `notes` - details on why the resource should no longer be processed
+
+---
+**Process Review**
+
+Everything else is done so it's worth reviewing this process and seeing if there's
+anyway we can improve it!
+
+---
