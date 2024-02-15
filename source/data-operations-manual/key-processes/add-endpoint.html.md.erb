@@ -1,0 +1,179 @@
+---
+title: Data Operations Manual - Key Processes - Adding An Endpoint
+weight: 40102
+---
+
+# Adding An Endpoint
+### Checking Data before loading it onto the platform with Endpoint Checker
+
+The [Endpoint Checker](https://github.com/digital-land/jupyter-analysis/tree/main/endpoint_checker) is a Jupyter notebook that you can use to get an idea of the level of usability of the data offered on the web by an LPA. The notebook summarises all the details related to an endpoint in one place, and is a good first place to look when validating a new endpoint.
+
+#### pre-requisites
+
+You need to know 
+
+* The collection you are checking against
+* The organisation code for the [data publisher](https://datasette.planning.data.gov.uk/digital-land?sql=select%0D%0A++entity%2C%0D%0A++name%2C%0D%0A++organisation%2C%0D%0A++website%0D%0Afrom%0D%0A++organisation%0D%0Aorder+by%0D%0A++organisation%0D%0Alimit%0D%0A++1000)
+* The URL where their documentation is (optional but **highly** recommended)
+* The URL where the data lives
+* what data it is you are getting
+* The start_date for this data. This can be in the future, for checking at least.
+
+If the file is a CSV, download it first and have a look to make sure that it meets the basic sanity-checks:
+
+* Is there a reference value for every row?
+* Are the mandatory fields for that Collection provided?
+* Are there any formatting problems, like multi-line fields (eg addresses) or misplaced commas?
+* Are there any rows at the end of the data that are going to cause problems? There is sometimes text or other content that isn't going to work for us.
+
+If the link is for a geographic system, again download it and have a look at the data to ensure that there's a reference field and that the mandatory fields are present. You can use the guidance in [Working with LPA GIS Systems](WorkingWithLPA_GIS.html) to help deal with any issues. A common one is that the publisher might provide a query with a list of output fields. These have commas in so tends to break the import process. You can usually safely replace all the fields with a single * character to get all the fields.
+
+The endpoint checker gives you a lot of information about the chances of successfully loading the data. I suggest you pick some URLs from existing endpoint.csv files and try them out to get a flavour of what it does but in general you will see
+
+1. Can we get the data downloaded? If so, you'll see information about the size of the download etc
+1. Can we convert it to a CSV structure?
+1. Can we match the columns provided with what we expect according to the standard for that Collection? In the past we have been quite lenient with column mapping for LPAs. As we move towards a more standardised approach, publishers should be using the standards.
+1. Does our system generate lookup values that make sense for the data given?
+1. Are we seeing the right number of rows being brought in vs the original input?
+1. Does the final representation of what the imported data look right? 
+
+If the data passes those tests you can move on to loading it onto the platform, below.
+
+### Loading data onto the platform 
+
+If you're happy with the results of validating your new endpoint you can use the final part of the notebook to find some convenient scripts to help set up the new download.
+
+1. Download the repository for the Collection you need to add to, or get the latest from it
+1. Set up and activate your virtual environment for it
+1. Run `make makerules` and `make init`
+1. Create an `import.csv` file per the notes in the Jupyter notebook
+1. Copy the two lines from the notebook into the file
+1. Save it and run the command line example from the notebook, in the Collection repository
+1. Run `make` to run the pipeline locally.
+
+Depending on the amount of data present in the Collection, the import process may take some time. Once it completes, review the `source.csv`, `endpoint.csv` and `lookup.csv` files to make sure they make sense. 
+
+#### Confirming it all worked
+
+The `make` process generates some files in the `dataset` folder in the Collection. You can examine these files for problem in the '-issue.csv' file and see what waa generated in the other csv file. You might need to use notepad++ to open these files as they can be tens of megabytes in size. You can also open the SQLITE file using and application called 'DB Browser for SQLite', though you may need to coy the SQLITE file locally before you can open it. 
+
+#### Saving changes back
+
+You can push the the `source.csv`, `endpoint.csv` and `lookup.csv` files files back to github, alongside the `import.csv`, having discarded any changes to other files not needed but changed by the process. It is a good idea to name the commit after the organisation you are importing. I've been using the name of the organisation plus the three letter code.
+
+### Adding Endpoints To A Collection Manually
+
+This is a fairly common process for us especially as we initially grow the data on the site.
+
+#### 1. Checkout repo
+
+From Github, clone the collection repo you wish to add endpoints to.
+
+#### 2. run collection init
+
+Run the following lines from a virtual env containing the required
+python dependencies required by the collection repo
+
+```bash
+make makerules
+make init
+```
+
+#### 3. get your csv of endpoints to add
+
+Find or generate a csv file of the entries that need to be added
+to the collection. Make a note of the location. The following columns need to be included in the csv:
+
+- `endpoint-url` - the url that the collector needs to extract data from
+- `documentation-url` - a url on a government related domain which contain information regarding the data
+- `start-date` - the date that the collector should start from (this can be in the past)
+- `plugins` - if a plugin is required to extract that data then it can be noted here otherwise leave blank
+- `pipelines` - the pipelines that need to be ran on resources collected from this endpoint. These are equivalent to the datasets and where more than one is necessary they should be separated by `;`
+- `organisation` - the organisation which the endpoint belongs to. The name should be in [this list](https://datasette.planning.data.gov.uk/digital-land/organisation)
+
+If you haven't been given some of the above information then reach out to the data manager or tech lead for advice. You can use the below to get you started:
+
+```text
+organisation,endpoint-url,documentation-url,start-date,pipelines,plugin
+```
+
+For example 
+
+```text
+organisation,endpoint-url,documentation-url,start-date,pipelines,plugin
+local-authority-eng:GRT,https://www.guildford.gov.uk/media/35723/Guildford-Brownfield-Register-2023/CSV/guildford_brownfieldregister_2023_10_12_rev1.csv?m=638327116385130000,https://www.guildford.gov.uk/article/25473/What-is-the-register,2023-10-12,brownfield-land,
+```
+
+#### 4. run `add_endpoint_and_lookups_cmd`
+
+Run the following command from inside the repository with the virtual env created in step 2 activated.
+
+As a minimum you'll need to include the path to the input csv generated in step 3. and the name of the collection that your working in.
+
+Note: collection name can be retrieved from the repository name. if your working in the `conservation-area-collection` repo then you would use `conservation-area`
+
+```
+digital_land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME]
+```
+
+The above command will work for the default collection set-up however you can set set the location
+of the key dependencies if any of the directories or files are in a different location. This should not be necessary most of the time.
+
+```
+-c, --collection-dir [COLLECTION-DIRECTORY; default="/collection"] The directory containing the collection configuration files, collection logs and resources
+-o, --organisation-path [ORGANISATION-CSV-PATH; default="var/cache/organisation.csv"] The path to the csv containing the list of organisations
+-s, --specification-dir [SPECIFICATION-DIR; default="/specification"] The directory containing the specification files
+-p, --pipeline-dir [PIPELINE-DIRECTORY; default="/pipeline"] The directory containing pipeline configuration files
+```
+
+#### 5. check assigned entities are normal
+After running the command, the following Collection repo
+files will be modified:
+
+```
+collection/source.csv
+collection/endpoints.csv
+pipeline/lookup.csv
+```
+
+The console output will show a list of new lookup entries
+organised by organisation and resource-hash.
+E.g.
+
+```
+----------------------------------------------------------------------
+>>> organisations:['local-authority-eng:ARU']
+>>> resource:6c38cd1f84054051ca200d62e9715be0cd739bedbae0db9561ef091fa95f59f1
+----------------------------------------------------------------------
+brownfield-land,,local-authority-eng:ARU,BR23911,1729345
+brownfield-land,,local-authority-eng:ARU,BR19811,1729346
+...
+```
+
+Find the first lookup entry in the console output,
+make a note of the entity id (the number at the end),
+and find this in pipeline/lookup.csv.
+
+Check this and all subsequent lines in lookup.csv for
+any anomalies. Each record should have, as a minimum, a prefix,
+organisation and reference.
+
+#### 6. run pipeline
+
+Run the following line from a virtual env containing the required
+python dependencies required by the collection repo
+
+```
+make
+```
+
+#### 7. perform final checks of the data for any anomalies
+How this step is performed will largely rely on the level of the operator's
+system knowledge.
+One approach might be to identify a new (or newly updated) entry in the
+.csv file, and search for this entry in the digital_land website.
+Navigating through to the Entity screen will show information that may
+be compared to the data in the collection/source.csv
+
+Once the pipeline is ran you can also use the following command to interrogate
+the local datasets (in the sqlite files) using datasette
