@@ -16,6 +16,26 @@ for each resource you want to retire you’ll need to to create a row in the csv
 * `resource` - not needed for retiring an endpoint
 * `notes` - details on why the resource should no longer be processed
 
+### Process for removing entities by ending its endpoint and retiring its resource
+
+#### 1. Get a list of entities to remove
+The list of entities should contain details like entity-number, reference, name and org.
+
+#### 2. Find the fact hash for entity you want to remove
+On Datasette, find the collection db
+Open fact table
+Filter the fact table with org name and entity-number
+Find the the fact hash for the entity you want to remove
+
+#### 3. Find the endpoint and resource given entity details
+Open fact_resource table
+Get the resource hash using the fact hash identified in step 2
+Use digital_land/resource_endpoint table to get the endpoint hash
+
+#### 4. Use Ending an endpoint and retiring a resource process
+Endpoint an endpoint can be found here data-operations-manual/key-processes/end-endpoint.html.md.erb
+Retiring A Resource described above
+
 ---
 **Process Review**
 
