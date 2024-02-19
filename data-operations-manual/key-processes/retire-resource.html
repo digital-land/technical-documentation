@@ -195,6 +195,21 @@
 * <code>status</code> - for retiring a resource this should be <code>410</code>
 * <code>resource</code> - not needed for retiring an endpoint
 * <code>notes</code> - details on why the resource should no longer be processed</p>
+<h3 id="process-for-removing-entities-by-ending-its-endpoint-and-retiring-its-resource">Process for removing entities by ending its endpoint and retiring its resource</h3>
+<h4 id="1-get-a-list-of-entities-to-remove">1. Get a list of entities to remove</h4>
+<p>The list of entities should contain details like entity-number, reference, name and org.</p>
+<h4 id="2-find-the-fact-hash-for-entity-you-want-to-remove">2. Find the fact hash for entity you want to remove</h4>
+<p>On Datasette, find the collection db
+Open fact table
+Filter the fact table with org name and entity-number
+Find the the fact hash for the entity you want to remove</p>
+<h4 id="3-find-the-endpoint-and-resource-given-entity-details">3. Find the endpoint and resource given entity details</h4>
+<p>Open fact_resource table
+Get the resource hash using the fact hash identified in step 2
+Use digital_land/resource_endpoint table to get the endpoint hash</p>
+<h4 id="4-use-ending-an-endpoint-and-retiring-a-resource-process">4. Use Ending an endpoint and retiring a resource process</h4>
+<p>Endpoint an endpoint can be found here data-operations-manual/key-processes/end-endpoint.html.md.erb
+Retiring A Resource described above</p>
 
 <hr>
 <p><strong>Process Review</strong></p>
