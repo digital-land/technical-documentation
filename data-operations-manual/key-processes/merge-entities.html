@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Data Operations Manual - Reference - Planning Data</title>
+    <title>Data Operations Manual - Key Processes - Merge Entities - Planning Data</title>
 
     <link href="../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/data-operations-manual/reference/">
+    <link rel="canonical" href="digital-land.github.io/data-operations-manual/key-processes/merge-entities.html">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Data Operations Manual - Reference - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/reference/" />
+      <meta name="twitter:title" content="Data Operations Manual - Key Processes - Merge Entities - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/key-processes/merge-entities.html" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Data Operations Manual - Reference" />
+      <meta property="og:title" content="Data Operations Manual - Key Processes - Merge Entities" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/data-operations-manual/reference/" />
+      <meta property="og:url" content="digital-land.github.io/data-operations-manual/key-processes/merge-entities.html" />
 
     
   </head>
@@ -185,53 +185,32 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="reference">Reference</h1>
-<p>This section of our documentation provides authoritative information about the software.</p>
-<p>NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term &lsquo;collection&rsquo; with a small c then we mean the <strong>activity</strong> of getting the data for a Collection. The collector is a term we sometimes use for the part of the software that collects the data.</p>
-<h3 id="technical-glossary">Technical Glossary</h3>
-<p>We use a lot of terms that are very specific to our system. We have listed some of them below.</p>
-<div class="table-container">
-        <table>
-          <tr>
-<th>Term</th>
-<th>Definition</th>
-</tr><tr>
-<td>Collection Repository</td>
-<td>This refers to one of our 30+ repositories in GitHub which contain all of the configuration to run collection, usually every night.</td>
-</tr><tr>
-<td>Collection Directory</td>
-<td>The Collection directory contains both the configuration files for a collector to run and also the logs and collected resources from previous collector runs. It is inside the Collection Repository.</td>
-</tr><tr>
-<td>Resource</td>
-<td>//TODO</td>
-</tr><tr>
-<td>Endpoint</td>
-<td>An endpoint is a link to the data from an Organisation within a Collection.</td>
-</tr>
-        </table>
-      </div><h3 id="key-repositories">Key Repositories</h3>
-<p>There are a lot of repositories within the project, many of them relating to Collections or to prototypes. The table below lists some of the key ones.</p>
-<div class="table-container">
-        <table>
-          <tr>
-<th>Repository</th>
-<th>Description</th>
-</tr><tr>
-<td><a href="https://github.com/digital-land/specification">Specification</a></td>
-<td>Contains the key documents that define the data we are collecting.</td>
-</tr><tr>
-<td><a href="https://github.com/digital-land/digital-land.info">Web Application</a></td>
-<td>The Python code for the <a href="https://www.planning.data.gov.uk/">web site</a>.</td>
-</tr><tr>
-<td>
-<a href="https://github.com/digital-land/digital-land-python">Digital Land Pipeline</a> (Digital Land Python)</td>
-<td>Python command-line tools for collecting and converting resources into a dataset, code library that supports other applications.</td>
-</tr><tr>
-<td><a href="https://github.com/digital-land/jupyter-analysis">Digital Jupyter Analysis</a></td>
-<td>Pieces of analysis of the platform as jupyter notebooks.</td>
-</tr>
-        </table>
-      </div>
+            <h1 id="merging-entities">Merging Entities</h1>
+<p>add-directions command redirects given entities using the entity numbers by adding entries in the old-entity.csv file.</p>
+<h4 id="1-create-a-csv-file-with-duplicated-entity-numbers">1. create a csv file with duplicated entity numbers</h4>
+<p>Find or generate a csv file of the entries that need to be added
+to the collection. Make a note of the location. The following columns need to be included in the csv:</p>
+
+<ul>
+<li><code>entity_source</code> - entity number to redirect</li>
+<li><code>entity_destination</code> - entity number to which the entity_source should point to</li>
+</ul>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>entity_source,entity_destination
+</code></pre></div><p>For example:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>entity_source,entity_destination
+100,200
+101,201
+</code></pre></div><h4 id="2-run-command">2. run command</h4>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>digital-land add-redirections &lt;csv-file-path&gt;
+</code></pre></div><p>For example:
+<code>
+digital-land add-redirections import.csv
+</code></p>
+<p>This will add entries in the old-entity.csv file in the required format.
+The entity number provided in entity_source will get redirected to entity_destination.</p>
+
+<hr>
+
             
           </main>
 

@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Data Operations Manual - Reference - Planning Data</title>
+    <title>Data Operations Manual - Key Processes - Ending an Endpoint - Planning Data</title>
 
     <link href="../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/data-operations-manual/reference/">
+    <link rel="canonical" href="digital-land.github.io/data-operations-manual/key-processes/end-endpoint.html">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Data Operations Manual - Reference - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/reference/" />
+      <meta name="twitter:title" content="Data Operations Manual - Key Processes - Ending an Endpoint - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/key-processes/end-endpoint.html" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Data Operations Manual - Reference" />
+      <meta property="og:title" content="Data Operations Manual - Key Processes - Ending an Endpoint" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/data-operations-manual/reference/" />
+      <meta property="og:url" content="digital-land.github.io/data-operations-manual/key-processes/end-endpoint.html" />
 
     
   </head>
@@ -185,53 +185,30 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="reference">Reference</h1>
-<p>This section of our documentation provides authoritative information about the software.</p>
-<p>NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term &lsquo;collection&rsquo; with a small c then we mean the <strong>activity</strong> of getting the data for a Collection. The collector is a term we sometimes use for the part of the software that collects the data.</p>
-<h3 id="technical-glossary">Technical Glossary</h3>
-<p>We use a lot of terms that are very specific to our system. We have listed some of them below.</p>
-<div class="table-container">
-        <table>
-          <tr>
-<th>Term</th>
-<th>Definition</th>
-</tr><tr>
-<td>Collection Repository</td>
-<td>This refers to one of our 30+ repositories in GitHub which contain all of the configuration to run collection, usually every night.</td>
-</tr><tr>
-<td>Collection Directory</td>
-<td>The Collection directory contains both the configuration files for a collector to run and also the logs and collected resources from previous collector runs. It is inside the Collection Repository.</td>
-</tr><tr>
-<td>Resource</td>
-<td>//TODO</td>
-</tr><tr>
-<td>Endpoint</td>
-<td>An endpoint is a link to the data from an Organisation within a Collection.</td>
-</tr>
-        </table>
-      </div><h3 id="key-repositories">Key Repositories</h3>
-<p>There are a lot of repositories within the project, many of them relating to Collections or to prototypes. The table below lists some of the key ones.</p>
-<div class="table-container">
-        <table>
-          <tr>
-<th>Repository</th>
-<th>Description</th>
-</tr><tr>
-<td><a href="https://github.com/digital-land/specification">Specification</a></td>
-<td>Contains the key documents that define the data we are collecting.</td>
-</tr><tr>
-<td><a href="https://github.com/digital-land/digital-land.info">Web Application</a></td>
-<td>The Python code for the <a href="https://www.planning.data.gov.uk/">web site</a>.</td>
-</tr><tr>
-<td>
-<a href="https://github.com/digital-land/digital-land-python">Digital Land Pipeline</a> (Digital Land Python)</td>
-<td>Python command-line tools for collecting and converting resources into a dataset, code library that supports other applications.</td>
-</tr><tr>
-<td><a href="https://github.com/digital-land/jupyter-analysis">Digital Jupyter Analysis</a></td>
-<td>Pieces of analysis of the platform as jupyter notebooks.</td>
-</tr>
-        </table>
-      </div>
+            <h1 id="ending-an-endpoint">Ending An Endpoint</h1>
+<p>This is needed whenever an endpoint is consistently failing or an LPA want’s to change to us getting the data from a different source.
+this process does not remove the record of an endpoint but it stops the collector from attempting to retrieve new resources from it.</p>
+<h4 id="1-identify-and-end-endpoint">1. Identify and end endpoint</h4>
+<p>You’ll need to identify the endpoint your looking to remove. The minimum information you’ll need is either the <code>endpoint-url</code> e.g. <code>https://raw.githubusercontent.com/digital-land/ancient-woodland-collection/main/data/ancient-woodland-status.csv</code> or the <code>endpoint</code> (hash) e.g. <code>f22b13c88a6c367b06e4c80aa61cb1620d7ca03193daeb6c5f65d014d16c6d2e</code>
+Using either fo these fields you can navigate to the the appropriate endpoint.csv and add an end-date to the line.
+The end-date must have the format <code>YYYY-MM-DD</code> otherwise it can cause errors further down the pipeline.
+Note: editing the endpoint.csv can either be done by cloning the specific collection repo or by editing it in the browser via github’s ui</p>
+<h4 id="2-identify-and-end-sources">2. Identify and end sources</h4>
+<p>Sources are dependant on endpoints so they should have end-dates added as well. This can easily be done by locating the relevant lines in the <code>source.csv</code> which have the endpoint hash associated with them.
+As above the end-date must have the format <code>YYYY-MM-DD</code> otherwise it can cause errors further down the pipeline.
+Note: remember there may be multiple sources for one endpoint!</p>
+<h4 id="3-optional-stop-old-resources-processing">3. Optional - Stop old resources processing</h4>
+<p>When removing an endpoint there is an important question that needs to be asked. Should we still process resources collected from this endpoint?
+The majority of the time the answer to this will be yes. For example if we have collected 2022 brownfield land data for an LPA and we need to change to a 2023 endpoint then we still want to keep the 2022 data in our system.
+Identify the resource hashes for the endpoint your removing and follow the retire a resource process1</p>
+
+<hr>
+<p><strong>Process Review</strong></p>
+<p>Everything else is done so it&rsquo;s worth reviewing this process and seeing if there&rsquo;s
+anyway we can improve it!</p>
+
+<hr>
+
             
           </main>
 

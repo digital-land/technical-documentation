@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Data Operations Manual - Reference - Planning Data</title>
+    <title>Data Operations Manual - Key Processes - Adding A Dataset - Planning Data</title>
 
     <link href="../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/data-operations-manual/reference/">
+    <link rel="canonical" href="digital-land.github.io/data-operations-manual/key-processes/add-dataset.html">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Data Operations Manual - Reference - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/reference/" />
+      <meta name="twitter:title" content="Data Operations Manual - Key Processes - Adding A Dataset - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/key-processes/add-dataset.html" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Data Operations Manual - Reference" />
+      <meta property="og:title" content="Data Operations Manual - Key Processes - Adding A Dataset" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/data-operations-manual/reference/" />
+      <meta property="og:url" content="digital-land.github.io/data-operations-manual/key-processes/add-dataset.html" />
 
     
   </head>
@@ -185,53 +185,37 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="reference">Reference</h1>
-<p>This section of our documentation provides authoritative information about the software.</p>
-<p>NOTE: Collection vs collection. A Collection with a capital C is the thing we are gathering - Tree Preservation Orders is a Collection, for example. When we use the term &lsquo;collection&rsquo; with a small c then we mean the <strong>activity</strong> of getting the data for a Collection. The collector is a term we sometimes use for the part of the software that collects the data.</p>
-<h3 id="technical-glossary">Technical Glossary</h3>
-<p>We use a lot of terms that are very specific to our system. We have listed some of them below.</p>
-<div class="table-container">
-        <table>
-          <tr>
-<th>Term</th>
-<th>Definition</th>
-</tr><tr>
-<td>Collection Repository</td>
-<td>This refers to one of our 30+ repositories in GitHub which contain all of the configuration to run collection, usually every night.</td>
-</tr><tr>
-<td>Collection Directory</td>
-<td>The Collection directory contains both the configuration files for a collector to run and also the logs and collected resources from previous collector runs. It is inside the Collection Repository.</td>
-</tr><tr>
-<td>Resource</td>
-<td>//TODO</td>
-</tr><tr>
-<td>Endpoint</td>
-<td>An endpoint is a link to the data from an Organisation within a Collection.</td>
-</tr>
-        </table>
-      </div><h3 id="key-repositories">Key Repositories</h3>
-<p>There are a lot of repositories within the project, many of them relating to Collections or to prototypes. The table below lists some of the key ones.</p>
-<div class="table-container">
-        <table>
-          <tr>
-<th>Repository</th>
-<th>Description</th>
-</tr><tr>
-<td><a href="https://github.com/digital-land/specification">Specification</a></td>
-<td>Contains the key documents that define the data we are collecting.</td>
-</tr><tr>
-<td><a href="https://github.com/digital-land/digital-land.info">Web Application</a></td>
-<td>The Python code for the <a href="https://www.planning.data.gov.uk/">web site</a>.</td>
-</tr><tr>
-<td>
-<a href="https://github.com/digital-land/digital-land-python">Digital Land Pipeline</a> (Digital Land Python)</td>
-<td>Python command-line tools for collecting and converting resources into a dataset, code library that supports other applications.</td>
-</tr><tr>
-<td><a href="https://github.com/digital-land/jupyter-analysis">Digital Jupyter Analysis</a></td>
-<td>Pieces of analysis of the platform as jupyter notebooks.</td>
-</tr>
-        </table>
-      </div>
+            <h1 id="adding-a-dataset">Adding A Dataset</h1>
+<p>These requests will likely be few and far between but will happen and will require
+co-ordination between both the operations and standards teams. Requests will likely
+come from both the data manager and the standards team.</p>
+<h4 id="1-ensure-the-dataset-has-been-added-to-the-specification">1. Ensure the dataset has been added to the specification</h4>
+<p>Before resources can be processed for a dataset the dataset itself needs to be registered
+in the specification. This includes recording which fields are needed at the end of the pipeline
+and the entity number range.</p>
+<p>This should be done by the standards team before datasets are requested to come
+to the platform but if not it&rsquo;s worth involving them here before you continue.</p>
+<p>Note: Don&rsquo;t include a collection in the dataset specification until the dataset set should go
+on the site. this will allow you to run the pipeline and push data to s3 without
+it being added to the platform</p>
+<h4 id="2-identify-or-create-a-collection">2. Identify or create a collection</h4>
+<p>A dataset HAS to be added to a collection repository. If there isn&rsquo;t already one
+then view the process to add a collection and follow the initial steps.</p>
+<h4 id="3-identify-and-add-an-endpoint-for-the-dataset">3. Identify and add an endpoint for the dataset</h4>
+<p>Once the above steps have been taken the only thing needed to be done is to add endpoints for the dataset. this can be done using our add endpoints process.</p>
+<p>Note: if you are adding a dataset that is &lsquo;hosted&rsquo; by us then it can be put in a data folder of the repo and the raw github link e.g. <code>https://raw.githubusercontent.com/digital-land/ancient-woodland-collection/main/data/ancient-woodland-status.csv</code> can then be used as an endpoint.</p>
+<h4 id="4-test-locally-and-in-gha">4. Test locally and in GHA</h4>
+<p>it&rsquo;s worth testing the dataset locally and in the GHA. this ensures that everything is working as expected. configuratino files can be altered to ensure it works as expected.</p>
+<h4 id="5-add-the-collection-to-the-dataset-in-the-specification">5. Add the collection to the dataset in the specification</h4>
+<p>This will signal that the dataset should be loaded into the postgresql DB behind the platform. once this step is done when the collection is ran it&rsquo;ll upload to the platform.</p>
+
+<hr>
+<p><strong>Process Review</strong></p>
+<p>Everything else is done so it&rsquo;s worth reviewing this process and seeing if there&rsquo;s
+anyway we can improve it!</p>
+
+<hr>
+
             
           </main>
 
