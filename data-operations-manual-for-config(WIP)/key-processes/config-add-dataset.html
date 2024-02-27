@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Data Operations Manual - Key Processes - Creating A Collection - Planning Data</title>
+    <title>Data Operations Manual - Key Processes - Adding A Dataset - Planning Data</title>
 
     <link href="../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/data-operations-manual/key-processes/add-collection.html">
+    <link rel="canonical" href="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/config-add-dataset.html">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Data Operations Manual - Key Processes - Creating A Collection - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/key-processes/add-collection.html" />
+      <meta name="twitter:title" content="Data Operations Manual - Key Processes - Adding A Dataset - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/config-add-dataset.html" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Data Operations Manual - Key Processes - Creating A Collection" />
+      <meta property="og:title" content="Data Operations Manual - Key Processes - Adding A Dataset" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/data-operations-manual/key-processes/add-collection.html" />
+      <meta property="og:url" content="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/config-add-dataset.html" />
 
     
   </head>
@@ -188,30 +188,29 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="creating-a-collection">Creating A Collection</h1>
-<p>This is needed when adding a dataset that doesn&rsquo;t belong to one of the collections
-that already exist.</p>
-<h4 id="1-ensure-the-collection-is-noted-in-the-specification">1. Ensure the collection is noted in the specification</h4>
-<p>Not doing this won&rsquo;t result in any specific errors but it should be done to ensure that the list of collections in the specification is up to date. This should be done with some visiability from the standards team</p>
-<h4 id="2-use-the-collection-template-to-create-a-repository">2. Use the <a href="https://github.com/digital-land/collection-template">collection-template</a> to create a repository</h4>
-<p>The <code>collection-template</code> repo is a template repository which can be used to create
-new collection repos. This is fairly simple using the Github UI. there is an option
-to use the template to create a new repo if you navigate to the <code>collection-template</code>
-page</p>
-<h4 id="3-update-readme">3. Update <code>.README</code></h4>
-<p>Update the details in the readme file.</p>
-<h4 id="4-deactivate-actions">4. Deactivate actions</h4>
-<p>The collection comes with the action ready to run every night. This should be paused until
-your ready for it to be ran. This can be done by commenting out the following lines in the <code>.github
-/workflows/run_caller.yaml</code> :</p>
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>schedule:
-- cron: 0 0 * * *
-</code></pre></div><h4 id="5-add-endpoints-edit-pipeline-config-files-and-test-locally">5. Add endpoints, edit pipeline config files and test locally.</h4>
-<p>This is where you need to get the pipeline running locally. see our other
-processes on this page for how to add data</p>
-<h4 id="6-re-activate-actions">6. Re-activate actions</h4>
-<p>Once the collection is ready to be ran nightly uncomment the line from above in
-the git workflow yaml file and it will start running nightly!</p>
+            <h1 id="adding-a-dataset">Adding A Dataset</h1>
+<p>These requests will likely be few and far between but will happen and will require
+co-ordination between both the operations and standards teams. Requests will likely
+come from both the data manager and the standards team.</p>
+<h4 id="1-ensure-the-dataset-has-been-added-to-the-specification">1. Ensure the dataset has been added to the specification</h4>
+<p>Before resources can be processed for a dataset the dataset itself needs to be registered
+in the specification. This includes recording which fields are needed at the end of the pipeline
+and the entity number range.</p>
+<p>This should be done by the standards team before datasets are requested to come
+to the platform but if not it&rsquo;s worth involving them here before you continue.</p>
+<p>Note: Don&rsquo;t include a collection in the dataset specification until the dataset set should go
+on the site. this will allow you to run the pipeline and push data to s3 without
+it being added to the platform</p>
+<h4 id="2-identify-or-create-a-collection">2. Identify or create a collection</h4>
+<p>A dataset HAS to be added to a collection. If there isn&rsquo;t already one
+then view the process to add a collection and follow the initial steps.</p>
+<h4 id="3-identify-and-add-an-endpoint-for-the-dataset">3. Identify and add an endpoint for the dataset</h4>
+<p>Once the above steps have been taken the only thing needed to be done is to add endpoints for the dataset. this can be done using our add endpoints process.</p>
+<p>Note: if you are adding a dataset that is &lsquo;hosted&rsquo; by us then it can be put in a data folder of the repo and the raw github link e.g. <code>https://raw.githubusercontent.com/digital-land/ancient-woodland-collection/main/data/ancient-woodland-status.csv</code> can then be used as an endpoint.</p>
+<h4 id="4-test-locally-and-in-gha">4. Test locally and in GHA</h4>
+<p>it&rsquo;s worth testing the dataset locally and in the GHA. this ensures that everything is working as expected. configuratino files can be altered to ensure it works as expected.</p>
+<h4 id="5-add-the-collection-to-the-dataset-in-the-specification">5. Add the collection to the dataset in the specification</h4>
+<p>This will signal that the dataset should be loaded into the postgresql DB behind the platform. once this step is done when the collection is ran it&rsquo;ll upload to the platform.</p>
 
 <hr>
 <p><strong>Process Review</strong></p>

@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Data Operations Manual - Key Processes - Creating A Collection - Planning Data</title>
+    <title>Data Operations Manual - Key Processes - Retiring A Resource - Planning Data</title>
 
     <link href="../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/data-operations-manual/key-processes/add-collection.html">
+    <link rel="canonical" href="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/config-retire-resource.html">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Data Operations Manual - Key Processes - Creating A Collection - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/key-processes/add-collection.html" />
+      <meta name="twitter:title" content="Data Operations Manual - Key Processes - Retiring A Resource - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/config-retire-resource.html" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Data Operations Manual - Key Processes - Creating A Collection" />
+      <meta property="og:title" content="Data Operations Manual - Key Processes - Retiring A Resource" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/data-operations-manual/key-processes/add-collection.html" />
+      <meta property="og:url" content="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/config-retire-resource.html" />
 
     
   </head>
@@ -188,30 +188,31 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="creating-a-collection">Creating A Collection</h1>
-<p>This is needed when adding a dataset that doesn&rsquo;t belong to one of the collections
-that already exist.</p>
-<h4 id="1-ensure-the-collection-is-noted-in-the-specification">1. Ensure the collection is noted in the specification</h4>
-<p>Not doing this won&rsquo;t result in any specific errors but it should be done to ensure that the list of collections in the specification is up to date. This should be done with some visiability from the standards team</p>
-<h4 id="2-use-the-collection-template-to-create-a-repository">2. Use the <a href="https://github.com/digital-land/collection-template">collection-template</a> to create a repository</h4>
-<p>The <code>collection-template</code> repo is a template repository which can be used to create
-new collection repos. This is fairly simple using the Github UI. there is an option
-to use the template to create a new repo if you navigate to the <code>collection-template</code>
-page</p>
-<h4 id="3-update-readme">3. Update <code>.README</code></h4>
-<p>Update the details in the readme file.</p>
-<h4 id="4-deactivate-actions">4. Deactivate actions</h4>
-<p>The collection comes with the action ready to run every night. This should be paused until
-your ready for it to be ran. This can be done by commenting out the following lines in the <code>.github
-/workflows/run_caller.yaml</code> :</p>
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>schedule:
-- cron: 0 0 * * *
-</code></pre></div><h4 id="5-add-endpoints-edit-pipeline-config-files-and-test-locally">5. Add endpoints, edit pipeline config files and test locally.</h4>
-<p>This is where you need to get the pipeline running locally. see our other
-processes on this page for how to add data</p>
-<h4 id="6-re-activate-actions">6. Re-activate actions</h4>
-<p>Once the collection is ready to be ran nightly uncomment the line from above in
-the git workflow yaml file and it will start running nightly!</p>
+            <h1 id="retiring-a-resource">Retiring A Resource</h1>
+<p>Sometimes a resource should not continue to be processed and included in the platform. this can happen for a few different reasons an example would be that it contains significant errors and therefore should be removed.</p>
+<h4 id="1-identify-resource-hashes">1. Identify resource hashes</h4>
+<p>In order to remove a resource the main thing you’ll need is the hash value for the resource. There are a number of ways to find this by examining tables in datasette or running <code>make collection</code> and examining the resource.csv</p>
+<h4 id="2-add-rows-to-old-resource-csv">2. add rows to <code>old-resource.csv</code></h4>
+<p>for each resource you want to retire you’ll need to to create a row in the csv. For each row you’ll need the following information:
+* <code>old-resource</code> - the resource hash you identified above
+* <code>status</code> - for retiring a resource this should be <code>410</code>
+* <code>resource</code> - not needed for retiring an endpoint
+* <code>notes</code> - details on why the resource should no longer be processed</p>
+<h3 id="process-for-removing-entities-by-ending-its-endpoint-and-retiring-its-resource">Process for removing entities by ending its endpoint and retiring its resource</h3>
+<h4 id="1-get-a-list-of-entities-to-remove">1. Get a list of entities to remove</h4>
+<p>The list of entities should contain details like entity-number, reference, name and org.</p>
+<h4 id="2-find-the-fact-hash-for-entity-you-want-to-remove">2. Find the fact hash for entity you want to remove</h4>
+<p>On Datasette, find the collection db
+Open fact table
+Filter the fact table with org name and entity-number
+Find the the fact hash for the entity you want to remove</p>
+<h4 id="3-find-the-endpoint-and-resource-given-entity-details">3. Find the endpoint and resource given entity details</h4>
+<p>Open fact_resource table
+Get the resource hash using the fact hash identified in step 2
+Use digital_land/resource_endpoint table to get the endpoint hash</p>
+<h4 id="4-use-ending-an-endpoint-and-retiring-a-resource-process">4. Use Ending an endpoint and retiring a resource process</h4>
+<p>Endpoint an endpoint can be found here data-operations-manual/key-processes/end-endpoint.html.md.erb
+Retiring A Resource described above</p>
 
 <hr>
 <p><strong>Process Review</strong></p>

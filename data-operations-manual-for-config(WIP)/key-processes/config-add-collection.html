@@ -9,19 +9,19 @@
 
     <link href="../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/data-operations-manual/key-processes/add-collection.html">
+    <link rel="canonical" href="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/config-add-collection.html">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta name="twitter:title" content="Data Operations Manual - Key Processes - Creating A Collection - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual/key-processes/add-collection.html" />
+      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/config-add-collection.html" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
       <meta property="og:title" content="Data Operations Manual - Key Processes - Creating A Collection" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/data-operations-manual/key-processes/add-collection.html" />
+      <meta property="og:url" content="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/config-add-collection.html" />
 
     
   </head>
@@ -193,25 +193,13 @@
 that already exist.</p>
 <h4 id="1-ensure-the-collection-is-noted-in-the-specification">1. Ensure the collection is noted in the specification</h4>
 <p>Not doing this won&rsquo;t result in any specific errors but it should be done to ensure that the list of collections in the specification is up to date. This should be done with some visiability from the standards team</p>
-<h4 id="2-use-the-collection-template-to-create-a-repository">2. Use the <a href="https://github.com/digital-land/collection-template">collection-template</a> to create a repository</h4>
-<p>The <code>collection-template</code> repo is a template repository which can be used to create
-new collection repos. This is fairly simple using the Github UI. there is an option
-to use the template to create a new repo if you navigate to the <code>collection-template</code>
-page</p>
-<h4 id="3-update-readme">3. Update <code>.README</code></h4>
-<p>Update the details in the readme file.</p>
-<h4 id="4-deactivate-actions">4. Deactivate actions</h4>
-<p>The collection comes with the action ready to run every night. This should be paused until
-your ready for it to be ran. This can be done by commenting out the following lines in the <code>.github
-/workflows/run_caller.yaml</code> :</p>
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>schedule:
-- cron: 0 0 * * *
-</code></pre></div><h4 id="5-add-endpoints-edit-pipeline-config-files-and-test-locally">5. Add endpoints, edit pipeline config files and test locally.</h4>
+<h4 id="2-create-collection-and-pipeline-folders-in-repo">2. Create Collection and Pipeline folders in repo</h4>
+<p>The config repo currently contains collection and pipeline folders for each unique collection held within the pipeline. When adding the collection simply create folders named as they are displayed in the specification</p>
+<h4 id="3-add-relevant-files">3. Add relevant files</h4>
+<p>Update the new collection folders by adding in the relevant files which are required of the pipeline ie in the collection folder you would have endpoint.csv, old-resource.csv and source.csv. And in the pipeline folder you will have the relevant configuration files.</p>
+<h4 id="4-add-endpoints-edit-pipeline-config-files-and-test-locally">4. Add endpoints, edit pipeline config files and test locally.</h4>
 <p>This is where you need to get the pipeline running locally. see our other
 processes on this page for how to add data</p>
-<h4 id="6-re-activate-actions">6. Re-activate actions</h4>
-<p>Once the collection is ready to be ran nightly uncomment the line from above in
-the git workflow yaml file and it will start running nightly!</p>
 
 <hr>
 <p><strong>Process Review</strong></p>
