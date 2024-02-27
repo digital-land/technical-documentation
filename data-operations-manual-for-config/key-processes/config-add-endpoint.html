@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Key Processes - Planning Data</title>
+    <title>Data Operations Manual - Key Processes - Adding An Endpoint - Planning Data</title>
 
     <link href="../../stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/">
+    <link rel="canonical" href="digital-land.github.io/data-operations-manual-for-config/key-processes/config-add-endpoint.html">
 
       <meta name="robots" content="noindex" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content="digital-land.github.io/images/govuk-large.png" />
-      <meta name="twitter:title" content="Key Processes - Planning Data" />
-      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/" />
+      <meta name="twitter:title" content="Data Operations Manual - Key Processes - Adding An Endpoint - Planning Data" />
+      <meta name="twitter:url" content="digital-land.github.io/data-operations-manual-for-config/key-processes/config-add-endpoint.html" />
 
       <meta property="og:image" content="digital-land.github.io/images/govuk-large.png" />
       <meta property="og:site_name" content="Planning Data" />
-      <meta property="og:title" content="Key Processes" />
+      <meta property="og:title" content="Data Operations Manual - Key Processes - Adding An Endpoint" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="digital-land.github.io/data-operations-manual-for-config(WIP)/key-processes/" />
+      <meta property="og:url" content="digital-land.github.io/data-operations-manual-for-config/key-processes/config-add-endpoint.html" />
 
     
   </head>
@@ -167,6 +167,32 @@
   </li>
 </ul>
 </li>
+<li><a href="../../data-operations-manual-for-config/index.html"><span>Data Operations Manual For Config</span></a>
+<ul>
+<li><a href="../../data-operations-manual-for-config/key-processes/index.html"><span>Key Processes</span></a>
+<ul>
+  <li>
+    <a href="../../data-operations-manual-for-config/key-processes/config-add-endpoint.html"><span>Adding An Endpoint</span></a>
+  </li>
+  <li>
+    <a href="../../data-operations-manual-for-config/key-processes/config-add-collection.html"><span>Creating A Collection</span></a>
+  </li>
+  <li>
+    <a href="../../data-operations-manual-for-config/key-processes/config-add-dataset.html"><span>Adding A Dataset</span></a>
+  </li>
+  <li>
+    <a href="../../data-operations-manual-for-config/key-processes/config-end-endpoint.html"><span>Ending An Endpoint</span></a>
+  </li>
+  <li>
+    <a href="../../data-operations-manual-for-config/key-processes/config-retire-resource.html"><span>Retiring A Resource</span></a>
+  </li>
+  <li>
+    <a href="../../data-operations-manual-for-config/key-processes/config-assign-entities.html"><span>Assigning Entities</span></a>
+  </li>
+</ul>
+</li>
+</ul>
+</li>
   <li>
     <a href="../../runbook.html"><span>Run Book</span></a>
   </li>
@@ -175,9 +201,6 @@
   </li>
   <li>
     <a href="../../HowTos.html"><span>How-to Guides</span></a>
-  </li>
-  <li>
-    <a href="../../data-operations-manual-for-config(WIP)/key-processes/index.html"><span>Key Processes</span></a>
   </li>
 </ul>
 
@@ -188,18 +211,45 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="key-processes">Key Processes</h1>
-<p>(THIS IS A WORK IN PROGRESS DOCUMENTATION. PROCESSES ARE STILL SUBJECT TO CHANGE.)</p>
-<p>There are a set of key processes that we need to do to the platform to ensure it is getting data onto it and it is getting the correct data. 
-Specifically there are two processes that are essential, validating an endpoint (TO BE ADDED) and adding an endpoint. But there are several others that
-data management require us to do.</p>
-<p>The set of processes are as follows:</p>
-<p>• <a href="/key-processes/config-add-endpoint.html">Adding An Endpoint</a></p>
-<p>• <a href="/key-processes/config-add-collection.html">Creating A New Collection</a></p>
-<p>• <a href="/key-processes/config-add-dataset.html">Adding A New Dataset</a></p>
-<p>• <a href="/key-processes/config-end-endpoint.html">Ending An Endpoint</a></p>
-<p>• <a href="/key-processes/config-retire-resource.html">Retiring A Resource</a></p>
-<p>• <a href="/key-processes/config-assign-entities.html">Assigning Entity Number To Entries</a></p>
+            <h1 id="adding-an-endpoint">Adding An Endpoint</h1>
+<h3 id="checking-data-before-loading-it-onto-the-platform-with-endpoint-checker">Checking Data before loading it onto the platform with Endpoint Checker</h3>
+<p>The <a href="https://github.com/digital-land/jupyter-analysis/tree/main/endpoint_checker">Endpoint Checker</a> is a Jupyter notebook that you can use to get an idea of the level of usability of the data offered on the web by an LPA. The notebook summarises all the details related to an endpoint in one place, and is a good first place to look when validating a new endpoint. (This can still be used to validate endpoints however the code it will print has not been updated to work within the config repo.)</p>
+<h4 id="pre-requisites">pre-requisites</h4>
+<p>You need to know</p>
+
+<ul>
+<li>The collection you are checking against</li>
+<li>The organisation code for the <a href="https://datasette.planning.data.gov.uk/digital-land?sql=select%0D%0A++entity%2C%0D%0A++name%2C%0D%0A++organisation%2C%0D%0A++website%0D%0Afrom%0D%0A++organisation%0D%0Aorder+by%0D%0A++organisation%0D%0Alimit%0D%0A++1000">data publisher</a></li>
+<li>The URL where their documentation is (Now <strong>mandatory</strong>)</li>
+<li>The URL where the data lives</li>
+<li>what data it is you are getting</li>
+<li>The start_date for this data. This can be in the future, for checking at least.</li>
+<li>The license code for the endpoint</li>
+</ul>
+<p>If the file is a CSV, download it first and have a look to make sure that it meets the basic sanity-checks:</p>
+
+<ul>
+<li>Is there a reference value for every row?</li>
+<li>Are the mandatory fields for that Collection provided?</li>
+<li>Are there any formatting problems, like multi-line fields (eg addresses) or misplaced commas?</li>
+<li>Are there any rows at the end of the data that are going to cause problems? There is sometimes text or other content that isn&rsquo;t going to work for us.</li>
+</ul>
+<p>If the link is for a geographic system, again download it and have a look at the data to ensure that there&rsquo;s a reference field and that the mandatory fields are present. You can use the guidance in <a href="WorkingWithLPA_GIS.html">Working with LPA GIS Systems</a> to help deal with any issues. A common one is that the publisher might provide a query with a list of output fields. These have commas in so tends to break the import process. You can usually safely replace all the fields with a single * character to get all the fields.</p>
+<h3 id="loading-data-onto-the-platform">Loading data onto the platform</h3>
+<p>If you&rsquo;re happy with the results of validating your new endpoint you can use the final part of the notebook to find some convenient scripts to help set up the new download. (This has not been updated to give the correct information for the config repo)</p>
+
+<ol>
+<li>Download the config repository</li>
+<li>Set up and activate your virtual environment for it</li>
+<li>Run <code>make makerules</code> and <code>make init</code></li>
+<li>Create an <code>import.csv</code> file per the notes in the Jupyter notebook (This remains valid however license will also be needed to be added as a column)</li>
+<li>Copy the two lines from the notebook into the file</li>
+<li>Save it and run the command line example from the notebook however it is important to add the -c and -p options at the end of the command which specify the directories for the collection and pipeline you’re adding to. 
+1.An example would look like: digital-land add-endpoints-and-lookups ./import.csv conservation-area -c ./collection/conservation-area -p ./pipeline/conservation-area</li>
+</ol>
+<p>Depending on the amount of data present in the Collection, the import process may take some time. Once it completes, review the <code>source.csv</code>, <code>endpoint.csv</code> and <code>lookup.csv</code> files to make sure they make sense.</p>
+<h4 id="saving-changes-back">Saving changes back</h4>
+<p>You can push the the <code>source.csv</code>, <code>endpoint.csv</code> and <code>lookup.csv</code> files files back to github, having discarded any changes to other files not needed but changed by the process. It is a good idea to name the commit after the organisation you are importing. I&rsquo;ve been using the name of the organisation plus the three letter code.</p>
 
             
           </main>
