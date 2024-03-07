@@ -1,0 +1,30 @@
+---
+title: Data Operations Manual
+weight: 4
+---
+# Centralising Pipeline Configuration
+
+We are in the process of centralising files from all of the collection repos. this is to
+support the migration to AWS and also allow us to build up the processes in the config
+manager app so that anyone can add an endpoint.
+
+## Progression
+
+See the table below on what has been centralised.
+
+|Collection|Status|Link|
+| legislation | complete | [here](https://github.com/digital-land/legislation-collection) |
+| title boundary | requested | [here](https://github.com/digital-land/title-boundary-collection) |
+| national park | requested | [here](https://github.com/digital-land/national-park-collection) |
+| ancient woodland | requested | [here](https://github.com/digital-land/ancient-woodland-collection) |
+| historic englnd | requested | [here](https://github.com/digital-land/historic-england-collection) |
+
+## Process
+
+The process for centralising a collection's config file is as follows:
+
+* clone config repository if needed (if already cloned then make sure up to date)
+* run script X to edit the local files on a branch of config and a branch of the colleciton
+* Merge branches in
+* Edit the README to state that it has been centralised
+* Update list above to show that it has been centralised

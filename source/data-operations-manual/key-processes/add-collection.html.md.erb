@@ -5,6 +5,15 @@ weight: 40103
 
 # Creating A Collection
 
+---
+
+:warning: We are currently attempting to centralise both pipeline and collection configuration files. There are
+two sets of instructions below depending on whether we have centralised the files for the collection you are 
+altering. See [here](/centralising-config/index.html) for a list of collections that we are working on.
+---
+
+## non-centralised instructtions
+
 This is needed when adding a dataset that doesn't belong to one of the collections
 that already exist.
 
@@ -44,6 +53,36 @@ processes on this page for how to add data
 Once the collection is ready to be ran nightly uncomment the line from above in
 the git workflow yaml file and it will start running nightly!
 
+
+---
+**Process Review**
+
+Everything else is done so it's worth reviewing this process and seeing if there's
+anyway we can improve it!
+
+---
+
+## centralised instructtions
+
+This is needed when adding a dataset that doesn't belong to one of the collections
+that already exist.
+
+#### 1. Ensure the collection is noted in the specification
+
+Not doing this won't result in any specific errors but it should be done to ensure that the list of collections in the specification is up to date. This should be done with some visiability from the standards team
+
+#### 2. Create Collection and Pipeline folders in repo
+
+The config repo currently contains collection and pipeline folders for each unique collection held within the pipeline. When adding the collection simply create folders named as they are displayed in the specification
+
+#### 3. Add relevant files
+
+Update the new collection folders by adding in the relevant files which are required of the pipeline ie in the collection folder you would have endpoint.csv, old-resource.csv and source.csv. And in the pipeline folder you will have the relevant configuration files.
+
+#### 4. Add endpoints, edit pipeline config files and test locally.
+
+This is where you need to get the pipeline running locally. see our other
+processes on this page for how to add data
 
 ---
 **Process Review**

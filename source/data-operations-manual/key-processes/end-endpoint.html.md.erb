@@ -3,6 +3,12 @@ title: Data Operations Manual - Key Processes - Ending an Endpoint
 weight: 40105
 ---
 
+---
+:warning: We are currently attempting to centralise both pipeline and collection configuration files. This process is very similar for both 
+centralised and non-centralised collections the only difference is the change in the location of the endpoint csv. 
+See [here](/centralising-config/index.html) for a list of collections that we are working on.
+---
+
 # Ending An Endpoint
 
 This is needed whenever an endpoint is consistently failing or an LPA want’s to change to us getting the data from a different source.
@@ -11,7 +17,7 @@ this process does not remove the record of an endpoint but it stops the collecto
 #### 1. Identify and end endpoint
 
 You’ll need to identify the endpoint your looking to remove. The minimum information you’ll need is either the `endpoint-url` e.g. `https://raw.githubusercontent.com/digital-land/ancient-woodland-collection/main/data/ancient-woodland-status.csv` or the `endpoint` (hash) e.g. `f22b13c88a6c367b06e4c80aa61cb1620d7ca03193daeb6c5f65d014d16c6d2e`
-Using either fo these fields you can navigate to the the appropriate endpoint.csv and add an end-date to the line.
+Using either fo these fields you can navigate to the the appropriate endpoint.csv (either in the individual collection repo or the config repo for centralised collections) and add an end-date to the line.
 The end-date must have the format `YYYY-MM-DD` otherwise it can cause errors further down the pipeline.
 Note: editing the endpoint.csv can either be done by cloning the specific collection repo or by editing it in the browser via github’s ui
 
