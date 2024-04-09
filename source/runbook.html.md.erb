@@ -66,6 +66,53 @@ information from the document.
 
 ## Incident Response History
 
+### Datasette Tiles outage - 2024-04-08
+
+#### In attendance
+
+* Ernest Man
+* Owen Eveleigh
+
+#### Description
+Failed canaries was first reported in the planning-data-platform slack channel on 08 April 2024 around 9:20am. It then resolved and raise 
+new alarm again at 10:10am.
+ 
+#### Running log
+
+* Ernest started investigation around 9:50am. RDS & EFS resources seems all fine. However, the ECS tasks keep failing in healthcheck
+which causes the task to restart.
+
+Main symptoms:
+
+* Slowness and error 504 for datasette tiles 
+* ECS tasks healthcheck keep failing which causes the tasks to restarts
+
+Summary of the issue: The datasette tile outage was caused by the Memory utilization reached close to 100%. And we can see the following sqlite3 error
+in logs.
+
+```
+ERROR: conn=<sqlite3.Connection object at 0x7f916c753120>, sql = ‘\n    select\n      columns.database_name,\n      
+columns.table_name,\n      group_concat(columns.name) as columns\n    from\n      columns\n    where\n      
+columns.table_name = “tiles”\n    group by\n      columns.database_name,\n      columns.table_name\n    
+order by\n      columns.table_name\n    ’, params = None: database table is locked: columns
+```
+
+```
+sqlite3.OperationalError: database table is locked: columns
+```
+
+#### Postmortem
+* Seems something happened which cause the sqlite table locked
+* ECS task have now upgrade to additonal 3 instance of .098 vCPU & 1GB. There should not be any additonal cost implications 
+as we are using the cluster spare resources, but a long term plan should consider for vertical scaling. 
+* Ernest will continous monitoring any issue.
+
+**On (2024-04-09)**
+
+* Datasette tiles are running fine in Production
+
+
+
 ### Datasette & Datasette Tiles outage - 2024-02-06
 
 #### In attendance
