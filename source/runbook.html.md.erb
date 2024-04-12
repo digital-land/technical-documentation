@@ -66,6 +66,29 @@ information from the document.
 
 ## Incident Response History
 
+### Planning.data.gov.uk Maps Down - 2024-04-12
+
+#### In attendance
+
+* George Goodall
+* Ernest Man
+* Owen Eveleigh
+
+#### Description
+Failed canaries was first reported in the planning-data-platform slack channel on the morning of 12 April 2024. The maps were down and the alarms were triggered.
+ 
+#### Running log
+
+* Ernest noticed the triggered alarms and found that the error was due to maplibre not being found in the client side javascript. he then contacted Owen and George. around 9.55 
+* George started investigating the issue at 10.00. shortly after he found the issue was to do with https://unpkg, where we were fetching the maplibre library from.
+* George then developed a hotfix involving obtaining maplibre via npm and using rollup.js to bundle the library into the client side javascript.
+* The hotfix was deployed around 11.30am and the maps were back online.
+
+#### Postmortem
+* This issue arose due to importing the javascript directly from the CDN, bundling the library into the client side javascript resolved the issue.
+* Going forward we need to address other imports from CDNs to prevent similar issues. both for javascript and css.
+
+
 ### Datasette Tiles outage - 2024-04-08
 
 #### In attendance
