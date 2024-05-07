@@ -219,17 +219,43 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="planning-data-gov-uk-maps-down-2024-04-12">Planning.data.gov.uk Maps Down - 2024-04-12</h3>
+<h3 id="planning-data-gov-uk-data-replaced-with-empty-fields-2024-05-03">Planning.data.gov.uk Data Replaced With Empty Fields - 2024-05-03</h3>
 <h4 id="in-attendance">In attendance</h4>
+
+<ul>
+<li>Kena Vyas</li>
+<li>Owen Eveleigh</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>Reports in slack of data no longer being available on the platform. It became clear that a change to the python library
+had resulted in all of the information except the entity number being removed from the entities.</p>
+<h4 id="running-log">Running log</h4>
+
+<ul>
+<li>Owen and Kena investigated the issue identifying the cause.</li>
+<li>Owen and Kena reverted the change and reprocessed the data.</li>
+<li>2024-05-07 issue still present for the title boundary data. This was due to another underlying issue
+caused by how events trigger in AWS. </li>
+<li>Owen manually triggered the re-processing of title boundary data in all three environments leading to the
+data being present on the site.</li>
+</ul>
+<h4 id="postmortem">Postmortem</h4>
+
+<ul>
+<li>Review of the changes made will take place including improving acceptance and unit tests which did not pick up on the fault.</li>
+<li>Ticket to be made regarding improving the triggers in AWS for large files which do not contian the right meta data.</li>
+</ul>
+<h3 id="planning-data-gov-uk-maps-down-2024-04-12">Planning.data.gov.uk Maps Down - 2024-04-12</h3>
+<h4 id="planning-data-gov-uk-maps-down-2024-04-12-in-attendance">In attendance</h4>
 
 <ul>
 <li>George Goodall</li>
 <li>Ernest Man</li>
 <li>Owen Eveleigh</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="planning-data-gov-uk-maps-down-2024-04-12-description">Description</h4>
 <p>Failed canaries was first reported in the planning-data-platform slack channel on the morning of 12 April 2024. The maps were down and the alarms were triggered.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="planning-data-gov-uk-maps-down-2024-04-12-running-log">Running log</h4>
 
 <ul>
 <li>Ernest noticed the triggered alarms and found that the error was due to maplibre not being found in the client side javascript. he then contacted Owen and George. around 9.55 </li>
@@ -237,7 +263,7 @@ information from the document.</p>
 <li>George then developed a hotfix involving obtaining maplibre via npm and using rollup.js to bundle the library into the client side javascript.</li>
 <li>The hotfix was deployed around 11.30am and the maps were back online.</li>
 </ul>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="planning-data-gov-uk-maps-down-2024-04-12-postmortem">Postmortem</h4>
 
 <ul>
 <li>This issue arose due to importing the javascript directly from the CDN, bundling the library into the client side javascript resolved the issue.</li>
