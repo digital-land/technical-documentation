@@ -66,6 +66,32 @@ information from the document.
 
 ## Incident Response History
 
+### Planning.data.gov.uk Data Replaced With Empty Fields - 2024-05-03
+
+#### In attendance
+
+* Kena Vyas
+* Owen Eveleigh
+
+#### Description
+
+Reports in slack of data no longer being available on the platform. It became clear that a change to the python library
+had resulted in all of the information except the entity number being removed from the entities. 
+
+#### Running log
+
+* Owen and Kena investigated the issue identifying the cause.
+* Owen and Kena reverted the change and reprocessed the data.
+* 2024-05-07 issue still present for the title boundary data. This was due to another underlying issue
+caused by how events trigger in AWS. 
+* Owen manually triggered the re-processing of title boundary data in all three environments leading to the
+data being present on the site.
+
+#### Postmortem
+* Review of the changes made will take place including improving acceptance and unit tests which did not pick up on the fault.
+* Ticket to be made regarding improving the triggers in AWS for large files which do not contian the right meta data.
+
+
 ### Planning.data.gov.uk Maps Down - 2024-04-12
 
 #### In attendance
