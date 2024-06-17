@@ -89,6 +89,13 @@
   </li>
 <li><a href="./architecture/design/index.html"><span>Solution design index</span></a>
 <ul>
+<li><a href="./architecture/design/archive/index.html"><span>Solution design archive</span></a>
+<ul>
+  <li>
+    <a href="./architecture/design/archive/2022-11/index.html"><span>Solution design - November 2022</span></a>
+  </li>
+</ul>
+</li>
 <li><a href="./architecture/design/latest/index.html"><span>Solution design</span></a>
 <ul>
   <li>
@@ -102,23 +109,16 @@
   </li>
 </ul>
 </li>
-<li><a href="./architecture/design/archive/index.html"><span>Solution design archive</span></a>
-<ul>
-  <li>
-    <a href="./architecture/design/archive/2022-11/index.html"><span>Solution design - November 2022</span></a>
-  </li>
-</ul>
-</li>
 <li><a href="./architecture/design/proposals/index.html"><span>Open Design Proposals</span></a>
 <ul>
   <li>
     <a href="./architecture/design/proposals/template.html"><span>Open Design Proposal - 00X - Title (Template)</span></a>
   </li>
   <li>
-    <a href="./architecture/design/proposals/002-data-pipelines-migration/index.html"><span>Open Design Proposal 002 - Data Pipelines Migration</span></a>
+    <a href="./architecture/design/proposals/001-publish-async/index.html"><span>Open Design Proposal 001 - Publish service - Async</span></a>
   </li>
   <li>
-    <a href="./architecture/design/proposals/001-publish-async/index.html"><span>Open Design Proposal 001 - Publish service - Async</span></a>
+    <a href="./architecture/design/proposals/002-data-pipelines-migration/index.html"><span>Open Design Proposal 002 - Data Pipelines Migration</span></a>
   </li>
 </ul>
 </li>
@@ -219,17 +219,38 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="planning-data-gov-uk-data-replaced-with-empty-fields-2024-05-03">Planning.data.gov.uk Data Replaced With Empty Fields - 2024-05-03</h3>
+<h3 id="planning-data-gov-uk-502-encountered-when-loading-entity-2024-06-07">Planning.data.gov.uk 502 encountered when loading entity  - 2024-06-07</h3>
 <h4 id="in-attendance">In attendance</h4>
+
+<ul>
+<li>Paul Downey</li>
+<li>Samriti Sadhu</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>An issue was reported via Slack concerning a 502 error encountered when accessing specific entities on the platform. 
+Upon investigation, it was observed that the error occurred due to the excessively large data size of certain entities, 
+particularly Flood Risk Zone entities.</p>
+<h4 id="running-log">Running log</h4>
+
+<ul>
+<li>On June 7, 2024, Paul Downey encountered the issue and reported it on the Slack channel, specifically for the 
+entity: https://www.planning.data.gov.uk/entity/65135927.</li>
+<li>Samriti Sadhu investigated the issue and observed that it occurred specifically for Flood Risk Zone entities 
+where the data volume was excessively large. This was confirmed by accessing the entity data in
+JSON format: https://www.planning.data.gov.uk/entity/65135927.json.</li>
+<li>A ticket is created in Trello to address and optimize the loading of large data sets.</li>
+</ul>
+<h3 id="planning-data-gov-uk-data-replaced-with-empty-fields-2024-05-03">Planning.data.gov.uk Data Replaced With Empty Fields - 2024-05-03</h3>
+<h4 id="planning-data-gov-uk-data-replaced-with-empty-fields-2024-05-03-in-attendance">In attendance</h4>
 
 <ul>
 <li>Kena Vyas</li>
 <li>Owen Eveleigh</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="planning-data-gov-uk-data-replaced-with-empty-fields-2024-05-03-description">Description</h4>
 <p>Reports in slack of data no longer being available on the platform. It became clear that a change to the python library
 had resulted in all of the information except the entity number being removed from the entities.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="planning-data-gov-uk-data-replaced-with-empty-fields-2024-05-03-running-log">Running log</h4>
 
 <ul>
 <li>Owen and Kena investigated the issue identifying the cause.</li>
