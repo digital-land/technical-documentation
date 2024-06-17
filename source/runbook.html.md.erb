@@ -66,6 +66,29 @@ information from the document.
 
 ## Incident Response History
 
+### Planning.data.gov.uk 502 encountered when loading entity  - 2024-06-07
+
+#### In attendance
+
+* Paul Downey
+* Samriti Sadhu
+
+#### Description
+An issue was reported via Slack concerning a 502 error encountered when accessing specific entities on the platform. 
+Upon investigation, it was observed that the error occurred due to the excessively large data size of certain entities, 
+particularly Flood Risk Zone entities.
+
+
+#### Running log
+
+* On June 7, 2024, Paul Downey encountered the issue and reported it on the Slack channel, specifically for the 
+entity: https://www.planning.data.gov.uk/entity/65135927.
+* Samriti Sadhu investigated the issue and observed that it occurred specifically for Flood Risk Zone entities 
+where the data volume was excessively large. This was confirmed by accessing the entity data in
+JSON format: https://www.planning.data.gov.uk/entity/65135927.json.
+* A ticket is created in Trello to address and optimize the loading of large data sets.
+
+
 ### Planning.data.gov.uk Data Replaced With Empty Fields - 2024-05-03
 
 #### In attendance
