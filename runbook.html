@@ -173,22 +173,29 @@ INCIDENT_RESPONSE_DOCUMENT
 <li>All team members must join the google meet link and begin documenting the outage.</li>
 </ul>
 <p>Resolving an outage is an iterative process that should be improved with the lessons learnt from the previous outages.
-It is suggested that the outage document contain the following headers to direct work appropriately.</p>
+It is suggested that the outage document contain the following headers to direct work appropriately. This is provided in Markdown to allow for easier updating of this Run Book.</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>### Outage - APPLICATION - DATE (YYYY-MM-DD)
 
-<ul>
-<li><strong>Outage - APPLICATION - DATE (YYYY-MM-DD format)</strong></li>
-<li><strong>In attendance</strong> - a list of people who have responded to the outage and the roles they have taken.</li>
-<li><strong>Description</strong> - A brief description of the outage, including affected services</li>
-<li><strong>Running log</strong> - Put timestamped entries under here including actions, observations, etc.
+#### In attendance
 
-<ul>
-<li>Action <strong>TIME We did x.</strong></li>
-<li>Observation <strong>TIME We observed that x happened.</strong></li>
-</ul></li>
-<li><strong>Postmortem</strong> - A few paragraphs explaining the root cause of the issue and what measures have been taken to mitigate
-further instances.</li>
-</ul>
-<p>Outage Roles:</p>
+* A list of people who have responded to the outage and the roles they have taken
+
+#### Description
+
+A brief description of the outage, including affected services
+
+#### Running log
+
+Put timestamped entries under here including actions, observations, etc.
+    * Action **TIME We did x.**
+    * Observation **TIME We observed that x happened.**
+
+#### Postmortem
+
+A few paragraphs explaining the root cause of the issue and what measures have been taken to mitigate
+further instances.
+
+</code></pre></div><p>Outage Roles:</p>
 
 <ul>
 <li><strong>Scribe</strong> The role of scribe is to maintain the incident report document during diagnosis and resolution of the outage.
