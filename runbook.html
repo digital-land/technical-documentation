@@ -219,18 +219,37 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="planning-data-gov-uk-502-encountered-when-loading-entity-2024-06-07">Planning.data.gov.uk 502 encountered when loading entity  - 2024-06-07</h3>
+<h3 id="organisation-collection-is-not-updating-local-authority-data-2024-06-24">Organisation-collection is not updating local authority data  - 2024-06-24</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>Async on slack:</p>
+
+<ul>
+<li>Paul Downey</li>
+<li>Owen Eveleigh</li>
+<li>Chris Johns</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>Paul Downey made some changes to the local-authority.csv to update the regions of local authorities. After the pipeline process ran for two days, the data was not being updated on Datasette or planning.data.gov.uk.</p>
+<h4 id="running-log">Running log</h4>
+
+<ul>
+<li>On June 24, 2024, Paul Downey encountered the issue and reported it on the Slack channel.</li>
+<li>Chris Johns investigate the issue and believed it was connected to a prior piece of work.</li>
+<li>Owen Eveleigh and Chris Johns identified the ikely cause of the issue was due to update to the data being incorrect. Entry-date field had been included previously where it should not have been.</li>
+<li>Owen Eveleigh made the decision that to fix this issue, we would remove entry-date from all organisation csv files (including local-authority.csv) and we will retire all the resources that contain the entry-date column, as these contain the error.</li>
+</ul>
+<h3 id="planning-data-gov-uk-502-encountered-when-loading-entity-2024-06-07">Planning.data.gov.uk 502 encountered when loading entity  - 2024-06-07</h3>
+<h4 id="planning-data-gov-uk-502-encountered-when-loading-entity-2024-06-07-in-attendance">In attendance</h4>
 
 <ul>
 <li>Paul Downey</li>
 <li>Samriti Sadhu</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="planning-data-gov-uk-502-encountered-when-loading-entity-2024-06-07-description">Description</h4>
 <p>An issue was reported via Slack concerning a 502 error encountered when accessing specific entities on the platform. 
 Upon investigation, it was observed that the error occurred due to the excessively large data size of certain entities, 
 particularly Flood Risk Zone entities.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="planning-data-gov-uk-502-encountered-when-loading-entity-2024-06-07-running-log">Running log</h4>
 
 <ul>
 <li>On June 7, 2024, Paul Downey encountered the issue and reported it on the Slack channel, specifically for the 
