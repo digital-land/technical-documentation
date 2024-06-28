@@ -238,12 +238,32 @@ information from the document.</p>
 <h4 id="description">Description</h4>
 <p>Paul Downey made some changes to the local-authority.csv to update the regions of local authorities. After the pipeline process ran for two days, the data was not being updated on Datasette or planning.data.gov.uk.</p>
 <h4 id="running-log">Running log</h4>
+<p><strong>On (2024-06-25)</strong></p>
 
 <ul>
-<li>On June 24, 2024, Paul Downey encountered the issue and reported it on the Slack channel.</li>
+<li>Paul Downey encountered the issue the previous day and reported it on the Slack channel.</li>
 <li>Chris Johns investigate the issue and believed it was connected to a prior piece of work.</li>
 <li>Owen Eveleigh and Chris Johns identified the ikely cause of the issue was due to update to the data being incorrect. Entry-date field had been included previously where it should not have been.</li>
 <li>Owen Eveleigh made the decision that to fix this issue, we would remove entry-date from all organisation csv files (including local-authority.csv) and we will retire all the resources that contain the entry-date column, as these contain the error.</li>
+</ul>
+<p><strong>On (2024-06-26)</strong></p>
+
+<ul>
+<li>Chris Johns removed the entry-date from the files. </li>
+<li>A second issue was discovered relating to how the organisation.csv file is generated. The recent change downloads the files used to generate it from AWS. However caching of the files meant that this could download outdated copies rather than the ones just generated. </li>
+<li>This step was then modified to get files directly from the S3 bucket.</li>
+</ul>
+<p><strong>On (2024-06-27)</strong></p>
+
+<ul>
+<li>Chris Johns reported that the overnight process had worked correctly and as expected. </li>
+<li>The incident was closed at this time, however enhanced monitoring will continue for the next few days, especially when we are notified that a data change is being made.</li>
+<li>A RCA and postmortem will be led by Gordon Matchett, and updated below.</li>
+</ul>
+<h4 id="postmortem">Postmortem</h4>
+
+<ul>
+<li>To be completed by Gordon Matchett.</li>
 </ul>
 <h3 id="planning-data-gov-uk-502-encountered-when-loading-entity-2024-06-07">Planning.data.gov.uk 502 encountered when loading entity  - 2024-06-07</h3>
 <h4 id="planning-data-gov-uk-502-encountered-when-loading-entity-2024-06-07-in-attendance">In attendance</h4>
@@ -286,7 +306,7 @@ caused by how events trigger in AWS. </li>
 <li>Owen manually triggered the re-processing of title boundary data in all three environments leading to the
 data being present on the site.</li>
 </ul>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="planning-data-gov-uk-data-replaced-with-empty-fields-2024-05-03-postmortem">Postmortem</h4>
 
 <ul>
 <li>Review of the changes made will take place including improving acceptance and unit tests which did not pick up on the fault.</li>
