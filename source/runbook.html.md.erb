@@ -97,10 +97,28 @@ Paul Downey made some changes to the local-authority.csv to update the regions o
 
 #### Running log
 
-* On June 24, 2024, Paul Downey encountered the issue and reported it on the Slack channel.
+**On (2024-06-25)**
+
+* Paul Downey encountered the issue the previous day and reported it on the Slack channel.
 * Chris Johns investigate the issue and believed it was connected to a prior piece of work.
 * Owen Eveleigh and Chris Johns identified the ikely cause of the issue was due to update to the data being incorrect. Entry-date field had been included previously where it should not have been.
 * Owen Eveleigh made the decision that to fix this issue, we would remove entry-date from all organisation csv files (including local-authority.csv) and we will retire all the resources that contain the entry-date column, as these contain the error.
+
+**On (2024-06-26)**
+
+* Chris Johns removed the entry-date from the files. 
+* A second issue was discovered relating to how the organisation.csv file is generated. The recent change downloads the files used to generate it from AWS. However caching of the files meant that this could download outdated copies rather than the ones just generated. 
+* This step was then modified to get files directly from the S3 bucket.
+
+**On (2024-06-27)**
+
+* Chris Johns reported that the overnight process had worked correctly and as expected. 
+* The incident was closed at this time, however enhanced monitoring will continue for the next few days, especially when we are notified that a data change is being made.
+* A RCA and postmortem will be led by Gordon Matchett, and updated below.
+
+#### Postmortem
+
+* To be completed by Gordon Matchett.
 
 ### Planning.data.gov.uk 502 encountered when loading entity  - 2024-06-07
 
