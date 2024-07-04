@@ -148,97 +148,14 @@
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
             <h1 id="open-design-proposal-001-publish-service-async">Open Design Proposal 001 - Publish service - Async</h1>
-<p>Author(s) - <a href="mailto:chris.cundill@tpximpact.com">Chris Cundill</a></p>
-<h2 id="status">Status</h2>
-<p>Open</p>
-<h2 id="introduction">Introduction</h2>
-<p>The first iteration of the Publish service offers validation of data files via an upload.  Interaction with the user
-is currently synchronous, meaning that a user uploads their data file and waits for an immediate validation response.
-The service needs to scale to support many more data sets and concurrent users meaning that the this approach is likely
-to result in system failure and/or poor user experience.</p>
-<p>Causes of system failure might include:</p>
 
-<ul>
-<li>Gateway/request timeout: requests take too long to process due to the size</li>
-<li>Out of memory: available memory might be &lsquo;maxxed&rsquo; out when trying to handle multiple large data files concurrently</li>
-<li>No more disk space: disk space might also be exceeded when trying to handle multiple large data files concurrently</li>
-<li>Request size too large: uploads of large files might exceed what the gateway or web servers are able to handle</li>
-</ul>
-<p>Meanwhile, poor user experience might be caused by excessive wait times for validation of large files.</p>
-<p>During development of the current service, it was observed that a data file of ~11MB was taking over 30 seconds to
-process.  Clearly, there are genuine scenarios where it will not be feasible to provide validation responses to end
-users synchronously.</p>
-<h2 id="detail">Detail</h2>
-<h3 id="overview">Overview</h3>
-<p>In order to address the problems outlined, the following changes are proposed:</p>
-
-<ul>
-<li>Respond to validation requests asynchronously</li>
-<li>Upload files direct to S3</li>
-</ul>
-<p>By responding to validation requests asynchronously, the system is able to fulfil a user&rsquo;s request in a manner that
-minimises the risk of system failure.  Memory and disk space can be optimised for processing each individual request.
-A database will be introduced to persist requests and validation results while a queue will be used to trigger
-asynchronous processing of requests.</p>
-<p>By uploading files directly to S3, large files will be handled by AWS&rsquo; dedicated infrastructure designed for multipart
-uploads.  Gateways, web servers and APIs do not need to be scaled for file-based requests. In addition, allocated disk
-space does not need to cater for storage of multiple concurrent uploaded files.</p>
-<h3 id="containers">Containers</h3>
-<h4 id="structure">Structure</h4>
-<p><a href="images/containers.drawio.png" rel="noopener noreferrer"><img src="images/containers.drawio.png" alt="Planning Data Service System Context" /></a></p>
-<p>The Publish Request API will manage request data and persist such to a Postgres database.</p>
-<p>An SQS queue will be used to trigger request to be fulfilled by the Publish Request Processor.</p>
-<p>The Publish Request Processor will process just one request at a time meaning its CPU, memory and disk requirements
-need only be as large as is necessary to process one file.  Running multiple instances of the Processor allows the
-system to process multiple requests concurrently.</p>
-<p>GOV.UK Notify will be used to send an email notification to users</p>
-<h4 id="interaction">Interaction</h4>
-<p><a href="images/container-interaction.drawio.png" rel="noopener noreferrer"><img src="images/container-interaction.drawio.png" alt="Planning Data Service System Context" /></a></p>
-<h3 id="testing">Testing</h3>
-<p>In order to validate the solution and indeed arrive at the correct assignment of compute resources (e.g. CPU, memory and disk),
-it will be necessary to undertake load testing.  This testing will also help determine the necessary number of processors
-required to meet concurrency targets.</p>
-<p>One possible method for the load testing could be using AWS&rsquo;s Distributed Load Testing pattern
-(see https://aws.amazon.com/solutions/implementations/distributed-load-testing-on-aws/).</p>
-<h2 id="implementation-considerations">Implementation considerations</h2>
-
-<ul>
-<li><p>New AWS resources will need to be provisioned for:</p>
-
-<ul>
-<li>Publish Request Database (Postgres on AWS RDS Aurora)
-
-<ul>
-<li>Create empty database and app users for Publish Request API</li>
-</ul></li>
-<li>Publish Request Queue (SQS)</li>
-<li>Publish Request Files (S3 Bucket)</li>
-</ul></li>
-<li><p>New code repositories, GitHub pipelines, ECR image repositories and ECS tasks will be needed for:</p>
-
-<ul>
-<li>Publish Request API
-
-<ul>
-<li>Service should be able to migrate/mange own database schema</li>
-<li>No need for CloudFront distribution</li>
-<li>Internal load balancer sufficient</li>
-</ul></li>
-<li>Publish Request Processor
-
-<ul>
-<li>No need for CloudFront distribution nor a load balancer</li>
-</ul></li>
-</ul></li>
-<li><p>For upload direct to S3, users will be required to have Javascript enabled.</p></li>
-<li><p>For load testing, it will be necessary to identify realistic figures for concurrent users and file sizes.</p>
-
-<ul>
-<li>It would be useful to identify min, max and average file sizes</li>
-</ul></li>
-</ul>
-<h2 id="design-comments-questions">Design Comments/Questions</h2>
-<p>No feedback yet.</p>
+<div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    <span class="govuk-warning-text__assistive">Warning</span>
+    Open Design Proposals have been migrated to https://github.com/digital-land/digital-land/wiki/Open-Design-Proposals
+  </strong>
+</div>
 
             
           </main>
