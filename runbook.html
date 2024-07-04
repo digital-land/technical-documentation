@@ -226,8 +226,38 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="organisation-collection-is-not-updating-local-authority-data-2024-06-24">Organisation-collection is not updating local authority data  - 2024-06-24</h3>
+<h3 id="outage-digital-land-tables-down-on-datasette-2024-07-04">Outage - digital-land tables down on Datasette - 2024-07-04</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>Async on Slack:</p>
+
+<ul>
+<li>Greg Slater</li>
+<li>Paul Downey</li>
+<li>Owen Eveleigh</li>
+<li>Ernest Man</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>Greg Slater noticed that some of the digital-land tables were showing an &ldquo;Invalid SQL&rdquo; error when attempting to load on datasette. In particular, digital-land.organisation was noted as being down. The error page shown notes a &ldquo;disk I/O error&rdquo;.</p>
+<h4 id="running-log">Running log</h4>
+<p><strong>On (2024-07-04)</strong></p>
+
+<ul>
+<li>Greg Slater reported the issue as a query on the Planning Data Slack channel.</li>
+<li>Multiple users confirmed that this was a widespread issue.</li>
+<li>Ernest Man and Owen Eveleigh were deployed to fix the issue.</li>
+<li>The machines hosting datasette were restarted. Upon restart, the webpages were available.</li>
+<li>Owen Eveleigh reported that this was due to a glitch found as <code>digital_land.sqlite3</code> had been deleted or updated.</li>
+<li>At this stage, the incident was closed, although there will be additional monitoring over the subsequent days to confirm no repeat of the issue.</li>
+</ul>
+<h4 id="postmortem">Postmortem</h4>
+
+<ul>
+<li>This incident was unexpected and deemed to be of a low risk of reoccurence.</li>
+<li>The primary concern was that the incident was not known until anecdotally discovered by the team.</li>
+<li>A <a href="https://trello.com/c/Y6VWQ3E1/3341-create-canaries-and-alerting-for-digital-land-key-tables">ticket</a> has been raised in the backlog to introduce canaries and other alerts to some of the key digital-land database tables. Once completed, these should alert the relevant teams that they are returning an error.</li>
+</ul>
+<h3 id="organisation-collection-is-not-updating-local-authority-data-2024-06-24">Organisation-collection is not updating local authority data  - 2024-06-24</h3>
+<h4 id="organisation-collection-is-not-updating-local-authority-data-2024-06-24-in-attendance">In attendance</h4>
 <p>Async on slack:</p>
 
 <ul>
@@ -235,9 +265,9 @@ information from the document.</p>
 <li>Owen Eveleigh</li>
 <li>Chris Johns</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="organisation-collection-is-not-updating-local-authority-data-2024-06-24-description">Description</h4>
 <p>Paul Downey made some changes to the local-authority.csv to update the regions of local authorities. After the pipeline process ran for two days, the data was not being updated on Datasette or planning.data.gov.uk.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="organisation-collection-is-not-updating-local-authority-data-2024-06-24-running-log">Running log</h4>
 <p><strong>On (2024-06-25)</strong></p>
 
 <ul>
@@ -260,7 +290,7 @@ information from the document.</p>
 <li>The incident was closed at this time, however enhanced monitoring will continue for the next few days, especially when we are notified that a data change is being made.</li>
 <li>A RCA and postmortem will be led by Gordon Matchett, and updated below.</li>
 </ul>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="organisation-collection-is-not-updating-local-authority-data-2024-06-24-postmortem">Postmortem</h4>
 
 <ul>
 <li>To be completed by Gordon Matchett.</li>
