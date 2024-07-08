@@ -233,8 +233,28 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="outage-digital-land-tables-down-on-datasette-2024-07-04">Outage - digital-land tables down on Datasette - 2024-07-04</h3>
+<h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>Async on Slack:</p>
+
+<ul>
+<li>Paul Downey</li>
+<li>Owen Eveleigh</li>
+<li>Chris Johns</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>Paul Downey reported that the <a href="https://datasette.planning.data.gov.uk/digital-land/column">datasette column table</a> only had three entries. There was a concern that this data may affect pipeline data, such as <a href="https://github.com/digital-land/config/blob/main/pipeline/brownfield-land/column.csv">brownfield land</a>.</p>
+<h4 id="running-log">Running log</h4>
+<p><strong>On (2024-07-08)</strong></p>
+
+<ul>
+<li>Paul Downey reported the issue on Slack.</li>
+<li>Owen Eveligh and Chris Johns began investigating. Owen began to look specifically at the brownfield land data to confirm the issue.</li>
+</ul>
+<h4 id="postmortem">Postmortem</h4>
+<p>To be completed once incident closed.</p>
+<h3 id="outage-digital-land-tables-down-on-datasette-2024-07-04">Outage - digital-land tables down on Datasette - 2024-07-04</h3>
+<h4 id="outage-digital-land-tables-down-on-datasette-2024-07-04-in-attendance">In attendance</h4>
 <p>Async on Slack:</p>
 
 <ul>
@@ -243,20 +263,20 @@ information from the document.</p>
 <li>Owen Eveleigh</li>
 <li>Ernest Man</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="outage-digital-land-tables-down-on-datasette-2024-07-04-description">Description</h4>
 <p>Greg Slater noticed that some of the digital-land tables were showing an &ldquo;Invalid SQL&rdquo; error when attempting to load on datasette. In particular, digital-land.organisation was noted as being down. The error page shown notes a &ldquo;disk I/O error&rdquo;.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="outage-digital-land-tables-down-on-datasette-2024-07-04-running-log">Running log</h4>
 <p><strong>On (2024-07-04)</strong></p>
 
 <ul>
 <li>Greg Slater reported the issue as a query on the Planning Data Slack channel.</li>
 <li>Multiple users confirmed that this was a widespread issue.</li>
 <li>Ernest Man and Owen Eveleigh were deployed to fix the issue.</li>
-<li>The machines hosting datasette were restarted. Upon restart, the webpages were available.</li>
-<li>Owen Eveleigh reported that this was due to a glitch found as <code>digital_land.sqlite3</code> had been deleted or updated.</li>
+<li>Four containers hosting datasette were restarted. Upon restart, the webpages were available.</li>
+<li>Owen Eveleigh reported that this was due to a glitch found as <code>digital_land.sqlite3</code> had caused very high CPU and memory usage on the containers, causing the SQL error to show</li>
 <li>At this stage, the incident was closed, although there will be additional monitoring over the subsequent days to confirm no repeat of the issue.</li>
 </ul>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="outage-digital-land-tables-down-on-datasette-2024-07-04-postmortem">Postmortem</h4>
 
 <ul>
 <li>This incident was unexpected and deemed to be of a low risk of reoccurence.</li>
