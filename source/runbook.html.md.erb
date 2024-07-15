@@ -81,6 +81,39 @@ information from the document.
 
 ## Incident Response History
 
+### Outage - Title boundaries not displayed on Map
+
+#### In attendance
+
+Async on Slack:
+
+* Paul Downey
+* Chris Cundill
+
+#### Description
+
+Paul Downey reported that he couldn’t find any title boundaries on our map and observed from the browser console that it
+appears as though the titles requested are not found (return 404 errors).
+
+![Title boundary map issue - screenshot](/images/psd-title-boundary-issue.png)
+
+#### Running log
+
+**On (2024-07-12)**
+
+* Paul Downey reported the issue on Slack, asking for it to be investigated after the weekend, on Monday.
+
+** On (2024-07-15)**
+
+* Chris Cundill began investigating. Following discussion with Owen Eveleigh, it appears that the job to populate
+datasette tiles with title boundaries may not be functioning normally and therefore has resulted in no map tile data
+for title boundaries.
+
+#### Postmortem
+
+To be completed once incident closed.
+
+
 ### Outage - Config data missing in datasette - 2024-07-08
 
 #### In attendance
