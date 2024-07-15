@@ -89,6 +89,19 @@
   </li>
 <li><a href="./architecture/design/index.html"><span>Solution design index</span></a>
 <ul>
+<li><a href="./architecture/design/latest/index.html"><span>Solution design</span></a>
+<ul>
+  <li>
+    <a href="./architecture/design/latest/data-pipelines/index.html"><span>Solution design - Data Pipelines</span></a>
+  </li>
+  <li>
+    <a href="./architecture/design/latest/planning-data-platform/index.html"><span>Solution design - Planning Data Platform</span></a>
+  </li>
+  <li>
+    <a href="./architecture/design/latest/check-service/index.html"><span>Solution design - Check Service</span></a>
+  </li>
+</ul>
+</li>
 <li><a href="./architecture/design/archive/index.html"><span>Solution design archive</span></a>
 <ul>
 <li><a href="./architecture/design/archive/2024-06/index.html"><span>Solution design - June 2024</span></a>
@@ -103,29 +116,16 @@
   </li>
 </ul>
 </li>
-<li><a href="./architecture/design/latest/index.html"><span>Solution design</span></a>
-<ul>
-  <li>
-    <a href="./architecture/design/latest/data-pipelines/index.html"><span>Solution design - Data Pipelines</span></a>
-  </li>
-  <li>
-    <a href="./architecture/design/latest/planning-data-platform/index.html"><span>Solution design - Planning Data Platform</span></a>
-  </li>
-  <li>
-    <a href="./architecture/design/latest/check-service/index.html"><span>Solution design - Check Service</span></a>
-  </li>
-</ul>
-</li>
 <li><a href="./architecture/design/proposals/index.html"><span>Open Design Proposals</span></a>
 <ul>
   <li>
     <a href="./architecture/design/proposals/template.html"><span>Open Design Proposal - 00X - Title (Template)</span></a>
   </li>
   <li>
-    <a href="./architecture/design/proposals/001-publish-async/index.html"><span>Open Design Proposal 001 - Publish service - Async</span></a>
+    <a href="./architecture/design/proposals/002-data-pipelines-migration/index.html"><span>Open Design Proposal 002 - Data Pipelines Migration</span></a>
   </li>
   <li>
-    <a href="./architecture/design/proposals/002-data-pipelines-migration/index.html"><span>Open Design Proposal 002 - Data Pipelines Migration</span></a>
+    <a href="./architecture/design/proposals/001-publish-async/index.html"><span>Open Design Proposal 001 - Publish service - Async</span></a>
   </li>
 </ul>
 </li>
@@ -233,8 +233,35 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
+<h3 id="outage-title-boundaries-not-displayed-on-map">Outage - Title boundaries not displayed on Map</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>Async on Slack:</p>
+
+<ul>
+<li>Paul Downey</li>
+<li>Chris Cundill</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>Paul Downey reported that he couldn’t find any title boundaries on our map and observed from the browser console that it
+appears as though the titles requested are not found (return 404 errors).</p>
+<p><a href="images/psd-title-boundary-issue.png" rel="noopener noreferrer"><img src="images/psd-title-boundary-issue.png" alt="Title boundary map issue - screenshot" /></a></p>
+<h4 id="running-log">Running log</h4>
+<p><strong>On (2024-07-12)</strong></p>
+
+<ul>
+<li>Paul Downey reported the issue on Slack, asking for it to be investigated after the weekend, on Monday.</li>
+</ul>
+<p>** On (2024-07-15)**</p>
+
+<ul>
+<li>Chris Cundill began investigating. Following discussion with Owen Eveleigh, it appears that the job to populate
+datasette tiles with title boundaries may not be functioning normally and therefore has resulted in no map tile data
+for title boundaries.</li>
+</ul>
+<h4 id="postmortem">Postmortem</h4>
+<p>To be completed once incident closed.</p>
+<h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
+<h4 id="outage-config-data-missing-in-datasette-2024-07-08-in-attendance">In attendance</h4>
 <p>Async on Slack:</p>
 
 <ul>
@@ -242,16 +269,16 @@ information from the document.</p>
 <li>Owen Eveleigh</li>
 <li>Chris Johns</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="outage-config-data-missing-in-datasette-2024-07-08-description">Description</h4>
 <p>Paul Downey reported that the <a href="https://datasette.planning.data.gov.uk/digital-land/column">datasette column table</a> only had three entries. There was a concern that this data may affect pipeline data, such as <a href="https://github.com/digital-land/config/blob/main/pipeline/brownfield-land/column.csv">brownfield land</a>.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="outage-config-data-missing-in-datasette-2024-07-08-running-log">Running log</h4>
 <p><strong>On (2024-07-08)</strong></p>
 
 <ul>
 <li>Paul Downey reported the issue on Slack.</li>
 <li>Owen Eveligh and Chris Johns began investigating. Owen began to look specifically at the brownfield land data to confirm the issue.</li>
 </ul>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="outage-config-data-missing-in-datasette-2024-07-08-postmortem">Postmortem</h4>
 <p>To be completed once incident closed.</p>
 <h3 id="outage-digital-land-tables-down-on-datasette-2024-07-04">Outage - digital-land tables down on Datasette - 2024-07-04</h3>
 <h4 id="outage-digital-land-tables-down-on-datasette-2024-07-04-in-attendance">In attendance</h4>
