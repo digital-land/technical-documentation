@@ -251,14 +251,60 @@ appears as though the titles requested are not found (return 404 errors).</p>
 <ul>
 <li>Paul Downey reported the issue on Slack, asking for it to be investigated after the weekend, on Monday.</li>
 </ul>
-<p>** On (2024-07-15)**</p>
+<p><strong>On (2024-07-15)</strong></p>
 
 <ul>
-<li>Chris Cundill began investigating. Following discussion with Owen Eveleigh, it appears that the job to populate
+<li>Chris Cundill (Chris C) began investigating. Following discussion with Owen Eveleigh, it appears that the job to populate
 datasette tiles with title boundaries may not be functioning normally and therefore has resulted in no map tile data
 for title boundaries.</li>
+<li>Chris C spent some time familiarising himself with the system containers responsible for populating datasette tiles</li>
+<li>Chris C identified that the system container responsible for building map tile data for datasette tiles is an ECS Task
+which is triggered by a Cloudtrail event (originating from S3) via EventBridge.
+
+<ul>
+<li>The source code for the ECS task is at <a href="https://github.com/digital-land/tiles-builder">Tiles Builder GitHub repo</a></li>
+<li>The EventBridge rule is named production-datasette-tile-builder-entity-uploaded-trigger</li>
+<li>The ECS task definition is named production-datasette-tile-builder-task</li>
+</ul></li>
+<li>Having not found any logging from the ECS task, Chris C used AWS S3 CLI to re-upload the .sqlite3 file for the
+title-boundary dataset to thus trigger an invocation of the ECS Task
+
+<ul>
+<li>THe upload did not result in an invocation of the ECS Task so the Cloudtrail event log was consulted</li>
+<li>Chris C observed that the requestParameters were truncated in the Cloudtrail event which means the event pattern in
+the EventBridge rule would not have matched</li>
+<li>He found examples of (CompleteMultipartUpload) events for other datasets from previous logs which did include
+the full requestParameters and would therefore match the EventBridge rule pattern</li>
+<li>Chris C will now review these findings with a colleague and proposes changing the event pattern&hellip;</li>
+</ul></li>
 </ul>
-<h4 id="postmortem">Postmortem</h4>
+<p>Current</p>
+<div class="highlight"><pre class="highlight json" tabindex="0"><code><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="nl">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="nl">"eventName"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"PutObject"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CompleteMultipartUpload"</span><span class="p">],</span><span class="w">
+     </span><span class="nl">"eventSource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"s3.amazonaws.com"</span><span class="p">],</span><span class="w">
+     </span><span class="nl">"requestParameters"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+       </span><span class="nl">"bucketName"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"production-collection-data"</span><span class="p">],</span><span class="w">
+       </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+         </span><span class="nl">"suffix"</span><span class="p">:</span><span class="w"> </span><span class="s2">".sqlite3"</span><span class="w">
+       </span><span class="p">}]</span><span class="w">
+     </span><span class="p">}</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="nl">"detail-type"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"AWS API Call via CloudTrail"</span><span class="p">],</span><span class="w">
+   </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"aws.s3"</span><span class="p">]</span><span class="w">
+ </span><span class="p">}</span><span class="w">
+</span></code></pre></div><p>Proposed:</p>
+<div class="highlight"><pre class="highlight json" tabindex="0"><code><span class="w"> </span><span class="p">{</span><span class="w">
+   </span><span class="nl">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+     </span><span class="nl">"eventName"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"PutObject"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CompleteMultipartUpload"</span><span class="p">],</span><span class="w">
+     </span><span class="nl">"resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+       </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"AWS::S3::Object"</span><span class="p">],</span><span class="w">
+       </span><span class="nl">"ARN"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nl">"wildcard"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:s3:::production-collection-data/*.sqlite3"</span><span class="p">}]</span><span class="w">
+     </span><span class="p">}</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"aws.s3"</span><span class="p">]</span><span class="w">
+ </span><span class="p">}</span><span class="w">
+</span></code></pre></div><h4 id="postmortem">Postmortem</h4>
 <p>To be completed once incident closed.</p>
 <h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
 <h4 id="outage-config-data-missing-in-datasette-2024-07-08-in-attendance">In attendance</h4>
