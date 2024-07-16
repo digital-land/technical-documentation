@@ -254,29 +254,33 @@ appears as though the titles requested are not found (return 404 errors).</p>
 <p><strong>On (2024-07-15)</strong></p>
 
 <ul>
-<li>Chris Cundill (Chris C) began investigating. Following discussion with Owen Eveleigh, it appears that the job to populate
+<li>Chris Cundill began investigating. Following discussion with Owen Eveleigh, it appears that the job to populate
 datasette tiles with title boundaries may not be functioning normally and therefore has resulted in no map tile data
 for title boundaries.</li>
-<li>Chris C spent some time familiarising himself with the system containers responsible for populating datasette tiles</li>
-<li>Chris C identified that the system container responsible for building map tile data for datasette tiles is an ECS Task
-which is triggered by a Cloudtrail event (originating from S3) via EventBridge.
+<li>After investigating the system containers responsible for populating datasette tiles, an ECS task was identified as
+the system container responsible for building map tile data for datasette tiles.  The ECS task is triggered by a
+Cloudtrail event (originating from S3) via EventBridge.
 
 <ul>
 <li>The source code for the ECS task is at <a href="https://github.com/digital-land/tiles-builder">Tiles Builder GitHub repo</a></li>
 <li>The EventBridge rule is named production-datasette-tile-builder-entity-uploaded-trigger</li>
 <li>The ECS task definition is named production-datasette-tile-builder-task</li>
 </ul></li>
-<li>Having not found any logging from the ECS task, Chris C used AWS S3 CLI to re-upload the .sqlite3 file for the
+<li>Having not found any logging from the ECS task, the AWS S3 CLI was used to re-upload the .sqlite3 file for the
 title-boundary dataset to thus trigger an invocation of the ECS Task
 
 <ul>
-<li>THe upload did not result in an invocation of the ECS Task so the Cloudtrail event log was consulted</li>
-<li>Chris C observed that the requestParameters were truncated in the Cloudtrail event which means the event pattern in
+<li>The upload did not result in an invocation of the ECS Task so the Cloudtrail event log was consulted</li>
+<li>It was observed that the requestParameters were truncated in the Cloudtrail event which means the event pattern in
 the EventBridge rule would not have matched</li>
-<li>He found examples of (CompleteMultipartUpload) events for other datasets from previous logs which did include
+<li>Examples of (CompleteMultipartUpload) events for other datasets were found from previous logs which did include
 the full requestParameters and would therefore match the EventBridge rule pattern</li>
-<li>Chris C will now review these findings with a colleague and proposes changing the event pattern&hellip;</li>
 </ul></li>
+</ul>
+<p><strong>On (2024-07-16)</strong></p>
+
+<ul>
+<li>After reviewing these findings, the following change to the event pattern was proposed&hellip;</li>
 </ul>
 <p>Current</p>
 <div class="highlight"><pre class="highlight json" tabindex="0"><code><span class="w"> </span><span class="p">{</span><span class="w">
