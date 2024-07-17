@@ -233,19 +233,40 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="outage-title-boundaries-not-displayed-on-map">Outage - Title boundaries not displayed on Map</h3>
+<h3 id="outage-check-service-2024-07-17">Outage - Check Service - 2024-07-17</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>Async on Slack:</p>
+
+<ul>
+<li>Owen Eveleigh</li>
+<li>Ben Hodgkiss</li>
+<li>Ernest Man</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>The <a href="https://check.planning.data.gov.uk/">Planning Data Check Service</a> is not available - and is returning an error page.</p>
+<h4 id="running-log">Running log</h4>
+<p><strong>On (2024-07-17)</strong></p>
+
+<ul>
+<li>Ben Hodgkiss noticed a canary alarm in Slack that the Check service canaries had failed twice at 9:17 and 9:27 am (BST).</li>
+<li>Once noticing, Owen Eveleigh was informed. After an initial investigation, an incident was declared.</li>
+<li>Ernest Man began to perform the full investigation of the issue, working alongside George Goodall for any identified application problems.</li>
+</ul>
+<h4 id="postmortem">Postmortem</h4>
+<p>To be completed once incident completed.</p>
+<h3 id="outage-title-boundaries-not-displayed-on-map">Outage - Title boundaries not displayed on Map</h3>
+<h4 id="outage-title-boundaries-not-displayed-on-map-in-attendance">In attendance</h4>
 <p>Async on Slack:</p>
 
 <ul>
 <li>Paul Downey</li>
 <li>Chris Cundill</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="outage-title-boundaries-not-displayed-on-map-description">Description</h4>
 <p>Paul Downey reported that he couldn’t find any title boundaries on our map and observed from the browser console that it
 appears as though the titles requested are not found (return 404 errors).</p>
 <p><a href="images/psd-title-boundary-issue.png" rel="noopener noreferrer"><img src="images/psd-title-boundary-issue.png" alt="Title boundary map issue - screenshot" /></a></p>
-<h4 id="running-log">Running log</h4>
+<h4 id="outage-title-boundaries-not-displayed-on-map-running-log">Running log</h4>
 <p><strong>On (2024-07-12)</strong></p>
 
 <ul>
@@ -308,7 +329,7 @@ the full requestParameters and would therefore match the EventBridge rule patter
    </span><span class="p">},</span><span class="w">
    </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"aws.s3"</span><span class="p">]</span><span class="w">
  </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h4 id="postmortem">Postmortem</h4>
+</span></code></pre></div><h4 id="outage-title-boundaries-not-displayed-on-map-postmortem">Postmortem</h4>
 <p>To be completed once incident closed.</p>
 <h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
 <h4 id="outage-config-data-missing-in-datasette-2024-07-08-in-attendance">In attendance</h4>
