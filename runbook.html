@@ -343,18 +343,16 @@ work with an ARN instead of a separate bucket name and bucket key.</p></li>
 <li><p>The following changes have been made:</p>
 
 <ul>
-<li>https://github.com/digital-land/tiles-builder/pull/15</li>
+<li><a href="https://github.com/digital-land/tiles-builder/pull/15">digital-land/tiles-builder/pull/15</a></li>
 </ul></li>
 <li><p>The EventBridge trigger for tiles-builder was changed manually in the development environment and tested by updating
 one of the dataset sqlite files.</p></li>
 </ul>
 <p><strong>On (2024-07-18)</strong>
- * Next, the Terraform changes for the EventBridge rule must be made.  Since all EventBridge rules are managed as a collection
-  by the same module, it became apparent that it would also be necessary to adapt the other ECS tasks for the ARN parameter:
-    * https://github.com/digital-land/digital-land-postgres/pull/16
-    * https://github.com/digital-land/digital-land-efs-sync/pull/4
- * The Terraform change will now be applied to the development environment and tested before proceeding to staging and
- production</p>
+ * Next, the Terraform changes for the EventBridge rule must be made.  Since all EventBridge rules are managed as a collection by the same module, it became apparent that it would also be necessary to adapt the other ECS tasks for the ARN parameter:
+    * <a href="https://github.com/digital-land/digital-land-postgres/pull/16">digital-land/digital-land-postgres/pull/16</a>
+    * <a href="https://github.com/digital-land/digital-land-efs-sync/pull/4">digital-land/digital-land-efs-sync/pull/4</a>
+ * The Terraform change will now be applied to the development environment and tested before proceeding to staging and production</p>
 <h4 id="outage-title-boundaries-not-displayed-on-map-postmortem">Postmortem</h4>
 <p>To be completed once incident closed.</p>
 <h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
