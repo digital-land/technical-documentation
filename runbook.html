@@ -348,11 +348,34 @@ work with an ARN instead of a separate bucket name and bucket key.</p></li>
 <li><p>The EventBridge trigger for tiles-builder was changed manually in the development environment and tested by updating
 one of the dataset sqlite files.</p></li>
 </ul>
-<p><strong>On (2024-07-18)</strong>
- * Next, the Terraform changes for the EventBridge rule must be made.  Since all EventBridge rules are managed as a collection by the same module, it became apparent that it would also be necessary to adapt the other ECS tasks for the ARN parameter:
-    * <a href="https://github.com/digital-land/digital-land-postgres/pull/16">digital-land/digital-land-postgres/pull/16</a>
-    * <a href="https://github.com/digital-land/digital-land-efs-sync/pull/4">digital-land/digital-land-efs-sync/pull/4</a>
- * The Terraform change will now be applied to the development environment and tested before proceeding to staging and production</p>
+<p><strong>On (2024-07-17)</strong></p>
+
+<ul>
+<li>Next, the Terraform changes for the EventBridge rule must be made.  Since all EventBridge rules are managed as a collection by the same module, it became apparent that it would also be necessary to adapt the other ECS tasks for the ARN parameter:
+
+<ul>
+<li><a href="https://github.com/digital-land/digital-land-postgres/pull/16">digital-land/digital-land-postgres/pull/16</a></li>
+<li><a href="https://github.com/digital-land/digital-land-efs-sync/pull/4">digital-land/digital-land-efs-sync/pull/4</a></li>
+</ul></li>
+<li>The Terraform change was applied to the development environment and tested before proceeding to production.
+
+<ul>
+<li>Staging environment was skipped since it was occupied with an ongoing development change which wasn&rsquo;t quite ready for production yet</li>
+</ul></li>
+<li>The Terraform change was applied to production, and the following ECS task images were published to ECS in production:
+
+<ul>
+<li>tiles-builder</li>
+<li>digital-land-postgres (ECS task named sqlite-ingestion)</li>
+<li>digital-land-efs-sync (usually just referred to as efs-sync)</li>
+</ul></li>
+<li>The S3 upload event was tested first on a smaller dataset: agricultural-land-classification-collection
+
+<ul>
+<li>All three ECS tasks were triggered normally and succeeded</li>
+</ul></li>
+<li>Now, the title-boundary dataset (15 GiB) is being uploaded to trigger an S3 upload event</li>
+</ul>
 <h4 id="outage-title-boundaries-not-displayed-on-map-postmortem">Postmortem</h4>
 <p>To be completed once incident closed.</p>
 <h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
