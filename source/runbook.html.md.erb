@@ -200,12 +200,20 @@ title-boundary dataset to thus trigger an invocation of the ECS Task
  * The EventBridge trigger for tiles-builder was changed manually in the development environment and tested by updating
  one of the dataset sqlite files.
 
-**On (2024-07-18)**
+**On (2024-07-17)**
 
  * Next, the Terraform changes for the EventBridge rule must be made.  Since all EventBridge rules are managed as a collection by the same module, it became apparent that it would also be necessary to adapt the other ECS tasks for the ARN parameter:
     * [digital-land/digital-land-postgres/pull/16](https://github.com/digital-land/digital-land-postgres/pull/16)
     * [digital-land/digital-land-efs-sync/pull/4](https://github.com/digital-land/digital-land-efs-sync/pull/4)
- * The Terraform change will now be applied to the development environment and tested before proceeding to staging and production
+ * The Terraform change was applied to the development environment and tested before proceeding to production.
+   * Staging environment was skipped since it was occupied with an ongoing development change which wasn't quite ready for production yet
+ * The Terraform change was applied to production, and the following ECS task images were published to ECS in production:
+   * tiles-builder
+   * digital-land-postgres (ECS task named sqlite-ingestion)
+   * digital-land-efs-sync (usually just referred to as efs-sync)
+ * The S3 upload event was tested first on a smaller dataset: agricultural-land-classification-collection
+   * All three ECS tasks were triggered normally and succeeded
+ * Now, the title-boundary dataset (15 GiB) is being uploaded to trigger an S3 upload event
 
 #### Postmortem
 
