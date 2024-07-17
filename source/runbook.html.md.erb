@@ -190,7 +190,23 @@ title-boundary dataset to thus trigger an invocation of the ECS Task
    "source": ["aws.s3"]
  }
  ```
+ * We agreed to go ahead with the proposed changes but also noted that the input parameters used by these jobs would
+ need to be changed since the bucket name and key are no longer available separately but only as part of the overall S3
+ Object ARN.  The knock-on effect is that the ECS tasks using these EventBridge triggers also need to be adapted to
+ work with an ARN instead of a separate bucket name and bucket key.
 
+ * The following changes have been made:
+   * https://github.com/digital-land/tiles-builder/pull/15
+ * The EventBridge trigger for tiles-builder was changed manually in the development environment and tested by updating
+ one of the dataset sqlite files.
+
+**On (2024-07-18)**
+ * Next, the Terraform changes for the EventBridge rule must be made.  Since all EventBridge rules are managed as a collection
+  by the same module, it became apparent that it would also be necessary to adapt the other ECS tasks for the ARN parameter:
+    * https://github.com/digital-land/digital-land-postgres/pull/16
+    * https://github.com/digital-land/digital-land-efs-sync/pull/4
+ * The Terraform change will now be applied to the development environment and tested before proceeding to staging and
+ production
 
 #### Postmortem
 
