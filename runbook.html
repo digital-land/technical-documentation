@@ -334,7 +334,28 @@ the full requestParameters and would therefore match the EventBridge rule patter
    </span><span class="p">},</span><span class="w">
    </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"aws.s3"</span><span class="p">]</span><span class="w">
  </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h4 id="outage-title-boundaries-not-displayed-on-map-postmortem">Postmortem</h4>
+</span></code></pre></div>
+<ul>
+<li><p>We agreed to go ahead with the proposed changes but also noted that the input parameters used by these jobs would
+need to be changed since the bucket name and key are no longer available separately but only as part of the overall S3
+Object ARN.  The knock-on effect is that the ECS tasks using these EventBridge triggers also need to be adapted to
+work with an ARN instead of a separate bucket name and bucket key.</p></li>
+<li><p>The following changes have been made:</p>
+
+<ul>
+<li>https://github.com/digital-land/tiles-builder/pull/15</li>
+</ul></li>
+<li><p>The EventBridge trigger for tiles-builder was changed manually in the development environment and tested by updating
+one of the dataset sqlite files.</p></li>
+</ul>
+<p><strong>On (2024-07-18)</strong>
+ * Next, the Terraform changes for the EventBridge rule must be made.  Since all EventBridge rules are managed as a collection
+  by the same module, it became apparent that it would also be necessary to adapt the other ECS tasks for the ARN parameter:
+    * https://github.com/digital-land/digital-land-postgres/pull/16
+    * https://github.com/digital-land/digital-land-efs-sync/pull/4
+ * The Terraform change will now be applied to the development environment and tested before proceeding to staging and
+ production</p>
+<h4 id="outage-title-boundaries-not-displayed-on-map-postmortem">Postmortem</h4>
 <p>To be completed once incident closed.</p>
 <h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
 <h4 id="outage-config-data-missing-in-datasette-2024-07-08-in-attendance">In attendance</h4>
