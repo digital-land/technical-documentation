@@ -362,7 +362,7 @@ one of the dataset sqlite files.</p></li>
 <ul>
 <li>Staging environment was skipped since it was occupied with an ongoing development change which wasn&rsquo;t quite ready for production yet</li>
 </ul></li>
-<li>The Terraform change was applied to production, and the following ECS task images were published to ECS in production:
+<li>The Terraform change was applied to production, and the following ECS task images were published to ECR in production:
 
 <ul>
 <li>tiles-builder</li>
@@ -374,7 +374,7 @@ one of the dataset sqlite files.</p></li>
 <ul>
 <li>All three ECS tasks were triggered normally and succeeded</li>
 </ul></li>
-<li>Now, the title-boundary dataset (15 GiB) is being uploaded to trigger an S3 upload event</li>
+<li>Currently, the title-boundary dataset (15 GiB) is being uploaded to trigger an S3 upload event</li>
 </ul>
 <h4 id="outage-title-boundaries-not-displayed-on-map-postmortem">Postmortem</h4>
 <p>To be completed once incident closed.</p>
