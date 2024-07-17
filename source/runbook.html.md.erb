@@ -207,13 +207,13 @@ title-boundary dataset to thus trigger an invocation of the ECS Task
     * [digital-land/digital-land-efs-sync/pull/4](https://github.com/digital-land/digital-land-efs-sync/pull/4)
  * The Terraform change was applied to the development environment and tested before proceeding to production.
    * Staging environment was skipped since it was occupied with an ongoing development change which wasn't quite ready for production yet
- * The Terraform change was applied to production, and the following ECS task images were published to ECS in production:
+ * The Terraform change was applied to production, and the following ECS task images were published to ECR in production:
    * tiles-builder
    * digital-land-postgres (ECS task named sqlite-ingestion)
    * digital-land-efs-sync (usually just referred to as efs-sync)
  * The S3 upload event was tested first on a smaller dataset: agricultural-land-classification-collection
    * All three ECS tasks were triggered normally and succeeded
- * Now, the title-boundary dataset (15 GiB) is being uploaded to trigger an S3 upload event
+ * Currently, the title-boundary dataset (15 GiB) is being uploaded to trigger an S3 upload event
 
 #### Postmortem
 
