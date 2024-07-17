@@ -201,6 +201,7 @@ title-boundary dataset to thus trigger an invocation of the ECS Task
  one of the dataset sqlite files.
 
 **On (2024-07-18)**
+
  * Next, the Terraform changes for the EventBridge rule must be made.  Since all EventBridge rules are managed as a collection by the same module, it became apparent that it would also be necessary to adapt the other ECS tasks for the ARN parameter:
     * [digital-land/digital-land-postgres/pull/16](https://github.com/digital-land/digital-land-postgres/pull/16)
     * [digital-land/digital-land-efs-sync/pull/4](https://github.com/digital-land/digital-land-efs-sync/pull/4)
