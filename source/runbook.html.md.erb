@@ -213,7 +213,25 @@ title-boundary dataset to thus trigger an invocation of the ECS Task
    * digital-land-efs-sync (usually just referred to as efs-sync)
  * The S3 upload event was tested first on a smaller dataset: agricultural-land-classification-collection
    * All three ECS tasks were triggered normally and succeeded
- * Currently, the title-boundary dataset (15 GiB) is being uploaded to trigger an S3 upload event
+ * Unfortunately the first few attempts to upload the title-boundary dataset (15 GiB) (to trigger an S3 upload event) failed due to authentication session timeouts
+
+**On (2024-07-17)**
+
+ * 7:30 - First upload failed (about 75% the way through) due to authentication session timeouts again
+ * 9:30 - Thankfully the second upload of the day succeeded (14.9 GiB)
+ * All ECS tasks were fired after the S3 upload event, including the critical datasette-tiles-builder task.  However, it seems hashing has prevented it from proceeding to write data…
+
+```
+2024-07-18T09:56:21.658+01:00	890a0155-8d5e-4d64-a4ba-9b1b70b68dbb: running with settings: S3_BUCKET=production-collection-data, S3_KEY=title-boundary-collection/dataset/title-boundary.sqlite3, DATABASE=title-boundary.sqlite3, DATABASE_NAME=title-boundary
+2024-07-18T09:56:21.658+01:00	890a0155-8d5e-4d64-a4ba-9b1b70b68dbb: checking lock
+2024-07-18T09:56:21.661+01:00	890a0155-8d5e-4d64-a4ba-9b1b70b68dbb: no current lock-title-boundary
+2024-07-18T09:56:21.674+01:00	890a0155-8d5e-4d64-a4ba-9b1b70b68dbb: removing existing temporary tiles
+2024-07-18T09:56:21.679+01:00	890a0155-8d5e-4d64-a4ba-9b1b70b68dbb: attempting download from s3://production-collection-data/title-boundary-collection/dataset/title-boundary.sqlite3
+2024-07-18T09:59:02.788+01:00	890a0155-8d5e-4d64-a4ba-9b1b70b68dbb: finished downloading from s3://production-collection-data/title-boundary-collection/dataset/title-boundary.sqlite3
+2024-07-18T09:59:02.799+01:00	890a0155-8d5e-4d64-a4ba-9b1b70b68dbb: building tiles
+```
+
+ * Will now work to see whether it is possible to remove the hash
 
 #### Postmortem
 
