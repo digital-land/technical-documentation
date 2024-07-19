@@ -376,7 +376,7 @@ one of the dataset sqlite files.</p></li>
 </ul></li>
 <li>Unfortunately the first few attempts to upload the title-boundary dataset (15 GiB) (to trigger an S3 upload event) failed due to authentication session timeouts</li>
 </ul>
-<p><strong>On (2024-07-17)</strong></p>
+<p><strong>On (2024-07-18)</strong></p>
 
 <ul>
 <li>7:30 - First upload failed (about 75% the way through) due to authentication session timeouts again</li>
@@ -392,10 +392,36 @@ one of the dataset sqlite files.</p></li>
 2024-07-18T09:59:02.799+01:00   890a0155-8d5e-4d64-a4ba-9b1b70b68dbb: building tiles
 </code></pre></div>
 <ul>
-<li>Will now work to see whether it is possible to remove the hash</li>
+<li>Added a new flag parameter to the datasette-tiles-builder task to control whether a hash check should be performed.
+
+<ul>
+<li>Disabling the check can be useful in the scenario where a rebuild of tile data is required even when SQLite data has not changed.</li>
+</ul></li>
+<li>After deploying the new version of datasette-tiles-builder task, it was triggered manually by creating an ECS task.
+
+<ul>
+<li>The manual trigger included the new flag to disable the hash check</li>
+</ul></li>
+<li>Unfortunately, despite skipping the hash check, a new problem materialised with generating a hash of the SQLite file
+
+<ul>
+<li>The root cause of this problem is not known.  Low disk space might be one issue.  No error materialised in logs.</li>
+<li>Instead of addressing the root cause, it was decided that an option would be introduced to disable hash generation.</li>
+</ul></li>
+<li>Another new flag parameter was added to the datasette-tiles-builder task to control whether hash generation should be performed.
+
+<ul>
+<li>Disabling the check can be useful in the scenario where a rebuild of tile data is required even when SQLite data has not changed.</li>
+</ul></li>
+<li>After deploying the new version of datasette-tiles-builder task, it was triggered manually by creating an ECS task.
+
+<ul>
+<li>Thankfully, this time the task succeeded.</li>
+<li>Map tile data for title boundaries was written to EFS for Datasette Tiles and, ultimately, the Map website to use</li>
+</ul></li>
 </ul>
 <h4 id="outage-title-boundaries-not-displayed-on-map-postmortem">Postmortem</h4>
-<p>To be completed once incident closed.</p>
+<p>To be completed by Gordon Mabbett.</p>
 <h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
 <h4 id="outage-config-data-missing-in-datasette-2024-07-08-in-attendance">In attendance</h4>
 <p>Async on Slack:</p>
