@@ -215,7 +215,7 @@ title-boundary dataset to thus trigger an invocation of the ECS Task
    * All three ECS tasks were triggered normally and succeeded
  * Unfortunately the first few attempts to upload the title-boundary dataset (15 GiB) (to trigger an S3 upload event) failed due to authentication session timeouts
 
-**On (2024-07-17)**
+**On (2024-07-18)**
 
  * 7:30 - First upload failed (about 75% the way through) due to authentication session timeouts again
  * 9:30 - Thankfully the second upload of the day succeeded (14.9 GiB)
@@ -231,11 +231,22 @@ title-boundary dataset to thus trigger an invocation of the ECS Task
 2024-07-18T09:59:02.799+01:00	890a0155-8d5e-4d64-a4ba-9b1b70b68dbb: building tiles
 ```
 
- * Will now work to see whether it is possible to remove the hash
+ * Added a new flag parameter to the datasette-tiles-builder task to control whether a hash check should be performed.
+    * Disabling the check can be useful in the scenario where a rebuild of tile data is required even when SQLite data has not changed.
+ * After deploying the new version of datasette-tiles-builder task, it was triggered manually by creating an ECS task.
+    * The manual trigger included the new flag to disable the hash check
+ * Unfortunately, despite skipping the hash check, a new problem materialised with generating a hash of the SQLite file
+   * The root cause of this problem is not known.  Low disk space might be one issue.  No error materialised in logs.
+   * Instead of addressing the root cause, it was decided that an option would be introduced to disable hash generation.
+ * Another new flag parameter was added to the datasette-tiles-builder task to control whether hash generation should be performed.
+    * Disabling the check can be useful in the scenario where a rebuild of tile data is required even when SQLite data has not changed.
+ * After deploying the new version of datasette-tiles-builder task, it was triggered manually by creating an ECS task.
+    * Thankfully, this time the task succeeded.
+    * Map tile data for title boundaries was written to EFS for Datasette Tiles and, ultimately, the Map website to use
 
 #### Postmortem
 
-To be completed once incident closed.
+To be completed by Gordon Mabbett.
 
 
 ### Outage - Config data missing in datasette - 2024-07-08
