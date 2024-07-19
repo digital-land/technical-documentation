@@ -246,8 +246,31 @@ title-boundary dataset to thus trigger an invocation of the ECS Task
 
 #### Postmortem
 
-To be completed by Gordon Mabbett.
+Coming soon.  Postmortem session to be arranged by Gordon Mabbett.
 
+In the meantime, here are few thoughts from Chris C relating to some questions received via Slack:
+
+*How long has this been happening?*
+
+Unsure.  The problem occurred because AWS truncated event data, which was actually a knock on effect from the size
+of the title boundary dataset.
+
+*What was the impact on users?*
+
+Title boundary data was not displayed on the Map search feature of the Planning Data website.
+
+*How can we recognise this in the future?*
+
+Get notified when an event-based ECS task fails to fire/execute.
+
+*What steps are we taking to ensure it doesn't happen again, or we can respond more quickly?*
+
+We could do the following:
+
+ * add better error handling in the main shell scripts
+ * setup an alarm and alert for when an event-based ECS task fails to fire/execute
+ * setup another alarm and alert for when an event-based ECS task encounters an error
+ * have smoke tests in production which check for the presence of expected datasets, e.g. ensure the map has some title boundaries
 
 ### Outage - Config data missing in datasette - 2024-07-08
 
