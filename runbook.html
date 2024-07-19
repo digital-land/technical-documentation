@@ -421,7 +421,24 @@ one of the dataset sqlite files.</p></li>
 </ul></li>
 </ul>
 <h4 id="outage-title-boundaries-not-displayed-on-map-postmortem">Postmortem</h4>
-<p>To be completed by Gordon Mabbett.</p>
+<p>Coming soon.  Postmortem session to be arranged by Gordon Mabbett.</p>
+<p>In the meantime, here are few thoughts from Chris C relating to some questions received via Slack:</p>
+<p><em>How long has this been happening?</em></p>
+<p>Unsure.  The problem occurred because AWS truncated event data, which was actually a knock on effect from the size
+of the title boundary dataset.</p>
+<p><em>What was the impact on users?</em></p>
+<p>Title boundary data was not displayed on the Map search feature of the Planning Data website.</p>
+<p><em>How can we recognise this in the future?</em></p>
+<p>Get notified when an event-based ECS task fails to fire/execute.</p>
+<p><em>What steps are we taking to ensure it doesn&rsquo;t happen again, or we can respond more quickly?</em></p>
+<p>We could do the following:</p>
+
+<ul>
+<li>add better error handling in the main shell scripts</li>
+<li>setup an alarm and alert for when an event-based ECS task fails to fire/execute</li>
+<li>setup another alarm and alert for when an event-based ECS task encounters an error</li>
+<li>have smoke tests in production which check for the presence of expected datasets, e.g. ensure the map has some title boundaries</li>
+</ul>
 <h3 id="outage-config-data-missing-in-datasette-2024-07-08">Outage - Config data missing in datasette - 2024-07-08</h3>
 <h4 id="outage-config-data-missing-in-datasette-2024-07-08-in-attendance">In attendance</h4>
 <p>Async on Slack:</p>
