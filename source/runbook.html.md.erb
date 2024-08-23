@@ -81,6 +81,32 @@ information from the document.
 
 ## Incident Response History
 
+### Outage - Datasette - 2024-08-23
+
+#### Description
+
+Over night we had requests on the providers site which used datasette to access data. the url used is
+datasette.planning.data.gov.uk. The datasette application was reporting 502 errors implying  that the serve was down.
+
+#### Running log
+
+    * At around 03:00 AM and 07:00AM the requests were made and sentry reported the events to the notification channel
+    * At 08:00AM the infrastructure team reacted to and investigates these errors. It was found that the application
+had automatically reset itself and the site was back up and operational.
+
+#### Postmortem
+
+Under further investigation it was identified that the traffic was mostly due to crawlers on the providers site. The providers team will
+be adding a robots.txt file to the service to stop this traffic in the future.
+
+The datasette outage was due to datasets being updated overnight. when data is added to the source it can cause the application to
+restart especially when requests are being made at the same time. we will investigate further to identify if this can be solved
+in the current set up but there are already plans to replace datasette to support the providers service which will remove these errors.
+
+We will continue to monitor the impact of these errors after the robots.txt is implemented. 
+
+The smoke tests did not trigger an alarm implying that the service was never down for ten minutes and had fixed itself. 
+
 ### Outage - Check Service - 2024-07-17
 
 #### In attendance
