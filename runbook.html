@@ -122,10 +122,10 @@
     <a href="./architecture/design/proposals/template.html"><span>Open Design Proposal - 00X - Title (Template)</span></a>
   </li>
   <li>
-    <a href="./architecture/design/proposals/002-data-pipelines-migration/index.html"><span>Open Design Proposal 002 - Data Pipelines Migration</span></a>
+    <a href="./architecture/design/proposals/001-publish-async/index.html"><span>Open Design Proposal 001 - Publish service - Async</span></a>
   </li>
   <li>
-    <a href="./architecture/design/proposals/001-publish-async/index.html"><span>Open Design Proposal 001 - Publish service - Async</span></a>
+    <a href="./architecture/design/proposals/002-data-pipelines-migration/index.html"><span>Open Design Proposal 002 - Data Pipelines Migration</span></a>
   </li>
 </ul>
 </li>
@@ -233,6 +233,22 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
+<h3 id="outage-datasette-2024-08-23">Outage - Datasette - 2024-08-23</h3>
+<h4 id="description">Description</h4>
+<p>Over night we had requests on the providers site which used datasette to access data. the url used is
+datasette.planning.data.gov.uk. The datasette application was reporting 502 errors implying  that the serve was down.</p>
+<h4 id="running-log">Running log</h4>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>* At around 03:00 AM and 07:00AM the requests were made and sentry reported the events to the notification channel
+* At 08:00AM the infrastructure team reacted to and investigates these errors. It was found that the application
+</code></pre></div><p>had automatically reset itself and the site was back up and operational.</p>
+<h4 id="postmortem">Postmortem</h4>
+<p>Under further investigation it was identified that the traffic was mostly due to crawlers on the providers site. The providers team will
+be adding a robots.txt file to the service to stop this traffic in the future.</p>
+<p>The datasette outage was due to datasets being updated overnight. when data is added to the source it can cause the application to
+restart especially when requests are being made at the same time. we will investigate further to identify if this can be solved
+in the current set up but there are already plans to replace datasette to support the providers service which will remove these errors.</p>
+<p>We will continue to monitor the impact of these errors after the robots.txt is implemented.</p>
+<p>The smoke tests did not trigger an alarm implying that the service was never down for ten minutes and had fixed itself.</p>
 <h3 id="outage-check-service-2024-07-17">Outage - Check Service - 2024-07-17</h3>
 <h4 id="in-attendance">In attendance</h4>
 <p>Async on Slack:</p>
@@ -244,9 +260,9 @@ information from the document.</p>
 <li>Chris Cundill</li>
 <li>George Goodall</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="outage-check-service-2024-07-17-description">Description</h4>
 <p>The <a href="https://check.planning.data.gov.uk/">Planning Data Check Service</a> is not available - and is returning an error page.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="outage-check-service-2024-07-17-running-log">Running log</h4>
 <p><strong>On (2024-07-17)</strong></p>
 
 <ul>
@@ -257,7 +273,7 @@ information from the document.</p>
 <li>At 11:46am, the Check service was back online.</li>
 <li>Further investigations and fixes will be carried out to do a long-term fix to the identified issue.</li>
 </ul>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="outage-check-service-2024-07-17-postmortem">Postmortem</h4>
 <p>To be completed once incident completed.</p>
 <h3 id="outage-title-boundaries-not-displayed-on-map">Outage - Title boundaries not displayed on Map</h3>
 <h4 id="outage-title-boundaries-not-displayed-on-map-in-attendance">In attendance</h4>
