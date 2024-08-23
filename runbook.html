@@ -234,13 +234,23 @@ information from the document.</p>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
 <h3 id="outage-datasette-2024-08-23">Outage - Datasette - 2024-08-23</h3>
+<h4 id="in-attendance">In attendance</h4>
+<p>Async on Slack:</p>
+
+<ul>
+<li>Infrastructure Team</li>
+<li>Providers Team</li>
+</ul>
 <h4 id="description">Description</h4>
 <p>Over night we had requests on the providers site which used datasette to access data. the url used is
 datasette.planning.data.gov.uk. The datasette application was reporting 502 errors implying  that the serve was down.</p>
 <h4 id="running-log">Running log</h4>
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>* At around 03:00 AM and 07:00AM the requests were made and sentry reported the events to the notification channel
-* At 08:00AM the infrastructure team reacted to and investigates these errors. It was found that the application
-</code></pre></div><p>had automatically reset itself and the site was back up and operational.</p>
+<p><strong>On (2024-08-23)</strong></p>
+
+<ul>
+<li>At around 03:00 AM and 07:00AM the requests were made and sentry reported the events to the notification channel</li>
+<li>At 08:00AM the infrastructure team reacted to and investigates these errors. It was found that the application had automatically reset itself and the site was back up and operational.</li>
+</ul>
 <h4 id="postmortem">Postmortem</h4>
 <p>Under further investigation it was identified that the traffic was mostly due to crawlers on the providers site. The providers team will
 be adding a robots.txt file to the service to stop this traffic in the future.</p>
@@ -250,7 +260,7 @@ in the current set up but there are already plans to replace datasette to suppor
 <p>We will continue to monitor the impact of these errors after the robots.txt is implemented.</p>
 <p>The smoke tests did not trigger an alarm implying that the service was never down for ten minutes and had fixed itself.</p>
 <h3 id="outage-check-service-2024-07-17">Outage - Check Service - 2024-07-17</h3>
-<h4 id="in-attendance">In attendance</h4>
+<h4 id="outage-check-service-2024-07-17-in-attendance">In attendance</h4>
 <p>Async on Slack:</p>
 
 <ul>
