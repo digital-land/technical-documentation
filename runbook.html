@@ -89,19 +89,6 @@
   </li>
 <li><a href="./architecture/design/index.html"><span>Solution design index</span></a>
 <ul>
-<li><a href="./architecture/design/latest/index.html"><span>Solution design</span></a>
-<ul>
-  <li>
-    <a href="./architecture/design/latest/data-pipelines/index.html"><span>Solution design - Data Pipelines</span></a>
-  </li>
-  <li>
-    <a href="./architecture/design/latest/planning-data-platform/index.html"><span>Solution design - Planning Data Platform</span></a>
-  </li>
-  <li>
-    <a href="./architecture/design/latest/check-service/index.html"><span>Solution design - Check Service</span></a>
-  </li>
-</ul>
-</li>
 <li><a href="./architecture/design/archive/index.html"><span>Solution design archive</span></a>
 <ul>
 <li><a href="./architecture/design/archive/2024-06/index.html"><span>Solution design - June 2024</span></a>
@@ -113,6 +100,19 @@
 </li>
   <li>
     <a href="./architecture/design/archive/2022-11/index.html"><span>Solution design - November 2022</span></a>
+  </li>
+</ul>
+</li>
+<li><a href="./architecture/design/latest/index.html"><span>Solution design</span></a>
+<ul>
+  <li>
+    <a href="./architecture/design/latest/data-pipelines/index.html"><span>Solution design - Data Pipelines</span></a>
+  </li>
+  <li>
+    <a href="./architecture/design/latest/planning-data-platform/index.html"><span>Solution design - Planning Data Platform</span></a>
+  </li>
+  <li>
+    <a href="./architecture/design/latest/check-service/index.html"><span>Solution design - Check Service</span></a>
   </li>
 </ul>
 </li>
@@ -233,25 +233,71 @@ information from the document.</p>
 <h2 id="common-issues">Common Issues</h2>
 <p>TBA</p>
 <h2 id="incident-response-history">Incident Response History</h2>
-<h3 id="outage-datasette-2024-08-23">Outage - Datasette - 2024-08-23</h3>
+<h3 id="slow-running-queries-on-server-2024-09-17">Slow Running Queries on Server - 2024-09-17</h3>
 <h4 id="in-attendance">In attendance</h4>
+<p>In attendance:</p>
+
+<ul>
+<li>Infrastructure Team</li>
+</ul>
+<h4 id="description">Description</h4>
+<p>A user has reported a number of slow queries. After some testing, this issue was confirmed as happening in local environments as well as on the production environment. This indicates that are queries are taking too long to be returned and are timing out.</p>
+<h4 id="running-log">Running log</h4>
+
+<ul>
+<li>On 17th September, Infrastructure Team confirmed that queries were running slowly and investigation began.</li>
+<li>On 19th September, attempts to optimise queries were unsuccessful in terms of allowing queries to run successfully. The queries involve a lot of complex geometries, specifically Flood risk zone causing potential issues. </li>
+<li>On 19th September, decision made to implement caching for the queries on each dataset. We ll cache the query per dataset so gives the user some freedom to change the query a bit.,</li>
+</ul>
+<h4 id="postmortem">Postmortem</h4>
+<p>To be completed once incident resolved.</p>
+<h3 id="security-incident-2024-09-17-datasette-applications-open-to-potential-xss-attacks">Security Incident 2024-09-17 - Datasette applications open to potential XSS attacks</h3>
+<h4 id="security-incident-2024-09-17-datasette-applications-open-to-potential-xss-attacks-in-attendance">In attendance</h4>
+<p>In attendance:</p>
+
+<ul>
+<li>Service Owner</li>
+<li>Infrastructure Team</li>
+</ul>
+<h4 id="security-incident-2024-09-17-datasette-applications-open-to-potential-xss-attacks-description">Description</h4>
+<p>Cyber Security raised a potential XSS attacks can act against our datasette applications. By entering two double slashes after our URLs it will redirect to the other domain (i.e https://datasette.planning.data.gov.uk//google.com/  will redirect you to google).</p>
+<h4 id="security-incident-2024-09-17-datasette-applications-open-to-potential-xss-attacks-running-log">Running log</h4>
+
+<ul>
+<li>On 17th September, Service Owner raised an issue with the datasette project team which is the root of the issue.</li>
+<li>On 17th September afternoon, a possible solution have been discussed between the Infrastructure Team, this will speed up the time to resolve the security threat instead of relying on other 3rd party provider which can take some time.</li>
+<li>We identified to resolve the issue by setting up a Cloudfront function which normalizes the URIs in our Cloudfront CDN.</li>
+<li>On 18th September, a Cloudfront function has been setup with a Terraform module.</li>
+<li>On 20th September, we rolled out the same changes to all our apps on AWS DEV / Staging.</li>
+<li>On 23rd September, we released the Cloudfront function into Production.</li>
+</ul>
+<h4 id="security-incident-2024-09-17-datasette-applications-open-to-potential-xss-attacks-postmortem">Postmortem</h4>
+<p>We have already identified the use of AWS’ Web Application Firewall (WAF), which could be used in the following ways:</p>
+
+<ul>
+<li>Protect our public interfaces (to include load balancers, Cognito authentication endpoints and content delivery networks (CloudFront) with AWS WAFs</li>
+<li>Deny requests from untrusted networks, including those identified as Tor exit nodes (routers)</li>
+<li>It helps protect against common attack vectors like SQL injection, cross-site scripting (XSS), and other Layer 7 attacks etc. </li>
+</ul>
+<h3 id="outage-datasette-2024-08-23">Outage - Datasette - 2024-08-23</h3>
+<h4 id="outage-datasette-2024-08-23-in-attendance">In attendance</h4>
 <p>Async on Slack:</p>
 
 <ul>
 <li>Infrastructure Team</li>
 <li>Providers Team</li>
 </ul>
-<h4 id="description">Description</h4>
+<h4 id="outage-datasette-2024-08-23-description">Description</h4>
 <p>Over night we had requests on the providers site which used datasette to access data. the url used is
 datasette.planning.data.gov.uk. The datasette application was reporting 502 errors implying  that the serve was down.</p>
-<h4 id="running-log">Running log</h4>
+<h4 id="outage-datasette-2024-08-23-running-log">Running log</h4>
 <p><strong>On (2024-08-23)</strong></p>
 
 <ul>
 <li>At around 03:00 AM and 07:00AM the requests were made and sentry reported the events to the notification channel</li>
 <li>At 08:00AM the infrastructure team reacted to and investigates these errors. It was found that the application had automatically reset itself and the site was back up and operational.</li>
 </ul>
-<h4 id="postmortem">Postmortem</h4>
+<h4 id="outage-datasette-2024-08-23-postmortem">Postmortem</h4>
 <p>Under further investigation it was identified that the traffic was mostly due to crawlers on the providers site. The providers team will
 be adding a robots.txt file to the service to stop this traffic in the future.</p>
 <p>The datasette outage was due to datasets being updated overnight. when data is added to the source it can cause the application to
