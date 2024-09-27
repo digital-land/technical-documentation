@@ -1,0 +1,151 @@
+---
+title: Working with LPA GIS Systems
+weight: 6
+---
+
+# Working with LPA GIS Systems
+
+Generally LPAs run one of a small number of GIS platforms. Most are compatible with some version of the OGC spec.
+
+You need a small amount of info to work with these servers. This page is intended to give you some guidance. 
+
+## Core Concepts
+
+LPAs often provide data directly from a standards-compliant web server. You can query the server for data by building relatively simple query strings.
+
+## Terminology
+
+* OGC - Open Geospatial Consortium. They define the standards. 
+* WFS - Web Feature Service. Use this service to get data in eg csv or json formats
+* WMS - Web Map Service. Use this service to get maps as images etc
+* Feature - a thing on a map. You get them from making calls to WFS.
+* Feature Type - information about the features above. 
+* QGIS - open-source mapping tools. Their desktop tool is great if you need to visualize your map data.
+
+There's broadly two kinds of query - one for maps -  (wms) and one for data that comprises maps, (wfs). We are going to focus on wfs.
+
+You might get a suggested endpoint like `https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&version=2.0.0` from an LPA. This is a pointer to their GIS. See 'WFS' in there? We can also see that they're providing version 2.0.0 of the OGC spec.
+
+What can you do with it?
+
+## Get the servers cabilities
+
+If you add `&request=GetCapabilities` onto the query, you will get back some XML that describes what the server can do. 
+
+[Try it! - click `https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&version=2.0.0&request=GetCapabilities`](https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&version=2.0.0&request=GetCapabilities)
+
+This is important to us since it gives us some insight into what their server can provide. When you ran the query above you got some XML. As is typical for an XML document there's a lot of stuff in there but there's no need to understand all of it. 
+
+### Interesting / useful items in a servers capabilties
+
+Look for the strings below in the XML:
+
+* outputFormat - lets us know what the server claimes to produicve if requested
+* ImplementsResultPaging - some servers hold massive amounts of data that we might want to download in chunks
+* FeatureTypeList - super important. A FeatureType names the kind of data the server can offer. Eg `<Name>ns:DVL_ARTICLE_4</Name>` is a clue we will be able to get Article 4 direction info.
+
+I scanned down the file looking for `FeatureTypeList` and found the Article 4 info - the first entry. 
+
+```xml
+<FeatureType>
+    <Name>ns:DVL_ARTICLE_4</Name>
+    <Title>DVL_ARTICLE_4</Title>
+    <DefaultCRS>urn:ogc:def:crs:EPSG::27700</DefaultCRS>
+    <OtherCRS>urn:ogc:def:crs:EPSG::3857</OtherCRS>
+    <OtherCRS>urn:ogc:def:crs:EPSG::4277</OtherCRS>
+    <OtherCRS>urn:ogc:def:crs:EPSG::4326</OtherCRS>
+        <ows:WGS84BoundingBox>
+            <ows:LowerCorner>-180 -89.9999</ows:LowerCorner>
+            <ows:UpperCorner>180 89.9999</ows:UpperCorner>
+        </ows:WGS84BoundingBox>
+</FeatureType>
+```
+
+Not _massively_ useful. The Name and Title and some stuff about coordinate systems and boundaries.
+
+You can get more.
+
+### Getting info about a Feature Type
+
+`DescribeFeatureType` gives you the definition of a given feature type. You just need to provide the name of the Feature Type you want, without the `ns:` prefix:
+
+`&request=DescribeFeatureType&TypeNames=DVL_ARTICLE_4`
+
+For example
+
+`https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&version=2.0.0&request=DescribeFeatureType&TypeNames=DVL_ARTICLE_4`
+
+Gives us a type definition. The best bit is that there is some info about the fields that Features of this FeatureType have:
+
+```xml
+<xsd:complexType name="DVL_ARTICLE_4_Type">
+    <xsd:complexContent>
+        <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="0" name="GML_Geometry" nillable="false" type="gml:GeometryPropertyType"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="ARTICLE" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="DATE122" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="NAME" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="REFERENCE" nillable="false" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:extension>
+    </xsd:complexContent>
+    </xsd:complexType>
+<xsd:element name="DVL_ARTICLE_4" substitutionGroup="gml:AbstractFeature" type="ns:DVL_ARTICLE_4_Type"/>
+```
+
+This gives you some guidance on what column mappings you need to set up. In the above, NAME and REFERENCE are going to get automatically mapped. DATE122 though? We do not know which [Article 4](https://digital-land.github.io/specification/dataset/article-4-direction-area/) Date that maps onto. To determine what we're going to do about that we can go and get the actual data.
+
+## Getting some map data for a Feature Type
+
+
+[Get the actual data - Click here! https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&version=2.0.0&request=GetFeature&TypeNames=DVL_ARTICLE_4](https://medwaymaps.medway.gov.uk/WFS/wfs.exe?service=WFS&version=2.0.0&request=GetFeature&TypeNames=DVL_ARTICLE_4)
+
+This gives you the data in full XML format. Here's a single Feature - Upper Upnor(4):
+
+```xml
+<wfs:member>
+    <ns:DVL_ARTICLE_4 gml:id="DVL_ARTICLE_4.1.1">
+    <gml:description>Polygon</gml:description>
+    <gml:name>Polygon</gml:name>
+    <gml:boundedBy>
+        <gml:Envelope srsName="EPSG:27700">
+            <gml:lowerCorner>575760.15 170442.45</gml:lowerCorner>
+            <gml:upperCorner>575810.78 170477.32</gml:upperCorner>
+        </gml:Envelope>
+    </gml:boundedBy>
+    <ns:GML_Geometry>
+    <gml:Polygon gml:id="DVL_ARTICLE_4.1.1.Geometry" srsName="EPSG:27700">
+        <gml:exterior>
+            <gml:LinearRing>
+                <gml:coordinates>575777.46,170476.57 575781.07,170475.62 575781.74,170477.32
+                ...
+                 575776.35,170472.7 575777.46,170476.57</gml:coordinates>
+            </gml:LinearRing>
+        </gml:exterior>
+    </gml:Polygon>
+    </ns:GML_Geometry>
+    <ns:ARTICLE>Article 4(2)</ns:ARTICLE>
+    <ns:NAME>Upper Upnor(4)</ns:NAME>
+    <ns:REFERENCE>UPNOR04</ns:REFERENCE>
+    </ns:DVL_ARTICLE_4>
+</wfs:member>
+```
+
+We can see NAME and REFERENCE but DATA122 is missing! Scanning the file for `ns:DATE122` leads to a number of occurrences. Not every Feature hasd a date, but where it is present the value is consitently associated with a particular NAME format. Examples below.
+
+```xml
+<ns:DATE122>05/09/05</ns:DATE122>
+<ns:NAME>Upper Upnor(1)</ns:NAME>
+...
+<ns:DATE122>05/09/05</ns:DATE122>
+<ns:NAME>Upper Upnor(2)</ns:NAME>
+```
+
+And so forth. At this point I might believe that this is the start data for the articl 4 direction item. We don't have a documentation URL though so I cannot check. This is the end of the road for this particular dataset until we get some clarity from Medway about the meaning of DATE122!
+
+
+## Useful links
+
+[QGIS services reference](https://docs.qgis.org/3.28/en/docs/server_manual/services.html)
+
