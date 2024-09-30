@@ -110,5 +110,6 @@ module.exports = function(eleventyConfig) {
       layouts: '../layouts'
     //   layouts: '../node_modules/@x-govuk/govuk-eleventy-plugin/layouts'
     },
+    pathPrefix: process.env.GITHUB_ACTIONS ? '/api-docs/' : '/'
   }
 };
