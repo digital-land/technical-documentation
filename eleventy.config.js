@@ -1,5 +1,11 @@
 const govukEleventyPlugin = require('@x-govuk/govuk-eleventy-plugin')
 
+function capitalizeWords(str) {
+    return str.replace(/\b\w/g, function(match) {
+      return match.toUpperCase();
+    });
+}
+
 module.exports = function(eleventyConfig) {
     // Register the plugin
     eleventyConfig.addPlugin(govukEleventyPlugin,{
@@ -13,7 +19,7 @@ module.exports = function(eleventyConfig) {
           // Sort by URL
           return a.url.localeCompare(b.url);
         });
-      });
+    });
     
     // Register specific options
     eleventyConfig.setQuietMode(false)
@@ -28,7 +34,7 @@ module.exports = function(eleventyConfig) {
         pages.forEach(page => {
             // Extract file slug and use it as a key
             const key = page.fileSlug || 'home'; // Default to 'home' if no slug
-            const title = page.data.title || key.replace(/-/g, ' '); // Title defaults to slug if none is provided
+            const title = page.data.title || capitalizeWords(key.replace(/-/g, ' ')); // Title defaults to slug if none is provided
             const url = page.url || `/`; // Default URL if none is provided
             // Create an object for the page
             const pageObject = {
@@ -54,7 +60,7 @@ module.exports = function(eleventyConfig) {
                 if (parts.length===1 && parts[0] === 'index.md') {
                     if (!structure[currentDir]) {
                         structure[currentDir] = {
-                            title: currentDir.replace(/-/g, ' '),
+                            title: capitalizeWords(currentDir.replace(/-/g, ' ')),
                             url: pageObj.url,
                             children: {}
                         };
