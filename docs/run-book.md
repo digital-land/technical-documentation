@@ -76,6 +76,59 @@ information from the document.
 
 ## Incident Response History
 
+### Slow Running Queries on Server - 2024-09-17
+
+#### In attendance
+
+In attendance:
+
+* Infrastructure Team
+
+#### Description
+
+A user has reported a number of slow queries. After some testing, this issue was confirmed as happening in local environments as well as on the production environment. This indicates that are queries are taking too long to be returned and are timing out.
+
+#### Running log
+
+* On 17th September, Infrastructure Team confirmed that queries were running slowly and investigation began.
+* On 19th September, attempts to optimise queries were unsuccessful in terms of allowing queries to run successfully. The queries involve a lot of complex geometries, specifically Flood risk zone causing potential issues. 
+* On 19th September, decision made to implement caching for the queries on each dataset. We ll cache the query per dataset so gives the user some freedom to change the query a bit.,
+
+#### Postmortem
+
+To be completed once incident resolved.
+
+### Security Incident 2024-09-17 - Datasette applications open to potential XSS attacks
+
+#### In attendance
+
+In attendance:
+
+* Service Owner
+* Infrastructure Team
+
+#### Description
+
+Cyber Security raised a potential XSS attacks can act against our datasette applications. By entering two double slashes after our URLs it will redirect to the other domain (i.e https://datasette.planning.data.gov.uk//google.com/  will redirect you to google).
+
+#### Running log
+
+* On 17th September, Service Owner raised an issue with the datasette project team which is the root of the issue.
+* On 17th September afternoon, a possible solution have been discussed between the Infrastructure Team, this will speed up the time to resolve the security threat instead of relying on other 3rd party provider which can take some time.
+* We identified to resolve the issue by setting up a Cloudfront function which normalizes the URIs in our Cloudfront CDN.
+* On 18th September, a Cloudfront function has been setup with a Terraform module.
+* On 20th September, we rolled out the same changes to all our apps on AWS DEV / Staging.
+* On 23rd September, we released the Cloudfront function into Production.
+
+#### Postmortem
+
+We have already identified the use of AWS’ Web Application Firewall (WAF), which could be used in the following ways:
+
+* Protect our public interfaces (to include load balancers, Cognito authentication endpoints and content delivery networks (CloudFront) with AWS WAFs
+* Deny requests from untrusted networks, including those identified as Tor exit nodes (routers)
+* It helps protect against common attack vectors like SQL injection, cross-site scripting (XSS), and other Layer 7 attacks etc. 
+
+
 ### Outage - Datasette - 2024-08-23
 
 #### In attendance
