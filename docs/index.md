@@ -1,14 +1,5 @@
 # Planning Data Wiki
 
-```
-         ____      __                                       _                                  ____                 __       
-        /  __    \ /  /___    ____    ___    (_)___      ___  _     /  __  \  ___  _/  /_ ___  _
-      /  /__/   /  /  __   `/  __  \/  __  \/  /   __  \/  __  `/   /  /  /  /   __   `/ __/  __  `/
-    /  _____/  /  /_/   /  /  /   /  /  /   /   /  /  /  /   /_/  /   /  /_/  /   /_ /  /  /_/  /_/  / 
-  /_/          /_/\__,_/_/  /_/_/  /_/_/_/  /_/\__,   /  /_____/\__,_/\__/\__,_/  
-                                                                              /____/                            
-```
-
 Welcome to the Planning Data Wiki. This is used by the members of the team to store documentation from a few key areas:
 
 * [Architecture & Infrastructure](/architecture-and-infrastructure/) - A section on how we deploy our code in the cloud
