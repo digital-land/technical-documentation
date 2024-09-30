@@ -1,0 +1,26 @@
+{% extends "../node_modules/@x-govuk/govuk-eleventy-plugin/layouts/base.njk" %}
+{% from "./components/wiki-nav/macro.njk" import wikiNav %}
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    classes: "govuk-!-display-none-print",
+    items: breadcrumbItems
+  }) if showBreadcrumbs }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter-from-desktop">
+      {{ wikiNav(collections.nestedPages) }}
+    </div>
+    <div class="govuk-grid-column-three-quarters-from-desktop">
+      {{ appDocumentHeader({
+        title: title,
+        description: description
+      }) }}
+
+      {{ appProseScope(content) if content }}
+
+      {% include "layouts/shared/related.njk" %}
+    </div>
+  </div>
+{% endblock %}
