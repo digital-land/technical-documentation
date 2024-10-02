@@ -76,7 +76,7 @@ information from the document.
 
 ## Incident Response History
 
-### Broken pages on [submit](https://submit.planning.data.gov.uk/) - 2024-10-02
+### Broken pages on [submit](https://submit.planning.data.gov.uk/) service - 2024-10-02
 
 #### In attendance
 
@@ -101,7 +101,7 @@ the dataset details page stopped working indicating parameters were incorrect
 - At 2:20 PM, the PR was reviewed and approved.
 
 #### Postmortem
-The root cause of the incident was changes to the performance database, which broke the queries used by the [submit](https://submit.planning.data.gov.uk/).
+The root cause of the incident was changes to the performance database, which broke the queries used by the [submit](https://submit.planning.data.gov.uk/) service.
 specifically the renaming of the table 'column_field_summary' to 'endpoint_dataset_resource_summary' as well as two of the columns within that table
 
 
