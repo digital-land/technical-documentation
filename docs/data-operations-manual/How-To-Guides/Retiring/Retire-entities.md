@@ -1,3 +1,4 @@
+# Retire entities
 
 This is similar to retiring a resource in that it won’t happen often. It may sometimes be necessary to correct errors in the data provided by the LPAs. E.g., if the provided entries are located outside the LPA’s boundary or extra unnecessary entities have been provided.
 

@@ -1,3 +1,4 @@
+# Configure an endpoint
 
 ## [collection/endpoint](https://github.com/digital-land/specification/blob/main/content/dataset/endpoint.md?plain=1) 
 

@@ -1,3 +1,5 @@
+# Add a new dataset and collection
+
 The following instructions are for when adding an entirely new dataset to the platform which does not have a corresponding collection repo.
 
 If you’re adding a new dataset to an existing collection you can follow the same process, but ignore steps 2 and 3.

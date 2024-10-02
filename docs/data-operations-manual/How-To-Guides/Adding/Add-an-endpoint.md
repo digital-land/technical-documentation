@@ -1,3 +1,4 @@
+# Add an endpoint
 
 **Prerequisites:**
 

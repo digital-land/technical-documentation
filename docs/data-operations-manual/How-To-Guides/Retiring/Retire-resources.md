@@ -1,3 +1,4 @@
+# Retire resources
 
 1. **Retrieve the resource hash**
 

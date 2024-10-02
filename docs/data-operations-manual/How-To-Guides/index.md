@@ -1,3 +1,5 @@
+# How to Guides
+
 There are a set of key processes that enable us to operate the platform. Hopefully we'll migrate these to an application when we get the chance!
 
 The set of processes are as follows:

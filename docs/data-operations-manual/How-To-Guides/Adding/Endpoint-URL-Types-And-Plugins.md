@@ -1,3 +1,5 @@
+# Endpoint URL Types and Plugins
+
 The pipeline can collect data published in a wide range of different formats, which means there is a lot of variety in the types of URLs we might add as endpoints. Broadly, however, endpoints typically fall into one of the following two categories:
 - Hosted file - these will usually be URL which ends in something like `.json` or `.csv`
 - Standards compliant web server - these will usually be identifiable by parts of the URL like `MapServer` or `FeatureServer`, or sections that look like query parameters, like `?service=WFS&version=1.0.0`
