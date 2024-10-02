@@ -1,3 +1,4 @@
+# Validating an endpoint
 
 1. **Check required information is available**  
    Before we can continue with anything, we need to make sure that we have the following information: *the organisation, the endpoint\_url, the documentation\_url,* and *the licence*. If even one of them is missing, we can’t continue with the process and require the LPA to give us the correct information.

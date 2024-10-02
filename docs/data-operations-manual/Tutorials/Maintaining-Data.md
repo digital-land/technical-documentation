@@ -1,3 +1,4 @@
+# Maintaining Data
 
 The scenarios are split into data being added and data being removed. In reality, endpoint updates could be a combination of both, in which case you will need to follow each process for entities which have been added or removed.
 
