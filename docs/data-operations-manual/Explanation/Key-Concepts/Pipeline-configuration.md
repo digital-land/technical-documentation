@@ -15,5 +15,5 @@ listed-building,,,ListEntry,reference,,,
 > [!NOTE] 
 > In most cases we prefer configuration to be made against an endpoint rather than a resource, as this means that the configuration persists when an endpoint is updated and a new resource is created.
 
-For more information on the configuration options read [How to configure an endpoint](https://github.com/digital-land/digital-land/wiki/Configure-an-endpoint)
+For more information on the configuration options read [How to configure an endpoint](../../How-To-Guides/Adding/Configure-an-endpoint)
 

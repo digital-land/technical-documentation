@@ -4,22 +4,22 @@ There are a set of key processes that enable us to operate the platform. Hopeful
 
 The set of processes are as follows:
 
-• [Validate An Endpoint](Validate-an-endpoint)
+• [Validate An Endpoint](Validating/Validate-an-endpoint)
 
-• [Adding A Dataset/Collection](Add-a-new-dataset-and-collection)
+• [Adding A Dataset/Collection](Adding/Add-a-new-dataset-and-collection)
 
-• [Adding An Endpoint](Add-an-endpoint)
+• [Adding An Endpoint](Adding/Add-an-endpoint)
 
-• [Configuring An Endpoint](Configure-an-endpoint)
+• [Configuring An Endpoint](Adding/Configure-an-endpoint)
 
-• [Assigning Entities](Assign-entities)
+• [Assigning Entities](Maintaining/Assign-entities)
 
-• [Merging Entities](Merge-entities)
+• [Merging Entities](Maintaining/Merge-entities)
 
-• [Retiring An Endpoint](Retire-endpoints)
+• [Retiring An Endpoint](Retiring/Retire-endpoints)
 
-• [Retiring A Resource](Retire-resources)
+• [Retiring A Resource](Retiring/Retire-resources)
 
-• [Retiring Entities](Retire-entities)
+• [Retiring Entities](Retiring/Retire-entities)
 
 • [Publish A Jupyter Notebook](Publish-A-Jupyter-Notebook)
