@@ -76,6 +76,41 @@ information from the document.
 
 ## Incident Response History
 
+### Broken pages on [submit](https://submit.planning.data.gov.uk/) - 2024-10-02
+
+#### In attendance
+
+In attendance:
+
+* Providers team
+* Owen
+
+#### Description
+
+the dataset details page stopped working indicating parameters were incorrect
+
+#### Running log
+
+- On October 2nd at 10:27 AM, an 'invalid parameters' error was reported when accessing certain URLs in staging and production environments.
+- At 10:53 AM, investigation began to identify the cause of the issue, which was found to be related to a table rename on the performance database.
+- At 10:56 AM, a fix was identified and a PR was created to resolve the issue.
+- At 11:09 AM, the fix was reviewed and approved.
+- At 11:31 AM, the issue was confirmed as resolved.
+- At 12:13 PM, a related issue was reported with the summary table on the overview page showing incorrect metrics for each dataset, which was found to be related to changes to the performance database.
+- At 1:11 PM, a PR was created to fix the related issue.
+- At 2:20 PM, the PR was reviewed and approved.
+
+#### Postmortem
+The root cause of the incident was changes to the performance database, which broke the queries used by the [submit](https://submit.planning.data.gov.uk/).
+specifically the renaming of the table 'column_field_summary' to 'endpoint_dataset_resource_summary' as well as two of the columns within that table
+
+
+### Actions to Prevent Similar Incidents in the Future
+
+- Implement regression testing to ensure changes to the database schema do not break the application
+- Consider using an API to interact with the database, which would allow for easier testing and validation of changes
+- Improve communication and coordination between teams to prevent similar incidents from occurring in the future
+
 ### Slow Running Queries on Server - 2024-09-17
 
 #### In attendance
