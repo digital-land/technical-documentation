@@ -92,13 +92,13 @@ the dataset details page stopped working indicating parameters were incorrect
 #### Running log
 
 - On October 2nd at 10:27 AM, an 'invalid parameters' error was reported when accessing certain URLs in staging and production environments.
-- At 10:53 AM, investigation began to identify the cause of the issue, which was found to be related to a table rename on the performance database.
-- At 10:56 AM, a fix was identified and a PR was created to resolve the issue.
-- At 11:09 AM, the fix was reviewed and approved.
+- At 10:53 AM, investigation began to identify the cause of the issue, which was found to be related to a table rename on the performance database. see [this PR](https://github.com/digital-land/digital-land-builder/pull/29)
+- At 10:56 AM, a fix was identified and [a PR](https://github.com/digital-land/submit/pull/496) was created to resolve the issue.
+- At 11:09 AM, [the fix](https://github.com/digital-land/submit/pull/496) was reviewed and approved.
 - At 11:31 AM, the issue was confirmed as resolved.
-- At 12:13 PM, a related issue was reported with the summary table on the overview page showing incorrect metrics for each dataset, which was found to be related to changes to the performance database.
-- At 1:11 PM, a PR was created to fix the related issue.
-- At 2:20 PM, the PR was reviewed and approved.
+- At 12:13 PM, a related issue was reported with the summary table on the overview page showing incorrect metrics for each dataset, which was found to be related to changes to the performance database. see [#29](https://github.com/digital-land/digital-land-builder/pull/29) and [#31](https://github.com/digital-land/digital-land-builder/pull/31/files)
+- At 1:11 PM, [a PR](https://github.com/digital-land/submit/pull/504) was created to fix the related issue.
+- At 2:20 PM, [the PR](https://github.com/digital-land/submit/pull/504) was reviewed and approved.
 
 #### Postmortem
 The root cause of the incident was changes to the performance database, which broke the queries used by the [submit](https://submit.planning.data.gov.uk/) service.
