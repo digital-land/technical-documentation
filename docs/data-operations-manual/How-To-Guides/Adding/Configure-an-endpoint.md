@@ -122,6 +122,9 @@ Important fields:
 * `field` \- the field to search for the pattern  
 * `pattern` \- the pattern to search for in the field (can just be a string, *does this accept regex like in patch?*)
 
+>**NOTE!**  
+> Filter config for a dataset will only work for fields that are in the dataset schema. So if you need to filter based on a column that's in the source data and not in the schema, you will first need to map it to a schema column using `column.csv` config.
+
 ## [pipeline/lookup](https://github.com/digital-land/specification/blob/main/content/dataset/lookup.md?plain=1)
 
 Used to map the relationships between the reference that a data provider uses to describe a thing, to the entity number that we have assigned to that thing. It is important to appreciate that there can be a 1:1 or a many:1 relationship here because we may collect data from multiple providers who publish information about the same thing (e.g. both LPAs and Historic England publish conservation area data, so we may map a reference from each to the same entity).

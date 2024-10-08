@@ -5,7 +5,7 @@
 - Cloned the [config repo](https://github.com/digital-land/config) by running `git clone [gitURL]` and updated it with `make init` in your virtual environment
 - Validated the data. If you haven’t done this yet, follow the steps in ‘[Validating an Endpoint](../../Validating/Validate-an-endpoint)’ before continuing.
 
-> [!NOTE]  
+> **NOTE!**  
 > The endpoint*checker will pre-populate some of the commands mentioned in the steps below, check the end of the notebook underneath ‘\_scripting*’.
 
 1. **Create an import file**  
@@ -13,8 +13,8 @@
 
 1. **Add configurations**
 
-   > [!TIP]  
-   > Check the [Endpoint-edge-cases](../../Adding/Add-an-endpoint#Endpoint edge-cases) section below for guidance on how to handle configuration for some non-standard scenarios, like a single endpoint being used for multiple provisions, or an endpoint for the `tree` dataset with polygon instead of point geometry.
+   > **NOTE!**  
+   > Check the [Endpoint-edge-cases](https://digital-land.github.io/technical-documentation/data-operations-manual/How-To-Guides/Adding/Add-an-endpoint/#endpoint-edge-cases) section below for guidance on how to handle configuration for some non-standard scenarios, like a single endpoint being used for multiple provisions, or an endpoint for the `tree` dataset with polygon instead of point geometry.
 
    1. **Populate the import file**
 
@@ -109,16 +109,27 @@ When handling this type of endpoint, two possible scenarios may arise.
 
 ### TPZ and Tree data in the same endoint
 
-At times, the endpoints we receive might include Tree and TPZ data. In cases like these, we need to add to the `filter.csv` file in the `tree-preservation-order pipeline`. The filter works based on the `tree-preservation-zone-type` pattern. Any data that corresponds to an `Area` pattern relates to a TPZ while data corresponding to an `Individual` pattern relates to a Tree.
+We might receive an endpoint that contains both Tree and TPZ data. When this happens we can usually use a `filter.csv` configuration to process a subset of the endpoint data for each dataset. Data supplied like this should have a `tree-preservation-zone-type` field for the TPZ data, which should contain one of `area`, `woodland` or `group` for TPZs and `individual` for trees.
+
+>**NOTE!**  
+>`filter.csv` config for a dataset will only work with a field that is in the dataset schema, and the `tree-preservation-zone-type` is not in the `tree` schema. So if you need to filter tree data using this field, it will first need to be mapped to a field in the `tree` schema that can then be used by `filter.csv`. You can use the `tree-preservation-order-tree` field (which isn't in the website guidance or tech spec, but is in the [specification repo spec](https://github.com/digital-land/specification/blob/main/content/dataset/tree.md)), like this [example in column.csv](https://github.com/digital-land/config/blob/main/pipeline/tree-preservation-order/column.csv#L201).
+
 
 For example:
 
+`column.csv` config
 ```
-tree-preservation-zone,28cff16a15892b5d99e0fbdb99921bf1cfce6ac4a72017c54c012c4c07378169,tree-preservation-zone-type,Area,,,,,
-tree,28cff16a15892b5d99e0fbdb99921bf1cfce6ac4a72017c54c012c4c07378169,tree-preservation-zone-type,Individual,,,,,
+dataset,endpoint,resource,column,field,start-date,end-date,entry-date
+tree,d6abdbc3123bc4b60ee9d34ab1ec52dda34d67e6260802df6a944a5f7d09352b,,tree_preservation_zone_type,tree-preservation-order-tree,,,
 ```
 
-To find out whether there are multiple datasets in an endpoint, look at the raw data by searching for tree-preservation-zone-type. Based on the value, it will either belong to TPZ or tree.
+`filter.csv` config
+```
+dataset,resource,field,pattern,entry-number,start-date,end-date,entry-date,endpoint
+tree-preservation-zone,,tree-preservation-zone-type,(?!Individual),,,,,d6abdbc3123bc4b60ee9d34ab1ec52dda34d67e6260802df6a944a5f7d09352b
+tree,,tree-preservation-order-tree,Individual,,,,,d6abdbc3123bc4b60ee9d34ab1ec52dda34d67e6260802df6a944a5f7d09352b
+```
+
 
 ### Tree data with polygon instead of point
 
