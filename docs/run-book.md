@@ -110,6 +110,7 @@ specifically the renaming of the table 'column_field_summary' to 'endpoint_datas
 - Implement regression testing to ensure changes to the database schema do not break the application
 - Consider using an API to interact with the database, which would allow for easier testing and validation of changes
 - Improve communication and coordination between teams to prevent similar incidents from occurring in the future
+- Ensure adequate smoke tests are created to test all users journeys in production / staging environments 
 
 ### Slow Running Queries on Server - 2024-09-17
 
