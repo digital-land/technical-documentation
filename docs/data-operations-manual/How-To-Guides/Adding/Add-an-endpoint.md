@@ -48,7 +48,7 @@
       The most common step here will be using `column.csv` to add in extra column mappings.
 
 1. **Run add_endpoint_and_lookups script**  
-   Run the following command inside the config repository within the virtual environmen:
+   Run the following command inside the config repository within the virtual environment:
 
    ```
    digital-land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME] -c ./collection/[COLLECTION_NAME] -p ./pipeline/[COLLECTION_NAME]
@@ -61,6 +61,19 @@
    ```
    digital-land add-endpoints-and-lookups ./import.csv article-4-direction -c./collection/article-4-direction -p ./pipeline/article-4-direction
 
+   ```
+
+   **Improved Method:**
+   This method defines the required prerequisite parameters for us.
+
+   Syntax
+   ```
+   make add-data COLLECTION=[COLLECTION_NAME] INPUT_CSV=[INPUT_FILE]
+   ```
+
+   For example
+   ```
+   make add-data COLLECTION=conservation-area INPUT_CSV=import.csv
    ```
 
 1. **Check results**  
