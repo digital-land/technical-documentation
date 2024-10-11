@@ -1,5 +1,5 @@
 
-The [performance database]() on datasette contains a number of useful tables designed for reporting and monitoring purposes. 
+The [performance database](https://datasette.planning.data.gov.uk/performance/) on datasette contains a number of useful tables designed for reporting and monitoring purposes. 
 
 ## [endpoint_dataset_resource_summary](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_resource_summary)
 ### Table description
