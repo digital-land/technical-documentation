@@ -65,6 +65,12 @@ An [example of the potential shape of the API](https://app.swaggerhub.com/apis/C
 is important since it communicates the intent that API is primarily for satisfying the needs of internal software tools. 
 > Should it become apparent that certain endpoints have wider-appeal, they could be promoted to the public platform API.
 
+### Container diagram
+
+The following container diagram illustrates how the Pipeline API will be able to communicate across a number of different
+data sources and formats to provide a single view of pipeline metadata.
+
+![Data Pipelines System Context](/images/proposals/010-data-pipeline-api/containers.drawio.png)
 
 ## Implementation considerations
 
