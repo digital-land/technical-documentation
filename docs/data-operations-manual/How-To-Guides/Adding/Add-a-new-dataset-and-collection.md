@@ -73,7 +73,7 @@ If everything is done correctly, you should be able to run `make datasette` and 
 
  > You’ll want to check the amount of records created in the dataset, this really should be equal to the amount of entries in the raw dataset. Also check the issues table for anything that sticks out and is fixable on our end
 
-### 7. Update run.yml and specification
+### 7. Update run.yml
 
 Finally, you need to uncomment the cron in the collection repo’s run.yml file found in .github/workflows. It should look like this:
 ````
@@ -91,6 +91,11 @@ Then run the workflow. To run the workflow, go to Actions -> Call Collection Run
 
 
 If the run was successful , there will be a green tick next to the newly run action. If it was unsuccessful, check the logs to find out what the issue was. 
-Once it ran successfully, all that is needed is to add the collection name to the specification. The specification currently should be empty. Change it. Once the change has merged, you’re all done!
+
+### 8. Update specification
+
+Once the workdlow has run successfully, all that is needed is to add the collection name to the specification. The specification currently should be empty. Change it. So `collection: '' ` should be changed to `collection: '[COLLECTION_NAME]'`.
+
+Once the change has merged, you’re all done!
 
 > Tip: If, despite all this, the collection does not appear on datasette, try running the workflow again, or wait until the next cycle of digital-land-builder has run.
