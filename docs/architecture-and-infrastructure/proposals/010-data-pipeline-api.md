@@ -23,7 +23,7 @@ An internal API is proposed for providing access to data pipeline metadata, whic
 
 ## Status
 
-> DRAFT
+> OPEN
 
  * Draft: proposal is still being authored and is not officially open for comment yet
  * Open: proposal is open for comment
@@ -91,7 +91,9 @@ The following container diagram shows how the Pipeline API interacts within the 
 
 ![Pipeline System Containers](/images/proposals/010-data-pipeline-api/containers.drawio.png)
 
-Remember the [overall system context diagram](/architecture-and-infrastructure/solution-design/) is helpful if you're not so familiar with the architecture of the Digital Planning Data service.
+Note that the Pipeline API reads collection and pipeline metadata in Parquet format from the existing Collection Archive bucket. The existing Collection Task will be modified to write data in Parquet format, as well as CSV and SQLite.
+
+Remember that the [overall system context diagram](/architecture-and-infrastructure/solution-design/) is helpful if you're not so familiar with the architecture of the Digital Planning Data service.
 
 ## Implementation considerations
 
