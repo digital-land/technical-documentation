@@ -79,9 +79,19 @@ Importantly, a deprecation date should be agreed for the older version, and all 
 
 ### Container diagram
 
+#### Pipeline API only
+
 The following container diagram illustrates how the Pipeline API will be able to communicate across a number of different data sources and formats to provide a single view of pipeline metadata.
 
-![Data Pipelines System Context](/images/proposals/010-data-pipeline-api/containers.drawio.png)
+![Pipeline API Container](/images/proposals/010-data-pipeline-api/containers-pipeline-api-only.drawio.png)
+
+#### Pipeline API within System Context
+
+The following container diagram shows how the Pipeline API interacts within the Data Collection Pipeline system context:
+
+![Pipeline System Containers](/images/proposals/010-data-pipeline-api/containers.drawio.png)
+
+Remember the [overall system context diagram](/architecture-and-infrastructure/solution-design/) is helpful if you're not so familiar with the architecture of the Digital Planning Data service.
 
 ## Implementation considerations
 
