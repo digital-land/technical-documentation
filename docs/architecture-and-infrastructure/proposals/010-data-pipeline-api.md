@@ -56,7 +56,7 @@ An internal API, separate from our existing public platform API is proposed to p
 
 #### API Spec
 
-An [example of the potential shape of the API](https://app.swaggerhub.com/apis/CHRISCUNDILL_1/data-collection-pipelines/1.0.0-oas3.1) has been provided in OpenAPI specification format.
+An [example of the potential shape of the API](https://editor-next.swagger.io/?url=https://digital-land.github.io/technical-documentation/assets/pipeline-api-spec.yml) has been provided in OpenAPI specification format.
 
 #### Public access
 
