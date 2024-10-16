@@ -1,0 +1,388 @@
+openapi: 3.1.0
+servers:
+  - url: https://pipeline-api.planning.data.gov.uk/v1
+info:
+  title:  Pipeline API - Internal
+  description: >-
+    Provides access to the metadata consumed and produced by the data collection
+    pipelines.  These pipelines are responsible for ETL (extract, transform and
+    load) from providers (including Local Planning Authorities) into the
+    Planning Data Platform (see https://www.planning.data.gov.uk/).
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: digitalland@communities.gov.uk
+  license:
+    name: Open Government Licence v3.0
+    url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  version: 1.0.0-oas3.1
+externalDocs:
+  description: About the Planning Data Platform
+  url: https://www.planning.data.gov.uk/about/
+tags:
+  - name: collection
+    description: Audit of resources collected from provider endpoints
+    externalDocs:
+      description: About the platform
+      url: https://www.planning.data.gov.uk/about/
+  - name: issue
+    description: Concerns arising from processing provider's data in the pipelines
+    externalDocs:
+      description: Publishing website
+      url: https://www.planning.data.gov.uk/guidance/try-check-publish-service
+  - name: specification
+    description: Data type definitions for Planning Data Platform
+    externalDocs:
+      description: Specification website
+      url: https://digital-land.github.io/specification/
+  - name: configuration
+    description: Configuration for data collection on Planning Data Platform
+    externalDocs:
+      description: Configuration repo
+      url: https://github.com/digital-land/config
+paths:
+  /specification:
+    get:
+      tags:
+        - specification
+      summary: Search specifications
+      description: Provides list of specifications matching the search parameters
+      parameters:
+        - name: dataset
+          in: query
+          description: Name of the dataset for which a specification is required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Specification'
+        '400':
+          description: Invalid status value
+  /specification/dataset:
+    get:
+      tags:
+        - specification
+  /specification/field:
+    get:
+      tags:
+        - specification
+  /configuration:
+    get:
+      tags:
+        - configuration
+      summary: Search configurations
+      description: Provides list of configurations matching the search parameters
+      parameters:
+        - name: dataset
+          in: query
+          description: Name of the dataset for which a configurations is required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Configuration'
+        '400':
+          description: Invalid status value
+  /log/collection:
+    get:
+      tags:
+        - collection
+      summary: Search resource collection logs
+      description: Provides list of log entries matching the search parameters
+      parameters:
+        - name: dataset
+          in: query
+          description: Name of the dataset for which logs are required
+          required: true
+          schema:
+            type: string
+        - name: organisation
+          in: query
+          description: Name of the provider for which logs are required
+          required: true
+          schema:
+            type: string
+        - name: endpoint
+          in: query
+          description: Name of the provider for which logs are required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Log'
+        '400':
+          description: Invalid status value
+  /log/issue:
+    get:
+      tags:
+        - issue
+      summary: Search issues
+      description: Provides list of issues matching the search parameters
+      parameters:
+        - name: dataset
+          in: query
+          description: Name of the dataset for which issues are required
+          required: true
+          schema:
+            type: string
+        - name: organisation
+          in: query
+          description: Name of the provider for which issues are required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+        '400':
+          description: Invalid status value
+  /organisation-summaries:
+    get:
+      tags:
+        - organisation-summaries
+      summary: Provides collection metrics for each organisation
+      description: >-
+        Metrics include the number of datasets provided, the number of datasets
+        with warnings and the number with errors
+      operationId: getOrganisationSummaries
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganisationSummary'
+  /organisation-summaries/{organisationId}:
+    get:
+      tags:
+        - organisation-summaries
+      summary: >-
+        Provides collection metrics for each dataset provided by a given
+        organisation
+      description: >-
+        Metrics include details of the datasets provided including the endpoint
+        record, warning and error counts
+      operationId: getOrganisationDatasetSummaries
+      parameters:
+        - name: organisationId
+          in: path
+          description: ID of organisation
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganisationDatasetSummary'
+        '400':
+          description: Invalid organisation ID supplied
+        '404':
+          description: Organisation summary not found
+  /resource:
+    get:
+      tags:
+        - resource
+      summary: Search resources
+      description: Provides list of specifications matching the search parameters
+      parameters:
+        - name: dataset
+          in: query
+          description: Name of the dataset for which the resources are required
+          required: true
+          schema:
+            type: string
+        - name: endpoint
+          in: query
+          description: The endpoint for which resources are required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Specification'
+        '400':
+          description: Invalid status value
+components:
+  schemas:
+    Specification:
+      type: object
+      properties:
+        name:
+          type: string
+          examples:
+            - article-4-direction
+    Configuration:
+      type: object
+      properties:
+        environment:
+          type: string
+        dataset:
+          type: string
+    OrganisationSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          examples:
+            - BOR
+        name:
+          type: string
+          examples:
+            - Borchester Borough County
+        datasetCounts:
+          $ref: '#/components/schemas/DatasetCounts'
+    DatasetCounts:
+      description: >-
+        Provides a count of datasets provided as well as the number of datasets
+        with warnings and/or errors
+      type: object
+      properties:
+        active:
+          description: >-
+            The count of active datasets. An active dataset means that an
+            endpoint has been provided which does not have an end date
+          type: integer
+          format: int32
+          examples:
+            - 20
+        warnings:
+          description: >-
+            The count of datasets with warnings. A dataset will be included in
+            this count if at least one warning was reported from the last run of
+            the data collection pipeline
+          type: integer
+          format: int32
+          examples:
+            - 5
+        errors:
+          description: >-
+            The count of datasets with errors. A dataset will be included in
+            this count if at least one error was reported from the last run of
+            the data collection pipeline
+          type: integer
+          format: int32
+          examples:
+            - 3
+    OrganisationDatasetSummary:
+      type: object
+      properties:
+        organisationId:
+          type: string
+          examples:
+            - BOR
+        datasset:
+          type: string
+          examples:
+            - Borchester Borough County
+        endpointUrl:
+          type: string
+          examples:
+            - https://someplace.com/data.csv
+        documentationUrl:
+          type: string
+          examples:
+            - https://someplace.com/data.html
+        endpointProvidedDate:
+          type: string
+          format: date-time
+        dataLastModified:
+          type: string
+          format: date-time
+        dataLastAccessed:
+          type: string
+          format: date-time
+        recordCount:
+          type: integer
+          format: int32
+          examples:
+            - 250
+        warningsCount:
+          type: integer
+          format: int32
+          examples:
+            - 2
+        errorCount:
+          type: integer
+          format: int32
+          examples:
+            - 1
+    Log:
+      type: object
+      properties:
+        bytes:
+          type: integer
+          format: int64
+        contentType:
+          type: string
+        elapsed:
+          type: integer
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        endpoint:
+          type: string
+        resource:
+          type: string
+        entryDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+    Issue:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
