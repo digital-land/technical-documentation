@@ -76,6 +76,51 @@ information from the document.
 
 ## Incident Response History
 
+### Outage - Submit Service - 2024-10-08
+
+#### In attendance
+
+* Providers team
+* SM
+
+#### Description
+
+The outage affected the Submit Service, causing users to experience 502 and 503 errors, with the landing page becoming unresponsive. The root cause was identified as a bug in handling undefined organisation IDs, which led to server crashes when users refreshed the error page. The issue persisted until a fix was developed and deployed.
+
+#### Running log
+
+* **17:56** – **Action** Service down reported.
+* **17:57** – **Observation** DH posted a Sentry issue showing a "Cannot set headers after they are sent to the client" error.
+* **17:59** – **Observation** DH and GG reported 502 and 503 errors.
+* **18:02** – **Observation** DH confirmed that the last merged PR didn’t seem to be the cause of the issue (ref: PR #527).
+* **18:04** – **Observation** DH experienced the landing page being down.
+* **18:05** – **Observation** GG confirmed the server was crashing.
+* **18:06** – **Action** DH began checking out the code and started debugging locally.
+* **18:10** – **Observation** DH reproduced the error locally.
+* **18:11** – **Observation** DH and GG confirmed that the issue was caused by undefined organisation IDs.
+* **18:12** – **Observation** SM suggested setting up alerts for such incidents.
+* **18:12** – **Observation** DH noticed that after the error page loads once, refreshing it brings the server down.
+* **18:20** – **Action** DH started working on a fix.
+* **18:27** – **Action** DH raised a new PR with the fix (ref: PR #529).
+* **18:28** – **Action** GG approved the PR.
+* **18:29** – **Observation** DH and GG identified the parallel middleware feature as the root cause of the issue.
+* **18:45** – **Action** Deployment started for the fix.
+* **18:47** – **Observation** Replacement service was running and accepting 20% of traffic.
+* **18:50** – **Observation** Replacement service accepting 100% of traffic.
+* **18:51** – **Observation** DH confirmed that the fix was deployed successfully, and the issue was resolved.
+
+#### Postmortem
+
+The outage was caused by a bug in handling undefined organisation IDs, leading to a "Cannot set headers after they are sent to the client" error. This was compounded by a flaw in the parallel middleware feature, which caused server crashes whenever users refreshed the error page.
+
+Once the root cause was identified, a fix was developed to properly handle undefined organisation IDs, preventing the crash from occurring. The fix was tested locally, reviewed, and deployed in a staggered manner to restore the service without further disruption. Traffic was fully restored within an hour of the initial outage.
+
+### Actions to Prevent Similar Incidents in the Future
+
+1. **Improved error handling** – We will implement more robust checks for undefined organisation IDs to prevent similar issues.
+2. **Alerting system** – An automated alert system will be introduced to notify the team when critical issues like 5xx errors occur.
+3. **Middleware review** – The parallel middleware feature will be thoroughly reviewed and tested to ensure stability under all conditions.
+
 ### Broken pages on [submit](https://submit.planning.data.gov.uk/) service - 2024-10-02
 
 #### In attendance
