@@ -588,7 +588,7 @@ and expected responses.
 the tests will extensive re-factoring to continue working
 
 
-## ADR - Coderabbit.ai Pilot for Submit Repository
+## ADR - Coderabbit.ai Pilot for Public Repositories Only
 
 **Date**: 2024/10/17
 
@@ -605,6 +605,7 @@ We will implement a pilot program for Coderabbit.ai focusing exclusively on the 
 2. Evaluate how well Coderabbit integrates with our existing processes (eg. Code Review / Quality Checks).
 3. Assess user satisfaction and ease of use among the development team.
 4. Document any challenges or limitations encountered.
+5. This **must** only be applied to public repos, no private repos should be considered at this time.
 
 The decision to expand the use of Coderabbit.ai to other repositories will be made based on the pilot’s success metrics, which include improvement in code quality, efficiency gains, and feedback from users.
 
