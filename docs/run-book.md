@@ -48,6 +48,9 @@ Put timestamped entries under here including actions, observations, etc.
 A few paragraphs explaining the root cause of the issue and what measures have been taken to mitigate
 further instances.
 
+#### Actions to Prevent Similar Incidents in the Future
+
+A list of actions that needes to be taken to prevent similar issues in the future.
 ```
 
 Outage Roles:
@@ -1037,3 +1040,58 @@ In reflection the team could have recognised the issues sooner and checked more 
 
 We could have offered the old address https://digital-land.info to OSL and other groups as a fallback while the system
 was down.
+
+### Outage - Submit Dashboard - 2023-10-10
+
+#### In attendance
+
+* CP
+* GM
+* DH
+* CC
+* CH
+
+#### Description
+
+The Submit dashboard was reported down, along with other pages on the platform, due to a schema change in the Performance database. This caused certain columns to be missing, leading to service disruption.
+
+#### Running log
+
+* 08:11 Observation **CP** observed the dashboard was down and shared a screenshot of the issue.
+* 08:14 Action **GM** questioned whether the issue was related to a Sentry error observed earlier.
+* 09:01 Observation **DH** noticed a missing column (`rle.exception`) in the database query.
+* 09:02 Action **DH** shared a link to a broken performance data query and flagged a recent [PR](https://github.com/digital-land/digital-land-builder/pull/36) as a possible cause.
+* 09:05 Action **DH** enquired with **CH** about whether a recent [PR](https://github.com/digital-land/digital-land-builder/pull/36) could have caused the issue.
+* 09:07 Observation **CH** agreed that the PR could be the cause and mentioned **CC** was supposed to liaise with the Providers team regarding the Performance DB changes.
+* 09:08 Action **DH** started working on a fix and asked who **CC** was liaising with.
+* 09:09 Action **CH** stated **CC** mentioned the Providers team but no specific individual.
+* 09:10 Action **DH** confirmed he would push a fix and emphasised the need for a process to prevent this in the future.
+* 09:15 Action **DH** submitted [PR#539](https://github.com/digital-land/submit/pull/539) to fix the broken dashboards.
+* 09:16 Observation **DH** realised that other pages besides the dashboard were also broken.
+* 09:17 Action **CH** suggested coordinating with **CC** in a separate chat.
+* 09:17 Action **GM** offered to arrange a huddle if needed.
+* 09:18 Observation **DH** agreed to the huddle and continued investigating.
+* 09:18 Action **GM** started a huddle with **DH**, **GG**, **CC**, **CH**.
+* 09:27 Action **DH** shared a link to a preview environment and asked **CP** to verify the fix.
+* 09:53 Action **DH** confirmed the fix was live, and **CP** verified that the issue was resolved.
+
+#### Postmortem
+
+The outage was caused by a schema change to the Performance database, which introduced a new column (`rle.exception`) that the Submit frontend was not prepared to handle. The database query failed due to the missing column, causing the dashboard and other parts of the platform to break.
+
+**DH** identified the issue and submitted a fix to ensure the frontend could handle the updated schema. The PR was merged, and the platform was back online shortly after. To prevent future occurrences, the team recognised the need for a more structured process to communicate schema changes between teams and ensure compatibility before deploying them.
+
+#### Actions to Prevent Similar Incidents in the Future
+
+1. **Improve Communication**  
+   Introduce a formalised process for cross-team communication when making infrastructure or schema changes. This will ensure that all relevant teams are aware of upcoming changes and have adequate time to prepare their respective systems.
+
+2. **Schema Change Review**  
+   Implement a schema change review process where both infrastructure and frontend teams collaborate to ensure that database changes are reflected in the application's queries and functionality before deployment.
+
+3. **Automated Alerts and Testing**  
+   Set up automated tests and alerts for key pages and endpoints (e.g., dashboards). This would help catch issues such as missing columns or query failures in the pre-production environment, avoiding downtime in production.
+
+4. **Post-Deployment Monitoring**  
+   Establish monitoring tools to provide real-time insights after deployment, enabling the team to quickly detect and resolve any issues that may arise from schema changes or other infrastructure updates.
+
