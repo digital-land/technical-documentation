@@ -586,3 +586,37 @@ and expected responses.
 - The approach may prove too simplistic and need replacing with something better suited to the purpose.
 - The first tests will be based on the FastAPI framework. If we later decide to use another framework,
 the tests will extensive re-factoring to continue working
+
+
+## ADR - Coderabbit.ai Pilot for Submit Repository
+
+**Date**: 2024/10/17
+
+#### Status
+Pending
+
+#### Context  
+We are planning to pilot the use of Coderabbit.ai, an AI-powered tool designed to enhance code review and development efficiency. The goal is to evaluate its potential benefits in improving code quality, identifying bugs, and speeding up the development process. To manage the scope, we will initially limit this pilot to the [Submit](https://github.com/digital-land/submit) repository, which is integral to our system but has manageable complexity. Expanding the pilot to other repositories will depend on the success of this trial.
+
+#### Decision  
+We will implement a pilot program for Coderabbit.ai focusing exclusively on the [Submit](https://github.com/digital-land/submit) repository. The pilot will aim to:
+
+1. Measure the tool's impact on code review times and quality (eg. Number of errors in sentry).
+2. Evaluate how well Coderabbit integrates with our existing processes (eg. Code Review / Quality Checks).
+3. Assess user satisfaction and ease of use among the development team.
+4. Document any challenges or limitations encountered.
+
+The decision to expand the use of Coderabbit.ai to other repositories will be made based on the pilot’s success metrics, which include improvement in code quality, efficiency gains, and feedback from users.
+
+#### Consequences
+
+1. **Positive Outcomes:**
+   - If successful, we will expand the pilot to other repositories, potentially increasing development efficiency across the board.
+   - Enhanced code review quality and faster identification of bugs or issues within the [Submit](https://github.com/digital-land/submit) repository.
+   - Valuable insights gained from using AI in the code review process that can influence future decisions on tool adoption.
+
+2. **Negative Outcomes:**
+   - If the tool does not meet expectations, the time and resources spent on the pilot may not yield the desired results, leading to a reassessment or termination of the initiative.
+
+3. **Operational Impact:**
+   - Code Review on the [Submit](https://github.com/digital-land/submit) repo might slow temporarily as teams adjust to using the tool and provide feedback for improvements.
