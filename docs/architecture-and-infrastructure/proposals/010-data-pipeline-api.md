@@ -113,4 +113,4 @@ Remember that the [overall system context diagram](/architecture-and-infrastruct
 
 ## Design Comments/Questions
 
-No feedback yet.
+Leave comments and questions on [GitHub Discussions](https://github.com/digital-land/technical-documentation/discussions/60).
