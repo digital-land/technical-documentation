@@ -19,16 +19,6 @@ externalDocs:
   description: About the Planning Data Platform
   url: https://www.planning.data.gov.uk/about/
 tags:
-  - name: collection
-    description: Audit of resources collected from provider endpoints
-    externalDocs:
-      description: About the platform
-      url: https://www.planning.data.gov.uk/about/
-  - name: issue
-    description: Concerns arising from processing provider's data in the pipelines
-    externalDocs:
-      description: Publishing website
-      url: https://www.planning.data.gov.uk/guidance/try-check-publish-service
   - name: specification
     description: Data type definitions for Planning Data Platform
     externalDocs:
@@ -39,6 +29,18 @@ tags:
     externalDocs:
       description: Configuration repo
       url: https://github.com/digital-land/config
+  - name: collection
+    description: Audit of resources collected from provider endpoints
+    externalDocs:
+      description: About the platform
+      url: https://www.planning.data.gov.uk/about/
+  - name: resource
+    description: Metadata about a resource collected from a provider's endpoint
+  - name: issue
+    description: Concerns arising from processing provider's data in the pipelines
+    externalDocs:
+      description: Publishing website
+      url: https://www.planning.data.gov.uk/guidance/try-check-publish-service
 paths:
   /specification:
     get:
@@ -76,12 +78,12 @@ paths:
     get:
       tags:
         - configuration
-      summary: Search configurations
+      summary: Search configuration
       description: Provides list of configurations matching the search parameters
       parameters:
-        - name: dataset
+        - name: collection
           in: query
-          description: Name of the dataset for which a configurations is required
+          description: Name of the collection for which configuration is required
           required: true
           schema:
             type: string
@@ -96,6 +98,33 @@ paths:
                   $ref: '#/components/schemas/Configuration'
         '400':
           description: Invalid status value
+  /configuration/endpoints:
+    get:
+      tags:
+        - configuration
+      summary: Search endpoints
+      description: Provides list of endpoints matching the search parameters
+      parameters:
+        - name: collection
+          in: query
+          description: Name of the collection for which endpoints are required
+          required: true
+          schema:
+            type: string
+  /configuration/sources:
+    get:
+      tags:
+        - configuration
+      summary: Search sources
+      description: Provides list of sources matching the search parameters
+      parameters:
+        - name: endpoint_id
+          in: query
+          description: identifier of the endpoint for which sources are required
+          required: true
+          schema:
+            type: string
+            format: uuid
   /log/collection:
     get:
       tags:
@@ -167,10 +196,10 @@ paths:
                   $ref: '#/components/schemas/Issue'
         '400':
           description: Invalid status value
-  /organisation-summaries:
+  /organisation-summary:
     get:
       tags:
-        - organisation-summaries
+        - organisation-summary
       summary: Provides collection metrics for each organisation
       description: >-
         Metrics include the number of datasets provided, the number of datasets
@@ -185,10 +214,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/OrganisationSummary'
-  /organisation-summaries/{organisationId}:
+  /organisation-summary/{organisationId}:
     get:
       tags:
-        - organisation-summaries
+        - organisation-summary
       summary: >-
         Provides collection metrics for each dataset provided by a given
         organisation
@@ -251,17 +280,107 @@ components:
   schemas:
     Specification:
       type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
       properties:
         name:
           type: string
           examples:
-            - article-4-direction
+            - development-plan
+        name_puralised:
+          type: string
+          examples:
+            - Development plans
+        status:
+          type: string
+          examples:
+            - working-draft
+        github_discussion:
+          type: integer
+        version:
+          type: string
+        dataset:
+          type: array
+          items:
+            - '#/components/schemas/Dataset'
+    Dataset:
+      type: object
+      properties:
+        id:
+          type: string
+          examples:
+            - development-plan-boundary
+        name:
+          type: string
+          examples:
+            - Development plan boundary
+        fields:
+          type: array
+          items:
+            - '#/components/schemas/Field'
+    Field:
+      type: object
+      properties:
+        name:
+          type: string
+          examples:
+            - reference
+        description:
+          type: string
+          examples:
+            - a unique identifier for a development plan
+    DateBoundedEntry:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        entry_date:
+          type: string
+          format: date-time
     Configuration:
       type: object
       properties:
-        environment:
+        collection:
           type: string
-        dataset:
+        endpoints:
+          type: array
+          schema:
+            $ref: '#/components/Endpoint'
+        sources:
+          type: array
+          schema:
+            $ref: '#/components/Source'
+    Endpoint:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
+      properties:
+        id:
+          type: string
+          format: uuid
+        collection:
+          type: string
+        url:
+          type: string
+        parameters:
+          type: string
+        plugin:
+          type: string
+    Source:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
+      properties:
+        endpoint_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        message:
           type: string
     OrganisationSummary:
       type: object
@@ -353,6 +472,8 @@ components:
             - 1
     Log:
       type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
       properties:
         bytes:
           type: integer
@@ -360,29 +481,30 @@ components:
         contentType:
           type: string
         elapsed:
-          type: integer
-        startDate:
-          type: string
-          format: date-time
-        endDate:
-          type: string
-          format: date-time
+          type: number
+          format: decimal
         endpoint:
           type: string
         resource:
           type: string
-        entryDate:
-          type: string
-          format: date-time
         status:
           type: string
     Issue:
       type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
       properties:
-        code:
-          type: integer
-          format: int32
-        type:
+        dataset:
+          type: string
+        entry_number:
+          type: number
+        field:
+          type: string
+        issue_type:
           type: string
         message:
+          type: string
+        resource:
+          type: string
+        value:
           type: string
