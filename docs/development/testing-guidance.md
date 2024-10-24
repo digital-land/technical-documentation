@@ -8,7 +8,7 @@ Throughout our codebase there are a number of different types of testing that we
 
 ### Unit
 
-Unit tests should always test the smallest piece of code that can be logically isolated in a system. This means that we can ensure the smallest piece of code meets it's requirements. A unit test should mock it's dependencies and shouldn't rely on a file system or a database to run. Altering how code is written can help remove these dependencies or make mocking easier. Larger functions/methods which combine a lot of units of code may not be appropriate to test with a unit test. In these cases Integration tests should be used.
+Unit tests should always test the smallest piece of code that can be logically isolated in a system. This means that we can ensure the smallest piece of code meets its requirements. A unit test should mock its dependencies and shouldn't rely on a file system or a database to run. Altering how code is written can help remove these dependencies or make mocking easier. Larger functions/methods which combine a lot of units of code may not be appropriate to test with a unit test. In these cases Integration tests should be used.
 
 ### Integration
 
@@ -20,7 +20,7 @@ Acceptance tests should. reflect acceptance criteria we set before picking up pi
 
 ### Performance
 
-performance tests allow us to focus on optimising a particular part of a process. They will not be ran as part of every PR as they are not based on acceptance criteria but they should be. ran semi-regularly to help us ensure that our code isn't becoming bloated and slow over time.
+Performance tests allow us to focus on optimising a particular part of a process. They will not be ran as part of every PR as they are not based on acceptance criteria but they should be. ran semi-regularly to help us ensure that our code isn't becoming bloated and slow over time.
 
 ## Testing Structure
 

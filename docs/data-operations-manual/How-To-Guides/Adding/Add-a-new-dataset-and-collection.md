@@ -97,7 +97,7 @@ If you have any DAG configuration changes to make within the airflow-dags repo, 
 
 When you're ready to publish DAGs to AWS, run the [GitHub Action to publish DAGs](https://github.com/digital-land/airflow-dags/actions/workflows/deploy.yml)..
 
-After the GitHub Action has run, you'll be able to verify the collection is present via the Airflow UI.  A member of the Infrastructure team will be able to provide you with the URLs for Airflow.
+After the GitHub Action has run, you'll be able to verify the collection is present via the [Airflow UI](/data-operations-manual/Explanation/Key-Concepts/Airflow-and-DAGs/#airflow-ui).
 
 If the collection is present, you should be able to execute it and view details of the last execution, e.g.
 
