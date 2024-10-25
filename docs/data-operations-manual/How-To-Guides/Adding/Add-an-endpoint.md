@@ -101,11 +101,7 @@
    Use git to push changes up to the repository, each night when the collection runs the files are downloaded from here. It is a good idea to name the commit after the organisation you are importing.
 
 1. **Run action workflow (optional)**  
-   Optionally, you can execute the workflow that usually runs overnight yourself - if you don’t want to wait until the next day - to check if the data is actually on the platform. Navigate to the [Airflow UI](/data-operations-manual/Explanation/Key-Concepts/Airflow-and-DAGs/#airflow-ui), find the relevant collection DAG and click the corresponding play button (blue triangle) to trigger an execution e.g.
-
-   ![Airflow DAG play button execution](/images/data-operations-manual/airflow-dag-play-button.png)
-
-   Depending on the collection, this can take a while but after it has finished running you can check on datasette if the expected data is on the platform.
+   Optionally, you can manually execute the workflow that usually runs overnight yourself - if you don’t want to wait until the next day - to check if the data is actually on the platform. Simply follow the instructions in the [guide for triggering a collection manually](/data-operations-manual/How-To-Guides/Maintaining/Trigger-collection-manually).
 
 ## Endpoint edge-cases
 
