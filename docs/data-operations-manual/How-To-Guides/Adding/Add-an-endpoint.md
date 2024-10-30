@@ -2,8 +2,8 @@
 
 **Prerequisites:**
 
-- Cloned the [config repo](https://github.com/digital-land/config) by running `git clone [gitURL]` and updated it with `make init` in your virtual environment
-- Validated the data. If you haven’t done this yet, follow the steps in ‘[Validating an Endpoint](../../Validating/Validate-an-endpoint)’ before continuing.
+- Clone the [config repo](https://github.com/digital-land/config) by running `git clone [gitURL]` and update it with `make init` in your virtual environment
+- Validate the data. If you haven’t done this yet, follow the steps in ‘[Validating an Endpoint](../../Validating/Validate-an-endpoint)’ before continuing.
 
 > **NOTE!**  
 > The endpoint*checker will pre-populate some of the commands mentioned in the steps below, check the end of the notebook underneath ‘\_scripting*’.
@@ -101,7 +101,7 @@
    Use git to push changes up to the repository, each night when the collection runs the files are downloaded from here. It is a good idea to name the commit after the organisation you are importing.
 
 1. **Run action workflow (optional)**  
-   Optionally, you can run the overnight workflow yourself if you don’t want to wait until the next day to check if the data is actually on the platform. Navigate to the corresponding collection’s repository actions page e.g. [article-4-direction-collection](https://github.com/digital-land/article-4-direction-collection/actions) and under ‘Call Collection Run’, run the workflow manually. Depending on the collection, this can take a while but after it has finished running you can check on datasette if the data is on the platform.
+   Optionally, you can manually execute the workflow that usually runs overnight yourself - if you don’t want to wait until the next day - to check if the data is actually on the platform. Simply follow the instructions in the [guide for triggering a collection manually](/data-operations-manual/How-To-Guides/Maintaining/Trigger-collection-manually).
 
 ## Endpoint edge-cases
 

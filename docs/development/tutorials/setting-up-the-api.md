@@ -1,6 +1,6 @@
-# Set-up our main application and load data into it
+# Set up our main application and load data into it
 
-This  is a good excercise for new developers joining the project. You may be asked to develop the app and you also get to see how data is loaded into the database.
+This is a good exercise for new developers joining the project. You are likely to be asked to develop the Planning Data Platform (main) application, so this tutorial will help you get familiar and will also give you insight into how data is loaded into the platform's database.
 
 1. Clone the projects:  
 

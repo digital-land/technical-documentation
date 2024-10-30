@@ -8,3 +8,4 @@ This section explain our data operations and key concepts to understanding the p
 - [Pipeline processes](./Key-Concepts/pipeline-processes)
 - [Specification](./Key-Concepts/Specification)
 - [Operational Procedures](Operational-Procedures/)
+- [Airflow and DAGs](./Key-Concepts/Airflow-and-DAGs)
