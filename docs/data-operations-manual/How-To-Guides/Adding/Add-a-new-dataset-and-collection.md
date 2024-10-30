@@ -91,17 +91,19 @@ Once you're happy with the configuration for the new collection and new dataset,
 
 ### 5. Regenerate Airflow DAGs
 
-Finally, you'll need to ensure the [DAGs for Airflow](https://github.com/digital-land/airflow-dags/) are regenerated and published to AWS.   This is necessary to ensure Airflow has the configuration need to run the new collection on a scheduled basis.
 
-If you have any DAG configuration changes to make within the airflow-dags repo, raise your changes as a pull request.  Seek approval and have it merged.
+Finally, you'll need to ensure the [DAGs for Airflow](https://github.com/digital-land/airflow-dags/) are re-published to AWS.  To do this, simply follow the instructions below.   Publishing the DAGs is necessary since the latest specification needs to be read to have the relevant collection DAGs created.
 
-When you're ready to publish DAGs to AWS, run the [GitHub Action to publish DAGs](https://github.com/digital-land/airflow-dags/actions/workflows/deploy.yml)..
+####  Re-publish DAGs
 
-After the GitHub Action has run, you'll be able to verify the collection is present via the [Airflow UI](/data-operations-manual/Explanation/Key-Concepts/Airflow-and-DAGs/#airflow-ui).
+ 1. If you have any DAG configuration changes to make within the airflow-dags repo, raise your changes as a pull request.  Seek approval and have it merged.
+
+ 1. When you're ready to publish DAGs to AWS, run the [GitHub Action to publish DAGs](https://github.com/digital-land/airflow-dags/actions/workflows/deploy.yml). After the GitHub Action has run, you'll be able to verify the collection is present via the [Airflow UI](/data-operations-manual/Explanation/Key-Concepts/Airflow-and-DAGs/#airflow-ui).
+
+#### Verify new collection present
 
 If the collection is present, you should be able to execute it and view details of the last execution, e.g.
-
-![Airflow DAG last execution](/images/data-operations-manual/airflow-dag-last-execution.png)
+   ![Airflow DAG last execution](/images/data-operations-manual/airflow-dag-last-execution.png)
 
 You should be able to verify that the collection is included in the trigger-collection-dags-manual DAG, e.g.
 
@@ -111,7 +113,6 @@ If the collection is selected for schedule, then it should also be present withi
 
 ![Airflow Trigger Collection DAGs - Scheduled](/images/data-operations-manual/airflow-trigger-collection-dags-scheduled.png)
 
-If the run was successful, there will be a green tick next to the newly run action. If it was unsuccessful, check the logs to find out what the issue was. 
-Once it ran successfully, all that is needed is to add the collection name to the specification. The specification currently should be empty. Change it. Once the change has merged, you’re all done!
+If the run was successful, there will be a green bpx next to the newly run workflow. If it was unsuccessful, check the logs to find out what the issue was.
 
 > Tip: If, despite all this, the collection does not appear on datasette, try running the workflow again, or wait until the next cycle of digital-land-builder has run.
