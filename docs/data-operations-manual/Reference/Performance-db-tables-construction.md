@@ -47,8 +47,8 @@ The Performance Database is designed to store and analyze performance-related me
 
 **Base Tables**:
     - `provision`: Contains information about organizations, cohorts, and datasets sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `reporting_historic_endpoints`: 
-    - `column_field`: 
+    - `reporting_historic_endpoints`: To store historical data on endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `column_field`: This is a mapping table that connects specific columns from an endpoint to their corresponding fields sourced according to the dataset's specification e.g UID -> reference,  sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
 
 **Columns**:
 - `organisation`: Extracted from the `provision` table.
@@ -99,11 +99,11 @@ The Performance Database is designed to store and analyze performance-related me
     - `issue`: Contains records of issues related to resources sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `resource`: Holds information about the resources linked to the endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `issue_type`: Defines types of issues sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `column_field`: 
+    - `column_field`:  This is a mapping table that connects specific columns from an endpoint to their corresponding fields sourced according to the dataset's specification e.g UID -> reference, sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `endpoint`: Contains information about endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `source`: Provides a link between endpoints and organizations sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `log`: Contains logs related to endpoint performance sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `reporting_historic_endpoints`:
+    - `reporting_historic_endpoints`: To store historical data on endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
 
 **Columns**:
 - `organisation`: Extracted from the `provision` table.
