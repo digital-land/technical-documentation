@@ -79,6 +79,44 @@ information from the document.
 
 ## Incident Response History
 
+### Incorrect Organisations Being Used - digital-land-python - DATE (2024-10-31)
+
+#### In attendance
+
+* Data Managment Team
+* Infrastructure Team
+
+#### Description
+
+The Data Management Team pushed changes to the configuration which were expected to change the organisations being used in the config to use the correct prefix for local authorities. 
+
+Unfortunately the code was combining the old and new organisations when it
+should have been using just the new ones. This  meant that many entries in the pipeline were raising the incorrect organisations issue which will mean the wrong organisations were against entities on the platform.
+
+#### Running log
+
+Put timestamped entries under here including actions, observations, etc.
+    * Action **TIME We did x.**
+    * Observation **TIME We observed that x happened.**
+    * The Data Management Team informed The Infrastructure Team of the  problam - ** 9.29 **
+    * The Infrastructure Team Met and several developers investigated the issue - ** 10.00 **
+    * The Infrastructure Team Identified the cause of the  issue - ** 10.23 **
+    * A PR was created to fix the issue with the piplines - ** 11.28 **
+    * After Testing and merging pipelines were triggered - ** 12.33 **
+    * Confirmation of issue resultion ** 2.30 **
+
+#### Postmortem
+
+The root cause was being driven by how we decide which organisations were  being attributed to a resource. the resource.csv wasn't being updated properly
+with changes in the configuration. the solution will solve this however there are some further improvements:
+
+* There is a dependancy to download both the log.csv and the reousrce.csv. We still require the logs to know which historic resources exist but the resource.csv will need regenerating anyway so we can remove the dependancy  on downloading it. Instead querying the logs for it. Or we could removeve config options from it.
+* having a process to completely reproduce both log.csv and resource.csv will  be beneficial in the future.
+
+#### Actions to Prevent Similar Incidents in the Future
+
+The code update will stop the same incident and some further tickets are mentioned in the postmortem.
+
 ### Outage - Submit Service - 2024-10-08
 
 #### In attendance
