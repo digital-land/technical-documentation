@@ -13,7 +13,7 @@ The Performance Database is designed to store and analyze performance-related me
 
 ### 1. Table: [endpoint_dataset_issue_type_summary](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_issue_type_summary)
 
-**Purpose**: To summarize issues associated with each dataset and endpoint.
+**Purpose**: To summarize issues associated with each dataset and its associated endpoint for various organisation.
 
 **Base Tables**:
     - `issue`: Contains records of issues related to resources sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
@@ -43,10 +43,10 @@ The Performance Database is designed to store and analyze performance-related me
 
 ### 2. Table: [endpoint_dataset_resource_summary](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_resource_summary)
 
-**Purpose**: To summarize resources associated with endpoints, including mapping and non-mapping fields.
+**Purpose**: To summarize resources associated with endpoints, including mapping and non-mapping fields. Mapping fields represent those that require conversion to align with the internal system's accepted field names (e.g., converting ID to reference), while non-mapping fields already match the required names and can be accepted directly without modification. 
 
 **Base Tables**:
-    - `provision`: Contains information about organizations, cohorts, and datasets sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `provision`: Contains information about datasets provisioned for a particular Organisation which include organisations, cohorts, and datasets sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `reporting_historic_endpoints`: To store historical data on endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `column_field`: This is a mapping table that connects specific columns from an endpoint to their corresponding fields sourced according to the dataset's specification e.g UID -> reference,  sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
 
@@ -74,7 +74,7 @@ The Performance Database is designed to store and analyze performance-related me
 
 **Base Tables**:
     - `endpoint`: Contains information about endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `source`: Provides a link between endpoints and organizations sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `source`: Provides centralized metadata for datasets across different organisations, sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `log`: Contains logs related to endpoint performance sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
 
 **Columns**:
@@ -91,18 +91,18 @@ The Performance Database is designed to store and analyze performance-related me
 
 ### 4. Table: [provision_summary](https://datasette.planning.data.gov.uk/performance/provision_summary)
 
-**Purpose**: To summarize provision metrics across organizations and datasets, counting various types of issues and endpoints.
+**Purpose**: This table provides an overview of the provision metrics for each dataset associated with an organization, by tracking the number of active and error-prone endpoints and counting various types of issues(error, warning & notice) and endpoints.
 
 **Base Tables**:
-    - `provision`: Contains information about datasets sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `provision`: Contains information about datasets provisioned for a particular Organisation which include organisations, cohorts, and datasets sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `organisation`: Contains the names and details of organizations sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `issue`: Contains records of issues related to resources sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `resource`: Holds information about the resources linked to the endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `issue_type`: Defines types of issues sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `column_field`:  This is a mapping table that connects specific columns from an endpoint to their corresponding fields sourced according to the dataset's specification e.g UID -> reference, sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `endpoint`: Contains information about endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `source`: Provides a link between endpoints and organizations sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `log`: Contains logs related to endpoint performance sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `source`: Provides centralized metadata for datasets across different organisations, sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `log`: Contains logs related to endpoint, sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `reporting_historic_endpoints`: To store historical data on endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
 
 **Columns**:
@@ -125,8 +125,8 @@ The Performance Database is designed to store and analyze performance-related me
 
 **Base Tables**:
     - `endpoint`: Contains information about endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `source`: Provides a link between endpoints and organizations sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `log`: Contains logs related to endpoint performance sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `source`: Provides centralized metadata for datasets across different organisations, sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `log`: Contains logs related to endpoint, sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `organisation`: Contains the names and details of organizations sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `source_pipeline`: Contains information on the pipeline associated with each source sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `resource`: Holds information about the resources linked to the endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
@@ -157,8 +157,8 @@ The Performance Database is designed to store and analyze performance-related me
 
 **Base Tables**:
     - `endpoint`: Contains information about endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `source`: Provides a link between endpoints and organizations sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
-    - `log`: Contains logs related to endpoint performance sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `source`: Provides centralized metadata for datasets across different organisations, sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
+    - `log`: Contains logs related to endpoint, sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `organisation`: Contains the names and details of organizations sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `source_pipeline`: Contains information on the pipeline associated with each source sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
     - `resource`: Holds information about the resources linked to the endpoints sourced from the [digital_land](https://datasette.planning.data.gov.uk/digital-land).
