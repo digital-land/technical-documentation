@@ -57,3 +57,18 @@ digital-land retire-endpoints-and-sources retire.csv
 
 Success criteria:
 No erroring endpoints listed in the query for the scope of the ticket.
+
+## Invalid Organisations
+
+One of our monitoring tasks is patching any `invalid organisation` issues that arise. This isually happens if the organisation value provided in the endpoint is wrong or missing e.g it could be a blank field or the wrong organisation name / identifier.
+
+A list of invalid organisation issues can be optained by downloading a csv file from either the [issue summary table](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or the [overview issue table](https://config-manager-prototype.herokuapp.com/reporting/overview) and filtering for `invalid organisations` under `issue-type`.
+
+To fix this, we can make use of the `patch.csv` file. More information on how this file works can be found in the pipeline/patch section in [configure an endpoint](../How-To-Guides/Adding/Configure-an-endpoint.md).
+
+For example, if we were given the wrong `organisationURI` in a `brownfield-land` dataset, we can patch it by targetting the endpoint, give the current uri in the `pattern` section, and the desired uri in the `value` section like so:
+
+```
+brownfield-land,,OrganisationURI,http://opendatacommunities.org/id/london-borough-council/hammersmith-and-,http://opendatacommunities.org/doc/london-borough-council/hammersmith-and-fulham,,,,,890c3ac73da82610fe1b7d444c8c89c92a7f368316e3c0f8d2e72f0c439b5245
+```
+To test it, follow the guidance in [building a collection locally](../How-To-Guides/Testing/Building-a-collection-locally) but keep the new patch entry and focus on the desired endpoint.
