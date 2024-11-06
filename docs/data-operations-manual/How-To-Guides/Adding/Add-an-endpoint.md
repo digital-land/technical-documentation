@@ -104,19 +104,8 @@
    ```
 
 1. **Test locally**  
-   Once the changes have been made and pushed, the next step is to test locally if the changes have the desired effect. 
-   Testing can be done from the `config` repo. Testing the entire collection can take a while so it's quicker focussing on only the newly added endpoint data.
+Once the changes have been made and pushed, checkout the relevant collections repository i.e., if the data added was conservation-area, checkout the conversation-area collection repository. Run the pipeline in the collection repo by running `make`. After the pipeline has finished running, use `make datasette` to interrogate the local datasets; this will enable you to check that the data is on the local platform as expected. In `lookups`, check if the entities added in the lookup.csv in step 4 are there.
 
-   1. In the dataset's `collection` folder, edit all the csv files to only include the newest record, everything else should be removed. So `endpoints.csv` and `source.csv` should only have the headers and the newly added endpoints/sources. `old-resource.csv` should be empty (unless the change was retiring a resource). Remove the `resource.csv` and `log.csv` as well as the samely named folders (with everything in it)
-
-   2. In the dataset's `pipeline` folder, anything targetting another resource/endpoint should be removed. This includes files the following files `[column.csv, combine.csv, old-entity.csv, and patch.csv]`. This is done to ensure that no errors will appear during the collection and transformation of the resource as well as the creation of the sql database.
-   
-   3. Run the pipeline in the collection repo by running `make COLLECTION=collection_name` e.g. `make COLLECTION=brownfield-land`.
-
-   4. After the pipeline has finished running, use `make datasette COLLECTION=collection-name` to interrogate the local datasets; this will enable you to check that the data is on the local platform as expected. Check that the expected data is there and no issues that are unexpected show up.
-
-   >**NOTE!**  
-   >If testing the entire collection is required, only removing the folders and files in step 1 are required. Since downloading each resource inividually will take hours, it is best to run the the entire process run in parallel. This can be done by adding `-j 16` to the command e.g `make -j 16 COLLECTION=collection_name`. The -j option specifies the number of jobs (commands) to run simultaneously during the process. The more cores your machine has, the higher the number (or lower) the number can be i.e. `-8` or `-32`.
 
 
 1. **Push changes**  
