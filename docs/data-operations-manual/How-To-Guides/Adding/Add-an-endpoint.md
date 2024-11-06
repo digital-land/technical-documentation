@@ -67,14 +67,22 @@
    This method defines the required prerequisite parameters for us.
 
    Syntax
+
    ```
    make add-data COLLECTION=[COLLECTION_NAME] INPUT_CSV=[INPUT_FILE]
    ```
 
    For example
+
    ```
    make add-data COLLECTION=conservation-area INPUT_CSV=import.csv
    ```
+
+1. **(Optiona) Update entity-organisation.csv**
+
+   If the data that has been added is part of the `conservation-area` collection e.g `conservation-area` and `conservation-area-document`, the entity range must be added as a new row. This is done using the entities generated in `lookup`. Use the first and the last of the entity numbers of the newly generated lookups e.g if `44012346` is the first and `44012370` the last, use these as `entity-minimum` and `entity-maximum`.
+
+   For an explanation of how the file works, see [entity-organisation](Configure-an-endpoint.md).
 
 1. **Check results**  
    After running the command, the endpoint.csv, lookup.csv, and source.csv should be modified.
@@ -124,25 +132,25 @@ When handling this type of endpoint, two possible scenarios may arise.
 
 We might receive an endpoint that contains both Tree and TPZ data. When this happens we can usually use a `filter.csv` configuration to process a subset of the endpoint data for each dataset. Data supplied like this should have a `tree-preservation-zone-type` field for the TPZ data, which should contain one of `area`, `woodland` or `group` for TPZs and `individual` for trees.
 
->**NOTE!**  
->`filter.csv` config for a dataset will only work with a field that is in the dataset schema, and the `tree-preservation-zone-type` is not in the `tree` schema. So if you need to filter tree data using this field, it will first need to be mapped to a field in the `tree` schema that can then be used by `filter.csv`. You can use the `tree-preservation-order-tree` field (which isn't in the website guidance or tech spec, but is in the [specification repo spec](https://github.com/digital-land/specification/blob/main/content/dataset/tree.md)), like this [example in column.csv](https://github.com/digital-land/config/blob/main/pipeline/tree-preservation-order/column.csv#L201).
-
+> **NOTE!**  
+> `filter.csv` config for a dataset will only work with a field that is in the dataset schema, and the `tree-preservation-zone-type` is not in the `tree` schema. So if you need to filter tree data using this field, it will first need to be mapped to a field in the `tree` schema that can then be used by `filter.csv`. You can use the `tree-preservation-order-tree` field (which isn't in the website guidance or tech spec, but is in the [specification repo spec](https://github.com/digital-land/specification/blob/main/content/dataset/tree.md)), like this [example in column.csv](https://github.com/digital-land/config/blob/main/pipeline/tree-preservation-order/column.csv#L201).
 
 For example:
 
 `column.csv` config
+
 ```
 dataset,endpoint,resource,column,field,start-date,end-date,entry-date
 tree,d6abdbc3123bc4b60ee9d34ab1ec52dda34d67e6260802df6a944a5f7d09352b,,tree_preservation_zone_type,tree-preservation-order-tree,,,
 ```
 
 `filter.csv` config
+
 ```
 dataset,resource,field,pattern,entry-number,start-date,end-date,entry-date,endpoint
 tree-preservation-zone,,tree-preservation-zone-type,(?!Individual),,,,,d6abdbc3123bc4b60ee9d34ab1ec52dda34d67e6260802df6a944a5f7d09352b
 tree,,tree-preservation-order-tree,Individual,,,,,d6abdbc3123bc4b60ee9d34ab1ec52dda34d67e6260802df6a944a5f7d09352b
 ```
-
 
 ### Tree data with polygon instead of point
 
