@@ -48,6 +48,9 @@ Put timestamped entries under here including actions, observations, etc.
 A few paragraphs explaining the root cause of the issue and what measures have been taken to mitigate
 further instances.
 
+#### Actions to Prevent Similar Incidents in the Future
+
+A list of actions that needes to be taken to prevent similar issues in the future.
 ```
 
 Outage Roles:
@@ -75,6 +78,87 @@ information from the document.
  TBA 
 
 ## Incident Response History
+
+### Outage - Submit Service - 2024-10-08
+
+#### In attendance
+
+* Providers team
+* SM
+
+#### Description
+
+The outage affected the Submit Service, causing users to experience 502 and 503 errors, with the landing page becoming unresponsive. The root cause was identified as a bug in handling undefined organisation IDs, which led to server crashes when users refreshed the error page. The issue persisted until a fix was developed and deployed.
+
+#### Running log
+
+* **17:56** – **Action** Service down reported.
+* **17:57** – **Observation** DH posted a Sentry issue showing a "Cannot set headers after they are sent to the client" error.
+* **17:59** – **Observation** DH and GG reported 502 and 503 errors.
+* **18:02** – **Observation** DH confirmed that the last merged PR didn’t seem to be the cause of the issue (ref: PR #527).
+* **18:04** – **Observation** DH experienced the landing page being down.
+* **18:05** – **Observation** GG confirmed the server was crashing.
+* **18:06** – **Action** DH began checking out the code and started debugging locally.
+* **18:10** – **Observation** DH reproduced the error locally.
+* **18:11** – **Observation** DH and GG confirmed that the issue was caused by undefined organisation IDs.
+* **18:12** – **Observation** SM suggested setting up alerts for such incidents.
+* **18:12** – **Observation** DH noticed that after the error page loads once, refreshing it brings the server down.
+* **18:20** – **Action** DH started working on a fix.
+* **18:27** – **Action** DH raised a new PR with the fix (ref: PR #529).
+* **18:28** – **Action** GG approved the PR.
+* **18:29** – **Observation** DH and GG identified the parallel middleware feature as the root cause of the issue.
+* **18:45** – **Action** Deployment started for the fix.
+* **18:47** – **Observation** Replacement service was running and accepting 20% of traffic.
+* **18:50** – **Observation** Replacement service accepting 100% of traffic.
+* **18:51** – **Observation** DH confirmed that the fix was deployed successfully, and the issue was resolved.
+
+#### Postmortem
+
+The outage was caused by a bug in handling undefined organisation IDs, leading to a "Cannot set headers after they are sent to the client" error. This was compounded by a flaw in the parallel middleware feature, which caused server crashes whenever users refreshed the error page.
+
+Once the root cause was identified, a fix was developed to properly handle undefined organisation IDs, preventing the crash from occurring. The fix was tested locally, reviewed, and deployed in a staggered manner to restore the service without further disruption. Traffic was fully restored within an hour of the initial outage.
+
+### Actions to Prevent Similar Incidents in the Future
+
+1. **Improved error handling** – We will implement more robust checks for undefined organisation IDs to prevent similar issues.
+2. **Alerting system** – An automated alert system will be introduced to notify the team when critical issues like 5xx errors occur.
+3. **Middleware review** – The parallel middleware feature will be thoroughly reviewed and tested to ensure stability under all conditions.
+
+### Broken pages on [submit](https://submit.planning.data.gov.uk/) service - 2024-10-02
+
+#### In attendance
+
+In attendance:
+
+* Providers team
+* Owen
+
+#### Description
+
+the dataset details page stopped working indicating parameters were incorrect
+
+#### Running log
+
+- On October 2nd at 10:27 AM, an 'invalid parameters' error was reported when accessing certain URLs in staging and production environments.
+- At 10:53 AM, investigation began to identify the cause of the issue, which was found to be related to a table rename on the performance database. see [this PR](https://github.com/digital-land/digital-land-builder/pull/29)
+- At 10:56 AM, a fix was identified and [a PR](https://github.com/digital-land/submit/pull/496) was created to resolve the issue.
+- At 11:09 AM, [the fix](https://github.com/digital-land/submit/pull/496) was reviewed and approved.
+- At 11:31 AM, the issue was confirmed as resolved.
+- At 12:13 PM, a related issue was reported with the summary table on the overview page showing incorrect metrics for each dataset, which was found to be related to changes to the performance database. see [#29](https://github.com/digital-land/digital-land-builder/pull/29) and [#31](https://github.com/digital-land/digital-land-builder/pull/31/files)
+- At 1:11 PM, [a PR](https://github.com/digital-land/submit/pull/504) was created to fix the related issue.
+- At 2:20 PM, [the PR](https://github.com/digital-land/submit/pull/504) was reviewed and approved.
+
+#### Postmortem
+The root cause of the incident was changes to the performance database, which broke the queries used by the [submit](https://submit.planning.data.gov.uk/) service.
+specifically the renaming of the table 'column_field_summary' to 'endpoint_dataset_resource_summary' as well as two of the columns within that table
+
+
+### Actions to Prevent Similar Incidents in the Future
+
+- Implement regression testing to ensure changes to the database schema do not break the application
+- Consider using an API to interact with the database, which would allow for easier testing and validation of changes
+- Improve communication and coordination between teams to prevent similar incidents from occurring in the future
+- Ensure adequate smoke tests are created to test all users journeys in production / staging environments 
 
 ### Slow Running Queries on Server - 2024-09-17
 
@@ -1001,3 +1085,58 @@ In reflection the team could have recognised the issues sooner and checked more 
 
 We could have offered the old address https://digital-land.info to OSL and other groups as a fallback while the system
 was down.
+
+### Outage - Submit Dashboard - 2023-10-10
+
+#### In attendance
+
+* CP
+* GM
+* DH
+* CC
+* CH
+
+#### Description
+
+The Submit dashboard was reported down, along with other pages on the platform, due to a schema change in the Performance database. This caused certain columns to be missing, leading to service disruption.
+
+#### Running log
+
+* 08:11 Observation **CP** observed the dashboard was down and shared a screenshot of the issue.
+* 08:14 Action **GM** questioned whether the issue was related to a Sentry error observed earlier.
+* 09:01 Observation **DH** noticed a missing column (`rle.exception`) in the database query.
+* 09:02 Action **DH** shared a link to a broken performance data query and flagged a recent [PR](https://github.com/digital-land/digital-land-builder/pull/36) as a possible cause.
+* 09:05 Action **DH** enquired with **CH** about whether a recent [PR](https://github.com/digital-land/digital-land-builder/pull/36) could have caused the issue.
+* 09:07 Observation **CH** agreed that the PR could be the cause and mentioned **CC** was supposed to liaise with the Providers team regarding the Performance DB changes.
+* 09:08 Action **DH** started working on a fix and asked who **CC** was liaising with.
+* 09:09 Action **CH** stated **CC** mentioned the Providers team but no specific individual.
+* 09:10 Action **DH** confirmed he would push a fix and emphasised the need for a process to prevent this in the future.
+* 09:15 Action **DH** submitted [PR#539](https://github.com/digital-land/submit/pull/539) to fix the broken dashboards.
+* 09:16 Observation **DH** realised that other pages besides the dashboard were also broken.
+* 09:17 Action **CH** suggested coordinating with **CC** in a separate chat.
+* 09:17 Action **GM** offered to arrange a huddle if needed.
+* 09:18 Observation **DH** agreed to the huddle and continued investigating.
+* 09:18 Action **GM** started a huddle with **DH**, **GG**, **CC**, **CH**.
+* 09:27 Action **DH** shared a link to a preview environment and asked **CP** to verify the fix.
+* 09:53 Action **DH** confirmed the fix was live, and **CP** verified that the issue was resolved.
+
+#### Postmortem
+
+The outage was caused by a schema change to the Performance database, which introduced a new column (`rle.exception`) that the Submit frontend was not prepared to handle. The database query failed due to the missing column, causing the dashboard and other parts of the platform to break.
+
+**DH** identified the issue and submitted a fix to ensure the frontend could handle the updated schema. The PR was merged, and the platform was back online shortly after. To prevent future occurrences, the team recognised the need for a more structured process to communicate schema changes between teams and ensure compatibility before deploying them.
+
+#### Actions to Prevent Similar Incidents in the Future
+
+1. **Improve Communication**  
+   Introduce a formalised process for cross-team communication when making infrastructure or schema changes. This will ensure that all relevant teams are aware of upcoming changes and have adequate time to prepare their respective systems.
+
+2. **Schema Change Review**  
+   Implement a schema change review process where both infrastructure and frontend teams collaborate to ensure that database changes are reflected in the application's queries and functionality before deployment.
+
+3. **Automated Alerts and Testing**  
+   Set up automated tests and alerts for key pages and endpoints (e.g., dashboards). This would help catch issues such as missing columns or query failures in the pre-production environment, avoiding downtime in production.
+
+4. **Post-Deployment Monitoring**  
+   Establish monitoring tools to provide real-time insights after deployment, enabling the team to quickly detect and resolve any issues that may arise from schema changes or other infrastructure updates.
+
