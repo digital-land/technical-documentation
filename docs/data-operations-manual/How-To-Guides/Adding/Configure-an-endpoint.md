@@ -98,14 +98,27 @@ Used to set a default value for all values in a field
 >
 > See: [https://github.com/digital-land/config/blob/main/pipeline/flood-risk-zone/default-value.csv\#L3](https://github.com/digital-land/config/blob/main/pipeline/flood-risk-zone/default-value.csv#L3)
 
-Important fields:
-
 - `field` \- the field to use the default value in
 - `value` \- the value to enter as default in the field
 
 ## [pipeline/default](https://github.com/digital-land/specification/blob/main/content/dataset/default.md?plain=1)
 
 _I think to set a default value using another field in the resource, but uncertain how this is different to column. Need more info._
+
+
+## [pipeline/entity-organisation](https://github.com/digital-land/specification/blob/main/content/dataset/entity-organisation.md?plain=1)
+Used to set the entity range for organisations within the conservation-area collection. This is done to ensure that entities within a range are linked to a certain organisation.
+
+> _Example_  
+> For `the conservation-area` dataset, we have an entry for `local-authority:BAB` with a `entity-minimum` of `44005968` and `entity-maximum` for `44005997`. This sets out that any entity within that range will be part of that organisation. More ranges for that organisation and dataset can be added in following rows e.g. setting the next range as `44008683 -> 44008684`
+>
+Important fields:
+
+- `dataset` \- the dataset to target e.g `conservation-area-document`
+- `organisation` \- the organisation to apply to e.g `local-authority:BAB`
+- `entity-minimum` \- sets the starting point of that range (inclusive)
+- `entity-maximum` \- sets the ending point of that range (inclusive)
+
 
 ## [pipeline/filter](https://github.com/digital-land/specification/blob/main/content/dataset/filter.md?plain=1)
 
