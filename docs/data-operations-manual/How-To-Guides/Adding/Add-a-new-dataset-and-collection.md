@@ -57,21 +57,8 @@ You can run a data collection pipeline locally and then verify your new configur
 
 #### 4.1 Run using config repo
 
-The easiest option might be to just stay within the config repository.
+The easiest option might be to just stay within the config repository. Follow the guidance in [building a collection locally](../Testing/Building-a-collection-locally.md)
 
-Create a virtual environment with the following command:
-```
-python3 -m venv --prompt . .venv --clear --upgrade-deps
-```
-
-You then need to update the collection with the dataset with the following commands:
-```
-make makerules
-make init
-make collect
-make
-```
-Finally. you should be able to run `make datasette` and then see a local datasette version with the new dataset on it.
 
 #### 4.2 Run using collection-task repo
 

@@ -67,11 +67,13 @@
    This method defines the required prerequisite parameters for us.
 
    Syntax
+
    ```
    make add-data COLLECTION=[COLLECTION_NAME] INPUT_CSV=[INPUT_FILE]
    ```
 
    For example
+
    ```
    make add-data COLLECTION=conservation-area INPUT_CSV=import.csv
    ```
@@ -95,20 +97,7 @@
    ```
 
 1. **Test locally**  
-   Once the changes have been made and pushed, the next step is to test locally if the changes have the desired effect. 
-   Testing can be done from the `config` repo. Testing the entire collection can take a while so it's quicker focussing on only the newly added endpoint data.
-
-   1. In the dataset's `collection` folder, edit all the csv files to only include the newest record, everything else should be removed. So `endpoints.csv` and `source.csv` should only have the headers and the newly added endpoints/sources. `old-resource.csv` should be empty (unless the change was retiring a resource). Remove the `resource.csv` and `log.csv` as well as the samely named folders (with everything in it)
-
-   2. In the dataset's `pipeline` folder, anything targetting another resource/endpoint should be removed. This includes files the following files `[column.csv, combine.csv, old-entity.csv, and patch.csv]`. This is done to ensure that no errors will appear during the collection and transformation of the resource as well as the creation of the sql database.
-   
-   3. Run the pipeline in the collection repo by running `make COLLECTION=collection_name` e.g. `make COLLECTION=brownfield-land`.
-
-   4. After the pipeline has finished running, use `make datasette COLLECTION=collection-name` to interrogate the local datasets; this will enable you to check that the data is on the local platform as expected. Check that the expected data is there and no issues that are unexpected show up.
-
-   >**NOTE!**  
-   >If testing the entire collection is required, only removing the folders and files in step 1 are required. Since downloading each resource inividually will take hours, it is best to run the the entire process run in parallel. This can be done by adding `-j 16` to the command e.g `make -j 16 COLLECTION=collection_name`. The -j option specifies the number of jobs (commands) to run simultaneously during the process. The more cores your machine has, the higher the number (or lower) the number can be i.e. `-8` or `-32`.
-
+   Once the changes have been made and pushed, the next step is to test locally if the changes have worked. Follow the steps in [building a collection locally](..\Testing\Building-a-collection-locally.md)
 
 1. **Push changes**  
    Use git to push changes up to the repository, each night when the collection runs the files are downloaded from here. It is a good idea to name the commit after the organisation you are importing.
@@ -137,25 +126,25 @@ When handling this type of endpoint, two possible scenarios may arise.
 
 We might receive an endpoint that contains both Tree and TPZ data. When this happens we can usually use a `filter.csv` configuration to process a subset of the endpoint data for each dataset. Data supplied like this should have a `tree-preservation-zone-type` field for the TPZ data, which should contain one of `area`, `woodland` or `group` for TPZs and `individual` for trees.
 
->**NOTE!**  
->`filter.csv` config for a dataset will only work with a field that is in the dataset schema, and the `tree-preservation-zone-type` is not in the `tree` schema. So if you need to filter tree data using this field, it will first need to be mapped to a field in the `tree` schema that can then be used by `filter.csv`. You can use the `tree-preservation-order-tree` field (which isn't in the website guidance or tech spec, but is in the [specification repo spec](https://github.com/digital-land/specification/blob/main/content/dataset/tree.md)), like this [example in column.csv](https://github.com/digital-land/config/blob/main/pipeline/tree-preservation-order/column.csv#L201).
-
+> **NOTE!**  
+> `filter.csv` config for a dataset will only work with a field that is in the dataset schema, and the `tree-preservation-zone-type` is not in the `tree` schema. So if you need to filter tree data using this field, it will first need to be mapped to a field in the `tree` schema that can then be used by `filter.csv`. You can use the `tree-preservation-order-tree` field (which isn't in the website guidance or tech spec, but is in the [specification repo spec](https://github.com/digital-land/specification/blob/main/content/dataset/tree.md)), like this [example in column.csv](https://github.com/digital-land/config/blob/main/pipeline/tree-preservation-order/column.csv#L201).
 
 For example:
 
 `column.csv` config
+
 ```
 dataset,endpoint,resource,column,field,start-date,end-date,entry-date
 tree,d6abdbc3123bc4b60ee9d34ab1ec52dda34d67e6260802df6a944a5f7d09352b,,tree_preservation_zone_type,tree-preservation-order-tree,,,
 ```
 
 `filter.csv` config
+
 ```
 dataset,resource,field,pattern,entry-number,start-date,end-date,entry-date,endpoint
 tree-preservation-zone,,tree-preservation-zone-type,(?!Individual),,,,,d6abdbc3123bc4b60ee9d34ab1ec52dda34d67e6260802df6a944a5f7d09352b
 tree,,tree-preservation-order-tree,Individual,,,,,d6abdbc3123bc4b60ee9d34ab1ec52dda34d67e6260802df6a944a5f7d09352b
 ```
-
 
 ### Tree data with polygon instead of point
 
