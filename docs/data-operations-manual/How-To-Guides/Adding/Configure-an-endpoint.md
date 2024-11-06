@@ -109,7 +109,7 @@ _I think to set a default value using another field in the resource, but uncerta
 
 ## [pipeline/entity-organisation](https://github.com/digital-land/specification/blob/main/content/dataset/entity-organisation.md?plain=1)
 
-Used to set the entity range for organisations within the conservation-area collection. This is done to ensure that entities within a range are linked to a certain organisation.
+Used to set the entity range for organisations within the conservation-area collection. This is done to ensure that entities within a range are linked to a certain organisation in the case that we have lookup entries for the same entity from different organisations. This helps prioritise data from the authoritative source.
 
 > _Example_  
 > For `the conservation-area` dataset, we have an entry for `local-authority:BAB` with a `entity-minimum` of `44005968` and `entity-maximum` for `44005997`. This sets out that any entity within that range will be part of that organisation. More ranges for that organisation and dataset can be added in following rows e.g. setting the next range as `44008683 -> 44008684`
