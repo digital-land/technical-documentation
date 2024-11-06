@@ -98,6 +98,8 @@ Used to set a default value for all values in a field
 >
 > See: [https://github.com/digital-land/config/blob/main/pipeline/flood-risk-zone/default-value.csv\#L3](https://github.com/digital-land/config/blob/main/pipeline/flood-risk-zone/default-value.csv#L3)
 
+Important fields:
+
 - `field` \- the field to use the default value in
 - `value` \- the value to enter as default in the field
 
@@ -105,20 +107,19 @@ Used to set a default value for all values in a field
 
 _I think to set a default value using another field in the resource, but uncertain how this is different to column. Need more info._
 
-
 ## [pipeline/entity-organisation](https://github.com/digital-land/specification/blob/main/content/dataset/entity-organisation.md?plain=1)
+
 Used to set the entity range for organisations within the conservation-area collection. This is done to ensure that entities within a range are linked to a certain organisation.
 
 > _Example_  
 > For `the conservation-area` dataset, we have an entry for `local-authority:BAB` with a `entity-minimum` of `44005968` and `entity-maximum` for `44005997`. This sets out that any entity within that range will be part of that organisation. More ranges for that organisation and dataset can be added in following rows e.g. setting the next range as `44008683 -> 44008684`
 >
-Important fields:
+> Important fields:
 
 - `dataset` \- the dataset to target e.g `conservation-area-document`
 - `organisation` \- the organisation to apply to e.g `local-authority:BAB`
 - `entity-minimum` \- sets the starting point of that range (inclusive)
 - `entity-maximum` \- sets the ending point of that range (inclusive)
-
 
 ## [pipeline/filter](https://github.com/digital-land/specification/blob/main/content/dataset/filter.md?plain=1)
 
@@ -134,7 +135,7 @@ Important fields:
 - `field` \- the field to search for the pattern
 - `pattern` \- the pattern to search for in the field (can just be a string, _does this accept regex like in patch?_)
 
->**NOTE!**  
+> **NOTE!**  
 > Filter config for a dataset will only work for fields that are in the dataset schema. So if you need to filter based on a column that's in the source data and not in the schema, you will first need to map it to a schema column using `column.csv` config.
 
 ## [pipeline/lookup](https://github.com/digital-land/specification/blob/main/content/dataset/lookup.md?plain=1)
