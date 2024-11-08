@@ -109,8 +109,8 @@ The Performance Database is designed to store and analyze performance-related me
 - `organisation`: Extracted from the `provision` table.
 - `organisation_name`: Extracted from the `organisation` table.
 - `dataset`: Extracted from the `provision` table.
-- `active_endpoint_count`: Calculated from `endpoint` table.
-- `error_endpoint_count`: Calculated from `endpoint` table.
+- `active_endpoint_count`: Represents the count of unique active endpoints for a dataset that do not have an endpoint_end_date (either NaN or blank). This calculation excludes endpoints that have been marked as retired/ended.
+- `error_endpoint_count`: Represents the count of unique errored endpoints for a dataset. This count includes endpoints where latest_status is not 200 and where endpoint_end_date is either NaN or blank, ignoring any historical errored endpoints.
 - `count_issue_error_internal`: Count of internal error issues calculated from `issue` and `issue_type`.
 - `count_issue_error_external`: Count of external error issues calculated from `issue` and `issue_type`.
 - `count_issue_warning_internal`: Count of internal warning issues calculated from `issue` and `issue_type`.
