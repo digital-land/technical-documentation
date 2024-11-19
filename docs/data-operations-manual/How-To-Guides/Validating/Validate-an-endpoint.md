@@ -78,7 +78,7 @@
    i. **Check for unassigned entities**  
       There should be the same number as the number of new records in the endpoint.
 
-   ii. **Check the expected columns have been mapped**
+   ii. **Check the expected columns have been mapped**  
       After the "Check logs collated from the pipeline process" cell you'll see a printout of the columns that have been mapped. If there are any missing you should use the `additional_column_mappings` to test making additional mappings. You should map as many other fields as possible to the specifications.
 
    iii. **Check for issues at ‘Issues Logs’**  
