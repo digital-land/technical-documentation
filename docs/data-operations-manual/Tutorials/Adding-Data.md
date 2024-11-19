@@ -1,6 +1,52 @@
-# Adding Data
+# Standard process
 
-This section covers situations when we add new data onto the platform.
+
+The trigger for this process should be a new Jira ticket on the [data managment board](https://mhclgdigital.atlassian.net/jira/software/projects/DATA/boards/229) for adding data. This ticket should link to a [Digital Land Service Desk](https://mhclgdigital.atlassian.net/jira/servicedesk/projects/DLSD) ticket which contains the correspondence with the customer.
+
+When you pick up the ticket, follow the steps below.
+
+**1. Validate endpoint**
+
+Follow the [validate an endpoint](../How-To-Guides/Validating/Validate-an-endpoint.md) process to check whether the data meets the specifications.
+
+Before adding new data you should also check whether there is already data for this provision on the platform. You can do this using the [LPA dashboard in the publish service](https://submit.planning.data.gov.uk/organisations), our [config manager reports](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/status), or by using the [search page on planning.data](https://www.planning.data.gov.uk/entity/).
+
+If there is existing data you may need to retire an old endpoint alongside adding the new one. The scenarios in the [maintaining data](Maintaining-Data.md) tutorials will help you work out the right process to follow.
+
+**2. Add endpoint**
+
+Follow the [add an endpoint](../How-To-Guides/Adding/Add-an-endpoint.md) process to set up the configuration for the new endpoint in the config repo. 
+
+Push your changes but **do not merge them before moving on to the next step**.
+
+**3. QA endpoint configuration**
+
+In order to make sure the configuration for the new endpoint is checked properly you should raise a PR for your changes and fill out the template that is automatically generated. This will make it clear what sort of change is being made, and also give you a QA checklist to fill out.
+
+You should share your PR with a colleague in data management team to review, and they should follow the same checks in the checklist.
+
+
+**4. Merge changes (and run workflow)**  
+
+Once your PR is approved the changes can be merged. At this point you could also run the action workflow to build the updated dataset (see the last step of the [add an endpoint](../How-To-Guides/Adding/Add-an-endpoint.md) process).
+
+**5. Review new data on platform**
+Once the workflow has been run (either manually, or in the automated overnight process) you should carry out some last QA checks:
+
+- Check that there are the expected number of new entities on the platform (you can use the search page to do this, either with the [location parameter](https://www.planning.data.gov.uk/entity/?dataset=conservation-area&geometry_curie=statistical-geography%3AE09000022) or the [`organisation_entity` parameter](https://www.planning.data.gov.uk/entity/?dataset=conservation-area&organisation_entity=192) if the new data doesn't have a location).
+- Check if the new data is on the [LPA dashboard in the publish service](https://submit.planning.data.gov.uk/organisations).
+
+**6. Close ticket**
+
+Once the final checks are complete you can close the tickets:
+
+- Reply to the customer in [Digital Land Service Desk](https://mhclgdigital.atlassian.net/jira/servicedesk/projects/DLSD) using the canned responses to let them know data is live.
+- Move Jira tickets to done
+
+# New endpoint scenarios
+When adding data from a new endpoint you may need to follow slightly different steps based on the context, like exactly what data is being provided, how it's being provided, and whether data for the provision already exists. 
+
+The sections below aim to explain some common scenarios to make it clear what steps should be followed, and what the expected outcome should be.
 
 ## New endpoint for a _single_, new ODP provision
 
