@@ -78,7 +78,7 @@
    make add-data COLLECTION=conservation-area INPUT_CSV=import.csv
    ```
 
-1. **(Optiona) Update entity-organisation.csv**
+1. **(Optional) Update entity-organisation.csv**
 
    If the data that has been added is part of the `conservation-area` collection e.g `conservation-area` and `conservation-area-document`, the entity range must be added as a new row. This is done using the entities generated in `lookup`. Use the first and the last of the entity numbers of the newly generated lookups e.g if `44012346` is the first and `44012370` the last, use these as `entity-minimum` and `entity-maximum`.
 
@@ -105,11 +105,15 @@
 1. **Test locally**  
    Once the changes have been made and pushed, checkout the relevant collections repository i.e., if the data added was conservation-area, checkout the conversation-area collection repository. Run the pipeline in the collection repo by running `make`. After the pipeline has finished running, use `make datasette` to interrogate the local datasets; this will enable you to check that the data is on the local platform as expected. In `lookups`, check if the entities added in the lookup.csv in step 4 are there.
 
-1. **Push changes**  
-   Use git to push changes up to the repository, each night when the collection runs the files are downloaded from here. It is a good idea to name the commit after the organisation you are importing.
+1. **Push changes**   
+   Commit your changes to a new branch that is named after the organisation whose endpoints are being added (use the 3 letter code for succinct names, e.g. `add-LBH-data`).
+
+   Push the changes on your branch to remote and create a new PR. This should be reviewed and approved by a colleague in the Data Management team before being merged into `main`.
+
+   Once the chages are merged they will be picked up by the nightly Airflow jobs which will build an updated dataset.
 
 1. **Run action workflow (optional)**  
-   Optionally, you can manually execute the workflow that usually runs overnight yourself - if you don’t want to wait until the next day - to check if the data is actually on the platform. Simply follow the instructions in the [guide for triggering a collection manually](/data-operations-manual/How-To-Guides/Maintaining/Trigger-collection-manually).
+   Optionally, if you don’t want to wait until the next day, you can manually execute the workflow that usually runs overnight yourself in order to be able to check if the data is actually on the platform. Simply follow the instructions in the [guide for triggering a collection manually](/data-operations-manual/How-To-Guides/Maintaining/Trigger-collection-manually).
 
 ## Endpoint edge-cases
 
