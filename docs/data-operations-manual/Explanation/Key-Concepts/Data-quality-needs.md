@@ -130,34 +130,49 @@ Having access to the whole dataset makes it possible to assess things like wheth
 
 # Monitoring data quality
 
-The artefacts described in the previous section provide a detailed record of *data quality assessments* made during data processing, as well as useful information which can be used to make further quality assessments. These artefacts can be used to monitor data quality issues in different ways:
+In order to structure how the artefacts described above are used for monitoring, the data management team have built and maintain a [list of data quality requirements](https://docs.google.com/spreadsheets/d/1kMAKOAm6Wam-AJb6R0KU-vzdvRCmLVN7PbbTAUh9Sa0/edit#gid=2142834080). 
 
-* By the **Submit service**, to allow LPAs to self-monitor and fix issues at source
+These documented data quality requirements help the data management team understand *what* needs to be assessed, *why* it needs to be assessed, and plan *how* it can be assessed. We use the process below to go from identifying a data quality need through to being able to actively monitor whether or not it is being met.
+
+![defining-data-quality-process](/images/data-operations-manual/defining-data-quality-process.png)
+
+1. Quality requirement: documenting a need we have of planning data based on its intended uses.
+
+1. Issue definition: agreeing the methods for systematically identify data which is not meeting a quality requirement.
+
+1. Issue implementation: automating identification of issues, either through a query or report, or through changes to the pipeline.
+
+1. Issue use (monitoring): surfacing information about data quality issues in a structured way so that action can be taken.
+
+Once the issue is defined and operational, the monitoring can be carried out in one of two ways, depending on the type of issue.
+
+* By the **[Publish service](https://submit.planning.data.gov.uk/)**, to allow LPAs to self-monitor and fix issues at source
 
 * By the **Data Management team**, to resolve data quality issues that can be fixed by a change in configuration
 
-  Note: The Data Management team has a [defined process](https://docs.google.com/document/d/1YGM8W0E2_qW60k8hlancVWBe0aYPNIfefpctNwQ3MSs/edit) for resolving data quality issues, which begins with an investigation, followed by one or both of a data fix and root cause resolution.
+Note: The Data Management team also has a [defined process](https://docs.google.com/document/d/1YGM8W0E2_qW60k8hlancVWBe0aYPNIfefpctNwQ3MSs/edit) for resolving data quality issues, which begins with an investigation, followed by one or both of a data fix and root cause resolution.
 
-Monitoring can be informed by a set of data quality requirements, which might also have some notion of priority or importance. It is important to note that due to the phased nature of the planning data service work and funding, requirements may vary by dataset. For example, validity requirements may be different for legislated specifications compared to pilot specifications.
-
-The data management team have a [list of data quality requirements](https://docs.google.com/spreadsheets/d/1kMAKOAm6Wam-AJb6R0KU-vzdvRCmLVN7PbbTAUh9Sa0/edit#gid=2142834080), which are being used to plan monitoring.
-
-A clear set of data quality requirements helps the data management team understand *what* needs to be assessed, *why* it needs to be assessed, and plan *how* it can be assessed. This could help design a *data quality monitoring schedule*, which would ensure that issues relating to key requirements are caught and handled in a timely manner.
-
-## Monitoring tools
-
-Currently there are a number of tools that the data management team use to monitor data quality.
-
-* [Config manager dashboard](https://config-manager-prototype.herokuapp.com/)
-
-* [Jupyter notebook reports](https://docs.google.com/spreadsheets/d/1DJ0wqMj-vMidzaUIqbvP0nEIY0kOcj1dd_HJk7aZuTE/edit#gid=604818789)
-
-* [Datasette for investigations](https://datasette.planning.data.gov.uk/)
 
 # Measuring data quality
 
-TO COMPLETE \- describe how data quality issues can be used to produce summary statistics which help measure performance.
+With well defined data quality requirements and issues, it's possible to use them to make useful summaries of data quality at different scales, for example assessing whether the data on a particular endpoint meets all of the requirements for a particular purpose.
 
+We've created a *data quality measurement framework* to define different data quality levels based on the requirements of ODP software. This measurement framework is used to score data provisions (a dataset from a provider) and create summaries of the number of provisions at each quality level.
+
+The table below visualises the framework:
+
+![quality framework table](/images/data-operations-manual/quality-framework-table.png)
+
+The criteria marked as "true" at each level must be met by a data provision in order for it to be scored at that level. Therefore the framework defines 5 criteria that must be met in order for a data provision to be *good for ODP*. The levels are cumulative, so those same 5 criteria plus 3 more must be met in order for a provision to be scored as *data that is trustworthy*. Where we have data from alternative providers (e.g. Historic England conservation-area data) the first criteria cannot be met so it is scored as the first quality level, *some data*.
+
+Each of the criteria are based around one or more data quality requirements. For example, the "No other types of validity errors" criteria is based on meeting 7 different data validity requirements from the specifications, while the "No unknown entities" criteria is based on just one timeliness requirement. We track how requirements are mapped to criteria on the [measurement tab of the data quality requirements tracker](https://docs.google.com/spreadsheets/d/1kMAKOAm6Wam-AJb6R0KU-vzdvRCmLVN7PbbTAUh9Sa0/edit?gid=1268095085#gid=1268095085).
+
+The framework is flexible and allows us to add more criteria to each level, or re-order them as required. Note that the criteria marked as "planned" are in development, and will be able to be used in the measurement framework once live.
+
+The chart below is an example of using the framework to measure the quality levels across all ODP dataset provisions (on 2024-11-20):
+
+![quality framework table](/images/data-operations-manual/ODP-data-quality-levels.png)
+(see quality reporting in the [jupyter-analysis](https://github.com/digital-land/jupyter-analysis) repo for up to date versions)
 
 
 [^1]:  The Government Data Quality Framework: https://www.gov.uk/government/publications/the-government-data-quality-framework/the-government-data-quality-framework\#why-do-we-need-a-data-quality-framework
