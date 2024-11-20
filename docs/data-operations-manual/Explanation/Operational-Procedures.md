@@ -14,7 +14,7 @@ To help with this complexity, we've got a few levels of documentation to help:
 
 When receiving data from the LPA, we need to first validate the data to check that it conforms to our data requirements.
 
-Depending on the dataset, the LPAs usually use the [check service](https://submit.planning.data.gov.uk/check/) to check whether their data meets the specifications. They don't do that all the time though, so we still need to manually validate the data. However, the check tool does not yet work for Brownfield-land/site datasets so we always need to validate the data on our end.
+Depending on the dataset, the LPAs usually use the [check service](https://submit.planning.data.gov.uk/check/) to check whether their data meets the specifications. But in most cases we still carry out validation checks ourselves before adding data.
 
 Read the [how to validate an endpoint guide](Validate-an-endpoint) to see the steps we follow.
 
