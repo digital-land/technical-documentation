@@ -7,7 +7,7 @@ When you pick up the ticket, follow the steps below.
 
 ### 1. Validate endpoint
 
-Follow the [validate an endpoint](../How-To-Guides/Validating/Validate-an-endpoint.md) process to check whether the data meets the specifications.
+Follow the [validate an endpoint](../How-To-Guides/Validating/Validate-an-endpoint.md) process to check whether the data meets the specifications. If you find any issues you should respond the the data provider and ask if they can fix them.
 
 Before adding new data you should also **check whether there is already data for this provision on the platform**. You can do this using the [LPA dashboard in the publish service](https://submit.planning.data.gov.uk/organisations), our [config manager reports](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/status), or by using the [search page on planning.data](https://www.planning.data.gov.uk/entity/).
 
