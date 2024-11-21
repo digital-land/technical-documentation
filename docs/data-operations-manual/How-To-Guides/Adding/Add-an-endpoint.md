@@ -103,7 +103,7 @@
    ```
 
 1. **Test locally**  
-   Once the changes have been made and pushed, checkout the relevant collections repository i.e., if the data added was conservation-area, checkout the conversation-area collection repository. Run the pipeline in the collection repo by running `make`. After the pipeline has finished running, use `make datasette` to interrogate the local datasets; this will enable you to check that the data is on the local platform as expected. In `lookups`, check if the entities added in the lookup.csv in step 4 are there.
+   Once the changes have been made and pushed, the next step is to test locally if the changes have worked. Follow the steps in [building a collection locally](..\Testing\Building-a-collection-locally.md)
 
 1. **Push changes**  
    Use git to push changes up to the repository, each night when the collection runs the files are downloaded from here. It is a good idea to name the commit after the organisation you are importing.

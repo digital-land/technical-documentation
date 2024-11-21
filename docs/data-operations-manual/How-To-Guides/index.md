@@ -8,6 +8,9 @@ The set of processes are as follows:
 
 • [Adding A Dataset/Collection](Adding/Add-a-new-dataset-and-collection)
 
+• [Building a collection locally](Testing/Building-a-collection-locally)
+
+
 • [Adding An Endpoint](Adding/Add-an-endpoint)
 
 • [Configuring An Endpoint](Adding/Configure-an-endpoint)
