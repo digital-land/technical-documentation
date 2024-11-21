@@ -10,14 +10,14 @@
 
 2. **Populate `old-resource.csv`:**
 
-   Using the resource hash from step , add a new row in `old-resource.csv` located in the config repository. Each row will have the following columns:
+   Using the resource hash from step 1, add a new row in `old-resource.csv` located in the config repository. Each row will have the following columns:
 
    - `old-resource` \- the resource hash you identified above
    - `status` \- for retiring a resource this should be 410
    - `resource` \- not needed for retiring an endpoint
    - `notes` \- details on why the resource should no longer be processed E.g., ‘Errors in resource’
 
-   The following assumes a resource hash _70100002871:_
+   The following assumes a resource hash 70100002871:
 
    ```
    7010002871,410,,new endpoint and reference field for GLO,,,
