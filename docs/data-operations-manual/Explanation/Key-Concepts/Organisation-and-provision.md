@@ -24,6 +24,6 @@ For example, in the case of the Article 4 Direction dataset:
 
 To modify the Project Organisation list, navigate to the [project](https://github.com/digital-land/specification/tree/main/content/project) folder within the specification repository and select the file depending on the project you wish to update.
 
-**Note:** Avoid making changes to any files in the [specification](https://github.com/digital-land/specification/tree/main/content) folder in specification repository, as any changes made here will be automatically reverted.
+**Note:** Avoid making changes to any files in the [specification](https://github.com/digital-land/specification/tree/main/specification) folder. The specification files are automatically built from the content files after every commit. Any changes made here will be automatically reverted.
 
 This process ensures that all relevant organisations, based on their roles and project affiliations, are accurately associated with each dataset.
