@@ -19,7 +19,11 @@ The [Provision Rule](https://datasette.planning.data.gov.uk/digital-land/provisi
 
 For example, in the case of the Article 4 Direction dataset:
 
-* The role is set to local-planning-authority. Organisations linked to this role are stored in the [Role Organisation](https://datasette.planning.data.gov.uk/digital-land/role_organisation?role=local-planning-authority) Table, and all organisations associated with this role are added as expected for the dataset.
-* Additionally, the dataset is associated with the project Open Digital Planning. Organisations linked to this project, found in the [Project Organisation](https://datasette.planning.data.gov.uk/digital-land/project_organisation?project=open-digital-planning) Table, are also added as expected for this dataset.
+* The role is set to local-planning-authority. Organisations linked to this role are stored in the [Role Organisation](https://datasette.planning.data.gov.uk/digital-land/role_organisation?role=local-planning-authority) Table, and all organisations associated with this role are added for the dataset.
+* Additionally, the dataset is associated with the project Open Digital Planning. Organisations linked to this project, found in the [Project Organisation](https://datasette.planning.data.gov.uk/digital-land/project_organisation?project=open-digital-planning) Table, are also added for this dataset.
+
+To modify the Project Organisation list, navigate to the [project](https://github.com/digital-land/specification/tree/main/content/project) folder within the specification repository and select the file depending on the project you wish to update.
+
+**Note:** Avoid making changes to any files in the [specification](https://github.com/digital-land/specification/tree/main/content) folder in specification repository, as any changes made here will be automatically reverted.
 
 This process ensures that all relevant organisations, based on their roles and project affiliations, are accurately associated with each dataset.
