@@ -79,6 +79,38 @@ information from the document.
 
 ## Incident Response History
 
+### Outage - Airflow Collections - 2024-11-26
+
+#### In attendance
+
+* Infrastructure Team
+
+#### Description
+
+When logging on in the morning, it was discovered that five Airflow collections had failed during their overnight run. Subsequent manual re-runs also failed with an error related to exceeding `duckdb`'s maximum line size. Additionally, entities related to Article 4 directions were found to be missing from the platform, though not in the overarching `digital-land` database.
+The issues were eventually traced back to a reversion of changes in the parquet loading process that had not deployed as expected. Upon fully reverting this change, the collections ran successfully, and the missing entities were restored.
+
+#### Running log
+
+* **10:00** Action: BH asked members of the Infrastructure Team to reprocess the five failed Airflow collections during stand-up.
+* **11:30** Action: BH manually re-ran the collections; they failed again with an errors referencing `duckdb` and the parquet plug-in.
+* **12:30** Observation: Providers and Data Management Teams discovered entities missing from the platform related to Article 4 direction areas, which were present the previous day. Investigations in datasette showed that the entities were removed from the collection database, though their records remained in the `digital-land` database.
+* **13:00** Action: An incident was declared. The Infrastructure Team joined a huddle to assign roles and tasks. Two key changes from the previous day were identified for investigation:
+  - Introduction of parquet loading (thought to have been reverted on the evening of the 25th).
+  - Config file updates for improved environment segregation.
+* **14:00** Observation: Config Team found no evidence their changes caused the issue. The Parquet Team discovered that one reversion did not deploy as expected, as logs indicated the parquet plug-in was still being initialised. This change was fully reverted.
+* **14:30** Action: Failed collections and Article 4 Direction Area were manually reprocessed. The collections ran successfully, and the missing Article 4 entities were restored onto the platform, including previously absent links.
+* **15:00** Action: A full manual run of all collections was conducted as a precaution to ensure data integrity.
+
+#### Postmortem
+
+TBC
+
+#### Actions to Prevent Similar Incidents in the Future
+
+* **Parquet plug-in testing** – Review the parquet loading process and add more comprehensive test coverage to prevent future issues.
+* **Collection checking** – Ensure that collection runs are checked after each overnight run, and introduce a policy for how to escalate these (i.e. do an initial re-run straight away to confirm the error persists and then form a team to fix)
+
 ### Outage - Submit Service - 2024-10-08
 
 #### In attendance
