@@ -97,7 +97,7 @@
    ```
 
 1. **Test locally**  
-   Once the changes have been made and pushed, the next step is to test locally if the changes have worked. Follow the steps in [building a collection locally](..\Testing\Building-a-collection-locally.md)
+   Once the changes have been made and pushed, the next step is to test locally if the changes have worked. Follow the steps in [building a collection locally](/data-operations-manual/How-To-Guides/Testing/Building-a-collection-locally)
 
 1. **Push changes**  
    Use git to push changes up to the repository, each night when the collection runs the files are downloaded from here. It is a good idea to name the commit after the organisation you are importing.
