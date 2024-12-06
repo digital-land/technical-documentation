@@ -121,6 +121,30 @@ Used to set the entity range for organisations within the conservation-area coll
 - `entity-minimum` \- sets the starting point of that range (inclusive)
 - `entity-maximum` \- sets the ending point of that range (inclusive)
 
+## [pipeline/expect](https://github.com/digital-land/specification/blob/main/content/dataset/expect.md?plain=1)
+
+
+
+Important fields:
+
+- `dataset` \- The dataset or list of datasets (separated by ';') within the collection, which the expectation should be executed against. 
+- `organisations` \- the organisation or list of organisations which the expectation should be executed for, e.g. `local-authority:BAB`. 
+
+    If given a list, the expectation will be executed multiple times against only entities within each organisation.
+
+    You can also use a dataset to specify a list of organisations, e.g. `local-authority`, or `national-park-authority`. Or leave the field blank if the expectation should be executed at a dataset level.
+
+- `operation` \- the expectation operation to be executed. Must be defined in [digital-land/expectations/operation.py](https://github.com/digital-land/digital-land-python/blob/main/digital_land/expectations/operation.py).
+- `parameters` \- a JSON string passing the operation parameters. Keys should be enclosed in double quotes, and values in double quotes and braces. This is to handle jinja formatting, which can use class attributes to parameterise  some of the inputs, e.g. 
+
+    `"{""lpa"":""{{ organisation.local_planning_authority }}""}"`
+
+- `name` \- the name for the expectation, which will appear in the logs. This can also use jinja formatting to accept parameters, like:
+
+    ```Check no Conservation Areas are outside of {{ organisation.name }} local planning authority```
+
+- `description` \- the description for the expectation, which will appear in the logs. Can also use jinja formatting as the `name` field.
+
 ## [pipeline/filter](https://github.com/digital-land/specification/blob/main/content/dataset/filter.md?plain=1)
 
 Used to filter a resource so that only a subset of the records are processed, based on whether the values in one of the resources fields are in a user-defined list.
