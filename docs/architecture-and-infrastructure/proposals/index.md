@@ -15,8 +15,9 @@ Proposals are to be created as a [GitHub Discussion](https://github.com/digital-
 
 ## Index
 
-| Number | Title                                                                                                 | Status | Review by |
-|--------|-------------------------------------------------------------------------------------------------------|--------| --------- |
-| 001    | [Check service - Async](/architecture-and-infrastructure/proposals/001-publish-async.md)              | Closed | 23/02/24  |
-| 002    | [Data Pipeline Migration](/architecture-and-infrastructure/proposals/002-data-pipeline-migration.md)  | Draft  | -  |
-| 010    | [Data Pipeline API](https://github.com/digital-land/technical-documentation/discussions/60)           | Draft  | -  |
+| Number | Title                                                                                                           | Status | Review by |
+|--------|-----------------------------------------------------------------------------------------------------------------|--------| --------- |
+| 001    | [Check service - Async](/architecture-and-infrastructure/proposals/001-publish-async.md)                        | Closed | 23/02/24  |
+| 002    | [Data Pipeline Migration](/architecture-and-infrastructure/proposals/002-data-pipeline-migration.md)            | Closed  | -  |
+| 010    | [Data Pipeline API](https://github.com/digital-land/technical-documentation/discussions/60)                     | Closed  | -  |
+| 011    | [Infrastructure Code Disaggregation](https://github.com/digital-land/technical-documentation/discussions/181)   | Closed  | -  |
