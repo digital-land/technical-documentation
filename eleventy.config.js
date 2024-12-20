@@ -9,6 +9,13 @@ function capitalizeWords(str) {
 module.exports = function(eleventyConfig) {
     // Register the plugin
     eleventyConfig.addPlugin(govukEleventyPlugin,{
+        header: {
+            logotype: {
+                text: 'Digital Land'
+            },
+            productName: 'Technical Documentation',
+        },
+        titleSuffix: 'Digital Land',
         stylesheets:['/assets/wiki.css']
     })
     eleventyConfig.addCollection("allPages", function(collection) {
