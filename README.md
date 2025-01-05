@@ -4,6 +4,17 @@ Technical Documentation for the planning data service.
 
 [![Documentation Deployment](https://github.com/digital-land/technical-documentation/actions/workflows/deploy-documentation.yml/badge.svg)](https://github.com/digital-land/technical-documentation/actions/workflows/deploy-documentation.yml)
 
+### Running Locally
+
+This repo produces static pages which are then hosted by github but you can serve these locally to shorten the development loop.
+
+To do this you'll need a couple of dependencies:
+
+* node.js and npm installed locally
+* make to be installed (make is used to simplify the commands to run)
+
+
+
 ### [Live Documentation](https://digital-land.github.io/technical-documentation)
 
 This project used to use the [Tech Docs Template][template], which is a [Middleman template][mmt] that you can use to build
