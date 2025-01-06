@@ -123,27 +123,29 @@ Used to set the entity range for organisations within the conservation-area coll
 
 ## [pipeline/expect](https://github.com/digital-land/specification/blob/main/content/dataset/expect.md?plain=1)
 
-
+This file is used to define rules that will be used by the pipeline code to generate and test expectations. The fields define the operation that will be used and the parameters to pass it, as well as what the expected result is and some metadata for the expectation that will appear in the [expectation table](https://datasette.planning.data.gov.uk/digital-land/expectation) in datasette.
 
 Important fields:
 
 - `dataset` \- The dataset or list of datasets (separated by ';') within the collection, which the expectation should be executed against. 
-- `organisations` \- the organisation or list of organisations which the expectation should be executed for, e.g. `local-authority:BAB`. 
+- `organisations` \- the organisation or list of organisations which the expectation should be executed for, e.g. `local-authority:BAB` (list separated by ';').
 
-    If given a list, the expectation will be executed multiple times against only entities within each organisation.
+    If given a list, the rule will create multiple expectations, each which will be executed against only entities within each organisation.
 
     You can also use a dataset to specify a list of organisations, e.g. `local-authority`, or `national-park-authority`. Or leave the field blank if the expectation should be executed at a dataset level.
 
 - `operation` \- the expectation operation to be executed. Must be defined in [digital-land/expectations/operation.py](https://github.com/digital-land/digital-land-python/blob/main/digital_land/expectations/operation.py).
+
 - `parameters` \- a JSON string passing the operation parameters. Keys should be enclosed in double quotes, and values in double quotes and braces. This is to handle jinja formatting, which can use class attributes to parameterise  some of the inputs, e.g. 
 
     `"{""lpa"":""{{ organisation.local_planning_authority }}""}"`
 
-- `name` \- the name for the expectation, which will appear in the logs. This can also use jinja formatting to accept parameters, like:
+- `name` \- the name for any expectations that will be created by the rule. It's best to not use parameters in this field as a generic name for each expectation created by the same rule makes it easier to quickly compare results in the [expectation table](https://datasette.planning.data.gov.uk/digital-land/expectation).
 
-    ```Check no Conservation Areas are outside of {{ organisation.name }} local planning authority```
 
-- `description` \- the description for the expectation, which will appear in the logs. Can also use jinja formatting as the `name` field.
+- `description` \- a description for the expectation. This can accept  jinja formatting to output parameters in the same way as the as the `parameters` field, e.g.
+
+    ```A test to check there are no listed-building-outline entities outside of the boundary for {{ organisation.name }}```
 
 ## [pipeline/filter](https://github.com/digital-land/specification/blob/main/content/dataset/filter.md?plain=1)
 
