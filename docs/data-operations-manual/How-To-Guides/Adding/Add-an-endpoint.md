@@ -47,36 +47,54 @@
 
       The most common step here will be using `column.csv` to add in extra column mappings.
 
-1. **Run add_endpoint_and_lookups script**  
-   Run the following command inside the config repository within the virtual environment:
+1. **Run add_data OR add_endpoint_and_lookups script**  
 
-   ```
-   digital-land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME] -c ./collection/[COLLECTION_NAME] -p ./pipeline/[COLLECTION_NAME]
-   ```
+   1. **(Preferred) Run add_data**
 
-   The completed command will be given in the _scripting_ section of the endpoint_checker.
+      Run the following command inside the config repository within the virtual environment:
 
-   For example (the actual command will vary based on the dataset added, article-4-direction is used as an example):
+      ```
+      digital-land add-data [INPUT-CSV-PATH] [COLLECTION_NAME] -c collection/[COLLECTION_NAME] -p ./pipeline/[COLLECTION_NAME] 
+      ```
 
-   ```
-   digital-land add-endpoints-and-lookups ./import.csv article-4-direction -c./collection/article-4-direction -p ./pipeline/article-4-direction
+      The command will fetch from the endpoint, process the resource, and assign entities if necessary, providing feedback and warnings along the way.
+      An example command would be:
 
-   ```
+      ```
+      digital-land add-data ./import.csv brownfield-land -c collection/brownfield-land/ -p pipeline/brownfield-land/
+      ```
 
-   **Improved Method:**
-   This method defines the required prerequisite parameters for us.
+   1. **(Legacy) Run add_endpoints_and_lookups_script**
 
-   Syntax
+      Run the following command inside the config repository within the virtual environment:
 
-   ```
-   make add-data COLLECTION=[COLLECTION_NAME] INPUT_CSV=[INPUT_FILE]
-   ```
+      ```
+      digital-land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME] -c ./collection/[COLLECTION_NAME] -p ./pipeline/[COLLECTION_NAME]
+      ```
 
-   For example
+      The completed command will be given in the _scripting_ section of the endpoint_checker.
 
-   ```
-   make add-data COLLECTION=conservation-area INPUT_CSV=import.csv
-   ```
+      For example (the actual command will vary based on the dataset added, article-4-direction is used as an example):
+
+      ```
+      digital-land add-endpoints-and-lookups ./import.csv article-4-direction -c./collection/article-4-direction -p ./pipeline/article-4-direction
+
+      ```
+
+      **Improved Method:**
+      This method defines the required prerequisite parameters for us.
+
+      Syntax
+
+      ```
+      make add-data COLLECTION=[COLLECTION_NAME] INPUT_CSV=[INPUT_FILE]
+      ```
+
+      For example
+
+      ```
+      make add-data COLLECTION=conservation-area INPUT_CSV=import.csv
+      ```
 
 1. **(Optional) Update entity-organisation.csv**
 
