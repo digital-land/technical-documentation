@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Domain Name System (DNS) setup for the planning data service involves the delegation of the planning subdomain from![img.png](img.png) the data.gov.uk domain which is managed by GDS (Government Digitial Service).  A name server lookup for the planning name server record reveals the following:
+The Domain Name System (DNS) setup for the planning data service involves the delegation of the planning subdomain from the data.gov.uk domain which is managed by GDS (Government Digitial Service).  A name server lookup for the planning name server record reveals the following:
 
 ```shell
 $ nslookup -q=ns planning.data.gov.uk
