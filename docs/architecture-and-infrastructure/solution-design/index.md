@@ -13,3 +13,8 @@ The solution architecture for the Planning Data Service has been modelled using 
  * [Data Pipelines](/architecture-and-infrastructure/solution-design/data-pipelines/)
  * [Planning Data Platform](/architecture-and-infrastructure/solution-design/planning-data-platform/)
  * [Check service](/architecture-and-infrastructure/solution-design/check-service/)
+
+
+### Others
+
+ * [DNS Setup](/architecture-and-infrastructure/dns/)
