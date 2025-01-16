@@ -4,5 +4,7 @@ The platform and infrastructure team has identified the need to provide support 
 
 **Key Pages**
 
-* Page 1
-* Page 2
+* [Team Structure](Team-Structure/)
+* [How to Raise a Request](raise-a-request/)
+* [Bug Triage Process](triage-process/)
+* [Metrics and Reporting](metrics-and-reporting/)
