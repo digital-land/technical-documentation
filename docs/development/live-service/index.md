@@ -1,6 +1,6 @@
 # Live Service Team
 
-From January-March 2025, the Platform and Infrastructure team are trialling the use of a Live Service Team to etc etc
+The platform and infrastructure team has identified the need to provide support for the Planning Data Service. This has been highlighted in the last 6 months as the number of issues coming to the team has increased as the number of datasets and users on the platform has increased. We have therefore decided to put in place the mechanism for sizing establishing a Platform Live Service Team using skills from within the team.
 
 **Key Pages**
 
