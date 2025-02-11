@@ -32,6 +32,7 @@ Check that this has created the following files and that only the headers are in
   * convert.csv
   * default-value.csv
   * default.csv
+  * expect.csv
   * filter.csv
   * lookup.csv
   * old-entity.csv
@@ -51,13 +52,15 @@ Follow steps 3 and 4 in ‘Adding an Endpoint’ for instructions on adding mapp
 
 Next, you can just proceed to add an endpoint. Validating the data through the endpoint checker will not work at this point but we can manually check whether the endpoint_url and documentation_url work as well as whether the required fields specified in the schema are present.   There will be no further need to validate it. Once the PR is merged, you can go to the next step.
 
+Note: If the dataset being added is a spatial dataset (i.e., it contains geometry), a column mapping must be included to map WKT to geometry. Without this mapping, the dataset will not have any geometry.
+
 ### 4. Test locally
 
 You can run a data collection pipeline locally and then verify your new configuration.  You can achieve this in two ways.
 
 #### 4.1 Run using config repo
 
-The easiest option might be to just stay within the config repository. Follow the guidance in [building a collection locally](../Testing/Building-a-collection-locally.md)
+The easiest option might be to just stay within the config repository. Follow the guidance in [building a collection locally](../Testing/Building-a-collection-locally)
 
 
 #### 4.2 Run using collection-task repo
@@ -76,7 +79,19 @@ You should be able to run `make datasette` and then see a local datasette versio
 
 Once you're happy with the configuration for the new collection and new dataset, have it reviewed by a colleague and then merged.
 
-### 5. Regenerate Airflow DAGs
+### 5. Create New Collection repository
+
+You will need to create a new collection repo named after the dataset you wish to add. This can be easily done with the collection-template repo found here (https://github.com/digital-land/collection-template). Select Use this template at the top right to be redirected to the repo creation page. When creating the repo, make sure to set the owner as digital-land and set the visibility to public.
+
+IMPORTANT: The name of the collection repo must end with "-collection". For example, for the "article-4-direction" dataset, it would need to be called article-4-direction-collection. Failing to do this will cause issues in the pipeline.
+
+Use [this repository](https://github.com/digital-land/air-quality-management-area-collection) as a reference to identify which files need to be modified or deleted. Update README.md accordingly.
+
+### 6. Update Specification
+
+Next, update the collection name for the dataset in the [specification](https://github.com/digital-land/specification) repository. Navigate to specification -> content -> dataset, locate the .md file corresponding to the dataset being added, and insert the relevant collection name. This step ensures that the DAG for this collection is created in Airflow.
+
+### 7. Regenerate Airflow DAGs
 
 
 Finally, you'll need to ensure the [DAGs for Airflow](https://github.com/digital-land/airflow-dags/) are re-published to AWS.  To do this, simply follow the instructions below.   Publishing the DAGs is necessary since the latest specification needs to be read to have the relevant collection DAGs created.
@@ -100,7 +115,12 @@ If the collection is selected for schedule, then it should also be present withi
 
 ![Airflow Trigger Collection DAGs - Scheduled](/images/data-operations-manual/airflow-trigger-collection-dags-scheduled.png)
 
-If the run was successful, there will be a green bpx next to the newly run workflow. If it was unsuccessful, check the logs to find out what the issue was.
+First, execute the collection in the [Airflow development environment](https://pipelines.development.planning.data.gov.uk/home) to identify any potential issues early. This helps prevent failures when deploying to production.
 
+If the run was successful, there will be a green box next to the newly run workflow. If it was unsuccessful, check the logs to find out what the issue was or reach out to the infrastructure team for assistance.
+
+Next, execute the collection in the [Airflow staging environment](https://pipelines.staging.planning.data.gov.uk/home). If the run is successful, share the [Planning Data staging URL](https://www.staging.planning.data.gov.uk/) with Data Design team for review.
+
+The collection will execute in production during the overnight run. If you don’t want the collection to run in production for any reason, disable the DAG for it in the [Airflow production environment](https://pipelines.planning.data.gov.uk/home).
 
 > Tip: If, despite all this, the collection does not appear on datasette, try running the workflow again, or wait until the next cycle of digital-land-builder has run.
