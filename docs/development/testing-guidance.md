@@ -75,7 +75,60 @@ tests
       - test_user_story_1.py
     - test_user_story_2.py
 ```
+### Adding `conftest.py` File
 
+The `conftest.py` file in a Python project is a centralized location for defining shared fixtures and configuration for your tests. It provides:
+
+- **Shared Resources**: Setting up shared resources like database connections, mock clients, or application instances.
+- **Code Reusability**: Reducing code duplication by providing reusable fixtures.
+- **Clarity**: Maintaining test clarity by isolating setup logic from test cases.
+
+##### Best Practices for `conftest.py`
+
+1. **Keep It Focused**
+   - Only include shared configurations and fixtures. Avoid adding test cases or unrelated code.
+
+2. **Name Fixtures Clearly**
+   - Use descriptive names to indicate their purpose (e.g., `temp_file`, `mock_service`).
+
+3. **Use Appropriate Scopes**
+   - Choose the right fixture scope (`function`, `class`, `module`, `session`) based on how long the fixture should persist.
+
+4. **Minimize Side Effects**
+   - Ensure fixtures clean up resources after execution to prevent interference between tests.
+
+
+---
+
+### Code Coverage, Linting, and Formatting
+
+To ensure code quality, maintain consistency, and measure testing effectiveness, we can try including steps for **coverage**, **linting**, and **formatting** as part of the testing workflow.
+
+For example, we can add this in a `Makefile` or CI pipeline:
+
+```makefile
+test: lint test-coverage
+
+test-coverage:: coverage-unit coverage-integration
+
+coverage-unit:
+	pytest --cov=src tests/unit/
+
+coverage-integration:
+	pytest --cov=src --cov-append --cov-fail-under=90 tests/integration/
+
+lint:: black-check flake8
+
+black-check:
+	black --check .
+
+black:
+	black .
+
+flake8:
+	flake8 .
+
+```
 
 ## Testing Information By Language
 
@@ -134,3 +187,64 @@ class TestClassTwo:
     def test_process_test_something_else(self):
         .....
 ```
+
+
+## Testing FastAPI Applications
+
+FastAPI provides built-in tools and conventions that simplify testing APIs.
+### `TestClient`
+
+FastAPI includes a `TestClient` utility (via Starlette) to simulate HTTP requests.
+
+```python
+from fastapi.testclient import TestClient
+
+# Create a test client for the FastAPI app
+client = TestClient(app)
+
+def test_endpoint():
+    response = client.get("/endpoint_api")
+    assert response.status_code == 200
+    assert response.json() == {"key": "value"}  # Replace with your expected response
+```
+
+
+### `Testcontainers`
+
+
+**Testcontainers** is a library that helps you create lightweight, disposable containers for testing. It is particularly useful for testing services like databases without mocking, ensuring your tests run in a real-world environment.
+
+### Prerequisites
+
+*   **Docker Desktop** (or any Docker runtime)
+*   **Python >= 3.8**
+
+### Why Testcontainers?
+
+1.  **Real Services**: Test against actual instances of databases, queues, etc.
+2.  **Isolation**: Each test runs in its own container, avoiding conflicts.
+3.  **Consistency**: Ensures the test environment matches production as closely as possible.
+
+### Example Usage with LocalStack Container. You can use Testcontainers to spin up a LocalStack container, which emulates AWS services
+
+```python
+from testcontainers.localstack import LocalStackContainer
+import boto3
+
+def localstack_container():
+    # Start LocalStack container
+    with LocalStackContainer() as localstack:
+        yield localstack
+
+def s3_client(localstack_container):
+    # Create an S3 client using the LocalStack endpoint
+    s3 = boto3.client(
+        "s3",
+        endpoint_url=localstack_container.get_url(),
+        region_name=os.environ["AWS_DEFAULT_REGION"],
+        aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+    )
+    return s3
+
+
