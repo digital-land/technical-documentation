@@ -3,39 +3,70 @@
 This page aims to lay out our strategy for CI/CD pipelines across our projects. There is
 additional guidance for developers detailing the process for deploying code changes.
 
-It's worth noting that this strategy is fairly generic so we can apply  it across a mixture 
+![CI/CD Overview](/images/CI-CD.drawio.png)
+
+We have simplified it down to three key steps:
+
+* Test - this is where code is tested, all repositories containing code should have this step!
+* Publish - this is where code is built and released. It's important to remember that at this point code has not been deployed into our infrastructure.
+* Deploy - In this diagram we keep this as a single step but it may  be mmultiple depending on the code being deployed. this step is inn charge of automatically deploying code once it was been published. It is handled in AWS and may not be neccessary for certain repositories.
+
+It's worth noting that this strategy is fairly generic so we can apply it across a mixture 
 of code bases including:
 
 * Applications
 * Code libraries/packages
 * Data Pipeline Tasks
 
-While the strategy is similar there may be some differences in how it's applied. Also 
-there may  be special cases where we need to deviate from this strategy but the  aim is
-to make it generic enough to be applicable in most scenarios 
-
 ## Continuous Integration (CI)
 
 Our CI is handled inside  of github using github actions on each repository. Any secrets
 are stored in  environments for that repository and are managed in AWS and  terraform is used
-to create and assign them to that repository.
+to create and assign them to that repository
 
-There are two key steps to the CI
-
-Test:
+### Test:
 
 * sets up  a test environment inside of a github task runner
 * at the minimum should run unit, integration and acceptance tests
 * reports  should be generated and displayed against the action.
 * will be very specific to each repo.
 
+**There MUST be a test workflow inside every repo.** - If this isn't present it's a good indication that the code isn't being tests.
+
+This action must:
+* run automatically on all branches except the main branch. This ensures that code is tested before being removed
+* have a manual workflow trigger so it can be manually ran on any branch.
+* Both lint and test the code
+
+A template for this is as follows:
+
+```
+name: Test
+
+on:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+jobs:
+  test-code:
+    runs-on: ubuntu-22.04
+    steps:
+      ...
+      ...
+```
+
+The specific steps will differ based on what code is being tested. In the long term we hope to create some generalised actions which can be used across our repos. 
+
 Publish:
+
+The publish step varies on it's scope depending on what the code is.
 
 * should publish a version of the code in a given format which can be used
 by our infrastructure. there should be a way  to publish the code for each  of our environments
 * development needs to be able to be triggered separately.
 * Staging and production should be published when merging into the main branch
-* should be ran  after testing is complete
+* should be ran after testing is complete
 * For applications - This will be a docker image that is generated inside of 
 a task runner. Using secrets it is then  published to the AWS docker repositories
 for the environment which the publish action is being triggered for. The required secrets
@@ -45,6 +76,41 @@ For other aspects it may be more specific. E.g. airflow dags are pushed to an s3
 and lambda functions will be compiled and uploaded as a zip.
 * For Code libraries - we haven't got a system
 set up but it will likely use git tags to publish the code to a tag. Digital-land-python is the main code library we maintain for data processing
+
+**There SHOULD be a publish workflow inside every repo** - this may  not allways be necessary right now as we don't publish our code libaries but one day...
+
+The Publish workflow MUST:
+* **RUN THE TESTS AGAIN!** - this is done primarily to ensure code is tested before publishing incase of dependency changes.
+* run automatically on the main branch. If it publishes to environments then it should publish  to  all environments on a push to the main brnach
+* have a manual wokflow trigger which can be applied to have branch. If it uses environments then the environment being pushed to should
+
+A template for this is as follows:
+
+```
+name: Publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: The environment to deploy to.
+
+jobs:
+  test-code:
+    runs-on: ubuntu-22.04
+    steps:
+      ...
+      ...
+
+  build-and-release-container:
+    runs-on: ubuntu-22.04
+    steps:
+      ...
+      ...
+```
 
 ## Continuous  Deployment
 
