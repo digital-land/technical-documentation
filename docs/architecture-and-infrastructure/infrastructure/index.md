@@ -402,6 +402,7 @@ module "application_<name>" {
 
 **GitHub deployment workflow (Application Only)**
 
+{% raw %}
 ```yaml
 name: Deploy
 on:
@@ -460,6 +461,7 @@ jobs:
       - run: docker push $DOCKER_REPO:${{ steps.vars.outputs.sha_short }}
       - run: docker push $DOCKER_REPO:latest
 ```
+{% endraw %}
 
 ### Add a new background task
 
@@ -569,6 +571,7 @@ module "task_<name>" {
     and push a built docker image to the
 
 **GitHub deployment workflow (Task Only)**
+
 {% raw %}
 ```yaml
 name: Deploy
