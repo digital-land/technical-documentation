@@ -160,6 +160,7 @@ The creation of the actual aws lambda functions are still in the [infrastructure
 
 **GitHub deployment workflow (Lambda functions)**
 
+{% raw %}
 ```yaml
 name: Deploy
 
@@ -261,6 +262,7 @@ jobs:
           aws lambda update-function-code --function-name ${{ matrix.environment }}-datasette-tiles-slack-notifier --zip-file fileb://./notification-code.zip
           aws lambda update-function-code --function-name ${{ matrix.environment }}-datasette-slack-notifier --zip-file fileb://./notification-code.zip
 ```
+{% endraw %}
 
 
 ## Configuration Changes
@@ -567,7 +569,7 @@ module "task_<name>" {
     and push a built docker image to the
 
 **GitHub deployment workflow (Task Only)**
-
+{% raw %}
 ```yaml
 name: Deploy
 on:
@@ -624,6 +626,7 @@ jobs:
       - run: docker push $DOCKER_REPO:${{ steps.vars.outputs.sha_short }}
       - run: docker push $DOCKER_REPO:latest
 ```
+{% endraw %}
 
 #### Deploy a Task and Application
 
@@ -631,6 +634,7 @@ To deploy both a task and application from the same repository, use the followin
 
 **`.github/workflows/deploy-application.yml`**
 
+{% raw %}
 ```yaml
 name: Deploy Application
 
@@ -703,9 +707,11 @@ jobs:
 
       - run: docker push $DOCKER_REPO:latest
 ```
+{% endraw %}
 
 **`.github/workflows/deploy-task.yml`**
 
+{% raw %}
 ```yaml
 name: Deploy Task
 
@@ -778,6 +784,7 @@ jobs:
 
       - run: docker push $DOCKER_REPO:latest
 ```
+{% endraw %}
 
 ### RDS autoscaling
 
@@ -809,6 +816,7 @@ These are healthchecks to ensure the defined endpoints are returning status code
 
 The canary template is written in node.js
 
+{% raw %}
 ```
 const { URL } = require('url');
 const synthetics = require('Synthetics');
@@ -927,6 +935,7 @@ exports.handler = async () => {
     return await loadBlueprint();
 };
 ```
+{% endraw %}
 
 aws alarm status
 
