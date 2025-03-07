@@ -24,7 +24,7 @@ Automatic via AWS Security Hub tool.
 
 #### Description
 
-The UK Government's National Cyber Security Centre have provided [guidance on how to choose, configure and use cloud services securely](https://www.ncsc.gov.uk/collection/cloud).
+The UK Government's National Cyber Security Centre have provided [guidance on how to choose, configure and use cloud services securely](https://www.ncsc.gov.uk/collection/cloud). The  guidance also contains [14 principles](https://www.ncsc.gov.uk/collection/cloud/the-cloud-security-principles) to instruct technical implementations.
 
 #### Monitoring approach
 
