@@ -216,11 +216,44 @@ This is aimed at the Mac machines provided to us rather than the general cases a
 
 #### Check that you have git installed
 
-On Mac this generally comes bundled with Xcode
+On Mac this generally comes bundled with Xcode, it mmay be that this is aready installed but often it may not be or an update caused it to be removed.
+
+you can check if github is installed by checking the version
+
+```sh
+git --version
+```
+
+
+if you get a version numberr then git is installed. this looks like this (it may be a more recent version)
+
+```sh
+git version 2.39.1
+```
+
+however you may get an error like the foowing
+
+```sh
+xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
+```
+
+if this appears you can install xcode by running
+
+```sh
+xcode-select --install
+```
+
+A window will pop up and guide your though the installation
 
 #### Create a Github account and have it added to the digital land organisation
 
-Before we do anything the Github account needs to exist and 
+Before we do anything you need to have a github account to add the ssh key to. Github accounts are free and you can set this up yourself.
+
+you're welcome to use a github acount that you already have to keep track of the projects your working on but you MUST remmove any  personal access tokens.
+
+Otherwise we suggest creating an account with the communities email address provided to you.
+
+Once it's created reach out to the infastructure team who can get you added to the organisation with the correctt privalages. It will be good to innclude the team lead from the team your joining in this message so any questions can be asked/answered by them.
 
 #### Generate an SSH key
 
