@@ -1,6 +1,6 @@
 # Architecture & Infrastructure
 
-In order to run the service we have to have resource for data processing and supporting our applications/apis. This section focusses on laying out the architecture behind the infrastructure and what infrastructure is deployed.
+In order to run the service we have to have compute resource for data processing and applications/APIs. This section focuses on describing the architecture behind the infrastructure and what infrastructure is deployed.
 
 * [Solution design](/architecture-and-infrastructure/solution-design/) - uses C4 diagrams to lay out the architecture for our system and it's components
 * [Infrastructure](/architecture-and-infrastructure/infrastructure/) - details about how our infrastructure is provisioned including AWS deployment diagrams.
