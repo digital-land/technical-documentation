@@ -109,3 +109,49 @@ New entries in endpoint.csv, source.csv, and lookup.csv
 New entries in pipeline files based on requirement.  
 Platform \-  
 Facts from the resources for the two separate records mapped to the same entity will appear on the platform under the same entity number
+
+
+## New endpoint for existing provision
+
+### Entities added
+
+**Scenario:** Supplier has published a new endpoint for a dataset for the second time. The new endpoint has new entities.  
+E.g., Platform has an endpoint for article-4-direction-area dataset from Barnet. Later, Barnet provides a new endpoint for the same dataset. The updated endpoint includes additional/new entities while retaining the reference for existing entities.
+
+**Resolution:**
+
+- Retire old endpoint using the [End Endpoint](../../How-To-Guides/Retiring/Retire-endpoints) process (ODP provisions only)
+- Follow the [Add Endpoint](../../How-To-Guides/Adding/Add-an-endpoint) process for the new endpoint.
+
+**Outcome:**  
+Configuration \-  
+New entries in endpoint.csv, source.csv, and lookup.csv  
+New entries in pipeline files based on requirement.  
+End-date added in endpoint.csv and source.csv for the old endpoint.  
+The entities already generated from the old endpoint remain in lookup.csv.
+
+Platform \-  
+Endpoint updated for dataset  
+Added/new entities appear on the site.  
+Facts from the new resource get linked to the existing entities
+
+
+### Data updated
+
+**Scenario:** A new national dataset endpoint is published when the platform currently includes an endpoint for this dataset. All of the references are the same as the previous endpoint but some of the other fields may contain updated data, e.g. newer boundaries in the geometry field.
+
+E.g., green-belt annual release
+
+**Resolution:**
+
+- Retire old endpoint using the [End an Endpoint](../../How-To-Guides/Retiring/Retire-endpoints) process (ODP provision only)
+- Follow the [Add Endpoint](../../How-To-Guides/Adding/Add-an-endpoint) process.
+
+No need to add lookups as the references remain the same.
+
+**Outcome:**  
+Configuration \-  
+New entries in endpoint.csv and source.csv  
+Platform \-  
+Endpoint updated for national dataset.  
+Facts from latest resource linked to existing entities.
