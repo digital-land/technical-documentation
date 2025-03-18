@@ -1,6 +1,6 @@
 # Onboarding Checklist
 
-This is a curated task list aimed at devs joining the team. It attempts to tackle both generalized and specific tasks that should be undertaken on joining including laptop set-up, reading to do and some suggestions on sessions to get set up.
+This is a curated task list aimed at devs joining the team. It attempts to tackle both generalised and specific tasks that should be undertaken on joining including laptop set-up, reading to do and some suggestions on sessions to get set up.
 
 General:
 - Read the planning data handbook

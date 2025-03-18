@@ -40,7 +40,7 @@ This will open a text editor window and allow you to edit the file in the GUI. T
 Next if you just need to add a line to the end of the file and don't want to open it you can run the following command to add text to a new line. 
 
 ```
-echo 'alias hellp="echo hello"' >> ~/.zshrc
+echo 'alias hello="echo hello"' >> ~/.zshrc
 ```
 
 After changing the .zshrc file you'll either need to restart your terminal or you can source it using the below command
@@ -225,13 +225,13 @@ git --version
 ```
 
 
-if you get a version numberr then git is installed. this looks like this (it may be a more recent version)
+if you get a version number then git is installed. this looks like this (it may be a more recent version)
 
 ```sh
 git version 2.39.1
 ```
 
-however you may get an error like the foowing
+however you may get an error like the following
 
 ```sh
 xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
@@ -249,11 +249,11 @@ A window will pop up and guide your though the installation
 
 Before we do anything you need to have a github account to add the ssh key to. Github accounts are free and you can set this up yourself.
 
-you're welcome to use a github acount that you already have to keep track of the projects your working on but you MUST remmove any  personal access tokens.
+you're welcome to use a github account that you already have to keep track of the projects your working on but you MUST remove any  personal access tokens.
 
 Otherwise we suggest creating an account with the communities email address provided to you.
 
-Once it's created reach out to the infastructure team who can get you added to the organisation with the correctt privalages. It will be good to innclude the team lead from the team your joining in this message so any questions can be asked/answered by them.
+Once it's created reach out to the infrastructure team who can get you added to the organisation with the correct privileges. It will be good to include the team lead from the team your joining in this message so any questions can be asked/answered by them.
 
 #### Generate an SSH key
 
@@ -278,7 +278,7 @@ id_ed25519
 id_ed25519.pub
 ```
 
-If you have keys then you've likely done this before. You're welcome to use one of your other keys especially if it's for other MHCG projects but we advise creating a new key for this particular project.
+If you have keys then you've likely done this before. You're welcome to use one of your other keys especially if it's for other MHCLG projects but we advise creating a new key for this particular project.
 
 To generate an ssh key use the below command, replacing your email with that on your Github account
 
@@ -355,7 +355,7 @@ Now it needs to be added to your Github account:
 * On the left go to SSH and GPG keys
 * Give it a name so you recognize which computer it's from
 * Leave the key type as authentication key
-* Use command + v to copy the key into the box
+* Use command + v to paste the key into the box
 * Click the add ssh key
 
 Now you should see that the ssh key has been added to your Github account.
