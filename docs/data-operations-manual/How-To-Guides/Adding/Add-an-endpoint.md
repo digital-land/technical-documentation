@@ -120,8 +120,11 @@
    ...
    ```
 
-1. **Test locally**  
-   Once the changes have been made and pushed, the next step is to test locally if the changes have worked. Follow the steps in [building a collection locally](/data-operations-manual/How-To-Guides/Testing/Building-a-collection-locally)
+1. **(Optional) Test locally**
+
+   If there is no extra configuration required for the endpoint then you should be able to go ahead without testing locally.
+
+   But if there is more complicated configuration required then you should test by building the collection locally to see if they have worked. Follow the steps in [building a collection locally](/data-operations-manual/How-To-Guides/Testing/Building-a-collection-locally)
 
 1. **Push changes**   
    Commit your changes to a new branch that is named after the organisation whose endpoints are being added (use the 3 letter code for succinct names, e.g. `add-LBH-data`).
