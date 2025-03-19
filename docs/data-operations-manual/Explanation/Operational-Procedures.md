@@ -7,8 +7,8 @@ These procedures can vary based on whether a dataset is national or compiled, wh
 To help with this complexity, we've got a few levels of documentation to help:
 
 1. This explanatory overview is at the highest level, and gives a basic explanation of some of the key steps in the data lifecycle.
-2. Below that, the tutorials section documents some of the standard processes we follow for each of these steps, and also explains some different scenarios that can occur when [adding](Adding-Data) and [maintaining](Maintaining-Data) data to make it clear how processes can vary slightly in different situations.
-3. The procedure steps in the scenarios link to the most detailed level of documentation - the [how-to guides](How-to-guides) - which give step by step instructions for how to complete particular tasks.
+2. Below that, the tutorials section documents some of the standard processes we follow for each of these steps, both when [adding data](../../Tutorials/Adding-Data) and [monitoring data quality](../../Tutorials/Monitoring-Data-Quality).
+3. The procedure steps in the scenarios link to the most detailed level of documentation - the [how-to guides](../../How-to-guides) - which give step by step instructions for how to complete particular tasks.
 
 ## Validating data
 
@@ -16,7 +16,7 @@ When receiving data from the LPA, we need to first validate the data to check th
 
 Depending on the dataset, the LPAs usually use the [check service](https://submit.planning.data.gov.uk/check/) to check whether their data meets the specifications. But in most cases we still carry out validation checks ourselves before adding data.
 
-Read the [how to validate an endpoint guide](Validate-an-endpoint) to see the steps we follow.
+Read the [how to validate an endpoint guide](../../How-to-guides/Validating/Validate-an-endpoint) to see the steps we follow.
 
 ## Adding data
 
@@ -26,26 +26,14 @@ There are two main scenarios for adding data:
 
 - Adding an endpoint for a new dataset and/or collection. This is usually for a national-scale dataset which is being added to the platform (e.g. adding `flood-storage-area` data from the Environment Agency to the platform for the first time).
 
-The [adding data](../Tutorials/Adding-Data.md) page in the tutorials section explains the process we follow for each of these scenarios.
+The [adding data](../../Tutorials/Adding-Data) page in the tutorials section explains the process we follow for each of these scenarios.
 
-You may find it useful to read some of the Key Concepts documentation, in particular on [pipeline processes and the data model](../Explanation/Key-Concepts/pipeline-processes.md) and [endpoint types](../Explanation/Key-Concepts/Endpoint-types.md).
+You may find it useful to read some of the Key Concepts documentation, in particular on [pipeline processes and the data model](../Key-Concepts/pipeline-processes) and [endpoint types](../Key-Concepts/Endpoint-types).
 
 ## Maintaining data
 
-Maintaining data means making sure that the changes a data provider makes to their data are reflected on the platform, which might be done either by adding new endpoints or managing updates by the provider to existing ones.
+Maintaining data means making sure that the changes a data provider makes to their data are reflected on the platform, as well as fixing any issues that occur due to incorrect configuration. All of the processes we follow here should be captured under our data quality framework, see the [monitoring data quality](../../Tutorials/Monitoring-Data-Quality) tutorial page.
 
-### Assigning entities
-
-All entries on the platform must be assigned an entity number in the `lookup.csv` for the collection. This usually happens automatically when adding a new endpoint through the `add-endpoints-and-lookups` script. However, when an endpoint is already on the platform but the LPA has indicated that the endpoint has been updated with a new resource and new entries, we can’t just re-add the endpoint. Instead, we assign the new entries their entity numbers differently.
-
-The [maintaining data](../Tutorials/Maintaining-Data.md) page in Tutorials covers some of these different scenarios and the steps that should be followed for each.
-
-
-### Merging entities
-
-There can be duplicates present in a dataset. This primarily takes place where multiple organisations are providing data about the same entity. We do not automatically detect and remove these. Instead, the `lookup.csv` for a dataset can be used to map data from different organisations to the same entity, or the `old-entity.csv` can be used to redirect information from one entity to another.
-
-Read the duplicate scenario in the [adding data](../Tutorials/Adding-Data.md) tutorial page, and the [how-to merge entities](../How-To-Guides/Maintaining/Merge-entities.md) page to learn more.
 
 ## Retiring data
 
@@ -55,13 +43,13 @@ When an endpoint consistently fails, or LPAs give us a different endpoint (as op
 
 When we retire an endpoint, we also need to retire the source(s) associated with it as sources are dependent on endpoints.
 
-Read [how-to retire an endpoint](../How-To-Guides/Retiring/Retire-endpoints.md) to learn more.
+Read [how-to retire an endpoint](../../How-To-Guides/Retiring/Retire-endpoints) to learn more.
 
 ### Retiring resources
 
 It won’t be necessary to do this step often, however, sometimes a resource should not continue to be processed and included in the platform. This can be for multiple reasons, and in most cases will occur when it has been found that the resource contains significant errors.
 
-Read [how-to retire a resource](../How-To-Guides/Retiring/Retire-resources.md) to learn more.
+Read [how-to retire a resource](../../How-To-Guides/Retiring/Retire-resources) to learn more.
 
 ### Retiring entities
 
