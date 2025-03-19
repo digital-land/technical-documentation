@@ -7,18 +7,18 @@ When you pick up the ticket, follow the steps below.
 
 ### 1. Validate endpoint
 
-Follow the [validate an endpoint](../How-To-Guides/Validating/Validate-an-endpoint.md) process to check whether the data meets the specifications. If you find any issues you should respond the the data provider and ask if they can fix them.
+Follow the [validate an endpoint](../../How-To-Guides/Validating/Validate-an-endpoint) process to check whether the data meets the specifications. If you find any issues you should respond the the data provider and ask if they can fix them.
 
 Before adding new data you should also **check whether there is already data for this provision on the platform**. You can do this using the [LPA dashboard in the publish service](https://submit.planning.data.gov.uk/organisations), our [config manager reports](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/status), or by using the [search page on planning.data](https://www.planning.data.gov.uk/entity/).
 
-If there is existing data you may need to retire an old endpoint alongside adding the new one. The scenarios in the [maintaining data](Maintaining-Data.md) tutorials will help you work out the right process to follow.
+If there is existing data you may need to retire an old endpoint alongside adding the new one. The scenarios further down this page will help you work out the right process to follow.
 
-> **NOTE**  - If adding a **national dataset**:  
+> **NOTE**  - If adding a **single source dataset**:  
 > The validation process will not be so standard. We should receive a description of the dataset from data design in the ticket. Check that the data on the endpoint matches the description.
 
 ### 2. Add endpoint
 
-Follow the [add an endpoint](../How-To-Guides/Adding/Add-an-endpoint.md) process to set up the configuration for the new endpoint in the config repo. 
+Follow the [add an endpoint](../../How-To-Guides/Adding/Add-an-endpoint) process to set up the configuration for the new endpoint in the config repo. 
 
 Push your changes but **do not merge them before moving on to the next step**.
 
@@ -31,7 +31,7 @@ You should share your PR with a colleague in data management team to review, and
 
 ### 4. Merge changes (and run workflow)
 
-Once your PR is approved the changes can be merged. At this point you could also run the action workflow to build the updated dataset (see the last step of the [add an endpoint](../How-To-Guides/Adding/Add-an-endpoint.md) process).
+Once your PR is approved the changes can be merged. At this point you could also run the action workflow to build the updated dataset (see the last step of the [add an endpoint](../../How-To-Guides/Adding/Add-an-endpoint) process).
 
 > **NOTE**  - If adding a **national dataset**: 
 > You should first run the action workflow in the development Airflow environment. This will publish the new data on the development planning data site so that the data design team can review it before going live. 
