@@ -7,18 +7,18 @@ When you pick up the ticket, follow the steps below.
 
 ### 1. Validate endpoint
 
-Follow the [validate an endpoint](../How-To-Guides/Validating/Validate-an-endpoint.md) process to check whether the data meets the specifications. If you find any issues you should respond the the data provider and ask if they can fix them.
+Follow the [validate an endpoint](../../How-To-Guides/Validating/Validate-an-endpoint) process to check whether the data meets the specifications. If you find any issues you should respond the the data provider and ask if they can fix them.
 
 Before adding new data you should also **check whether there is already data for this provision on the platform**. You can do this using the [LPA dashboard in the publish service](https://submit.planning.data.gov.uk/organisations), our [config manager reports](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/status), or by using the [search page on planning.data](https://www.planning.data.gov.uk/entity/).
 
-If there is existing data you may need to retire an old endpoint alongside adding the new one. The scenarios in the [maintaining data](Maintaining-Data.md) tutorials will help you work out the right process to follow.
+If there is existing data you may need to retire an old endpoint alongside adding the new one. The scenarios further down this page will help you work out the right process to follow.
 
-> **NOTE**  - If adding a **national dataset**:  
+> **NOTE**  - If adding a **single source dataset**:  
 > The validation process will not be so standard. We should receive a description of the dataset from data design in the ticket. Check that the data on the endpoint matches the description.
 
 ### 2. Add endpoint
 
-Follow the [add an endpoint](../How-To-Guides/Adding/Add-an-endpoint.md) process to set up the configuration for the new endpoint in the config repo. 
+Follow the [add an endpoint](../../How-To-Guides/Adding/Add-an-endpoint) process to set up the configuration for the new endpoint in the config repo. 
 
 Push your changes but **do not merge them before moving on to the next step**.
 
@@ -31,7 +31,7 @@ You should share your PR with a colleague in data management team to review, and
 
 ### 4. Merge changes (and run workflow)
 
-Once your PR is approved the changes can be merged. At this point you could also run the action workflow to build the updated dataset (see the last step of the [add an endpoint](../How-To-Guides/Adding/Add-an-endpoint.md) process).
+Once your PR is approved the changes can be merged. At this point you could also run the action workflow to build the updated dataset (see the last step of the [add an endpoint](../../How-To-Guides/Adding/Add-an-endpoint) process).
 
 > **NOTE**  - If adding a **national dataset**: 
 > You should first run the action workflow in the development Airflow environment. This will publish the new data on the development planning data site so that the data design team can review it before going live. 
@@ -109,3 +109,49 @@ New entries in endpoint.csv, source.csv, and lookup.csv
 New entries in pipeline files based on requirement.  
 Platform \-  
 Facts from the resources for the two separate records mapped to the same entity will appear on the platform under the same entity number
+
+
+## New endpoint for existing provision
+
+### Entities added
+
+**Scenario:** Supplier has published a new endpoint for a dataset for the second time. The new endpoint has new entities.  
+E.g., Platform has an endpoint for article-4-direction-area dataset from Barnet. Later, Barnet provides a new endpoint for the same dataset. The updated endpoint includes additional/new entities while retaining the reference for existing entities.
+
+**Resolution:**
+
+- Retire old endpoint using the [End Endpoint](../../How-To-Guides/Retiring/Retire-endpoints) process (ODP provisions only)
+- Follow the [Add Endpoint](../../How-To-Guides/Adding/Add-an-endpoint) process for the new endpoint.
+
+**Outcome:**  
+Configuration \-  
+New entries in endpoint.csv, source.csv, and lookup.csv  
+New entries in pipeline files based on requirement.  
+End-date added in endpoint.csv and source.csv for the old endpoint.  
+The entities already generated from the old endpoint remain in lookup.csv.
+
+Platform \-  
+Endpoint updated for dataset  
+Added/new entities appear on the site.  
+Facts from the new resource get linked to the existing entities
+
+
+### Data updated
+
+**Scenario:** A new national dataset endpoint is published when the platform currently includes an endpoint for this dataset. All of the references are the same as the previous endpoint but some of the other fields may contain updated data, e.g. newer boundaries in the geometry field.
+
+E.g., green-belt annual release
+
+**Resolution:**
+
+- Retire old endpoint using the [End an Endpoint](../../How-To-Guides/Retiring/Retire-endpoints) process (ODP provision only)
+- Follow the [Add Endpoint](../../How-To-Guides/Adding/Add-an-endpoint) process.
+
+No need to add lookups as the references remain the same.
+
+**Outcome:**  
+Configuration \-  
+New entries in endpoint.csv and source.csv  
+Platform \-  
+Endpoint updated for national dataset.  
+Facts from latest resource linked to existing entities.

@@ -8,13 +8,13 @@
    * the documentation_url
    * the licence
    
-   If any are missing you will need to ask the LPA to give more information.
+   If any are missing and they can't be worked out independently, then ask the LPA to give more information.
 
 1. **Use check service to test whether the data matches the specifications**
 
-   For ODP datasets the [check service](https://check.planning.data.gov.uk/) will test most of the things we need. Select the required dataset and submit the endpoint URL to see the results.
+   For ODP datasets the [Check Service](https://submit.planning.data.gov.uk/check/) will test most of the things we need. Select the required dataset and submit the endpoint URL to see the results.
 
-   If there are serious issues such as missing `reference` or `geometry` fields, or the `reference` field isn't unique, these should be raised with the LPA before adding the data.
+   The service will tell you if there are issues which must be fixed before the data can be added. For any other issues it is ok to go ahead and add the data so that the provider can then fix issues and improve the quality over time.
 
    NOTE the check service:
 
@@ -23,7 +23,10 @@
 
    In these situations you should also use the endpoint checker (see steps below).
 
-1. **Use the endpoint checker to check for any issues**  
+1. **(Optional) Use the endpoint checker to check for any issues**  
+   
+   > NOTE:   
+   > This step should only be followed if you are validating a `conservation-area` endpoint, or if the Check service won't work for some reason.
    
    The endpoint checker works by downloading a resource from the endpoint and running the pipeline locally to check if it can be processed while also highlighting any other quality issues. It checks:
 
@@ -100,5 +103,6 @@ Once the steps above have been followed you should be certain of the following:
 * *If it's a spatial dataset*, that it has a `geometry` field, or a `point` field in the case of `tree` data
 * *If it's a conservation-area dataset*, whether it contains any spatial duplicates with existing datasets which will need to be merged
 
+<br></br>
 
 Now use the [adding an Endpoint](../../Adding/Add-an-endpoint) guide to add the data.
