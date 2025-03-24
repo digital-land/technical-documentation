@@ -109,12 +109,16 @@ _I think to set a default value using another field in the resource, but uncerta
 
 ## [pipeline/entity-organisation](https://github.com/digital-land/specification/blob/main/content/dataset/entity-organisation.md?plain=1)
 
-Used to set the entity range for organisations within the conservation-area collection. This is done to ensure that entities within a range are linked to a certain organisation in the case that we have lookup entries for the same entity from different organisations. This helps prioritise data from the authoritative source.
+This configuration file is used to assign the organisation responsible for managing an entity or range of entities. For any entities within the dataset and entity range given, facts from the assigned organisation will be prioritised over facts from any other organisation. In practice this means when we have multiple sources of data for a single entity, the organisation can be kept as the authoritative organisation by setting the entity-organisation in this file.
+
 
 > _Example_  
-> For `the conservation-area` dataset, we have an entry for `local-authority:BAB` with a `entity-minimum` of `44005968` and `entity-maximum` for `44005997`. This sets out that any entity within that range will be part of that organisation. More ranges for that organisation and dataset can be added in following rows e.g. setting the next range as `44008683 -> 44008684`
->
-> Important fields:
+> Entity `44002714` has multiple entries in `lookup.csv`: one for organisation `local-authority:TOB` (Torbay council) and one for `government-organisation:PB1164` (Historic England). That means we have data from both of these sources for this entity.
+> 
+> This entity number falls within the range of 44002711 - 44002734 which is assigned to `local-authority:TOB` in `entity-organisation.csv`. That means that the facts on the [entity page](https://www.planning.data.gov.uk/entity/44002714) should all be from Torbay, even if there are more recent facts from Historic England. And importantly, the `Organisation` on the entity page will remain as Torbay Council.
+
+
+Important fields:
 
 - `dataset` \- the dataset to target e.g `conservation-area-document`
 - `organisation` \- the organisation to apply to e.g `local-authority:BAB`
