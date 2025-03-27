@@ -13,7 +13,7 @@
 
 ### Planning data site
 
-https://www.planning.data.gov.uk
+[https://www.planning.data.gov.uk](https://www.planning.data.gov.uk)
 
 
 * Explore the planning data site, can you see what datasets we currently publish?
@@ -23,7 +23,7 @@ https://www.planning.data.gov.uk
 
 ### Data design 
 
-https://design.planning.data.gov.uk/
+[https://design.planning.data.gov.uk/](https://design.planning.data.gov.uk/)
 
 * Read the documentation of the [design process](https://design.planning.data.gov.uk/data-design-process), does the way the data design team work make sense?
 * Explore the planning consideration backlog, look at some considerations in detail - particularly following through to the github discussion and the links to the dataset on the platform
@@ -31,7 +31,7 @@ https://design.planning.data.gov.uk/
 
 ### Submit service: Guidance
 
-https://www.planning.data.gov.uk/guidance/
+[https://www.planning.data.gov.uk/guidance/](https://www.planning.data.gov.uk/guidance/)
 
 * Does the guidance structure help make sense of the journey that data providers go on?
 * Read some of the data specification guidance (e.g. [article-4-direction](https://www.planning.data.gov.uk/guidance/specifications/article-4-direction)), does it match the data you saw live on the platform?
@@ -39,7 +39,7 @@ https://www.planning.data.gov.uk/guidance/
 
 ### Submit service: LPA dashboard
 
-https://submit.planning.data.gov.uk/organisations
+[https://submit.planning.data.gov.uk/organisations](https://submit.planning.data.gov.uk/organisations)
 
 
 * Explore the dashboard pages for some different organisations, can you find one with a lot of issues?
@@ -54,14 +54,14 @@ https://submit.planning.data.gov.uk/organisations
 ## The data model and pipeline
 
 ### Pipeline
-* Read the [pipeline processes](../../Explanation/Key-Concepts/pipeline-processes.md) and [pipeline configuration](../../Explanation/Key-Concepts/pipeline-configuration.md) pages.
+* Read the [pipeline processes](../../Explanation/Key-Concepts/pipeline-processes) and [pipeline configuration](../../Explanation/Key-Concepts/pipeline-configuration) pages.
 * Read the [blog post on the data model](https://digital-land.github.io/blog-post/storing-and-updating-data/)
 * Check out the [config repo](https://github.com/digital-land/config/) - can you find the endpoint URL for a dataset you're interested in and download the unprocessed data from a provider?
 * Take a look at some of the recent commits to see the sorts of changes that happen.
 
 ### Specification
 
-* Read the [specification guidance page](../specification).
+* Read the [specification guidance page](../../Explanation/Key-Concepts/specification).
 * Take a look around the [specification repo](https://github.com/digital-land/specification/), particularly individual dataset files (e.g. [article-4-direction.md](https://github.com/digital-land/specification/blob/main/content/dataset/article-4-direction.md?plain=1)) - can you work out what sort of processes some of these fields might control?
 
 ### datasette
@@ -79,8 +79,8 @@ https://submit.planning.data.gov.uk/organisations
 
 #### Data quality
 * Read the following pages:
-    * [Data quality needs](../Explanation/Key-Concepts/Data-quality-1-needs)
-    * [Data quality framework](../Explanation/Key-Concepts/Data-quality-2-framework) 
+    * [Data quality needs](../../Explanation/Key-Concepts/Data-quality-1-needs)
+    * [Data quality framework](../../Explanation/Key-Concepts/Data-quality-2-framework) 
 
 
 
