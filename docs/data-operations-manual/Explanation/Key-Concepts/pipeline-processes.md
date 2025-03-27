@@ -8,16 +8,22 @@ We ask Local Planning Authorities (LPAs) to publish open data on their website i
 
 The system that is used to take data from endpoints and process it into a consistent format is called the **pipeline**. The pipeline is able to collect data hosted in many different formats, identify common quality issues with data (and in some cases resolve them), and transform data into a consistent state to be presented on the website.
 
-\!\! For more detail on how the pipeline works see the [documentation here](https://github.com/digital-land/digital-land/wiki/Historic-Documentation#run-the-pipeline-to-make-the-dataset).
 
-Data is organised into separate **datasets**, each of which may consist of data collected from just one or many endpoints. Datasets might be referred to as either **compiled** or **national** based on how data for them is provided. For example the [article-4-direction-area dataset](https://www.planning.data.gov.uk/dataset/article-4-direction-area) has many providers as we collect data from LPAs to add to this dataset, and is therefore a compiled dataset. The [agricultural-land-classification dataset](https://www.planning.data.gov.uk/dataset/agricultural-land-classification) on the other hand has just one provider as it is a dataset with national coverage published by Natural England, and is therefore a national dataset.
+Data is organised into separate **datasets**, each of which may consist of data collected from just one or many endpoints. Datasets might be referred to as either **compiled** or **single-source** based on how data for them is provided. 
 
-Each dataset is organised into separate **collections**, which are groups of datasets collected together based on their similarity. For example, the `conservation-area-collection` is the home for the `conservation-area` and the `conservation-area-document` dataset. There are a few key components to collections, which are outlined below using the conservation-area-collection as an example:
+> For example the [article-4-direction-area dataset](https://www.planning.data.gov.uk/dataset/article-4-direction-area) has many providers as we collect data from LPAs to add to this dataset, and is therefore a **compiled** dataset.   
+> 
+> The [agricultural-land-classification dataset](https://www.planning.data.gov.uk/dataset/agricultural-land-classification) on the other hand has just one provider as it is a dataset with national coverage published by Natural England, and is therefore a **single-source** dataset.
 
-* The collection repo (note the “-collection” after the name):  [https://github.com/digital-land/conservation-area-collection/](https://github.com/digital-land/conservation-area-collection/). This is the repo which is used to build the collection data, and is triggered each night by a github workflow.  
-* The collection and pipeline configuration files, which store configuration data which controls how data feeding into the collection is processed (see [section below](#pipeline-configuration) for more detail):  
-  * [https://github.com/digital-land/config/tree/main/collection/conservation-area](https://github.com/digital-land/config/tree/main/collection/conservation-area)  
-  * [https://github.com/digital-land/config/tree/main/pipeline/conservation-area](https://github.com/digital-land/config/tree/main/pipeline/conservation-area) 
+Each dataset is organised into separate **collections**, which are groups of datasets collected together based on their similarity. For example, the `conservation-area-collection` is the home for the `conservation-area` and the `conservation-area-document` dataset. 
+
+Each collection has its own set of configuration files. Thse files are essentially a set of data which tells the pipeline how to work, e.g. where to go to collect data from, and how to process it once it's collected. These files are all stored in the [config repo](https://github.com/digital-land/config/), split up into a `pipeline` and a `collection` folder for each collection. 
+
+> e.g. the configuration files for the `conservation-area` collection are split into these folders:
+>  * [https://github.com/digital-land/config/tree/main/collection/conservation-area](https://github.com/digital-land/config/tree/main/collection/conservation-area)  
+>  * [https://github.com/digital-land/config/tree/main/pipeline/conservation-area](https://github.com/digital-land/config/tree/main/pipeline/conservation-area) 
+
+See the [pipeline configuration](../Pipline-configuration) page for more details..
 
 The data management team is responsible for adding data to the platform, and maintaining it once it’s there, see [here for the list of team responsibilities](https://docs.google.com/document/d/1PoAUktKj80qOTvI4BB3qZkZdwpiGEq_woEfrIdwg2Ac/edit#heading=h.aoi2nezcsd1h) in the Planning Data Service Handbook.
 
