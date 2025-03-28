@@ -29,20 +29,3 @@ digital-land assign-entities collection/tree-preservation-order/resource/4e0de67
 
 3. **Check results**  
    Confirm the desired result in the lookup.csv file, the amount of entities that needed to be assigned should be the same amount that have been added in the lookup file.
-
-## Batch assigning entities
-
-1. **Download issue summary table**
-   Get the issue summay table from the [config-manager for ODP data](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) by clicking the `Download Current Table`
-
-2. **Add the file to the root of config**  
-   The downloaded file is called `odp-issue.csv`, don't change the file extension! Copy it over from the downloaded location to the root of `config` where the script `batch_assign_entities.py` is located.
-
-3. **Run the script**  
-   The script can be run using the command `python3 batch_assign_entities.py [PATH_TO_FILE]` so with the above moved file location the command would be `python3 batch_assign_entities.py odp-issue.csv`
-
-4. **Populated lookup**
-   It will download all the resources for unknown entities into a `resources` folder, assign entities, and then delete the downloaded resource files. The affected dataset's `lookup.csv` should now have new rows with the assigned entities. The amount of entities that needed to be assigned should be the same amount that have been added in the lookup file.
-
-5. **Check config-manager issue summary**
-   After the changes have been merged and collected by the workflows and datasette, check [config-manager for ODP data](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) and download the table again. There should be no unknown entities anymore (unless the collector has found new data but the entities from before assigning entities should be gone)
