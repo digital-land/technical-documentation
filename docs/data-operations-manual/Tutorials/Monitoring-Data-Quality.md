@@ -30,7 +30,7 @@ The recommended steps to resolve this are as follows:
 3. **Analyse Unknown Entity issues**
     Open the `issue_summary.csv` file and apply a filter to the "scope" column to display only entries related to ODP. Begin by analysing all unknown entities issues associated with the ODP scope.
 
-    If the `count_issue` for any dataset is unusually high, verify that the entities are valid and new. `count_issue` may also be high if the LPA has recently their references for existing entities.
+    If the `count_issue` for any dataset is unusually high, verify that the entities are valid and new. `count_issue` may also be high if the LPA has recently their references for existing entities. Keep a note of endpoints with an unusually high number of `count_issue` to review once the entities have been assigned.
 
     The command will prompt the user to confirm. Type "yes" to assign Unknown entities for ODP.
 
@@ -39,6 +39,10 @@ The recommended steps to resolve this are as follows:
     It will download all the resources for unknown entities into a resources folder, assign entities, and then delete the downloaded resource files. The affected dataset’s lookup.csv should now have new rows with the assigned entities. The amount of entities that needed to be assigned should be the same amount that have been added in the lookup file.
 
     Unknown entities will be automatically assigned.
+
+    Review the entities assigned for the endpoint you’ve noted. The key thing to check here is whether the references are a continuation or follow a similar format to existing lookups for that provision.
+
+    Note: If the entities belong to the Conservation Area dataset, you should check for duplicates using endpoint checker, refer Step 3 in [Validating an endpoint](https://digital-land.github.io/technical-documentation/data-operations-manual/How-To-Guides/Validating/Validate-an-endpoint/). Once the new entries for the lookup.csv have been generated, use the outputs from the `Duplicates with different entity numbers` section of the endpoint checker to replace the newly generated entity numbers for any duplicates, with the entity numbers of the existing entity that they match.
 
 4. **Assign entities for Mandated and single-source datasets**
     Repeat Step 3 for assign entities for Mandated and single-source datasets.
