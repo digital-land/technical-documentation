@@ -11,7 +11,7 @@ The unknown entities issue usually occurs when an LPA updates their data on the 
 
 The recommended steps to resolve this are as follows:
 
-1. Go to the report found [here](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue)
+1. Download the issues report for [ODP datasets](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or [all datasets](https://config-manager-prototype.herokuapp.com/reporting/download?type=endpoint_dataset_issue_type_summary).
 2. Download the CSV file with ‘Download Current Table’ which will download a file called `odp_issues`
 3. Analyse the "unknown entity" issues. Look for `issue_type` with `unknown entity`
 4. If possible, for each of the issues you have identified, follow the steps in [Assign entities](../../How-To-Guides/Maintaining/Assign-entities). Keep track of the row of the issue.
@@ -106,7 +106,7 @@ Once you've added the new endpoint and merged the changes, re-run the [monitor f
 ## Out of range entities
 
 ### Trigger
-This is a configuration error where the entity numbers that have been used in a dataset are not within the range defined for that dataset. These issues will be raised in the [issue report](https://config-manager-prototype.herokuapp.com/reporting/download?type=odp-issue) where the `issue_type` = "entity number out of range".
+This is a configuration error where the entity numbers that have been used in a dataset are not within the range defined for that dataset. These issues will be raised in the issue report for [ODP datasets](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or [all datasets](https://config-manager-prototype.herokuapp.com/reporting/download?type=endpoint_dataset_issue_type_summary), where the `issue_type` = "entity number out of range".
 
 ### Task
 In order to fix, for each dataset with issues you should:
@@ -122,7 +122,7 @@ Once fixed, there should no longer be any issues raised in the issue report.
 
 One of our monitoring tasks is patching any `invalid organisation` issues that arise. This isually happens if the organisation value provided in the endpoint is wrong or missing e.g it could be a blank field or the wrong organisation name / identifier.
 
-A list of invalid organisation issues can be optained by downloading a csv file from either the [issue summary table](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or the [overview issue table](https://config-manager-prototype.herokuapp.com/reporting/overview) and filtering for `invalid organisations` under `issue-type`.
+A list of invalid organisation issues can be optained by downloading the issue report for [ODP datasets](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or [all datasets](https://config-manager-prototype.herokuapp.com/reporting/download?type=endpoint_dataset_issue_type_summary) and filtering for `invalid organisations` under `issue-type`.
 
 To fix this, we can make use of the `patch.csv` file. More information on how this file works can be found in the pipeline/patch section in [configure an endpoint](../How-To-Guides/Adding/Configure-an-endpoint.md).
 
