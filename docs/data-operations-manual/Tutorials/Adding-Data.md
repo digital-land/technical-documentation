@@ -26,16 +26,6 @@ Push your changes but **do not merge them before moving on to the next step**.
 
 In order to make sure the configuration for the new endpoint is checked properly you should raise a PR for your changes and fill out the template that is automatically generated. This will make it clear what sort of change is being made, and also give you a QA checklist to fill out.
 
-When creating a branch in git use the following naming convention:
-
-> Adding data branch name: `[initials]/add-[ORG]-[DATASET]`
->  
-> e.g. If Joe Bloggs is adding Article 4 direction data for Bristol he'd call his branch: `jb/add-BST-A4D`
-
-Acronyms for collections could be: `A4D` for article-4-direction, `CA` for conservation-area, `LB` for listed-building, and `TPO` for tree-preservation-order.
-
-For organisation you should use the the `organisation` value from the [organisation table](https://datasette.planning.data.gov.uk/digital-land/organisation) with the prefix (e.g. `local-authority`) removed.
-
 Once it's been raised, share your PR with a colleague in data management team to review, and they should follow the same checks in the checklist.
 
 
