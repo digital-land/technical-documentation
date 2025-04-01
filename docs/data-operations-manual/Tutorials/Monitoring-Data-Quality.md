@@ -81,6 +81,28 @@ However, when non-ODP datasets have broken, primary endpoints we should search f
 ### Test
 Once the changes have been merged into main, the primary endpoint for the provision should no longer appear in the datasette query.
 
+
+## Identify new data sources for stale endpoints
+### Trigger
+We define an endpoint as "stale" when it has not been updated with new data within the time period we expect. 
+
+> e.g.   
+> the [source](https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47) of the latest endpoint we have for `flood-risk-zone` data published by the Environment Agency states that the dataset is updated quarterly. If the start date of the latest resource is 01/01/2024 and today's date is 30/06/24 there hasn't been an update for 6 months so we would say this endpoint is stale.
+
+
+> NOTE  
+> For our **compiled** datasets, local planning authorities are responsible for updating endpoints or publishing new ones for new datasets so we don't monitor for staleness.  
+> 
+> For our **single source** datasets (i.e. those with national coverage from a single data provider) we need to check whether we have added the most up to date data.
+
+### Task
+1. Check for any stale endpoints by running the [monitor frequency of datasets](https://github.com/digital-land/jupyter-analysis/blob/main/reports/monitor_frequency_of_datasets/monitor_frequency_of_datasets.ipynb) report. This will identify any endpoints which have not been updated within the expected time period.
+2. For any identified datasets you should check to see whether the data provider has published more up to date data on a new endpoint. You can use the source of existing endpoints to find their website.
+3. If you find a new endpoint you will need to add it. Check the [new endpoint for existing provision](../Adding-Data/#new-endpoint-for-existing-provision) scenario on the Adding data page to find the steps to follow in order to retire old endpoints, add the new one and assign any new entities if required.
+
+### Test
+Once you've added the new endpoint and merged the changes, re-run the [monitor frequency of datasets](https://github.com/digital-land/jupyter-analysis/blob/main/reports/monitor_frequency_of_datasets/monitor_frequency_of_datasets.ipynb) report; the dataset you've updated should no longer be in the list.
+
 ## Out of range entities
 
 ### Trigger
