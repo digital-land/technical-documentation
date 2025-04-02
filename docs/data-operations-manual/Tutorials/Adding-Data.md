@@ -26,7 +26,7 @@ Push your changes but **do not merge them before moving on to the next step**.
 
 In order to make sure the configuration for the new endpoint is checked properly you should raise a PR for your changes and fill out the template that is automatically generated. This will make it clear what sort of change is being made, and also give you a QA checklist to fill out.
 
-You should share your PR with a colleague in data management team to review, and they should follow the same checks in the checklist.
+Once it's been raised, share your PR with a colleague in data management team to review, and they should follow the same checks in the checklist.
 
 
 ### 4. Merge changes (and run workflow)
