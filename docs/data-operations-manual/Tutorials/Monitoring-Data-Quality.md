@@ -11,7 +11,7 @@ The unknown entities issue usually occurs when an LPA updates their data on the 
 
 The recommended steps to resolve this are as follows:
 
-1. Go to the report found [here](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue)
+1. Download the issues report for [ODP datasets](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or [all datasets](https://config-manager-prototype.herokuapp.com/reporting/download?type=endpoint_dataset_issue_type_summary).
 2. Download the CSV file with ‘Download Current Table’ which will download a file called `odp_issues`
 3. Analyse the "unknown entity" issues. Look for `issue_type` with `unknown entity`
 4. If possible, for each of the issues you have identified, follow the steps in [Assign entities](../../How-To-Guides/Maintaining/Assign-entities). Keep track of the row of the issue.
@@ -81,10 +81,32 @@ However, when non-ODP datasets have broken, primary endpoints we should search f
 ### Test
 Once the changes have been merged into main, the primary endpoint for the provision should no longer appear in the datasette query.
 
+
+## Identify new data sources for stale endpoints
+### Trigger
+We define an endpoint as "stale" when it has not been updated with new data within the time period we expect. 
+
+> e.g.   
+> the [source](https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47) of the latest endpoint we have for `flood-risk-zone` data published by the Environment Agency states that the dataset is updated quarterly. If the start date of the latest resource is 01/01/2024 and today's date is 30/06/24 there hasn't been an update for 6 months so we would say this endpoint is stale.
+
+
+> NOTE  
+> For our **compiled** datasets, local planning authorities are responsible for updating endpoints or publishing new ones for new datasets so we don't monitor for staleness.  
+> 
+> For our **single source** datasets (i.e. those with national coverage from a single data provider) we need to check whether we have added the most up to date data.
+
+### Task
+1. Check for any stale endpoints by running the [monitor frequency of datasets](https://github.com/digital-land/jupyter-analysis/blob/main/reports/monitor_frequency_of_datasets/monitor_frequency_of_datasets.ipynb) report. This will identify any endpoints which have not been updated within the expected time period.
+2. For any identified datasets you should check to see whether the data provider has published more up to date data on a new endpoint. You can use the source of existing endpoints to find their website.
+3. If you find a new endpoint you will need to add it. Check the [new endpoint for existing provision](../Adding-Data/#new-endpoint-for-existing-provision) scenario on the Adding data page to find the steps to follow in order to retire old endpoints, add the new one and assign any new entities if required.
+
+### Test
+Once you've added the new endpoint and merged the changes, re-run the [monitor frequency of datasets](https://github.com/digital-land/jupyter-analysis/blob/main/reports/monitor_frequency_of_datasets/monitor_frequency_of_datasets.ipynb) report; the dataset you've updated should no longer be in the list.
+
 ## Out of range entities
 
 ### Trigger
-This is a configuration error where the entity numbers that have been used in a dataset are not within the range defined for that dataset. These issues will be raised in the [issue report](https://config-manager-prototype.herokuapp.com/reporting/download?type=odp-issue) where the `issue_type` = "entity number out of range".
+This is a configuration error where the entity numbers that have been used in a dataset are not within the range defined for that dataset. These issues will be raised in the issue report for [ODP datasets](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or [all datasets](https://config-manager-prototype.herokuapp.com/reporting/download?type=endpoint_dataset_issue_type_summary), where the `issue_type` = "entity number out of range".
 
 ### Task
 In order to fix, for each dataset with issues you should:
@@ -100,7 +122,7 @@ Once fixed, there should no longer be any issues raised in the issue report.
 
 One of our monitoring tasks is patching any `invalid organisation` issues that arise. This isually happens if the organisation value provided in the endpoint is wrong or missing e.g it could be a blank field or the wrong organisation name / identifier.
 
-A list of invalid organisation issues can be optained by downloading a csv file from either the [issue summary table](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or the [overview issue table](https://config-manager-prototype.herokuapp.com/reporting/overview) and filtering for `invalid organisations` under `issue-type`.
+A list of invalid organisation issues can be optained by downloading the issue report for [ODP datasets](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or [all datasets](https://config-manager-prototype.herokuapp.com/reporting/download?type=endpoint_dataset_issue_type_summary) and filtering for `invalid organisations` under `issue-type`.
 
 To fix this, we can make use of the `patch.csv` file. More information on how this file works can be found in the pipeline/patch section in [configure an endpoint](../How-To-Guides/Adding/Configure-an-endpoint.md).
 
