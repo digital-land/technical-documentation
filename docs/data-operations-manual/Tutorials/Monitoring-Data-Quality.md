@@ -84,12 +84,17 @@ Once the changes have been merged into main, the primary endpoint for the provis
 ## Out of range entities
 
 ### Trigger
-This is a configuration error where the entity numbers that have been used in a dataset are not within the range defined for that dataset. These issues will be raised in the [issue report](https://config-manager-prototype.herokuapp.com/reporting/download?type=odp-issue) where the `issue_type` = "entity number out of range".
+This is a configuration error where the entity numbers that have been used in a dataset are not within the range defined for that dataset.
+
+The entity range for datasets are defined in the [specification repository](https://github.com/digital-land/specification/tree/main/content/dataset), select a dataset to view its entity range, defined by the entity-minimum and entity-maximum fields.
+
+These issues will be raised in the [issue report](https://config-manager-prototype.herokuapp.com/reporting/download?type=odp-issue) where the `issue_type` = "entity number out of range".
 
 ### Task
 In order to fix, for each dataset with issues you should:
 
-1. Delete the entries in `lookup.csv` which are using an incorrect entity number.
+1. Delete the entries in `lookup.csv` which are using an incorrect entity number, go to [Datasette](https://datasette.planning.data.gov.uk/) and select the relevant dataset. Next, filter the issue table using the `resource` and `issue_type` fields present in the downloaded issue table, then use the value field to identify the incorrect entity number. Now, find the incorrect entity number in lookup.csv and remove the entire row.
+
 2. Follow the [assign entities](../../How-To-Guides/Maintaining/Assign-entities) process to assign new entity numbers and replace the deleted lookup entries.
 
 ### Test
