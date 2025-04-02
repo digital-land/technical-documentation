@@ -2,11 +2,11 @@
 
 **Prerequisites:**
 
-- Clone the [config repo](https://github.com/digital-land/config) by running `git clone [gitURL]` and update it with `make init` in your virtual environment
+- Clone the [config repo](https://github.com/digital-land/config) by running `git clone [gitURL]` and update it with `make makerules`, and `make init` in your virtual environment (remember to add the `COLLECTION=[COLLECTION_NAME]` variable for the make commands).
 - Validate the data. If you haven’t done this yet, follow the steps in ‘[Validating an Endpoint](../../Validating/Validate-an-endpoint)’ before continuing.
 
 > **NOTE!**  
-> The endpoint*checker will pre-populate some of the commands mentioned in the steps below, check the end of the notebook underneath ‘\_scripting*’.
+> If you run the endpoint checker, it will pre-populate some of the commands mentioned in the steps below, check the end of the notebook underneath ‘\_scripting’.
 
 1. **Create an import file**  
    If you don’t already have an import.csv file in the root of the config file, simply create one with the command `touch import.csv`
@@ -28,7 +28,7 @@
       - `organisation` - the organisation which the endpoint belongs to. The name should be in [this list](https://datasette.planning.data.gov.uk/digital-land/organisation)
       - `licence` - the type of licence the data is published with. This can usually be found at the dataset's documentation url.
 
-      The endpoint checker should output text you can copy into `import.csv` with the required headers and values, or alternatively copy the headers below:
+      If the Jira ticket has been created from the submit data form the ticket will have a csv attached with these details pre-populated (apart from plugins field). Or alternatively, endpoint checker will output text you can copy directly in to an empty csv, or you can copy the headers below:
 
       ```
       organisation,endpoint-url,documentation-url,start-date,pipelines,plugin,licence
@@ -47,44 +47,9 @@
 
       The most common step here will be using `column.csv` to add in extra column mappings.
 
-1. **Run add_data OR add_endpoint_and_lookups script**  
+1. **Run the add-data command**  
 
-   1. **(Preferred) Run add_data**
-
-      Run the following command inside the config repository within the virtual environment:
-
-      ```
-      digital-land add-data [INPUT-CSV-PATH] [COLLECTION_NAME] -c collection/[COLLECTION_NAME] -p ./pipeline/[COLLECTION_NAME] 
-      ```
-
-      The command will fetch from the endpoint, process the resource, and assign entities if necessary, providing feedback and warnings along the way.
-      An example command would be:
-
-      ```
-      digital-land add-data ./import.csv brownfield-land -c collection/brownfield-land/ -p pipeline/brownfield-land/
-      ```
-
-   1. **(Legacy) Run add_endpoints_and_lookups_script**
-
-      Run the following command inside the config repository within the virtual environment:
-
-      ```
-      digital-land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME] -c ./collection/[COLLECTION_NAME] -p ./pipeline/[COLLECTION_NAME]
-      ```
-
-      The completed command will be given in the _scripting_ section of the endpoint_checker.
-
-      For example (the actual command will vary based on the dataset added, article-4-direction is used as an example):
-
-      ```
-      digital-land add-endpoints-and-lookups ./import.csv article-4-direction -c./collection/article-4-direction -p ./pipeline/article-4-direction
-
-      ```
-
-      **Improved Method:**
-      This method defines the required prerequisite parameters for us.
-
-      Syntax
+   Run the following command inside the config repository within the virtual environment:
 
       ```
       make add-data COLLECTION=[COLLECTION_NAME] INPUT_CSV=[INPUT_FILE]
@@ -93,8 +58,27 @@
       For example
 
       ```
-      make add-data COLLECTION=conservation-area INPUT_CSV=import.csv
+      make add-data COLLECTION=article-4-direction INPUT_CSV=import.csv
       ```
+
+      The command will take you step by step through the process with some user prompts.
+   
+   ----
+   **\*LEGACY\* add-endpoints-and-lookups script**
+
+      If for some reason the `make add-data` process isn't working, you may need to revert to the legacy command, which is:
+
+      ```
+      digital-land add-endpoints-and-lookups [INPUT-CSV-PATH] [COLLECTION_NAME] -c ./collection/[COLLECTION_NAME] -p ./pipeline/[COLLECTION_NAME] -o ./var/[COLLECTION_NAME]/cache/organisation.csv
+      ```
+
+      e.g.
+
+      ```
+      digital-land add-endpoints-and-lookups ./import.csv article-4-direction -c./collection/article-4-direction -p ./pipeline/article-4-direction -o ./var/article-4-direction/cache/organisation.csv
+
+      ```
+      ----
 
 1. **(Optional) Update entity-organisation.csv**
 
@@ -127,7 +111,15 @@
    But if there is more complicated configuration required then you should test by building the collection locally to see if they have worked. Follow the steps in [building a collection locally](/data-operations-manual/How-To-Guides/Testing/Building-a-collection-locally)
 
 1. **Push changes**   
-   Commit your changes to a new branch that is named after the organisation whose endpoints are being added (use the 3 letter code for succinct names, e.g. `add-LBH-data`).
+   Commit your changes to a new branch, using the following naming convention:
+
+   > Adding data branch name: `[initials]/add-[ORG]-[DATASET]`
+   >  
+   > e.g. If Joe Bloggs is adding Article 4 direction data for Bristol he'd call his branch: `jb/add-BST-A4D`
+
+   Acronyms used for collections are: `A4D` for article-4-direction, `CA` for conservation-area, `LB` for listed-building, and `TPO` for tree-preservation-order.
+
+   For organisation you should use the the `organisation` value from the [organisation table](https://datasette.planning.data.gov.uk/digital-land/organisation) with the prefix (e.g. `local-authority`) removed.
 
    Push the changes on your branch to remote and create a new PR. This should be reviewed and approved by a colleague in the Data Management team before being merged into `main`.
 

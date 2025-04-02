@@ -1,6 +1,8 @@
 # Monitoring Data Quality
 
-This section covers situations where we are monitoring the quality of data and fix any issues that have arisen.
+This page explains the processes we follow to fix data quality issues that we actively monitor for.
+
+Each of these sections covers a different issue, each of which are defined by our [data quality requirements](https://docs.google.com/spreadsheets/d/1kMAKOAm6Wam-AJb6R0KU-vzdvRCmLVN7PbbTAUh9Sa0/edit?gid=2142834080#gid=2142834080&fvid=1368636333).
 
 ## Unknown entities
 
@@ -78,32 +80,75 @@ The recommended steps to resolve this are as follows:
 Success criteria:
 The count of entities on the platform and on the latest resource should be the same. Run the report to make sure that the counts are matching.
 
-## Retire erroring endpoints
+## Retire broken, non-primary endpoints
 
-One of our quality measures is to reduce the number of endpoints erroring on our platform so we no longer collecting data from those endpoints. We can retire endpoints in a batch by running a script.
+### Trigger
+We define an endpoint as "broken" once it has been logged with a non-200 status for more than 30 consequtive days. We pro-actively end-date broken endpoints and their sources when they are not the primary endpoint for a provision, i.e. the endpoint is not the only or most recently added endpoint for a provision.
 
-The scope of this task can either be for non-ODP datasets or for ODP datasets, so only retire those that are within scope of this.
+> e.g. 
+> Wiltshire council has two active `brownfield-land` endpoints, one added in 2025 and one added in 2024. This makes the 2025 endpoint the primary endpoint. The 2024 endpoint has had a 404 status for 62 days, so it should be given an end-date. 
 
-The recommended steps to resolve this are as follows:
+> NOTE
+> This applies to all datasets, including ODP, statutory and single-source.
 
-1. Run [this query](https://datasette.planning.data.gov.uk/digital-land?sql=WITH+unique_endpoints+AS+%28%0D%0A++SELECT%0D%0A++++collection%2C%0D%0A++++pipeline+as+dataset%2C%0D%0A++++endpoint%2C%0D%0A++++organisation%2C%0D%0A++++name%2C%0D%0A++++MIN%28endpoint_entry_date%29+AS+endpoint_entry_date%0D%0A++FROM%0D%0A++++reporting_historic_endpoints%0D%0A++WHERE%0D%0A++++%28%0D%0A++++++%22endpoint_end_date%22+is+null%0D%0A++++++OR+%22endpoint_end_date%22+%3D+%22%22%0D%0A++++%29%0D%0A++++AND+%22endpoint_entry_date%22+%3C+DATE%28%27now%27%2C+%27-1+year%27%29%0D%0A++++AND+%22status%22+NOT+LIKE+%222%25%22%0D%0A++GROUP+BY%0D%0A++++collection%2C%0D%0A++++endpoint%2C%0D%0A++++name%0D%0A%29%2C%0D%0Alatest_log_entry+AS+%28%0D%0A++SELECT%0D%0A++++endpoint%2C%0D%0A++++MAX%28latest_log_entry_date%29+AS+latest_200_log_entry_date%0D%0A++FROM%0D%0A++++reporting_historic_endpoints%0D%0A++WHERE%0D%0A++++status+%3D+%27200%27%0D%0A++GROUP+BY%0D%0A++++endpoint%0D%0A%29%0D%0ASELECT%0D%0Aue.collection%2C%0D%0A++ue.dataset%2C%0D%0A++ue.name%2C%0D%0A++p.project%2C%0D%0A++p.provision_reason%2C%0D%0A++ue.endpoint%2C%0D%0A++strftime%28%27%25d-%25m-%25Y%27%2C+ue.endpoint_entry_date%29+as+endpoint_entry_date%2C%0D%0A++strftime%28%27%25d-%25m-%25Y%27%2C+l.latest_200_log_entry_date%29+as+latest_200_log_entry_date%2C%0D%0A++CAST%28%0D%0A++++julianday%28%27now%27%29+-+julianday%28l.latest_200_log_entry_date%29+AS+int64%0D%0A++%29+as+n_days_since_last_200%2C%0D%0A++s.source%0D%0AFROM%0D%0A++unique_endpoints+ue%0D%0A++LEFT+JOIN+source+s+ON+ue.endpoint+%3D+s.endpoint%0D%0A++LEFT+JOIN+latest_log_entry+l+ON+ue.endpoint+%3D+l.endpoint%0D%0A++LEFT+JOIN+provision+p+on+ue.dataset+%3D+p.dataset%0D%0A++and+ue.organisation+%3D+p.organisation%0D%0AWHERE%0D%0A++%28%0D%0A++++l.latest_200_log_entry_date+%3C+DATE%28%27now%27%2C+%27-5+day%27%29%0D%0A++++OR+l.latest_200_log_entry_date+IS+NULL%0D%0A++%29%0D%0A++AND+%22n_days_since_last_200%22+%3E+90%0D%0AORDER+BY%0D%0A++ue.dataset%2C%0D%0A++julianday%28%27now%27%29+-+julianday%28l.latest_200_log_entry_date%29+desc) which will return all endpoints which have been erroring for more than 90 days (e.g where `n_days_since_last_200 > 90`)
-2. Select the data as CSV and copy the contents
-3. In VSC, create a `retire.csv` file in the root and paste the content in there
-4. Run the command:
+### Task
+1. Identify broken, non-primary endpoints through [this datasette query](https://datasette.planning.data.gov.uk/digital-land?sql=--+count+endpoints+and+their+statuses+per+org+and+dataset%0D%0AWITH+endpoint_status_series+as+%28%0D%0A%0D%0A+++SELECT+organisation%2C+name%2C+pipeline%2C+collection%2C+endpoint%2C+status%2C+resource%2C+latest_log_entry_date%2C+endpoint_entry_date%2C+endpoint_end_date%2C%0D%0A++++++dense_rank%28%29+over+%28partition+by+organisation%2C+pipeline+order+by+endpoint_entry_date+desc%2C+endpoint%29+as+endpoint_no%2C%0D%0A++++++dense_rank%28%29+over+%28partition+by+endpoint+order+by+latest_log_entry_date+desc%2C+status%29++as+status_no%0D%0A+++FROM+reporting_historic_endpoints%0D%0A+++ORDER+BY+name%2C+endpoint_entry_date+desc%0D%0A++%0D%0A%29%2C%0D%0A%0D%0A--+get+latest+200+status+for+all+endpoints%0D%0Alatest_log_entry+AS+%28%0D%0A++SELECT%0D%0A++++endpoint%2C%0D%0A++++MAX%28latest_log_entry_date%29+AS+latest_200_log_entry_date%2C%0D%0A++++CAST%28julianday%28%27now%27%29+-+julianday%28MAX%28latest_log_entry_date%29%29+AS+int64%29+as+n_days_since_last_200%0D%0A++FROM%0D%0A++++reporting_historic_endpoints%0D%0A++WHERE%0D%0A++++status+%3D+%27200%27%0D%0A++GROUP+BY%0D%0A++++endpoint%0D%0A%29%0D%0A%0D%0A--+get+all+non-latest%2C+un-end-dated+endpoints+with+a+latest+status+that%27s+not+200+where+it%27s+been+%3C+90+days+since+last+200+status%0D%0ASELECT+%0D%0A+++es.*%2C%0D%0A+++l.latest_200_log_entry_date%2C%0D%0A+++l.n_days_since_last_200%2C%0D%0A+++s.source%0D%0A++%0D%0AFROM+endpoint_status_series+es%0D%0ALEFT+JOIN+latest_log_entry+l+ON+es.endpoint+%3D+l.endpoint%0D%0ALEFT+JOIN+source+s+on+es.endpoint+%3D+s.endpoint%0D%0AWHERE+1%3D1%0D%0AAND+es.endpoint_no+%21%3D+1%0D%0AAND+es.status_no+%3D+1%0D%0AAND+es.status+NOT+LIKE+%222%25%22%0D%0AAND+es.endpoint_end_date+%3D+%22%22%0D%0AAND+l.n_days_since_last_200+%3E+30).
+2. Download the query results as a scv file called `retire.csv` in the root of your local `config` directory.
+4. Run the following command:
 
 ```
 digital-land retire-endpoints-and-sources retire.csv
 ```
 
-5. Write down the endpoints you have retired (and note any you have been unable to retire) in [the sheet](https://docs.google.com/spreadsheets/d/1M1Zj_iuYFmd5d29TBUFo6lyaQpeylbnI/edit?gid=1103537962#gid=1103537962)
+### Test
+Once the changes have been merged into main, the endpoints and sources you retired should no longer appear in the datasette query results.
 
-Success criteria:
-No erroring endpoints listed in the query for the scope of the ticket.
+## Identify new data sources for broken, primary endpoints
+### Trigger
+We define an endpoint as "broken" once it has been logged with a non-200 status for more than 30 consequtive days. And we call an endpoint a "primary" endpoint when it is the most recently added, or the only endpoint for a provision.
+
+> e.g. 
+> * the `archaeological-priority-area` dataset has one endpoint; this is the primary endpoint
+> * the `local-authority-district` dataset has 3 active endpoints; the most recently added one is the primary endpoint
+
+For ODP datasets, endpoint errors are raised back to data providers through the Submit service so we don't need to do anything.
+
+However, when non-ODP datasets have broken, primary endpoints we should search for alternatives.
+
+### Task
+1. Identify broken, primary endpoints through [this datasette query](https://datasette.planning.data.gov.uk/digital-land?sql=--+count+endpoints+and+their+statuses+per+org+and+dataset%0D%0AWITH+endpoint_status_series+as+%28%0D%0A%0D%0A+++SELECT+organisation%2C+name%2C+pipeline%2C+collection%2C+endpoint%2C+status%2C+resource%2C+latest_log_entry_date%2C+endpoint_entry_date%2C+endpoint_end_date%2C%0D%0A++++++dense_rank%28%29+over+%28partition+by+organisation%2C+pipeline+order+by+endpoint_entry_date+desc%2C+endpoint%29+as+endpoint_no%2C%0D%0A++++++dense_rank%28%29+over+%28partition+by+endpoint+order+by+latest_log_entry_date+desc%2C+status%29++as+status_no%0D%0A+++FROM+reporting_historic_endpoints%0D%0A+++ORDER+BY+name%2C+endpoint_entry_date+desc%0D%0A++%0D%0A%29%2C%0D%0A%0D%0A--+get+latest+200+status+for+all+endpoints%0D%0Alatest_log_entry+AS+%28%0D%0A++SELECT%0D%0A++++endpoint%2C%0D%0A++++MAX%28latest_log_entry_date%29+AS+latest_200_log_entry_date%2C%0D%0A++++CAST%28julianday%28%27now%27%29+-+julianday%28MAX%28latest_log_entry_date%29%29+AS+int64%29+as+n_days_since_last_200%0D%0A++FROM%0D%0A++++reporting_historic_endpoints%0D%0A++WHERE%0D%0A++++status+%3D+%27200%27%0D%0A++GROUP+BY%0D%0A++++endpoint%0D%0A%29%0D%0A%0D%0A--+get+all+non-latest%2C+un-end-dated+endpoints+with+a+latest+status+that%27s+not+200+where+it%27s+been+%3C+90+days+since+last+200+status%0D%0ASELECT+%0D%0A+++es.*%2C%0D%0A+++l.latest_200_log_entry_date%2C%0D%0A+++l.n_days_since_last_200%2C%0D%0A+++s.source%0D%0A++%0D%0AFROM+endpoint_status_series+es%0D%0ALEFT+JOIN+latest_log_entry+l+ON+es.endpoint+%3D+l.endpoint%0D%0ALEFT+JOIN+source+s+on+es.endpoint+%3D+s.endpoint%0D%0A%0D%0AWHERE+1%3D1%0D%0AAND+es.endpoint_no+%3D+1%0D%0AAND+es.status_no+%3D+1%0D%0AAND+es.status+NOT+LIKE+%222%25%22%0D%0AAND+es.endpoint_end_date+%3D+%22%22%0D%0AAND+l.n_days_since_last_200+%3E+30%0D%0AAND+es.pipeline+in+%28SELECT+DISTINCT+dataset+FROM+provision_rule+WHERE+provision_reason+in+%28%22alternative%22%2C+%22authoritative%22%29%29).
+2. For any broken endpoints, search the data provider's website for any newly published endpoint URLs (the source URL for the broken endpoint should take you to the correct site).
+3. If you find any newer endpoints, add an end-date for the broken endpoint and source and follow the [adding data process](../Adding-Data) to add the new one.
+
+### Test
+Once the changes have been merged into main, the primary endpoint for the provision should no longer appear in the datasette query.
+
+
+## Identify new data sources for stale endpoints
+### Trigger
+We define an endpoint as "stale" when it has not been updated with new data within the time period we expect. 
+
+> e.g.   
+> the [source](https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47) of the latest endpoint we have for `flood-risk-zone` data published by the Environment Agency states that the dataset is updated quarterly. If the start date of the latest resource is 01/01/2024 and today's date is 30/06/24 there hasn't been an update for 6 months so we would say this endpoint is stale.
+
+
+> NOTE  
+> For our **compiled** datasets, local planning authorities are responsible for updating endpoints or publishing new ones for new datasets so we don't monitor for staleness.  
+> 
+> For our **single source** datasets (i.e. those with national coverage from a single data provider) we need to check whether we have added the most up to date data.
+
+### Task
+1. Check for any stale endpoints by running the [monitor frequency of datasets](https://github.com/digital-land/jupyter-analysis/blob/main/reports/monitor_frequency_of_datasets/monitor_frequency_of_datasets.ipynb) report. This will identify any endpoints which have not been updated within the expected time period.
+2. For any identified datasets you should check to see whether the data provider has published more up to date data on a new endpoint. You can use the source of existing endpoints to find their website.
+3. If you find a new endpoint you will need to add it. Check the [new endpoint for existing provision](../Adding-Data/#new-endpoint-for-existing-provision) scenario on the Adding data page to find the steps to follow in order to retire old endpoints, add the new one and assign any new entities if required.
+
+### Test
+Once you've added the new endpoint and merged the changes, re-run the [monitor frequency of datasets](https://github.com/digital-land/jupyter-analysis/blob/main/reports/monitor_frequency_of_datasets/monitor_frequency_of_datasets.ipynb) report; the dataset you've updated should no longer be in the list.
 
 ## Out of range entities
 
 ### Trigger
-This is a configuration error where the entity numbers that have been used in a dataset are not within the range defined for that dataset. These issues will be raised in the [issue report](https://config-manager-prototype.herokuapp.com/reporting/download?type=odp-issue) where the `issue_type` = "entity number out of range".
+This is a configuration error where the entity numbers that have been used in a dataset are not within the range defined for that dataset. These issues will be raised in the issue report for [ODP datasets](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or [all datasets](https://config-manager-prototype.herokuapp.com/reporting/download?type=endpoint_dataset_issue_type_summary), where the `issue_type` = "entity number out of range".
 
 ### Task
 In order to fix, for each dataset with issues you should:
@@ -119,7 +164,7 @@ Once fixed, there should no longer be any issues raised in the issue report.
 
 One of our monitoring tasks is patching any `invalid organisation` issues that arise. This isually happens if the organisation value provided in the endpoint is wrong or missing e.g it could be a blank field or the wrong organisation name / identifier.
 
-A list of invalid organisation issues can be optained by downloading a csv file from either the [issue summary table](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or the [overview issue table](https://config-manager-prototype.herokuapp.com/reporting/overview) and filtering for `invalid organisations` under `issue-type`.
+A list of invalid organisation issues can be optained by downloading the issue report for [ODP datasets](https://config-manager-prototype.herokuapp.com/reporting/odp-summary/issue) or [all datasets](https://config-manager-prototype.herokuapp.com/reporting/download?type=endpoint_dataset_issue_type_summary) and filtering for `invalid organisations` under `issue-type`.
 
 To fix this, we can make use of the `patch.csv` file. More information on how this file works can be found in the pipeline/patch section in [configure an endpoint](../How-To-Guides/Adding/Configure-an-endpoint.md).
 
