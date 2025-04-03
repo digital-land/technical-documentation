@@ -98,7 +98,9 @@ The problem occurred because the set of valid values being fed into this process
 
 #### Postmortem
 
-
+The other affected fields by this are categorical fields with capital letters in them. These are: 
+* ancient-woodland-status - ancient woodland dataset
+* greenbelt-core - green belt dataset
 
 
 ### Outage - Airflow Collections - 2024-11-26
