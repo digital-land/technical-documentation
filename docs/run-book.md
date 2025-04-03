@@ -79,6 +79,28 @@ information from the document.
 
 ## Incident Response History
 
+### Local Authorities displaying incorrect local-authority-types - 2025-04-01
+
+#### Description
+
+In the afternoon on 2025-04-01, it was discovered that the local-authority-type values for local authorities were discovered to be all lowercase, when they should be all uppercase. This had a side effect of breaking the role-organisation code in the specification.
+
+This problem surfaced due to a recent change regarding categorical field checks. Previously we had been checking that the data for categorical fields belonged to a set of valid values - if it didn't, we only raised a (pipeline) issue 'invalid category value'. After the change, we now perform some slightly more robust checks to try to match data to one of the valid values (replacing spaces with hyphens etc., handle capitalisation), and importantly if we find something that looks equivalent to a valid value, we fix the data to match the valid value. The categorical field check now has the potential to modify (fix) the data output by the pipeline rather than just raising an issue.
+
+The problem occurred because the set of valid values being fed into this process was being forced lowercase. This means when performing the categorical field check, the valid values were lowercase, so the data was being 'fixed' to lowercase. This problem of the valid values being forced lowercase is something that predates the change made - the change simply surfaced it as it now affects the data (we can assume that previously issues were being raised)
+
+#### Running log
+
+* **16:07$** Observation: PSD notices local-authority-type values are lower -case and messages in slack.
+* **17:06$** Observation: CC investigates and discovers the problem (valid values being forced lowercase)
+* **17:07$** Action: A fix is merged to digital-land-python and the organisation-collection and brownfield-land-collection are rerun to
+* **18:00$** Observation: CC reviews data after rerunning collections and confirms that data looks normal
+
+#### Postmortem
+
+
+
+
 ### Outage - Airflow Collections - 2024-11-26
 
 #### In attendance
