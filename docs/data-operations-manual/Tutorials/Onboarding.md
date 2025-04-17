@@ -66,6 +66,8 @@
 
 ### datasette
 
+The [Following the data flow tutorial](../Following-the-data-flow) tutorial uses a new endpoint to demonstrate some different datasette tables, run through it.
+
 ### digital-land-python
 
 
@@ -75,7 +77,7 @@
 ### Processes
 
 #### Adding data
-* Read the [operational procedures guide](../../Explanation/Operational-Procedures), does it help start to make sense of the data lifecylce?
+* Read the [operational procedures guide](../../Explanation/Operational-Procedures), it should help to start to make sense of the data lifecycle.
 
 #### Data quality
 * Read the following pages:
@@ -90,11 +92,13 @@
 * Follow the key tasks of the [onboarding Trello card](https://trello.com/c/bONeNXuA/144-template-onboarding-ticket) [note - is this still live?? Looks fairly up to date.. but not sure about access (ironically..)]
 
 #### Environment
-* Follow the [environment setup guide]() [needs writing..!] to get your machine set up.
+* You'll want to run any code in a standalone environment. You should be able to get an environment set up by cloning the repo you need and running `make init` which will install any packages needed in the environment. But before doing that you may need to install some other software on your machine. See the [development how to guides](../../../development/how-to-guides/) for how to do this, you may need wsl if you're on a windows laptop, and you'll want to use venv or a similar environment management tool to create new environments.
 
 #### git
 * You'll need to be given access to the digital-land organisation.
 * If you're new to git, follow the github [start your journey](https://docs.github.com/en/get-started/start-your-journey) process on their docs, particularly the "Hello World" section.
+* Once you've got access to digital-land, you may want to [configure ssh](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/checking-for-existing-ssh-keys) - this will mean you don't need to authenticate for every push.
+* 
 
 #### config
 * Clone the config repo and get a virtual environment running
