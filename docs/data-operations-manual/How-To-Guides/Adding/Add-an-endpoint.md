@@ -82,9 +82,11 @@
 
 1. **(Optional) Update entity-organisation.csv**
 
-   If the data that has been added is part of the `conservation-area` collection e.g `conservation-area` and `conservation-area-document`, the entity range must be added as a new row. This is done using the entities generated in `lookup`. Use the first and the last of the entity numbers of the newly generated lookups e.g if `44012346` is the first and `44012370` the last, use these as `entity-minimum` and `entity-maximum`.
+   If the data that has been added is part of the `conservation-area` collection e.g `conservation-area` and `conservation-area-document`, the entity range must be added as a new row to `pipeline/entity-organisation.csv`. 
+   
+   This is done using the entities generated in `lookup.csv`: use the first and the last of the entity numbers of the newly generated lookups. E.g if `44012346` is the first and `44012370` the last, use these as the `entity-minimum` and `entity-maximum` for the new entry.
 
-   For an explanation of how the file works, see [entity-organisation](Configure-an-endpoint.md).
+   For a more detailed explanation of how this config file works, see the relevant section in the [configure and endpoint guide](../Configure-an-endpoint).
 
 1. **Check results**  
    After running the command, the endpoint.csv, lookup.csv, and source.csv should be modified.
