@@ -33,13 +33,13 @@ This diagram does not describe  how we implement this functionality through clou
 * Configuration - this allows the data management team to describe how data should be processed across the various stages and is owned by that team. This includes what endpoints to download data from, all the way through to what special transformations and tests should be  done on the data.
 * Digitall-land-python (Code) - this is the implementation of both the specification and the configuration. It is what is actually happening when various inputs are supplied and is designed to fulfil the needs of the other teams of the pipeline. It is owned by the infrastructure team. It is worth noting that this allows us to run the same processes in almost the same way across different infrastructure implementations as it is a python library containing the capabilities of the different data processes.
 
-### Processing layers
+### Implementation
 
-As hinted at above the concepts can be implemented in various different ways. We may want to run the process differently in the cloud making use of more scalable solutions than locally. Or some tools may require the capabilities on demand rather than in a big batch process. The aim is to write flexible code in the digital-land-python which we can utilise in different scenarios.
+As hinted at above the concepts can be implemented in various different ways. We may want to run the process differently in the cloud making use of more scalable solutions than locally. Or some tools may require the capabilities on demand rather than in a big batch process. The aim is to write flexible code in digital-land-python which we can utilise in different scenarios.
 
 ![Pipeline Architceture  with process layers](/images/data-pipeline-architecture/data-pipeline-architecture-processing-layers.drawio.png)
 
-There are currently two main different processing layers:
+There are currently two main different implementations:
 
 * Batch - this is how data gets on the platform, each night these processes are ran to update all of the data on the platform. This is implemented using airflow as a workflow orchestrator. This is scheduled to run each night but these processes can be manually triggered by a member of the team during the day.
 * Dynamic - this was developed to support the checking of data outside of the primary pipelines. It isn't intended to load data into the platform and instead replicate aspects of it to get faster results. There are possible applications for the configuration manager tool. It is accessed via an api and uses celery and SQS to que and trigger tasks as required. As from the above diagram it's worth noting that  this  layer is a lot more limited in what it can achieve.
