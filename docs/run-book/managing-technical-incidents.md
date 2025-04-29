@@ -46,7 +46,19 @@ Establish who your incident lead is. Find out who noticed the problem and if any
 
 ### 2. Inform your team
 
-Inform the team using the [#planning-data-live-service-and-continuous-improvement](https://communities-govuk.slack.com/archives/C06RS99Q98A) channel in Slack. If the incident involves a data or security breach, you must also notify:
+Inform the team using the below template in the [#planning-data-live-service-and-continuous-improvement](https://communities-govuk.slack.com/archives/C06RS99Q98A) channel in Slack. You can copy and paste it, then fill in the information in the square brackets.
+
+```
+🚨 *Incident Alert* 🚨
+ 
+- *Issue detected:* [Brief description, e.g., High CPU usage, database lock, cache miss]
+- *Current impact:* [Brief description, e.g., Users experiencing slowness]
+- *Actions taken so far:* [E.g., scaling up ECS nodes, investigating locks]
+- *Next steps:* [E.g., Monitoring, preparing to terminate blocking queries]
+- *Estimated time to resolution:* [E.g., 10–15 minutes, under investigation]
+```
+
+If the incident involves a data or security breach, you must also notify:
 
 - {the MHCLG security team?}
 - {anyone else?}
