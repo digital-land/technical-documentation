@@ -1,0 +1,510 @@
+openapi: 3.1.0
+servers:
+  - url: https://pipeline-api.planning.data.gov.uk/v1
+info:
+  title:  Pipeline API - Internal
+  description: >-
+    Provides access to the metadata consumed and produced by the data collection
+    pipelines.  These pipelines are responsible for ETL (extract, transform and
+    load) from providers (including Local Planning Authorities) into the
+    Planning Data Platform (see https://www.planning.data.gov.uk/).
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: digitalland@communities.gov.uk
+  license:
+    name: Open Government Licence v3.0
+    url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  version: 1.0.0-oas3.1
+externalDocs:
+  description: About the Planning Data Platform
+  url: https://www.planning.data.gov.uk/about/
+tags:
+  - name: specification
+    description: Data type definitions for Planning Data Platform
+    externalDocs:
+      description: Specification website
+      url: https://digital-land.github.io/specification/
+  - name: configuration
+    description: Configuration for data collection on Planning Data Platform
+    externalDocs:
+      description: Configuration repo
+      url: https://github.com/digital-land/config
+  - name: collection
+    description: Audit of resources collected from provider endpoints
+    externalDocs:
+      description: About the platform
+      url: https://www.planning.data.gov.uk/about/
+  - name: resource
+    description: Metadata about a resource collected from a provider's endpoint
+  - name: issue
+    description: Concerns arising from processing provider's data in the pipelines
+    externalDocs:
+      description: Publishing website
+      url: https://www.planning.data.gov.uk/guidance/try-check-publish-service
+paths:
+  /specification:
+    get:
+      tags:
+        - specification
+      summary: Search specifications
+      description: Provides list of specifications matching the search parameters
+      parameters:
+        - name: dataset
+          in: query
+          description: Name of the dataset for which a specification is required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Specification'
+        '400':
+          description: Invalid status value
+  /specification/dataset:
+    get:
+      tags:
+        - specification
+  /specification/field:
+    get:
+      tags:
+        - specification
+  /configuration:
+    get:
+      tags:
+        - configuration
+      summary: Search configuration
+      description: Provides list of configurations matching the search parameters
+      parameters:
+        - name: collection
+          in: query
+          description: Name of the collection for which configuration is required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Configuration'
+        '400':
+          description: Invalid status value
+  /configuration/endpoints:
+    get:
+      tags:
+        - configuration
+      summary: Search endpoints
+      description: Provides list of endpoints matching the search parameters
+      parameters:
+        - name: collection
+          in: query
+          description: Name of the collection for which endpoints are required
+          required: true
+          schema:
+            type: string
+  /configuration/sources:
+    get:
+      tags:
+        - configuration
+      summary: Search sources
+      description: Provides list of sources matching the search parameters
+      parameters:
+        - name: endpoint_id
+          in: query
+          description: identifier of the endpoint for which sources are required
+          required: true
+          schema:
+            type: string
+            format: uuid
+  /log/collection:
+    get:
+      tags:
+        - collection
+      summary: Search resource collection logs
+      description: Provides list of log entries matching the search parameters
+      parameters:
+        - name: dataset
+          in: query
+          description: Name of the dataset for which logs are required
+          required: true
+          schema:
+            type: string
+        - name: organisation
+          in: query
+          description: Name of the provider for which logs are required
+          required: true
+          schema:
+            type: string
+        - name: endpoint
+          in: query
+          description: Name of the provider for which logs are required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Log'
+        '400':
+          description: Invalid status value
+  /log/issue:
+    get:
+      tags:
+        - issue
+      summary: Search issues
+      description: Provides list of issues matching the search parameters
+      parameters:
+        - name: dataset
+          in: query
+          description: Name of the dataset for which issues are required
+          required: true
+          schema:
+            type: string
+        - name: organisation
+          in: query
+          description: Name of the provider for which issues are required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+        '400':
+          description: Invalid status value
+  /organisation-summary:
+    get:
+      tags:
+        - organisation-summary
+      summary: Provides collection metrics for each organisation
+      description: >-
+        Metrics include the number of datasets provided, the number of datasets
+        with warnings and the number with errors
+      operationId: getOrganisationSummaries
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganisationSummary'
+  /organisation-summary/{organisationId}:
+    get:
+      tags:
+        - organisation-summary
+      summary: >-
+        Provides collection metrics for each dataset provided by a given
+        organisation
+      description: >-
+        Metrics include details of the datasets provided including the endpoint
+        record, warning and error counts
+      operationId: getOrganisationDatasetSummaries
+      parameters:
+        - name: organisationId
+          in: path
+          description: ID of organisation
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganisationDatasetSummary'
+        '400':
+          description: Invalid organisation ID supplied
+        '404':
+          description: Organisation summary not found
+  /resource:
+    get:
+      tags:
+        - resource
+      summary: Search resources
+      description: Provides list of specifications matching the search parameters
+      parameters:
+        - name: dataset
+          in: query
+          description: Name of the dataset for which the resources are required
+          required: true
+          schema:
+            type: string
+        - name: endpoint
+          in: query
+          description: The endpoint for which resources are required
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Specification'
+        '400':
+          description: Invalid status value
+components:
+  schemas:
+    Specification:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
+      properties:
+        name:
+          type: string
+          examples:
+            - development-plan
+        name_puralised:
+          type: string
+          examples:
+            - Development plans
+        status:
+          type: string
+          examples:
+            - working-draft
+        github_discussion:
+          type: integer
+        version:
+          type: string
+        dataset:
+          type: array
+          items:
+            - '#/components/schemas/Dataset'
+    Dataset:
+      type: object
+      properties:
+        id:
+          type: string
+          examples:
+            - development-plan-boundary
+        name:
+          type: string
+          examples:
+            - Development plan boundary
+        fields:
+          type: array
+          items:
+            - '#/components/schemas/Field'
+    Field:
+      type: object
+      properties:
+        name:
+          type: string
+          examples:
+            - reference
+        description:
+          type: string
+          examples:
+            - a unique identifier for a development plan
+    DateBoundedEntry:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        entry_date:
+          type: string
+          format: date-time
+    Configuration:
+      type: object
+      properties:
+        collection:
+          type: string
+        endpoints:
+          type: array
+          schema:
+            $ref: '#/components/Endpoint'
+        sources:
+          type: array
+          schema:
+            $ref: '#/components/Source'
+    Endpoint:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
+      properties:
+        id:
+          type: string
+          format: uuid
+        collection:
+          type: string
+        url:
+          type: string
+        parameters:
+          type: string
+        plugin:
+          type: string
+    Source:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
+      properties:
+        endpoint_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        message:
+          type: string
+    OrganisationSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          examples:
+            - BOR
+        name:
+          type: string
+          examples:
+            - Borchester Borough County
+        datasetCounts:
+          $ref: '#/components/schemas/DatasetCounts'
+    DatasetCounts:
+      description: >-
+        Provides a count of datasets provided as well as the number of datasets
+        with warnings and/or errors
+      type: object
+      properties:
+        active:
+          description: >-
+            The count of active datasets. An active dataset means that an
+            endpoint has been provided which does not have an end date
+          type: integer
+          format: int32
+          examples:
+            - 20
+        warnings:
+          description: >-
+            The count of datasets with warnings. A dataset will be included in
+            this count if at least one warning was reported from the last run of
+            the data collection pipeline
+          type: integer
+          format: int32
+          examples:
+            - 5
+        errors:
+          description: >-
+            The count of datasets with errors. A dataset will be included in
+            this count if at least one error was reported from the last run of
+            the data collection pipeline
+          type: integer
+          format: int32
+          examples:
+            - 3
+    OrganisationDatasetSummary:
+      type: object
+      properties:
+        organisationId:
+          type: string
+          examples:
+            - BOR
+        datasset:
+          type: string
+          examples:
+            - Borchester Borough County
+        endpointUrl:
+          type: string
+          examples:
+            - https://someplace.com/data.csv
+        documentationUrl:
+          type: string
+          examples:
+            - https://someplace.com/data.html
+        endpointProvidedDate:
+          type: string
+          format: date-time
+        dataLastModified:
+          type: string
+          format: date-time
+        dataLastAccessed:
+          type: string
+          format: date-time
+        recordCount:
+          type: integer
+          format: int32
+          examples:
+            - 250
+        warningsCount:
+          type: integer
+          format: int32
+          examples:
+            - 2
+        errorCount:
+          type: integer
+          format: int32
+          examples:
+            - 1
+    Log:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
+      properties:
+        bytes:
+          type: integer
+          format: int64
+        contentType:
+          type: string
+        elapsed:
+          type: number
+          format: decimal
+        endpoint:
+          type: string
+        resource:
+          type: string
+        status:
+          type: string
+    Issue:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DateBoundedEntry"
+      properties:
+        dataset:
+          type: string
+        entry_number:
+          type: number
+        field:
+          type: string
+        issue_type:
+          type: string
+        message:
+          type: string
+        resource:
+          type: string
+        value:
+          type: string

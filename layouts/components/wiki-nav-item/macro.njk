@@ -1,0 +1,16 @@
+{% macro wikiNavItem(page,level) %}
+  <li class="wiki-nav_item">
+    {% if page.children | length > 0 %}
+      <!-- Parent Directory (Collapsible) -->
+      <a class= "x-govuk-sub-navigation__link{% if level == 1 %} wiki-nav_bold {% endif %}" href="{{ page.url }}">{{ page.title }}</a>
+      <ul class="wiki-nav_section">
+        {% for child_key,child_page in page.children %}
+          {{ wikiNavItem(child_page, level + 1) }}
+        {% endfor %}
+      </ul>
+    {% else %}
+      <!-- File (Regular Link) -->
+      <a class="x-govuk-sub-navigation__link {% if level == 1 %} wiki-nav_bold {% endif %}" href="{{ page.url }}">{{ page.title }}</a> 
+    {% endif %}
+  </li>
+{% endmacro %}
