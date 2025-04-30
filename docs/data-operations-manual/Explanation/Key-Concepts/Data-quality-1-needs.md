@@ -92,15 +92,17 @@ The pipeline transforms the collected data into the format required for the plat
 
 The general model for tests made here is comparing the supplied state of a value to a desired state. When the desired state is not met a *data quality issue* is logged. The data processing pipeline makes many such tests automatically and in the case of common or expected data errors it may be possible to automatically transform the data to the desired state. The pipeline also allows for the configuration of dataset, endpoint, or resource-specific processing to handle problems which have been identified manually. 
 
-*Example of automated test:*
+> *Example of automated test:*
+> 
+> The values for the point field in a tree dataset is supplied in the OSGB36 coordinate reference system, rather than the WGS84 required by the specification. The point value is automatically re-projected to WGS84, and a data quality issue is created to record this.
 
-The values for the point field in a tree dataset is supplied in the OSGB36 coordinate reference system, rather than the WGS84 required by the specification. The point value is automatically re-projected to WGS84, and a data quality issue is created to record this.
+<br>
 
-*Example of manual configuration:*
+> *Example of manual configuration:*
+> 
+> When adding a new endpoint for the listed-building-outline dataset it’s noticed that the listed-building-grade field contains the values 1, 2, and 3 rather than the I, II, and III required by the specification. These supplied values are mapped to the desired values by making an addition to the patch.csv file in the listed-building collection configuration, and a data quality issue is automatically created during processing to record this re-mapping.
 
-When adding a new endpoint for the listed-building-outline dataset it’s noticed that the listed-building-grade field contains the values 1, 2, and 3 rather than the I, II, and III required by the specification. These supplied values are mapped to the desired values by making an addition to the patch.csv file in the listed-building collection configuration, and a data quality issue is automatically created during processing to record this re-mapping.
-
-See our [how to configure an endpoint guide](/docs/data-operations-manual/How-To-Guides/Adding/Configure-an-endpoint) for more information on configuration.
+See our [how to configure an endpoint guide](../../../How-To-Guides/Adding/Configure-an-endpoint) for more information on configuration.
 
 The **severity level** of the data quality issue which is logged during this process indicates whether a transformation was successfully made to the desired state (severity level \= “informational” or “warning”), or whether this was not possible (severity level \= “error”).
 
@@ -118,12 +120,12 @@ This table records how the field names in any supplied resource have been mapped
 
 ### Dataset
 
-At this stage transformed resources from data providers are combined into database files and loaded onto the platform. Once the database files have been created there is a further opportunity to make data quality tests which make use of an entire dataset or datasets, rather than just being able to examine data row-by-row. Tests made at this stage of the process vary from the pipeline stage in that they do not alter the data and simply report data quality issues.
+At this stage transformed resources from data providers are combined into database files and loaded onto the platform. Once the database files have been created there is a further opportunity to make data quality tests which make use of an entire dataset or datasets, rather than just being able to examine data row-by-row. Tests made at this stage of the process vary from the pipeline stage in that they do not alter the data and simply report data quality issues. The method we use to do this is called "expectations" (see our [configure and run expectations guide](../../../How-To-Guides/Testing/Configure-and-run-expectations) for more detail).
 
-*Example Dataset quality test*
+> *Example Dataset quality test*
+> 
+> The expectation rule "[Check number of entities inside the local planning authority boundary matches the manual count](https://datasette.planning.data.gov.uk/digital-land/expectation?_facet=name&name=Check+number+of+entities+inside+the+local+planning+authority+boundary+matches+the+manual+count)" counts the number of entities we have on the platform for each LPA, and compares the actual number to an expected number created by counting the number published on each LPA's website. This quality test is only possible at this stage as it requires summarising from the entire dataset.
 
-Having access to the whole dataset makes it possible to assess things like whether the values in a reference field are unique, or whether the reference values used across  conservation-area and  conservation-area-document datasets link correctly. 
 
-#### Key artefact: [Expectation issues table](https://datasette.planning.data.gov.uk/digital-land/expectation_issue)
+#### Key artefact: [Expectation table](https://datasette.planning.data.gov.uk/digital-land/expectation)
 
-#### Key artefact: [Expectation results table](https://datasette.planning.data.gov.uk/digital-land/expectation_result)
