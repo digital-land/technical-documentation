@@ -1,5 +1,47 @@
 # Incident response history
 
+## Submit POST Issue 2025 - 05 - 13
+
+In attendance
+
+Planning Data Team
+Live Services Team
+
+Description
+The check tool is raising a 403 error after and LPA selects how they would like to provide their data (file/url)
+
+Steps to reproduce bug:
+
+- Link here: https://submit.planning.data.gov.uk/check/upload-method
+- Enter the service: https://submit.planning.data.gov.uk/
+- Select an organisation (first noticed this with Lambeth)
+- Find a dataset that hasn't been submitted and select this
+- Click 'check your data meets the specification' and enter the check service
+- Select either 'file upload' or 'url'
+- Click continue
+
+Incident priority
+P1
+
+Running log
+
+- 09:35 on 13 May: Member of the team reported the incident in  slack after LPLAs had reported the problem
+- 09:56 on 13 May: Ernest has implemented a short term fix
+- 15:31 on 13 May: Ernest has pushed a more permanent fix
+- 15:35 on 13 May: Dilwoar tested and confirmed application is working
+
+Blameless incident review/Postmortem
+
+What was the root cause of the issue?
+
+We have implemented a caching rule on /check/*, specifically the redirect from http to https did not include POST requests. This meant a 403 was returned to the user. 
+
+This was fixed by allowing the redirect rule to include POST
+Actions to prevent similar incidents in the future
+
+- Expanding the canaries to include a post route for that app (probably shouldn’t be on the actual route as it will create a task in the service so may  need to expand the health route)
+- Error tracking alerts of routes (not as effective as the one above)
+
 ## Local Authorities displaying incorrect local-authority-types - 2025-04-01
 
 ### Description
