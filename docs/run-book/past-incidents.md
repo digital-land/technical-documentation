@@ -2,12 +2,13 @@
 
 ## Submit POST Issue 2025 - 05 - 13
 
-In attendance
+### In attendance
 
 Planning Data Team
 Live Services Team
 
-Description
+### Description
+
 The check tool is raising a 403 error after and LPA selects how they would like to provide their data (file/url)
 
 Steps to reproduce bug:
@@ -20,17 +21,18 @@ Steps to reproduce bug:
 - Select either 'file upload' or 'url'
 - Click continue
 
-Incident priority
+### Incident priority
+
 P1
 
-Running log
+### Running log
 
-- 09:35 on 13 May: Member of the team reported the incident in  slack after LPLAs had reported the problem
-- 09:56 on 13 May: Ernest has implemented a short term fix
-- 15:31 on 13 May: Ernest has pushed a more permanent fix
-- 15:35 on 13 May: Dilwoar tested and confirmed application is working
+- **09:35 on 13 May:** Member of the team reported the incident in  slack after LPLAs had reported the problem
+- **09:56 on 13 May:** Live Service Team has implemented a short term fix
+- **15:31 on 13 May:** Live Service Team has pushed a more permanent fix
+- **15:35 on 13 May:** Planning Data Team tested and confirmed application is working
 
-Blameless incident review/Postmortem
+### Postmortem
 
 What was the root cause of the issue?
 
