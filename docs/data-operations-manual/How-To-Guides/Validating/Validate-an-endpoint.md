@@ -89,7 +89,7 @@
 
    iv. **Check for duplicates at ‘Duplicates with different entity numbers’**  
       If there are duplicates printed out, and the duplicates have different entity numbers, then you will need to merge these duplicates after running the `add-endpoint-and-lookups` command. This should be done by changing entity number of newly generated entity to the older entity it is a duplicate of.
-
+https://digital-land.github.io/technical-documentation/data-operations-manual/How-To-Guides/Validating/Validate-an-endpoint/
    v. **Check for unique counts in ‘Duplicate Values in Reference Columns’**  
       In the printed out table, the amount of _nunique_ must be the same as _count_ and _size_. This tells us that all the data is unique. If they are not unique, we need to get back to the LPA and require them to update their endpoint to only have unique references.
    

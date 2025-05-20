@@ -40,7 +40,7 @@ The recommended steps to resolve this are as follows:
     
     It will download all the resources for unknown entities into a resources folder, assign entities, and then delete the downloaded resource files. The affected dataset’s lookup.csv should now have new rows with the assigned entities. The amount of entities that needed to be assigned should be the same amount that have been added in the lookup file.
 
-    Unknown entities will be automatically assigned.
+    The previous assignment process which allowed Unknown entities to be automatically assigned has now been updated and provides an interactive issue summary reporting facility which highlights issues and enables corrective measures to be actioned to enhance data integrity.
 
     Review the entities assigned for the endpoint you’ve noted. The key thing to check here is whether the references are a continuation or follow a similar format to existing lookups for that provision.
 
