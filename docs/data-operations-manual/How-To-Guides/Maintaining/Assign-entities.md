@@ -41,3 +41,7 @@
 
 3. **Check results**  
    Confirm the desired result in the lookup.csv file, the amount of entities that needed to be assigned should be the same amount that have been added in the lookup file.
+
+4. **Validate new entities**
+   When assigning new entities after an endpoint has already been added, validation is now undertaken as per the add-data executable process, and not as previously automatically accepted.
+   The assign-entities executable runs the resource through the pipeline before saving the assigned entities. An interactive issues summary report then provides an opportunity for the end user to check the new entities and have the option to accept or reject the entities as per the acceptance criteria.
