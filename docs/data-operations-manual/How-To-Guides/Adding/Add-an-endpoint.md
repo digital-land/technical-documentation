@@ -186,4 +186,6 @@ Whereas [this](https://datasette.planning.data.gov.uk/digital-land/column_field?
 
 ### Update documentation-url for an existing endpoint
 
-When an LPA requests an update to the documentation URL for an existing and active endpoint on our platform, update the corresponding entry in the source.csv file by modifying the documenation-url field with the new value provided by the LPA. Once updated, commit the changes.
+When an LPA requests an update to the documentation URL for an existing and active endpoint on our platform, attempting to add the endpoint again from the start will result in an "Duplicate endpoint" error.
+
+Instead, update the source.csv file directly by locating the existing entry for that endpoint and modifying the documentation-url field with the new value provided by the LPA. Once updated, commit the changes.
