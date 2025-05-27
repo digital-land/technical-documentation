@@ -183,3 +183,7 @@ tree,422e2a9f2fb1d809d8849e05556aa7c232060673c1cc51d84bcf9bb586d5de52,,WKT,geome
 
 As an example, this [datasette query](https://datasette.planning.data.gov.uk/digital-land/column_field?_sort=rowid&resource__exact=0889c8a96914abc22521f738a6cbad7b104ccff6256118a0a39bf94912cb38d4) shows a resource where we were provided a `polygon` dataset for tree so we mapped `wkt` to `geometry`.
 Whereas [this](https://datasette.planning.data.gov.uk/digital-land/column_field?resource=05182443ad8ea72ec17fd2f46dd6e19126e86ddbc2d5f386bb2dab8b5f922d49) one was a `point` format so we did not need to override the mapping. You’ll notice that the field related to the column `wkt` is point.
+
+### Update documentation-url for an existing endpoint
+
+When an LPA requests an update to the documentation URL for an existing and active endpoint on our platform, update the corresponding entry in the source.csv file by modifying the documenation-url field with the new value provided by the LPA. Once updated, commit the changes.
