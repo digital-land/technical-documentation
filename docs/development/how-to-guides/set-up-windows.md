@@ -1,4 +1,4 @@
-# Setting up DLUCH locally on Windows Machine
+# Setting up project locally on Windows Machine
 
 1. Download Windows Terminal [Windows Terminal installation | Microsoft Learn] (https://learn.microsoft.com/en-us/windows/terminal/install)
 
