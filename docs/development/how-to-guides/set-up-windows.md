@@ -137,7 +137,8 @@ python -m alembic upgrade head
 
 Edit `.env` and set:
 
-S3_KEY=entity-builder/dataset/entity.sqlite3
+for e.g. 
+export S3_OBJECT_ARN=arn:aws:s3:::digital-land-production-collection-dataset/central-activities-zone-collection/dataset/central-activities-zone.sqlite3
 
 ### 16. Run Local Loader Script Again
 
