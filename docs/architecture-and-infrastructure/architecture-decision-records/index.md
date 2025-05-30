@@ -629,7 +629,7 @@ Approved
 #### Context
 Spatial queries on datasets containing large and complex geometries (e.g., flood-risk-zone) were observed to be slow and resource-intensive. To address this, an initial optimisation was implemented by creating a new table, entity_subdivided, to store subdivided versions of complex dataset geometries. This significantly improved query perfomance.
 #### Decision
-- A new table called entity_subdivided introduced to store subdivided geometries for complex datasets
+- A new table called **entity_subdivided** introduced to store subdivided geometries for complex datasets
 - Subdivided geometries will be stored alongside their entity and dataset identifiers
 - The querying logic will check for the presence of a subdivided geometry in entity_subdivided and use it if available.
 - If not available, the original geometry from the entity table will be used as a fallback.

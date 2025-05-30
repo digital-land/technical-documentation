@@ -28,12 +28,12 @@ In an attempt to optimize the spatial queries, the ST_Subdivide function was use
 
 #### Implementation
 
-A new table, entity_subdivided, will be introduced to store subdivided geometries derived from entity.geometry of complex datasets like flood-risk-zone. The subdivision will be done using ST_Subdivide, ensuring that large and complex geometries are broken into smaller parts while maintaining spatial accuracy.
+A new table, **entity_subdivided**, will be introduced to store subdivided geometries derived from entity.geometry of complex datasets like flood-risk-zone. The subdivision will be done using ST_Subdivide, ensuring that large and complex geometries are broken into smaller parts while maintaining spatial accuracy.
 The entity_subdivided table will store the multiple subdivided geometries corresponding to each entity hence a One-to-Many Relationship.
 
 ##### Key Changes:
 
-* A new table entity_subdivided to store subdivided geometries.
+* A new table **entity_subdivided** to store subdivided geometries.
 
 ![Class diagram for entity_subdivided](/images/entity_subdivided.drawio (1).png)
 
