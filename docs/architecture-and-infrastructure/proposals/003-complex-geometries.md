@@ -5,7 +5,7 @@ Some of the API queries are exremely slow and often result in 502s, particularly
 
 ### Result
 The execution time was reduced from ~30 seconds to ~4 seconds for an example API query in local environment, significantly improving performance. 
-example query: https://www.planning.data.gov.uk/entity.json?longitude=-1.5093779539231569&latitude=53.36780846610864&entries=current&geometry_relation=intersects&limit=100&exclude_field=geometry,point
+example query: [Link Here](https://www.planning.data.gov.uk/entity.json?longitude=-1.5093779539231569&latitude=53.36780846610864&entries=current&geometry_relation=intersects&limit=100&exclude_field=geometry,point)
 
 ## Status
 
@@ -16,7 +16,7 @@ example query: https://www.planning.data.gov.uk/entity.json?longitude=-1.5093779
 ### Overview
 Significant performance degradation in spatial queries was observed, especially when dealing with large bounding boxes containing complex geometries. This was because some dastasets and entities like flood risk zones contained highly detailed geometries that extended across large areas, generating extensive bounding boxes. As a result, even when the queried points were outside the actual geometry, the large bounding box caused the geometry to be considered in spatial queries for that area. See the example below.
 
-![Calculation of Bouding box for a large complex geometry](geometry_bounding_box.drawio.png)
+![Calculation of Bouding box for a large complex geometry](/images/geometry_bounding_box.drawio.png)
 
 #### Things Tried
 
@@ -28,14 +28,14 @@ In an attempt to optimize the spatial queries, the ST_Subdivide function was use
 
 #### Implementation
 
-A new table, entity_subdivided, will be introduced to store subdivided geometries derived from entity.geometry of complex datasets like flood-risk-zone. The subdivision will be done using ST_Subdivide, ensuring that large and complex geometries are broken into smaller parts while maintaining spatial accuracy.
+A new table, **entity_subdivided**, will be introduced to store subdivided geometries derived from entity.geometry of complex datasets like flood-risk-zone. The subdivision will be done using ST_Subdivide, ensuring that large and complex geometries are broken into smaller parts while maintaining spatial accuracy.
 The entity_subdivided table will store the multiple subdivided geometries corresponding to each entity hence a One-to-Many Relationship.
 
 ##### Key Changes:
 
-* A new table entity_subdivided to store subdivided geometries.
+* A new table **entity_subdivided** to store subdivided geometries.
 
-![Class diagram for entity_subdivided](<entity_subdivided.drawio (1).png>)
+![Class diagram for entity_subdivided](/images/entity_subdivided.drawio (1).png)
 
 * Queries involving spatial filters will use entity_subdivided table's geometry instead of entity.geometry for datasets like flood-risk-zone.
 * Modification wherever needed of existing queries to join entity and entity_subdivided.

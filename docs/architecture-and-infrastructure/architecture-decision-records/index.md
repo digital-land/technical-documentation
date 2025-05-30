@@ -588,7 +588,7 @@ and expected responses.
 the tests will extensive re-factoring to continue working
 
 
-## ADR - Coderabbit.ai Pilot for Public Repositories Only
+## 20. ADR - Coderabbit.ai Pilot for Public Repositories Only
 
 **Date**: 2024/10/17
 
@@ -621,3 +621,21 @@ The decision to expand the use of Coderabbit.ai to other repositories will be ma
 
 3. **Operational Impact:**
    - Code Review on the [Submit](https://github.com/digital-land/submit) repo might slow temporarily as teams adjust to using the tool and provide feedback for improvements.
+
+## 21. Introduce entity_subdivided Table to Store Subdivided Geometries of Complex datasets
+Date: 2025-04-30
+#### Status
+Approved
+#### Context
+Spatial queries on datasets containing large and complex geometries (e.g., flood-risk-zone) were observed to be slow and resource-intensive. To address this, an initial optimisation was implemented by creating a new table, entity_subdivided, to store subdivided versions of complex dataset geometries. This significantly improved query perfomance.
+#### Decision
+- A new table called **entity_subdivided** introduced to store subdivided geometries for complex datasets
+- Subdivided geometries will be stored alongside their entity and dataset identifiers
+- The querying logic will check for the presence of a subdivided geometry in entity_subdivided and use it if available.
+- If not available, the original geometry from the entity table will be used as a fallback.
+#### Consequences
+- Improved performance of spatial queries involving complex geometries across datasets.
+- Additional storage is required to hold subdivided geometries.
+- Query logic complexity increases slightly to support dual-source geometry selection (entity vs entity_subdivided).
+
+
