@@ -20,7 +20,8 @@
  * Linux (Debian/Ubuntu)
 
     ```
-      sudo curl -L https://github.com/99designs/aws-vault/releases/latest/download/aws-vault-linux-amd64 -o /usr/local/bin/aws-vault
+      sudo curl -L https://github.com/99designs/aws-vault/releases/latest/download/aws-vault-linux-amd64 
+      -o /usr/local/bin/aws-vault
 
       sudo chmod +x /usr/local/bin/aws-vault
     ```
