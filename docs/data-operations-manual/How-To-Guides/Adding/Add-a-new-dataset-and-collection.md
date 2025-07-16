@@ -79,20 +79,12 @@ You should be able to run `make datasette` and then see a local datasette versio
 
 Once you're happy with the configuration for the new collection and new dataset, have it reviewed by a colleague and then merged.
 
-### 5. Create New Collection repository
 
-You will need to create a new collection repo named after the dataset you wish to add. This can be easily done with the collection-template repo found here (https://github.com/digital-land/collection-template). Select Use this template at the top right to be redirected to the repo creation page. When creating the repo, make sure to set the owner as digital-land and set the visibility to public.
-
-IMPORTANT: The name of the collection repo must end with "-collection". For example, for the "article-4-direction" dataset, it would need to be called article-4-direction-collection. Failing to do this will cause issues in the pipeline.
-
-Use [this repository](https://github.com/digital-land/air-quality-management-area-collection) as a reference to identify which files need to be modified or deleted. Update README.md accordingly.
-
-### 6. Update Specification
+### 5. Update Specification
 
 Next, update the collection name for the dataset in the [specification](https://github.com/digital-land/specification) repository. Navigate to specification -> content -> dataset, locate the .md file corresponding to the dataset being added, and insert the relevant collection name. This step ensures that the DAG for this collection is created in Airflow.
 
-### 7. Regenerate Airflow DAGs
-
+### 6. Regenerate Airflow DAGs
 
 Finally, you'll need to ensure the [DAGs for Airflow](https://github.com/digital-land/airflow-dags/) are re-published to AWS.  To do this, simply follow the instructions below.   Publishing the DAGs is necessary since the latest specification needs to be read to have the relevant collection DAGs created.
 
