@@ -84,8 +84,6 @@ Once you're happy with the configuration for the new collection and new dataset,
 
 Next, update the collection name for the dataset in the [specification](https://github.com/digital-land/specification) repository. Navigate to specification -> content -> dataset, locate the .md file corresponding to the dataset being added, and insert the relevant collection name. This step ensures that the DAG for this collection is created in Airflow.
 
-IMPORTANT: The name of the collection must end with "-collection". For example, for the "article-4-direction" dataset, it would need to be called article-4-direction-collection. Failing to do this will cause issues in the pipeline.
-
 ### 6. Regenerate Airflow DAGs
 
 Finally, you'll need to ensure the [DAGs for Airflow](https://github.com/digital-land/airflow-dags/) are re-published to AWS.  To do this, simply follow the instructions below.   Publishing the DAGs is necessary since the latest specification needs to be read to have the relevant collection DAGs created.
