@@ -54,7 +54,7 @@ The recommended steps to resolve this are as follows:
 5. **Review Changes**
     Once merged, use [endpoint_dataset_issue_type_summary table](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_issue_type_summary?_sort=rowid&issue_type__exact=unknown+entity) and check if the previous unknown entity issues are resolved. 
     
-    Note in the sheet if you are not able to assign entities for any LPA.
+    Make a note in the ticket if you are not able to assign entities for any LPA.
 
 Success criteria:
 Ideally, the number of unknown entity errors should be zero after completing the above steps.
