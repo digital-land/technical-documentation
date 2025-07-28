@@ -51,13 +51,7 @@ The recommended steps to resolve this are as follows:
 
     Enter the scope, either mandated or single-source based on requirement.
     
-5. **Merge Changes**
-    Raise a PR and merge it after it's reviewed.
-
-    Create a new sheet in [this google docs](https://docs.google.com/spreadsheets/d/1gZ_SIx9jdko_aD3QRZUJh39PdNHISS1N/edit?usp=drive_link&ouid=105995804157199974210&rtpof=true&sd=true) and rename the sheet to have the Sprint start date.
-    Paste the row of “unknown entity” issues you have resolved in the google sheet, This will help track the datasets you've updated and ensure they are noted for future review.
-
-6. **Review Changes**
+5. **Review Changes**
     Once merged, use [endpoint_dataset_issue_type_summary table](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_issue_type_summary?_sort=rowid&issue_type__exact=unknown+entity) and check if the previous unknown entity issues are resolved. 
     
     Note in the sheet if you are not able to assign entities for any LPA.
