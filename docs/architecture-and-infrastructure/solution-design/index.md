@@ -8,12 +8,13 @@ The solution architecture for the Planning Data Service has been modelled using 
 ![Planning Data Service System Context](/images/system-context.drawio.png)
 
 
-## Containers
+## Systems
 
- * [Data Pipelines](/architecture-and-infrastructure/solution-design/data-pipelines/)
- * [Planning Data Platform](/architecture-and-infrastructure/solution-design/planning-data-platform/)
- * [Check service](/architecture-and-infrastructure/solution-design/check-service/)
+* [Data Pipelines](/architecture-and-infrastructure/solution-design/data-pipelines/) - This system is where both the batch data proccessing and the dynamic data pocessing is done to support the othe systemms.
+* [Planning Data Platform](/architecture-and-infrastructure/solution-design/planning-data-platform/) - the system for the [platform](www.plannig.data.gov.uk)
+* [Provide](/architecture-and-infrastructure/solution-design/check-service/) - the systemm to support tools and feedback for data providers
 
+> 🔜 Need to build a ayatem page for the data management service 
 
 ### Others
 
