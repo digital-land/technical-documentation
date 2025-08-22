@@ -638,4 +638,27 @@ Spatial queries on datasets containing large and complex geometries (e.g., flood
 - Additional storage is required to hold subdivided geometries.
 - Query logic complexity increases slightly to support dual-source geometry selection (entity vs entity_subdivided).
 
+## 22. Automate EBS volume snapshots with aws Data Lifecycle Manager (DLM)
 
+Date: 2025-08-22
+
+#### Status
+Approved
+
+#### Context
+We need an automated and consistent backup solution for aws EBS volumes with minimal operational overhead. Manual or script-based approaches are error-prone and make compliance/auditing difficult. We already manage aws resources via Terraform and prefer a native, low-maintenance option.
+To control the aws snapshot storage costs, we will restrict automated snapshots to the production environment only. Development and staging will continue without automated EBS backups.
+Additionally, aws Trusted Advisor includes a best-practice check for EBS Snapshots. It recommends that all critical volumes have recent snapshots to protect against data loss. Our current setup does not consistently meet this recommendation.
+
+#### Decision
+Adopt aws Data Lifecycle Manager (DLM) to create daily EBS snapshots for production volumes, with short retention policy to control costs and managed via Terraform.
+- DLM lifecycle policy targeting resource_types = ["VOLUME"]
+- Daily schedule at 07:00 UTC
+- Retention: 2 DAYS
+- Feature flag with var.enable_ebs_snapshot which only enabled in production.
+
+#### Consequences
+- Compliance: Satisfies aws Trusted Advisor’s “Amazon EBS Snapshots” check, ensuring production EBS volumes have recent backups and strengthening audit posture.
+- Reliability & simplicity: Managed service handles scheduling, retries, and orchestration, no custom code or cron/Lambda to maintain.
+- Production safety: Ensures critical workloads have daily recoverable EBS snapshots with automated retention policy.
+- Cost control: By limiting to production only, snapshot storage costs are minimised. Non-prod (dev/staging) avoids unnecessary backup overhead.
