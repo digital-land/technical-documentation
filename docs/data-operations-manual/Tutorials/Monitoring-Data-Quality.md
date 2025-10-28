@@ -228,7 +228,7 @@ The steps required for this process:-
 
 3. `DO NOT` inform the organisation at this stage.
 
-4. On Power BI navigate to the "Digital Planning" workspace then to the "Planning Data Monitoring" report from where you select the "Duplicate Conservation Area" page.
+4. On Power BI navigate to the "Digital Planning" workspace then to the "Planning Data Monitoring" report from where you select the "Duplicate Conservation Area" page.(Link_[0])
 
 5. Click on the reports TITLE in order for the options panel to appear to right hand side
 
@@ -238,7 +238,7 @@ The steps required for this process:-
 
 8. Filter on the message column for "complete_match" criteria
 
-9. Filter on the entity_b_organisation.name column for the organisation for which the data was added on the previous day (re:step 1)
+9. Filter on the entity_a_organisation.name column for the organisation Historic England and filter on the entity_b_organisation.name column for the organisation for which the data was added on the previous day (re:step 1)
 
 10. Copy the entities in columns entity_a and entity_b
 
@@ -250,5 +250,6 @@ e.g. 44012512,301,44013703,,redirect Historic England duplicate to LPA entity,20
 
 13. When this change is merged, check the PowerBI report to confirm the duplicate entities have been fixed.
 
+[0]: <https://app.powerbi.com/groups/80b5c556-2a94-402f-bd6a-225e9a9b6561/list?experience=power-bi>
 [1]: <config/pipeline/conservation-area/old-entity.csv at main · digital-land/config>
 [2]: <config/pipeline/conservation-area/entity-organisation.csv at main . digital-land/config>
