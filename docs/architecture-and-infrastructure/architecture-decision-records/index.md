@@ -662,3 +662,40 @@ Adopt aws Data Lifecycle Manager (DLM) to create daily EBS snapshots for product
 - Reliability & simplicity: Managed service handles scheduling, retries, and orchestration, no custom code or cron/Lambda to maintain.
 - Production safety: Ensures critical workloads have daily recoverable EBS snapshots with automated retention policy.
 - Cost control: By limiting to production only, snapshot storage costs are minimised. Non-prod (dev/staging) avoids unnecessary backup overhead.
+
+## 23. Checkov for Infrastructure-as-Code (IaC) security scanning
+
+Date: 2025-12-16
+
+#### Status
+Approved
+
+#### Context
+In order to enable a full infrastructure CI/CD pipeline, we require automated security scanning of Infrastructure-as-Code (IaC) to ensure that security best practices and compliance controls are enforced consistently and early in the delivery process.
+
+The selected tool must integrate seamlessly into our CI/CD workflows, provide fast and actionable feedback to developers, and prevent insecure infrastructure configurations from being promoted to higher environments. Additionally, the solution should support our current IaC technologies while allowing for future expansion without introducing additional tooling complexity.
+
+Two primary candidates were evaluated and both tools are well-established and widely adopted for IaC security scanning.
+- Checkov ([by Prisma Cloud](https://www.checkov.io/))
+- tfsec ([by Aqua Security](https://aquasecurity.github.io/tfsec/v1.28.13/)) 
+
+#### Decision
+We have decided to adopt Checkov as the primary IaC security scanning tool instead of tfsec for the following reason.
+- Broader IaC and platform support - Checkov supports multiple IaC frameworks such as Terraform, CloudFormation and dockerfiles etc.
+- Unified Policy Engine - Checkov provides a centralised policy engine and built-in support for compliance frameworks such as CIS, NIST etc.
+- Support native GitHub Actions CI integrations
+- Support multiple output formats (CLI, JSON, SARIF)
+- Checkov classifies issues by severity (LOW, MEDIUM, HIGH, CRITICAL) and also allows filtering by severity.
+
+#### Consequences
+As a result of adopting Checkov, it will be implemented as a new GitHub Actions workflow and executed on every pull request and on the main branch.
+
+1. **Positive Outcomes:**
+- Infrastructure security scanning is integrated into GitHub PRs, providing early feedback on security issues before changes are merged.
+- Initial soft-fail configuration ensures that the pipeline and pr merge process are not blocked while teams become familiar with the tool.
+- Scan results will be generated in SARIF format and centralised review of the security findings.
+
+2. **Negative Outcomes:**
+- Security findings will not block merges during the initial rollout, which may allow known issues to reach the main branch.
+- Developers may need time to interpret and act on new security findings introduced by the scans.
+
