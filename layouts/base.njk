@@ -24,3 +24,8 @@
     </div>
   </div>
 {% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  <script src="/assets/wiki-nav.js"></script>
+{% endblock %}

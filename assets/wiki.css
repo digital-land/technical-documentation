@@ -17,8 +17,59 @@
   list-style: none;
   margin: 0 0;
   padding: 0px 0px 0px 20px;
+  transition: max-height 0.2s ease-out;
 }
 
 .wiki-nav_section_1 {
     padding: 0px 0px 0px 0px;
-  }
+}
+
+.wiki-nav_section--collapsed {
+  display: none;
+}
+
+.wiki-nav_parent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.wiki-nav_toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #003078;
+  font-size: 16px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.wiki-nav_toggle:hover {
+  color: #1d70b8;
+}
+
+.wiki-nav_toggle:focus {
+  outline: 3px solid #ffdd00;
+  outline-offset: 1px;
+}
+
+.wiki-nav_toggle-icon {
+  display: block;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.wiki-nav_current-page {
+  color: #505a5f !important;
+  text-decoration: none !important;
+  pointer-events: none;
+  cursor: default;
+}
