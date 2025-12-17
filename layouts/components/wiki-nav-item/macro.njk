@@ -1,14 +1,15 @@
 {% macro wikiNavItem(page,level) %}
+  {% set navId = (page.url if page.url else page.title) | replace('/', '-') | replace(' ', '-') | lower %}
   <li class="wiki-nav_item">
     {% if page.children | length > 0 %}
       <!-- Parent Directory (Collapsible) -->
       <div class="wiki-nav_parent">
         <a class= "x-govuk-sub-navigation__link{% if level == 1 %} wiki-nav_bold {% endif %}" href="{{ page.url }}">{{ page.title }}</a>
-        <button class="wiki-nav_toggle" aria-expanded="false" aria-controls="nav-{{ page.url | replace('/', '-') | replace(' ', '-') }}">
+        <button class="wiki-nav_toggle" aria-expanded="false" aria-controls="nav-{{ navId }}">
           <span class="wiki-nav_toggle-icon" aria-hidden="true">‹</span>
         </button>
       </div>
-      <ul class="wiki-nav_section wiki-nav_section--collapsed" id="nav-{{ page.url | replace('/', '-') | replace(' ', '-') }}">
+      <ul class="wiki-nav_section wiki-nav_section--collapsed" id="nav-{{ navId }}">
         {% for child_key,child_page in page.children %}
           {{ wikiNavItem(child_page, level + 1) }}
         {% endfor %}
