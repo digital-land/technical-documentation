@@ -22,7 +22,17 @@ technical documentation using a GOV.UK style.
 
 But we found that using  the template required knowledge of Ruby  which isn't a requirement of our project and was difficult for alll members of the team to interact with so we switched to [X-GOVUK Eleventy Plugin](https://x-govuk.github.io/govuk-eleventy-plugin/).
 
-We have customised the layout so that edits don't need any  special knowledge other than creating and editing markdown files. To make a change simply edit the relvent document or create a new one in the docs directory and the sidenav will automatically update!
+We have customised the layout so that edits don't need any  special knowledge other than creating and editing markdown files. To make a change simply edit the relevant document or create a new one in the docs directory and the sidenav will automatically update!
+
+#### Optional
+
+If creating a new markdown file, no knowledge is needed other than markdown. However, if you want titles to display in the browser tab, run:
+
+```bash
+make frontmatter
+```
+
+This will add a header to your page with the necessary metadata using the first heading you created in your markdown file.
 
 [mit]: LICENCE
 [copyright]: http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/
