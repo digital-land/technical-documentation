@@ -699,3 +699,31 @@ As a result of adopting Checkov, it will be implemented as a new GitHub Actions 
 - Security findings will not block merges during the initial rollout, which may allow known issues to reach the main branch.
 - Developers may need time to interpret and act on new security findings introduced by the scans.
 
+
+## 24. Use Customer-Managed KMS CMK for SSM Parameter Store encryption (CKV_AWS_337)
+
+Date: 2025-12-19
+
+#### Status
+Approved
+
+#### Context
+Checkov control CKV_AWS_337 – Ensure SSM parameters are using KMS CMK requires that AWS Systems Manager (SSM) Parameter Store parameters are encrypted using a customer-managed AWS KMS key, rather than the default AWS-managed SSM key (aws/ssm).
+
+By default, SSM Parameter Store encrypts SecureString parameters with an AWS-managed key, which provides encryption at rest but limits our ability to enforce fine-grained access controls, key rotation policies and alignment with internal security standards.
+
+To meet this control and align with MHCLG security and compliance requirements, we must explicitly define how KMS keys are created, managed, and used for SSM Parameter Store encryption within our Infrastructure-as-Code (IaC) workflows.
+
+#### Decision
+We have decided to create and manage a dedicated customer-managed KMS key (CMK) using Terraform and use this key to encrypt all SSM SecureString parameters instead of relying on the default AWS-managed SSM key.
+
+#### Consequences
+As a result of adopting a customer-managed KMS CMK for SSM Parameter Store:
+
+1. **Positive Outcomes:**
+- Full compliance with Checkov control CKV_AWS_337.
+- Centralised and consistent encryption strategy managed via Terraform.
+
+2. **Negative Outcomes:**
+- Additional operational overhead to manage KMS keys (policies, rotation, lifecycle).
+- Terraform configurations become slightly more complex due to explicit key management.
