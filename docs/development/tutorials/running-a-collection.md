@@ -1,4 +1,6 @@
-# Running A Data Collection Pipeline
+---
+title: Running A Data Collection Pipeline
+---
 
 ### TODO: Needs Completing
 

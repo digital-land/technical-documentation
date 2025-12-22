@@ -1,4 +1,7 @@
-# Open Design Proposal - 00X - Title (Template)
+---
+title: Open Design Proposal - 00X - Title (Template)
+---
+
 Author(s) - (include Authors here with mailto: links)
 ## Introduction
 Introduction to design change, including context of decision. State briefly the user need being met.

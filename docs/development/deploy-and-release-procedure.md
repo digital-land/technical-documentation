@@ -1,4 +1,6 @@
-# Deploy And Release Procedure
+---
+title: Deploy And Release Procedure
+---
 
 When working across our applications, processes and packages you will at some stage need to deploy code across our development, staging and production environment. While this process may change across different repositories this page contains some generalised guidance that can be applied in different areas. We use Continuous deployment to minimise the work needed by developers.
 

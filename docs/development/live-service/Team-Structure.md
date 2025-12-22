@@ -1,4 +1,6 @@
-### Team Structure and Guidance
+---
+title: Team Structure and Guidance
+---
 
 **Team Setup**
 - Teams are split across three key areas:

@@ -1,4 +1,6 @@
-# Data Operations Manual
+---
+title: Data Operations Manual
+---
 
 This section gived information on how we perform data operations to manage the data on the platform.
 

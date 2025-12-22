@@ -1,4 +1,6 @@
-# Make Python Virtual Environments
+---
+title: Make Python Virtual Environments
+---
 
 To create a new python environment, type:
 

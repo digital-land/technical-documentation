@@ -1,4 +1,6 @@
-# Infrastructure
+---
+title: Infrastructure
+---
 
 This section focuses on describing our approach to provisioning hosting infrastructure for the Planning Data Service.
 

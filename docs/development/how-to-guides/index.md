@@ -1,4 +1,6 @@
-# How-to guides
+---
+title: How-to guides
+---
 
 These guides are short snappy instructions for developers and how specific things can be achieved. Useful for new and experienced developers.
 

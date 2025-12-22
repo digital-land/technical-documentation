@@ -1,4 +1,6 @@
-# Architecture & Infrastructure
+---
+title: Architecture & Infrastructure
+---
 
 In order to run the service we have to have compute resource for data processing and applications/APIs. This section focuses on describing the architecture behind the infrastructure and what infrastructure is deployed.
 

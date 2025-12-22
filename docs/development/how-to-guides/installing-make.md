@@ -1,4 +1,6 @@
-# Installing Make
+---
+title: Installing Make
+---
 
 Make is used pretty consistently across our projects for making similar commands across applications or for executing the pipeline on a single machine.
 

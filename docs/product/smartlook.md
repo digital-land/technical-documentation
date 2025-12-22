@@ -1,4 +1,6 @@
-# Smartlook User Tracking Documentation
+---
+title: Smartlook User Tracking Documentation
+---
 
 ## Overview
 

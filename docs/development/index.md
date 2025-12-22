@@ -1,4 +1,6 @@
-# Development
+---
+title: Development
+---
 
 As with any digital project developers are key! We are spread out across multiple teams and use this documentation to agree on ways of working and best practices for anyone developing on the project. 
 

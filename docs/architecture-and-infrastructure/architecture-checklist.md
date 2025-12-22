@@ -1,4 +1,6 @@
-# Architecture Review Checklist
+---
+title: Architecture Review Checklist
+---
 
 ## Overview
 

@@ -1,4 +1,6 @@
-# Plan
+---
+title: Plan
+---
 
 The plan process does a combination of things specifically:
 * update the resource and log csvs after new logs have been created in  the  collect pocess

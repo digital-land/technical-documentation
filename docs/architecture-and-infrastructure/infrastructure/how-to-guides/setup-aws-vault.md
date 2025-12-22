@@ -1,4 +1,6 @@
-# Setup aws vault
+---
+title: Setup aws vault
+---
 
 ## Background
 

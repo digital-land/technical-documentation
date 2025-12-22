@@ -1,4 +1,6 @@
-# Batch Processing & Our Pipelines
+---
+title: Batch Processing & Our Pipelines
+---
 
 **These are the pipelines which load data into the platform**. 
 

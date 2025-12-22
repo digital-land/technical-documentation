@@ -1,4 +1,6 @@
-# Installing GDAL
+---
+title: Installing GDAL
+---
 
 GDAL is a set of tools used for geospatial analysis and is needed across our  pipelines and in the main application.
 

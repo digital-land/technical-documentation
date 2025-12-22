@@ -1,4 +1,6 @@
-## Pipeline configuration 
+---
+title: Pipeline configuration
+---
 
 Configuration files control where data is collected from and how data is transformed from resources into the fact and entity model described above. Each collection has its own set of configuration files organised into two folders: `collection` and `pipeline`. 
 

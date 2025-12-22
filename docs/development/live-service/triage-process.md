@@ -1,4 +1,6 @@
-### Bug Triage Process
+---
+title: Bug Triage Process
+---
 
 **Pre-meeting**
 

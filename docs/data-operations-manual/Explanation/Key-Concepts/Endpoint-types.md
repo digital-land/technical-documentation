@@ -1,4 +1,6 @@
-# Endpoint URL Types and Plugins
+---
+title: Endpoint URL Types and Plugins
+---
 
 The pipeline can collect data published in a wide range of different formats, which means there is a lot of variety in the types of URLs we might add as endpoints. Broadly, however, endpoints typically fall into one of the following two categories:
 - Hosted file - these will usually be URL which ends in something like `.json` or `.csv`

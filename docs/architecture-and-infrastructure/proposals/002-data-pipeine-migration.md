@@ -1,4 +1,6 @@
-# Open Design Proposal 002 - Data Pipelines Migration
+---
+title: Open Design Proposal 002 - Data Pipelines Migration
+---
 
 Author(s) - [Chris Cundill](mailto:chris.cundill@tpximpact.com)
 

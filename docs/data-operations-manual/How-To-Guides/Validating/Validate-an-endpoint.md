@@ -1,4 +1,6 @@
-# Validating an endpoint
+---
+title: Validating an endpoint
+---
 
 1. **Check required information is available**  
    In order to add an endpoint we require the following information: 

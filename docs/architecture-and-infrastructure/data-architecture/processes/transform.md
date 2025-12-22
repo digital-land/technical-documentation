@@ -1,4 +1,6 @@
-# Transform
+---
+title: Transform
+---
 
 The transform process take a resource and given a dataset name processes that resource against the dataset. This uses a set of configuration files and the specification files which instruct the process what to do.
 

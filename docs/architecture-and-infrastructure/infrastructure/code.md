@@ -1,4 +1,6 @@
-## Code Repositories
+---
+title: Code Repositories
+---
 
 Taking an [IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code) approach, our hosting infrastructure is defined
 in Terraform code.

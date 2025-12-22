@@ -1,4 +1,6 @@
-# Retire entities
+---
+title: Retire entities
+---
 
 We only retire entities which have been added in error.
 

@@ -1,4 +1,6 @@
-## Airflow & DAGs
+---
+title: Airflow & DAGs
+---
 
 ### Airflow
 

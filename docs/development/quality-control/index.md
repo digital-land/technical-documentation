@@ -1,4 +1,6 @@
-# Quality Control
+---
+title: Quality Control
+---
 
 This section contains information on the quality control processes that are in place for the Planning Data Service.
 

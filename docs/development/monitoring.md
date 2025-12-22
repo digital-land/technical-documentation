@@ -1,4 +1,6 @@
-## Monitoring
+---
+title: Monitoring
+---
 
 Across our infrastructure we host multiple applications and data pipelines all under  constant development. Natural this system requires multiple methods of monitoring to keep track of what's going on.
 

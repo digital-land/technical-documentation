@@ -1,4 +1,6 @@
-# Google Analytics User Tracking Documentation
+---
+title: Google Analytics User Tracking Documentation
+---
 
 ## Overview
 

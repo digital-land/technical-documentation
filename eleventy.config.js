@@ -85,7 +85,7 @@ module.exports = function(eleventyConfig) {
                 // If directory doesn't exist in the structure, initialize it
                 if (!structure[currentDir]) {
                     structure[currentDir] = {
-                        title: currentDir.replace(/-/g, ' '),
+                        title: capitalizeWords(currentDir.replace(/-/g, ' ')),
                         url: '',
                         children: {}
                     };

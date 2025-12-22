@@ -1,4 +1,6 @@
-# Run Book
+---
+title: Run Book
+---
 
 This section contains some basic instructions for fixing common issues encountered operating the service.
 

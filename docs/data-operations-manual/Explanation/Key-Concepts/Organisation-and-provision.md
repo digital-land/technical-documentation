@@ -1,4 +1,6 @@
-## Organisation
+---
+title: Organisation
+---
 
 We maintain a list of organisations that supply data to our platform. These organisations are categorised into various types, such as development corporations, government organisations, local authorities, and more. Each data source added to our platform must be linked to the organisation that provided the data.
 

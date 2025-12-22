@@ -1,4 +1,6 @@
-# How-to guides
+---
+title: How-to guides
+---
 
 These guides are brief instructions for engineers and how specific things can be achieved. Useful for new and experienced members of the team.
 

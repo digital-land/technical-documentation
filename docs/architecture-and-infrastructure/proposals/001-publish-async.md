@@ -1,4 +1,6 @@
-# Open Design Proposal 001 - Publish service - Async
+---
+title: Open Design Proposal 001 - Publish service - Async
+---
 
 Author(s) - [Chris Cundill](mailto:chris.cundill@tpximpact.com)
 

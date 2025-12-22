@@ -1,4 +1,6 @@
-# Setting up on Windows
+---
+title: Setting up on Windows
+---
 
 1. Download Windows Terminal [Windows Terminal installation | Microsoft Learn] (https://learn.microsoft.com/en-us/windows/terminal/install)
 

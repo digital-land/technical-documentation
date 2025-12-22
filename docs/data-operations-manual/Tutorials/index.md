@@ -1,4 +1,6 @@
-# Tutorials
+---
+title: Tutorials
+---
 
 You will find a list of tutorials here:
 

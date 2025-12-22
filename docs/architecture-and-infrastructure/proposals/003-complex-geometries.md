@@ -1,4 +1,7 @@
-# Open Design Proposal - 003 - Querying on Complex geometries 
+---
+title: Open Design Proposal - 003 - Querying on Complex geometries
+---
+
 Author(s) - [Samriti Sadhu](mailto:ssadhu@scottlogic.com)
 ## Introduction
 Some of the API queries are exremely slow and often result in 502s, particularly when querying near large and complex datasets such as flood-risk-zone. To improve query performance, we propose using ST_Subdivide function of postgis to split large geometries into smaller, more manageable components and store them in a separate table. This approach will optimize spatial queries.

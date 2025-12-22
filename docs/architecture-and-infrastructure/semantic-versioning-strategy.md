@@ -1,4 +1,6 @@
-# Semantic Versioning Strategy (`SEMVER.md`)
+---
+title: Semantic Versioning Strategy (`SEMVER.md`)
+---
 
 ## 1. Overview
 

@@ -1,5 +1,6 @@
-
-# Data quality framework
+---
+title: Data quality framework
+---
 
 We have a structured approach to how we identify and fix issues with data quality, which we refer to as our *data quality framework*.
 

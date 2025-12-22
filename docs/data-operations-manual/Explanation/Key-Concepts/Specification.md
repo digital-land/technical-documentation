@@ -1,4 +1,6 @@
-## Specification Repo
+---
+title: Specification Repo
+---
 
 The [specification](https://github.com/digital-land/specification) repository contains the information regarding fields, tables, and other essential configurations.
 

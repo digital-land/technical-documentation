@@ -1,4 +1,6 @@
-# Merge Entities
+---
+title: Merge Entities
+---
 
 1. **Create csv file in root and populate**  
    To merge duplicate entities, we make use of the add-redirections command. For this, you will need to have a csv file with the entities you want to merge (we’ll name it `entity-merge.csv` for this explanation) . Imagine that  a `conservation-area` has duplicate entities, one with the entity number 3032307 and the other with number 3033940\. We want to combine both together as they refer to the same entity. We will essentially be redirecting references of 3032307 to 3033940 

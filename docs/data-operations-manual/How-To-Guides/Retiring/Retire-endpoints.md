@@ -1,5 +1,6 @@
-
-## Retiring individual endpoints
+---
+title: Retiring individual endpoints
+---
 
 1. **Find the endpoint/source(s) to be retired**  
      

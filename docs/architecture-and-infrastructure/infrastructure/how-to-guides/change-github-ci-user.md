@@ -1,7 +1,10 @@
+---
+title: Change permissions for a GitHub CI user
+---
+
 Permissions are found within the IAM policies attached to the build user assigned to a GitHub repository
 
 
-# Change permissions for a GitHub CI user
 
 ## Background
 

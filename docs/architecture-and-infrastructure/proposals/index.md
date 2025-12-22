@@ -1,4 +1,6 @@
-# Open Design Proposals
+---
+title: Open Design Proposals
+---
 
 ## Intro
 

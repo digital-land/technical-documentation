@@ -1,4 +1,6 @@
-# Managing technical incidents
+---
+title: Managing technical incidents
+---
 
 Our incident management focuses on restoring normal operations quickly with minimal impact on users.
 

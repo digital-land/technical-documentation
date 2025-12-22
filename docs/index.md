@@ -1,4 +1,6 @@
-# Planning Data Wiki
+---
+title: Planning Data Wiki
+---
 
 Welcome to the Planning Data Wiki. This is used by the members of the team to store documentation from a few key areas:
 

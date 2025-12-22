@@ -1,4 +1,6 @@
-# How to resolve certain issues
+---
+title: How to resolve certain issues
+---
 
 This outlines the steps and processes to take for many issues the platform may experience.
 

@@ -1,5 +1,7 @@
+---
+title: What are expectations?
+---
 
-## What are expectations?
 Expecation is the term used to describe an assertion made about our data for the purposes of data quality.
 
 A single assertion might be something like: 

@@ -1,4 +1,6 @@
-# Set Up WSL
+---
+title: Set Up WSL
+---
 
 For windows users it's recommended to set up window's sub-system fo Linux (WSL) as our projects are primarily set-up to run on Linux
 

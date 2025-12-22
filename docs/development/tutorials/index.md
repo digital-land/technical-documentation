@@ -1,4 +1,6 @@
-# Tutorials
+---
+title: Tutorials
+---
 
 These tutorials are aimed  at  new joiners to the  prroject or the subject and  give additional context and information whille guiding a developer through several processes.
 

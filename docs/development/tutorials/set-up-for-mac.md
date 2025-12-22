@@ -1,4 +1,6 @@
-# Setting up a Mac for use on our project
+---
+title: Setting up a Mac for use on our project
+---
 
 This tutorial aims to walk you through a lot of the base level requirements you need to work on the majority of our code base. Our codebase spans a lot and this attempts to just install the essential parts that are generally needed. There may be app specific requirements on top of this but this is a good place to start when joining the project.
 

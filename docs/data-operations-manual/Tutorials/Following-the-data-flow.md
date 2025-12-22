@@ -1,5 +1,7 @@
+---
+title: Purpose
+---
 
-# Purpose
 This tutorial isn't for a particular task, instead it aims to demonstrate the data that is produced as a result of adding a new endpoint to our configuration.
 
 You can follow it before or after you've followed the [adding data](../Adding-data) process yourself, but the idea is that by following the links here you'll start to build up a more complete picture of how data is collected, processed and published on our platform, which will help understand the data adding process better.

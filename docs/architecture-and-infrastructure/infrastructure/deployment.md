@@ -1,4 +1,6 @@
-# Infrastructure deployment diagrams
+---
+title: Infrastructure deployment diagrams
+---
 
 Our hosting infrastructure is provided by Amazon Web Services (AWS).  Deployment diagrams for our most established
 systems are provided below.

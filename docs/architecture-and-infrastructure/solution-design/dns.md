@@ -1,4 +1,6 @@
-# Solution design - DNS
+---
+title: Solution design - DNS
+---
 
 ## Overview
 

@@ -1,5 +1,5 @@
 SHELL := bash
-.PHONY: init clean
+.PHONY: init clean frontmatter
 
 init: 
 	npm install
@@ -23,6 +23,10 @@ serve:
 
 build:
 	npx eleventy
+
+# Add frontmatter title to markdown files where none exists
+frontmatter:
+	python3 add_frontmatter.py
 
 
 

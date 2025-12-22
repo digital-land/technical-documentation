@@ -1,4 +1,6 @@
-# Installing SQLite
+---
+title: Installing SQLite
+---
 
 ## On Linux
 

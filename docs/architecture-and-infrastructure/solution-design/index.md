@@ -1,5 +1,6 @@
-
-# Solution design
+---
+title: Solution design
+---
 
 The solution architecture for the Planning Data Service has been modelled using the [C4 approach](https://c4model.com/).
 

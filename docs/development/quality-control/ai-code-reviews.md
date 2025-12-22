@@ -1,4 +1,6 @@
-# AI Code Reviewing with CodeRabbit
+---
+title: AI Code Reviewing with CodeRabbit
+---
 
 ## Introduction
 CodeRabbit is an AI-powered code review tool that integrates with our development workflow to enhance code quality, maintainability, and security. It assists developers by providing automated feedback, detecting potential issues, and ensuring adherence to best practices.

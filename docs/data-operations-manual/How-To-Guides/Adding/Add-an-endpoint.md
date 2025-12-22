@@ -1,4 +1,6 @@
-# Add an endpoint
+---
+title: Add an endpoint
+---
 
 **Prerequisites:**
 

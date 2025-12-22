@@ -1,4 +1,6 @@
-# Data Architecture
+---
+title: Data Architecture
+---
 
 Our key product is to produce a data platform which is capable of serving consumers with data related to the planning system. Because of this we have to perform a lot of processing to retrieve data from data providers and get it into the correct format.
 

@@ -1,4 +1,6 @@
-# Debugging Live Services
+---
+title: Debugging Live Services
+---
 
 ## Async processor API
 

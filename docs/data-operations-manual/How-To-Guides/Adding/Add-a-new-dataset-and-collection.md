@@ -1,4 +1,6 @@
-# Add a new dataset and collection
+---
+title: Add a new dataset and collection
+---
 
 The following instructions are for when adding an entirely new dataset to the platform which does not have a corresponding collection configuration.
 

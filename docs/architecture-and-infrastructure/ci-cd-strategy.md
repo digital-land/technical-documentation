@@ -1,4 +1,6 @@
-# Continuous Integration(CI)/Continuous Delivery(CD) Strategy
+---
+title: Continuous Integration(CI)/Continuous Delivery(CD) Strategy
+---
 
 This page aims to lay out our strategy for CI/CD pipelines across our projects. There is
 additional guidance for developers detailing the process for deploying code changes.

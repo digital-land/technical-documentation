@@ -1,4 +1,6 @@
-# Solution design - Planning Data Platform
+---
+title: Solution design - Planning Data Platform
+---
 
 ## Containers
 

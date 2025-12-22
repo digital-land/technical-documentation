@@ -1,4 +1,6 @@
-# Operational Procedures
+---
+title: Operational Procedures
+---
 
 One of the key responsibilities of the data management team is adding new endpoints and keeping existing ones up to date. This page gives an overview of the important concepts behind the procedures we follow at different stages of the data lifecycle.
 

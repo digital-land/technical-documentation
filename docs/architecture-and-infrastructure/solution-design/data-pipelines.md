@@ -1,4 +1,6 @@
-# Solution design - Data Pipelines
+---
+title: Solution design - Data Pipelines
+---
 
 Our data pipelines system is set upp to complete batch and dynamic pocessing to support the service. It's worth reviewing our data architecture to understand the data flow of pipelines.
 

@@ -1,5 +1,6 @@
-# Architecture Decision Records (ADRs)
-
+---
+title: Architecture Decision Records (ADRs)
+---
 
 ## 1. Record architecture decisions
 

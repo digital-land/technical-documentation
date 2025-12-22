@@ -1,4 +1,6 @@
-# Building a collection locally
+---
+title: Building a collection locally
+---
 
 Before we commit any changes to main, we need to be sure that the changes have the desired effect. To do this, we build a datasette database locally for any collection.
 

@@ -1,4 +1,6 @@
-# Change permissions for an application
+---
+title: Change permissions for an application
+---
 
 ## Background
 

@@ -1,4 +1,6 @@
-# Infrastructure Security
+---
+title: Infrastructure Security
+---
 
 ## Overview
 

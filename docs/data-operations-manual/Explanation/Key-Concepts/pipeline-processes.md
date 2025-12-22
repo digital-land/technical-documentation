@@ -1,4 +1,6 @@
-## Pipeline process / data model 
+---
+title: Pipeline process / data model
+---
 
 See the [about section of the planning.data website](https://www.planning.data.gov.uk/about/)  to learn more about the website and programme objectives:
 

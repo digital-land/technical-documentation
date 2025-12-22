@@ -1,4 +1,6 @@
-## Performance Database Table Construction Documentation
+---
+title: Performance Database Table Construction Documentation
+---
 
 This is documentation that explains the construction of the tables in the [performance database](https://datasette.planning.data.gov.uk/performance/), including details on base tables, sources of columns.
 

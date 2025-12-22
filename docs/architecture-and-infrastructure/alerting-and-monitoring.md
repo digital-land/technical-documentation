@@ -1,4 +1,6 @@
-# Alerting and Monitoring Strategy
+---
+title: Alerting and Monitoring Strategy
+---
 
 This document outlines our monitoring and alerting strategy for the **Planning Data Platform** and associated services. It ensures we are notified of issues early, helps us respond quickly to incidents, and supports our compliance with GOV.UK Service Standard.
 

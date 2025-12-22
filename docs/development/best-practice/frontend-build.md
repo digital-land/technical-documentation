@@ -1,4 +1,6 @@
-# Frontend Build Best Practices
+---
+title: Frontend Build Best Practices
+---
 
 This document outlines best practices for frontend build processes in Digital Land projects, based on the approach used in config-manager.
 

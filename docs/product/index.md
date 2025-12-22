@@ -1,4 +1,6 @@
-# Product
+---
+title: Product
+---
 
 This section contains information on the product and the planning data service.
 

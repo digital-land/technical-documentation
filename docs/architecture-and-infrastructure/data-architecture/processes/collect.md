@@ -1,4 +1,6 @@
-# Collect
+---
+title: Collect
+---
 
 the collect process is used in our data collection pipelines to download a resource from an endpoint.  It produces a collection log per endpoint for that given date.
 

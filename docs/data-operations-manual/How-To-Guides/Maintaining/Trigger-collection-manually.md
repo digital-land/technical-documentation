@@ -1,4 +1,6 @@
-# Trigger collection manually
+---
+title: Trigger collection manually
+---
 
 Data collection pipelines are executed via [Airflow](/data-operations-manual/Explanation/Key-Concepts/Airflow-and-DAGs).
 
