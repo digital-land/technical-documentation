@@ -728,3 +728,30 @@ As a result of adopting a customer-managed KMS CMK for SSM Parameter Store:
 2. **Negative Outcomes:**
 - Additional operational overhead to manage KMS keys (policies, rotation, lifecycle).
 - Terraform configurations become slightly more complex due to explicit key management.
+
+## 25. Use Customer-Managed KMS CMK for CloudWatch Logs encryption (CKV_AWS_158)
+
+Date: 2025-12-30
+
+#### Status
+Approved
+
+#### Context
+Checkov control CKV_AWS_158 – Ensure CloudWatch Log Groups are encrypted with a customer-managed KMS key requires that AWS CloudWatch log groups use a customer-managed AWS KMS key rather than leaving log groups unencrypted or using less controlled defaults.
+
+To meet this control and align with MHCLG security and compliance requirements, we must explicitly define how KMS keys are created, managed, and applied to CloudWatch log groups within our Infrastructure-as-Code (IaC) workflows.
+
+#### Decision
+We have decided to create and manage a dedicated customer-managed KMS key (CMK) using Terraform and use this CMK to encrypt all CloudWatch Logs log groups by explicitly setting **kms_key_id** on each log group.
+
+#### Consequences
+As a result of adopting a customer-managed KMS CMK for CloudWatch Logs:
+
+1. **Positive Outcomes:**
+- Full compliance with Checkov control CKV_AWS_158.
+- Centralised and consistent encryption strategy managed via Terraform.
+
+2. **Negative Outcomes:**
+- Additional operational overhead to manage KMS keys (policies, rotation, lifecycle).
+- Terraform configurations become slightly more complex due to explicit key management.
+
