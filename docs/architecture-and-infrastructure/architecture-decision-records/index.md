@@ -2,6 +2,14 @@
 title: Architecture Decision Records (ADRs)
 ---
 
+Architecture Decision Records (ADRs) capture important architectural and technical decisions made during the design and delivery of this service. They record the context of a decision, the options considered, and the outcome, so that future teams can understand not just *what* was decided, but *why*.
+
+Using ADRs helps us maintain a clear decision history, supports transparency, and makes it easier to revisit or challenge earlier assumptions as the service evolves. This approach aligns with good practice across government digital teams, including guidance from the [Government Digital Service](https://www.gov.uk/government/organisations/government-digital-service) on documenting and communicating technical decisions, and wider [GOV.UK Service Manual guidance on technology and architecture](https://www.gov.uk/service-manual/technology/architecture).
+
+## Contents
+
+{% toc %}
+
 ## 20. Use Customer-Managed KMS CMK for CloudWatch Logs encryption (CKV_AWS_158)
 
 Date: 2025-12-30
