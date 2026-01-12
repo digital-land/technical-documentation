@@ -34,3 +34,15 @@ digital-land retire-endpoints-and-sources retire.csv
 
 4. **Check the results**  
    Double check if all the endpoints and sources that are meant to be retired have an end-date added to the corresponding line. There should be as many endpoints retired as given in retire.csv. There should be at least the same amount of retired sources (remember that multiple sources can be associated with an endpoint)
+
+## Deleting endpoints with duplicate entries
+
+When the same endpoint is associated with two different datasets or organisations, and it is determined that one of them is incorrect, retiring the endpoint using an end-date will impact the other correct entry depending on its position in the file. 
+
+To prevent such issues, the correct approach is to remove the entire entry for the endpoint from both the endpoint and source CSV files.
+
+1. Locate the entry to be removed using the endpoint hash.
+
+2. Verify the entry by confirming the associated organisation or dataset.
+
+3. Delete the entry from both the endpoint and source files.
