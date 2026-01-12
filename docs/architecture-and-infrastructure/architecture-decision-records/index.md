@@ -2,7 +2,7 @@
 title: Architecture Decision Records (ADRs)
 ---
 
-## 25. Use Customer-Managed KMS CMK for CloudWatch Logs encryption (CKV_AWS_158)
+## 20. Use Customer-Managed KMS CMK for CloudWatch Logs encryption (CKV_AWS_158)
 
 Date: 2025-12-30
 
@@ -28,7 +28,7 @@ As a result of adopting a customer-managed KMS CMK for CloudWatch Logs:
 - Additional operational overhead to manage KMS keys (policies, rotation, lifecycle).
 - Terraform configurations become slightly more complex due to explicit key management.
 
-## 24. Use Customer-Managed KMS CMK for SSM Parameter Store encryption (CKV_AWS_337)
+## 19. Use Customer-Managed KMS CMK for SSM Parameter Store encryption (CKV_AWS_337)
 
 Date: 2025-12-19
 
@@ -56,7 +56,7 @@ As a result of adopting a customer-managed KMS CMK for SSM Parameter Store:
 - Additional operational overhead to manage KMS keys (policies, rotation, lifecycle).
 - Terraform configurations become slightly more complex due to explicit key management.
 
-## 23. Checkov for Infrastructure-as-Code (IaC) security scanning
+## 18. Checkov for Infrastructure-as-Code (IaC) security scanning
 
 Date: 2025-12-16
 
@@ -93,7 +93,7 @@ As a result of adopting Checkov, it will be implemented as a new GitHub Actions 
 - Developers may need time to interpret and act on new security findings introduced by the scans.
 
 
-## 22. Automate EBS volume snapshots with aws Data Lifecycle Manager (DLM)
+## 17. Automate EBS volume snapshots with aws Data Lifecycle Manager (DLM)
 
 Date: 2025-08-22
 
@@ -118,7 +118,7 @@ Adopt aws Data Lifecycle Manager (DLM) to create daily EBS snapshots for product
 - Production safety: Ensures critical workloads have daily recoverable EBS snapshots with automated retention policy.
 - Cost control: By limiting to production only, snapshot storage costs are minimised. Non-prod (dev/staging) avoids unnecessary backup overhead.
 
-## 21. Introduce entity_subdivided Table to Store Subdivided Geometries of Complex datasets
+## 16. Introduce entity_subdivided Table to Store Subdivided Geometries of Complex datasets
 Date: 2025-04-30
 #### Status
 Approved
@@ -134,7 +134,7 @@ Spatial queries on datasets containing large and complex geometries (e.g., flood
 - Additional storage is required to hold subdivided geometries.
 - Query logic complexity increases slightly to support dual-source geometry selection (entity vs entity_subdivided).
 
-## 20. ADR - Coderabbit.ai Pilot for Public Repositories Only
+## 15. ADR - Coderabbit.ai Pilot for Public Repositories Only
 
 **Date**: 2024/10/17
 
@@ -168,7 +168,7 @@ The decision to expand the use of Coderabbit.ai to other repositories will be ma
 3. **Operational Impact:**
    - Code Review on the [Submit](https://github.com/digital-land/submit) repo might slow temporarily as teams adjust to using the tool and provide feedback for improvements.
 
-## 18. Use NodeJS to serve the frontend of the new data validation tool and interact with other APIs
+## 14. Use NodeJS to serve the frontend of the new data validation tool and interact with other APIs
 
 Date: 2023-10-24
 
@@ -194,7 +194,7 @@ All the buisness logic should be delegated to other APIs, and exception to this 
 - We will be able to use the official GDS frontend toolkit, which will make it easier to build a consistent UI. as opposed to using the unofficial python port / nunjucks implementation of the GDS frontend toolkit.
 
 
-## 19. Use PyTest and JSONSchema as the Contract validation and testing solution
+## 13. Use PyTest and JSONSchema as the Contract validation and testing solution
 Date: 2023-10-24
 #### Status
 Pending
@@ -220,7 +220,7 @@ and expected responses.
 the tests will extensive re-factoring to continue working
 
 
-## 17. Use vector tiles to display geographic data on a map
+## 12. Use vector tiles to display geographic data on a map
 
 Date: 2021-07-22
 
@@ -261,7 +261,7 @@ source url that is compatible with vector-based map libraries.
 - The generation of the tilesets is an added time cost to our CI/CD pipeline. 
 - We should be careful not to use conversion options that change the underlying data (e.g. removing polygons/points)
 
-## 16. Missing entry-dates
+## 11. Missing entry-dates
 
 Date: 2021-04-20
 
@@ -297,7 +297,7 @@ issues (e.g. as described above), we will use the existing patching mechanism to
 - Data providers will have visibility of any changes that our processes make to entry-date values, so that they can
     correct the source data ahead of any future submissions (where possible).
 
-## 15. Write new tests at the lowest possible levels
+## 10. Write new tests at the lowest possible levels
 
 Date: 2021-03-09
 
@@ -324,89 +324,7 @@ See [here](https://martinfowler.com/articles/practical-test-pyramid.html#TheTest
 
 #### Consequences
 
-
-
-## 6. Use Github pages for our content
-
-Date: 2021-03-08
-
-#### Status
-
-Proposed
-
-#### Context
-
-TODO
-
-#### Decision
-
-TODO
-
-#### Consequences
-
-TODO
-
-## 7. Provide unique IDs for dataset entries
-
-Date: 2021-03-08
-
-#### Status
-
-Proposed
-
-#### Context
-
-TODO
-
-#### Decision
-
-TODO
-
-#### Consequences
-
-TODO
-
-## 8. Use files for repositories, databases as indexes
-
-Date: 2021-03-08
-
-#### Status
-
-Proposed
-
-#### Context
-
-TODO
-
-#### Decision
-
-TODO
-
-#### Consequences
-
-TODO
-
-## 9. Use SQLite for data packages
-
-Date: 2021-03-08
-
-#### Status
-
-Proposed
-
-#### Context
-
-TODO
-
-#### Decision
-
-TODO
-
-#### Consequences
-
-TODO
-
-## 10. Use the Entity-Value-Attribute pattern for our data model
+## 9. Use the Entity-Value-Attribute pattern for our data model
 
 Date: 2021-03-08
 
@@ -439,7 +357,7 @@ The model should provide a "fact" identifier for each entity-attribute-value tri
     pacakges: see [9. Use SQLite for data packages](0009-use-sqlite-for-data-packages.md).
 * The specification can still be used to document, check, and control how we process data in this schema-less model.
 
-## 11. Avoid git submodules wherever possible
+## 8. Avoid git submodules wherever possible
 
 Date: 2021-03-08
 
@@ -468,28 +386,7 @@ NPM for Javascript) in order to use external code in a controlled, versioned man
  * New projects should not use git submodules
  * Existing or adopted projects using git submodules should be migrated where possible
 
-
-## 12. Collection names should be singular
-
-Date: 2021-03-08
-
-#### Status
-
-Proposed
-
-#### Context
-
- * Is this referring to python collection names or database table entities?
-
-#### Decision
-
-TODO
-
-#### Consequences
-
-TODO
-
-## 13. Use Github LFS for large git files
+## 7. Use Github LFS for large git files
 
 Date: 2021-03-08
 
@@ -513,7 +410,7 @@ LFS requires a hosted server).
 There is a cost associated with hosting on Github. Users will need to have Git LFS installed in order to be able to
 retrieve large files.
 
-## 14. Use kebab-case for names in data
+## 6. Use kebab-case for names in data
 
 Date: 2021-03-08
 
@@ -588,36 +485,8 @@ sense to keep the CSS and JS required for leaflet maps together.
 * Loading JS at the end of the page means failing JS will not block the page from loading. Important for our progressive
     enhancement approach to JS
 
-## 1. Record architecture decisions
 
-Date: 2021-03-05
-
-#### Status
-
-Accepted
-
-#### Context
-
-We need to record the architectural decisions made on this project.
-
-#### Decision
-
-We will use Architecture Decision Records, as
-[described by Michael Nygard](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions), starting by
-recording some of our existing technical decisions, which we'll review as a team.
-
-We've elected to keep the source markdown files in the `content` directory to be consistent with our other _render_
-repositories.
-
-We can later tag decisions, and render them as HTML in the `doc` directory so they can be more easily searched and
-navigated on the digital land site.
-
-#### Consequences
-
-See Michael Nygard's article, linked above. For a lightweight ADR toolset, see Nat Pryce's
-[adr-tools](https://github.com/npryce/adr-tools).
-
-## 2. floating-package-dependencies
+## 4. floating-package-dependencies
 
 Date: 2021-03-05
 
@@ -711,7 +580,7 @@ Use the [repository pattern](https://martinfowler.com/eaaCatalog/repository.html
     given aggregate
 - It enables easier transition to different storage technologies
 
-## 4. Implement plugins using pluggy
+## 2. Implement plugins using pluggy
 
 Date: 2021-03-05
 
@@ -755,3 +624,31 @@ The Python code currently may be migrated to a package in the future, so it can 
 * Plugins need to be written in Python, or have a Python wrapper.
 * Developers will need documentation to understand how the pluggy framework works.
 
+## 1. Record architecture decisions
+
+Date: 2021-03-05
+
+#### Status
+
+Accepted
+
+#### Context
+
+We need to record the architectural decisions made on this project.
+
+#### Decision
+
+We will use Architecture Decision Records, as
+[described by Michael Nygard](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions), starting by
+recording some of our existing technical decisions, which we'll review as a team.
+
+We've elected to keep the source markdown files in the `content` directory to be consistent with our other _render_
+repositories.
+
+We can later tag decisions, and render them as HTML in the `doc` directory so they can be more easily searched and
+navigated on the digital land site.
+
+#### Consequences
+
+See Michael Nygard's article, linked above. For a lightweight ADR toolset, see Nat Pryce's
+[adr-tools](https://github.com/npryce/adr-tools).
