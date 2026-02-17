@@ -138,7 +138,9 @@ title: Add an endpoint
 ### Infrastructure funding statement
    An example scenario is the addition of the Infrastructure funding statement dataset where the endpoint is provided as a .pdf file. In this instance we need to navigate to the `data` **directory** within the `INFRASTRUCTURE-FUNDING-STATEMENT-COLLECTION` **repository** using an editor such as github or Visual studio code. 
    
-   Within this directory the file `infrastructure-funding.statement.csv` which is ordered by LPA needs to be edited by adding an entry to this list so that it becomes available to processed as an alternative data source.
+   Within this directory the file [infrastructure-funding.statement.csv](https://github.com/digital-land/infrastructure-funding-statement-collection/blob/main/data/infrastructure-funding-statement.csv) which is ordered by LPA needs to be edited by adding an entry to this list so that it becomes available to processed as an alternative data source.
+   
+
 
    To do this quickly an existing entry can be copied and the appropaite fields updated accordingly  
    **"reference,collection,name,documentation-url,document-url,period-start-date,period-end-date,entry-date,start-date,end-date"**
@@ -149,7 +151,7 @@ title: Add an endpoint
 Once this is done save this file and commit it along with an associated pull request (PR) before being merged into the main branch
 
 
-   The next file to be updated is the `lookup.csv` in the  `CONFIG` **repository**.
+   The next file to be updated is the [lookup.csv](https://github.com/digital-land/config/blob/main/pipeline/infrastructure-funding-statement/lookup.csv) in the  `CONFIG` **repository**.
    To do this quickly an existing entry can be copied and the appropaite fields updated accordingly
    **"prefix,resource,endpoint,entry-number,organisation,reference,entity,entry-date,start-date,end-date"** 
    i.e.
@@ -161,7 +163,7 @@ Once this is done save this file and commit it along with an associated pull req
 
    Once this is done save this file.
 
-   The next file to be updated is the `entity-organisation.csv` in the  `CONFIG` **repository**.
+   The next file to be updated is the [entity-organisation.csv](https://github.com/digital-land/config/blob/main/pipeline/infrastructure-funding-statement/entity-organisation.csv) in the  `CONFIG` **repository**.
    To do this quickly an existing entry can be copied and the appropaite fields updated accordingly
    **"dataset,entity-minimum,entity-maximum,organisation"**
    i.e.
