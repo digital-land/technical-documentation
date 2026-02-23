@@ -132,6 +132,49 @@ title: Add an endpoint
 1. **Run action workflow (optional)**  
    Optionally, if you don’t want to wait until the next day, you can manually execute the workflow that usually runs overnight yourself in order to be able to check if the data is actually on the platform. Simply follow the instructions in the [guide for triggering a collection manually](/data-operations-manual/How-To-Guides/Maintaining/Trigger-collection-manually).
 
+
+## Add Alternate source data
+
+### Infrastructure funding statement
+   An example scenario is the addition of the Infrastructure funding statement dataset where the endpoint is provided as a .pdf file. In this instance we need to navigate to the `data` **directory** within the `INFRASTRUCTURE-FUNDING-STATEMENT-COLLECTION` **repository** using an editor such as github or Visual studio code. 
+   
+   Within this directory the file [infrastructure-funding.statement.csv](https://github.com/digital-land/infrastructure-funding-statement-collection/blob/main/data/infrastructure-funding-statement.csv) which is ordered by LPA needs to be edited by adding an entry to this list so that it becomes available to processed as an alternative data source.
+   
+
+
+   To do this quickly an existing entry can be copied and the appropaite fields updated accordingly  
+   **"reference,collection,name,documentation-url,document-url,period-start-date,period-end-date,entry-date,start-date,end-date"**
+   i.e.
+   ```   
+        tewkesbury-council-ifs-24-25,infrastructure-funding-statement,,https://tewkesbury.gov.uk/services/planning/community-infrastructure-levy-cil/developer-contributions/,https://tewkesbury.gov.uk/wp-content/uploads/2025/12/IFS-2024-25-Tewkesbury-Borough-PUBLISH.pdf,01/04/2024,31/03/2025,,,
+   ```   
+Once this is done save this file and commit it along with an associated pull request (PR) before being merged into the main branch
+
+
+   The next file to be updated is the [lookup.csv](https://github.com/digital-land/config/blob/main/pipeline/infrastructure-funding-statement/lookup.csv) in the  `CONFIG` **repository**.
+   To do this quickly an existing entry can be copied and the appropaite fields updated accordingly
+   **"prefix,resource,endpoint,entry-number,organisation,reference,entity,entry-date,start-date,end-date"** 
+   i.e.
+   ```
+   infrastructure-funding-statement,,,,government-organisation:D1342,tewkesbury-council-ifs-24-25,8100202,,,
+   ``` 
+   N.B Ensure the value for "reference" field in incremented to the latedt value in the sequence.
+   
+
+   Once this is done save this file.
+
+   The next file to be updated is the [entity-organisation.csv](https://github.com/digital-land/config/blob/main/pipeline/infrastructure-funding-statement/entity-organisation.csv) in the  `CONFIG` **repository**.
+   To do this quickly an existing entry can be copied and the appropaite fields updated accordingly
+   **"dataset,entity-minimum,entity-maximum,organisation"**
+   i.e.
+   ```
+   infrastructure-funding-statement,8100202,8100202,local-authority:TEW
+   ```
+   Once this is done save this file.
+ 
+   The changes can then be committed and an associated pull request (PR) raised before being merged into the main branch
+
+
 ## Endpoint edge-cases
 
 ### Handling Combined Endpoints
