@@ -50,17 +50,17 @@ The way that LPAs are being funded by DLUHC informs some requirements about supp
 
 Different users of the data may also have different quality requirements for it. For example, a service may require a specific set of fields from a dataset to always be present in order to be able to use the data, or another one might need to know that the data is always kept up to date.
 
-## How and where data quality assessments happen
+## How and where data quality tests happen
 
-The data processing journey covers the steps of data being collected from endpoints, changed into the required format and then collated and published on the planning data service website. Data quality assessments happen at many different stages throughout this journey and can produce different effects, from making direct changes to data values, to recording alerts that something is not as expected. 
+The data processing journey covers the steps of data being collected from endpoints, changed into the required format and then collated and published on the planning data service website. Data quality tests happen at many different stages throughout this journey and can produce different effects, from making direct changes to data values, to recording alerts that something is not as expected. 
 
-It’s important to note that the quality assessments which take place may be concerned with both validity requirements from the data specifications (e.g. is a field value in the expected format), as well as broader requirements or those which concern data maintenance or operations (e.g. are there duplicated endpoints for an organisation’s dataset). Both of these sides are essential to consider because both affect the quality of data that ends up published on the platform for consumers.
+It’s important to note that the quality tests which take place may be concerned with both validity requirements from the data specifications (e.g. is a field value in the expected format), as well as broader requirements or those which concern data maintenance or operations (e.g. are there duplicated endpoints for an organisation’s dataset). Both of these sides are essential to consider because both affect the quality of data that ends up published on the platform for consumers.
 
 Throughout this process a number of records are produced to record what’s happened. These artefacts either:
 
-* Directly record the results of automated data quality assessments (and any associated transformations), or manually configured transformations made during processing
+* Directly record the results of automated data quality tests (and any associated transformations), or manually configured transformations made during processing
 
-* Or are processing logs which can be used to make further data quality assessments
+* Or are processing logs which can be used to make further data quality tests
 
 These artefacts provide the input to services or tools which report on or summarise data quality:
 
@@ -70,7 +70,7 @@ These artefacts provide the input to services or tools which report on or summar
 
 * Data management team reporting
 
-This process diagram created by Owen outlines some of the key stages in the process and where these artefacts are produced, and the next section describes some of these stages and artefacts in relation to data quality assessments.
+This process diagram created by Owen outlines some of the key stages in the process and where these artefacts are produced, and the next section describes some of these stages and artefacts in relation to data quality tests.
 
 ![data quality artefacts diagram](/images/data-operations-manual/data-quality-artefacts.png)
 
@@ -81,9 +81,9 @@ This is the point at which the system attempts to collect data from a data provi
 
 #### Key artefact: [Logs table](https://datasette.planning.data.gov.uk/digital-land/log)
 
-This table records the date of the attempt to collect data, as well as different status codes or exceptions depending on whether it was successful or not. These attempts aren’t strictly data quality assessments themselves, but the Logs can be used to make them.
+This table records the date of the attempt to collect data, as well as different status codes or exceptions depending on whether it was successful or not. These attempts aren’t strictly data quality tests themselves, but the Logs can be used to make them.
 
-*Example of using the Logs table for a data quality assessment*
+*Example of using the Logs table for a data quality test*
 
 The Logs table can be queried to check how many days it has been since an endpoint had new data published on it which might allow us to understand whether data is meeting a timeliness requirement.
 
@@ -91,17 +91,19 @@ The Logs table can be queried to check how many days it has been since an endpoi
 
 The pipeline transforms the collected data into the format required for the platform. It is important to note here that as well as transforming the shape and format of data the pipeline **can** **also transform data values** supplied by a data provider. 
 
-The general model for assessments made here is comparing the supplied state of a value to a desired state. When the desired state is not met a *data quality issue* is logged. The data processing pipeline makes many such assessments automatically and in the case of common or expected data errors it may be possible to automatically transform the data to the desired state. The pipeline also allows for the configuration of dataset, endpoint, or resource-specific processing to handle problems which have been identified manually. 
+The general model for tests made here is comparing the supplied state of a value to a desired state. When the desired state is not met a *data quality issue* is logged. The data processing pipeline makes many such tests automatically and in the case of common or expected data errors it may be possible to automatically transform the data to the desired state. The pipeline also allows for the configuration of dataset, endpoint, or resource-specific processing to handle problems which have been identified manually. 
 
-*Example of automated assessment:*
+> *Example of automated test:*
+> 
+> The values for the point field in a tree dataset is supplied in the OSGB36 coordinate reference system, rather than the WGS84 required by the specification. The point value is automatically re-projected to WGS84, and a data quality issue is created to record this.
 
-The values for the point field in a tree dataset is supplied in the OSGB36 coordinate reference system, rather than the WGS84 required by the specification. The point value is automatically re-projected to WGS84, and a data quality issue is created to record this.
+<br>
 
-Example of manual configuration:
+> *Example of manual configuration:*
+> 
+> When adding a new endpoint for the listed-building-outline dataset it’s noticed that the listed-building-grade field contains the values 1, 2, and 3 rather than the I, II, and III required by the specification. These supplied values are mapped to the desired values by making an addition to the patch.csv file in the listed-building collection configuration, and a data quality issue is automatically created during processing to record this re-mapping.
 
-When adding a new endpoint for the listed-building-outline dataset it’s noticed that the listed-building-grade field contains the values 1, 2, and 3 rather than the I, II, and III required by the specification. These supplied values are mapped to the desired values by making an addition to the patch.csv file in the listed-building collection configuration, and a data quality issue is automatically created during processing to record this re-mapping.
-
-See our [how to configure an endpoint guide](/docs/data-operations-manual/How-To-Guides/Adding/Configure-an-endpoint.md) for more information on configuration.
+See our [how to configure an endpoint guide](../../../How-To-Guides/Adding/Configure-an-endpoint) for more information on configuration.
 
 The **severity level** of the data quality issue which is logged during this process indicates whether a transformation was successfully made to the desired state (severity level \= “informational” or “warning”), or whether this was not possible (severity level \= “error”).
 
@@ -119,12 +121,12 @@ This table records how the field names in any supplied resource have been mapped
 
 ### Dataset
 
-At this stage transformed resources from data providers are combined into database files and loaded onto the platform. Once the database files have been created there is a further opportunity to make data quality assessments which make use of an entire dataset or datasets, rather than just being able to examine data row-by-row. Assessments made at this stage of the process vary from the pipeline stage in that they do not alter the data and simply report data quality issues.
+At this stage transformed resources from data providers are combined into database files and loaded onto the platform. Once the database files have been created there is a further opportunity to make data quality tests which make use of an entire dataset or datasets, rather than just being able to examine data row-by-row. Tests made at this stage of the process vary from the pipeline stage in that they do not alter the data and simply report data quality issues. The method we use to do this is called "expectations" (see our [configure and run expectations guide](../../../How-To-Guides/Testing/Configure-and-run-expectations) for more detail).
 
-*Example Dataset quality assessment*
+> *Example Dataset quality test*
+> 
+> The expectation rule "[Check number of entities inside the local planning authority boundary matches the manual count](https://datasette.planning.data.gov.uk/digital-land/expectation?_facet=name&name=Check+number+of+entities+inside+the+local+planning+authority+boundary+matches+the+manual+count)" counts the number of entities we have on the platform for each LPA, and compares the actual number to an expected number created by counting the number published on each LPA's website. This quality test is only possible at this stage as it requires summarising from the entire dataset.
 
-Having access to the whole dataset makes it possible to assess things like whether the values in a reference field are unique, or whether the reference values used across  conservation-area and  conservation-area-document datasets link correctly. 
 
-#### Key artefact: [Expectation issues table](https://datasette.planning.data.gov.uk/digital-land/expectation_issue)
+#### Key artefact: [Expectation table](https://datasette.planning.data.gov.uk/digital-land/expectation)
 
-#### Key artefact: [Expectation results table](https://datasette.planning.data.gov.uk/digital-land/expectation_result)
