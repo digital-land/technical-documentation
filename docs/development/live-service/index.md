@@ -10,3 +10,4 @@ The platform and infrastructure team has identified the need to provide support 
 * [How to Raise a Request](raise-a-request/)
 * [Bug Triage Process](triage-process/)
 * [Metrics and Reporting](metrics-and-reporting/)
+* [Responding to a Live Service Issue](responding/)
