@@ -42,21 +42,26 @@ Important fields:
 
 - `old-resource` \- the hash of the resource being ended
 - `status` \- the status code for this entry, use `410` for ended _(\!\! are there others which can be used?_)
-- `resource` \- _uncertain, can a resource be re-directed?_
 - `notes` \- to record why this configuration change was made
 
 ## [pipeline/column](https://github.com/digital-land/specification/blob/main/content/dataset/column.md?plain=1)
 
-This table is used to add extra mappings from the resource column headers to our specification field names, for example mapping a field named `UID` in a resource to our `reference` field.
+Used to map column headers in an endpoint or resource to specification field names. Unlike `transform.csv` which handles spec-level renames globally, `column.csv` is typically used to handle inconsistent or non-standard column naming in specific endpoints. Leaving `resource` and `endpoint` blank applies the mapping gloablly.
+
+> _Example_  
+> Mapping a field named `UID` in an endpoint to our `reference` field
 
 Important fields:
 
 - `column` \- the column header in the resource being mapped
 - `field` \- the field name in our specification the column header should be mapped to
+- `endpoint` \- (optional) limit the mapping to a specific endpoint
 
 ## [pipeline/combine](https://github.com/digital-land/specification/blob/main/content/dataset/combine.md?plain=1)
 
-Used to combine values across multiple rows. The grouping is based on the reference field so this only works when there are multiple rows per reference (note this happens after concat so concat can be used to create a reference from multiple fields and control the grouping to some extent)
+Used to merge field values across multiple facts for the same entity. This runs later in the pipeline than other configuration (after entity resolution) so operates on facts rather than raw rows.
+
+For geometry fields, values are merged into a single `Multipolygon` using a spatial union rather than string joining. For all other fields, unique values are deduplicated, sorted and joined using the specified separator.
 
 > _Example_  
 > In the `agricultural-land-classification` collection the `geometry` field of the Natural England is grouped by the reference, resulting in individual polygons being grouped into a multipolygon or geometry collection.
@@ -89,14 +94,23 @@ Important fields:
 
 ## [pipeline/convert](https://github.com/digital-land/specification/blob/main/content/dataset/convert.md?plain=1)
 
-_Unsure\!_
+_Not currently in active use. This file was intended to configure converstion behaviour for specific resources but the functionality is handled automatically by the pipeline. The only existing configuration is in [brownfield-land](https://github.com/digital-land/config/blob/main/pipeline/brownfield-land/convert.csv?plain=1) and contains no active parameters._
+
+## [pipeline/default](https://github.com/digital-land/specification/blob/main/content/dataset/default.md?plain=1)
+
+Used to populate an empty field by copying the value from another field in the same row. Only applies when the target field has no value - existing values are never overwritten. This is different to `default-value.csv` which sets a hardcoded value rather than copying from another field.
+
+> _Example_  
+> If `start-date` should default to the value of `actual-date` when not provided, add a row mapping `start-date` → `actual-date`.
+>
+> See: [https://github.com/digital-land/config/blob/78c2167948503f794b6023ae17796b5d086514de/pipeline/local-plan/default.csv#L5](https://github.com/digital-land/config/blob/78c2167948503f794b6023ae17796b5d086514de/pipeline/local-plan/default.csv#L5)
 
 ## [pipeline/default-value](https://github.com/digital-land/specification/blob/main/content/dataset/default-value.md?plain=1)
 
-Used to set a default value for all values in a field
+Used to set a hardcoded default value for a field when it is empty. Unlike `default.csv` which copies a value from another field, this sets a fixed literal value.
 
 > _Example_  
-> Set the value of `flood-risk-level` to 2 for all values from an endpoint in the `flood-risk-zone`, because the data is provided split into a different endpoint per flood risk level but each resource doesn’t record the level explicitly in a field.
+> Set the value of `flood-risk-level` to `2` for all values from an endpoint in the `flood-risk-zone`, because the data is provided split into a different endpoint per flood risk level but each resource doesn’t record the level explicitly in a field.
 >
 > See: [https://github.com/digital-land/config/blob/main/pipeline/flood-risk-zone/default-value.csv\#L3](https://github.com/digital-land/config/blob/main/pipeline/flood-risk-zone/default-value.csv#L3)
 
@@ -104,10 +118,6 @@ Important fields:
 
 - `field` \- the field to use the default value in
 - `value` \- the value to enter as default in the field
-
-## [pipeline/default](https://github.com/digital-land/specification/blob/main/content/dataset/default.md?plain=1)
-
-_I think to set a default value using another field in the resource, but uncertain how this is different to column. Need more info._
 
 ## [pipeline/entity-organisation](https://github.com/digital-land/specification/blob/main/content/dataset/entity-organisation.md?plain=1)
 
@@ -225,8 +235,17 @@ Sometimes, the raw data contains extraneous lines that can cause issues during p
 
 Important fields:
 
-- `pattern` - the pattern to search for in the raw endpoint file
+- `pattern` \- the pattern to search for in the raw endpoint file
 
 ## [pipeline/transform](https://github.com/digital-land/specification/blob/main/content/dataset/transform.md?plain=1)
 
-_Unsure\!_
+Used to rename fields to match the latest specification. Maps old field names to their current replacements, applied globally across all resources. Use this when a field has been renamed in the specification and you need existing data to continue flowing through correctly.
+
+> _Example_  
+> The brownfield-land specification changed from using fields like `OrganisationURI` and `SiteNameAddress` to `organisation` and `site-address`. These changes were added to the relevant `transform.csv` to accommodate this specification change.
+>
+> See: [https://github.com/digital-land/config/blob/main/pipeline/brownfield-land/transform.csv](https://github.com/digital-land/config/blob/main/pipeline/brownfield-land/transform.csv)
+
+Important fields:
+- `field` \- the old field name in the source data
+- `replacement-field` \- the new field name in the current specification
