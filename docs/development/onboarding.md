@@ -3,43 +3,90 @@ title: Onboarding Checklist
 ---
 
 > NOTE  
-> This is currently a Work In Progress 
+> This is currently a Work In Progress
 
-This is a curated task list aimed at devs joining the team. It attempts to tackle both generalized and specific tasks that should be undertaken on joining including laptop set-up, reading to do and some suggestions on sessions to get set up.
+This is a curated task list aimed at developers joining the team. It covers general tasks that everyone should complete, followed by role-specific checklists for software developers, data engineers, and DevOps engineers.
 
-### General:
-- Read the planning data handbook
-- Run through our introductory tutorial on setting up your machine. This focuses on installing general software that is good to have for everyone:
-    - for Mac users see [Set Up for Mac](/development/tutorials/set-up-for-mac/)
-- Read through [Onboarding in Data Operations](/data-operations-manual/Tutorials/Onboarding/) this gives a good overview of questions you should ask as you look through what is being developed here.
+---
 
-Now based on the areas you'll be focusing on there are some specific checklists below. This is done to stop everyone installing everything however if you're asked to do work that crosses between the boundaries you can come back and do others later.
+## General (everyone)
 
-### Data Engineering:
+### People and access
+- [ ] Meet with your technical lead to understand the team structure and current priorities
+- [ ] Meet with the product manager to understand the product vision and roadmap
+- [ ] Create a GitHub account (or use an existing one) and ask your technical lead to get you added to the organisation with the correct permissions — **remove any personal access tokens from an existing account before using it**
+- [ ] Get access to the relevant Slack channels — ask your technical lead if you are unsure which ones
 
-- TBD
+### Reading
+- [ ] Read the [Planning Data Handbook](https://team-playbook.planning-data.dev/)
+- [ ] Read the [key development principles](/development/key-principles/)
+- [ ] Review the [deploy and release procedure](/development/deploy-and-release-procedure/)
+- [ ] Review the [Pull Request best practices](/development/best-practice/pull-requests/)
+- [ ] Review the [CI/CD strategy](/architecture-and-infrastructure/ci-cd-strategy/)
+- [ ] Read through [Onboarding in Data Operations](/data-operations-manual/Tutorials/Onboarding/) for a broad overview of the platform and the questions worth asking as you get started
 
-### Application Development:
+---
 
-#### 1. Clone the Key Repositories
-Download the two applications that are currently run as a live service that you will likely need to work on:  
-- [Planning Data API](https://github.com/digital-land/digital-land.info)
-- [Submit Service](https://github.com/digital-land/submit)
+## Software Developer (frontend and/or backend)
 
-There are more repositories to explore, but start with these.
+### Machine setup
+- [ ] Run through the [Set Up for Mac](/development/tutorials/set-up-for-mac/) tutorial to install the base-level dependencies needed across most of our repositories
 
-#### 2. Set Up and Run the Applications
-- Follow the [Planning Data Repo Tutorial](/development/tutorials/planning-data-info-repo/)
-- Follow the [Submit Service Repo Tutorial](/development/tutorials/submit-tutorial/) for an overview of the application architecture, instructions to get it working, and key points about the service architecture.
+### Key repositories to clone
+- [ ] [Planning Data platform](https://github.com/digital-land/digital-land.info) — the main website
+- [ ] [Submit service](https://github.com/digital-land/submit) — tools to help data providers submit URLs for collection
 
-#### 3. Adopt Best Practices
-Going forward, all projects should follow the [best practices outlined here](/development/best-practice/). You should be able to use the following commands to start the service:
+### Get the applications running
+- [ ] Follow the [Submit Service tutorial](/development/tutorials/submit-tutorial/) for an overview of the application architecture and instructions to get it running locally
 
-```bash
-make init
-make run
-```
+### Best practices and conventions
+- [ ] Review the [best practices documentation](/development/best-practice/) — all projects should follow these
+- [ ] Confirm you can start a service using the standard make targets:
+  ```bash
+  make init
+  make run
+  ```
 
-### DevOps:
+---
 
-- TBD
+## Data Engineer
+
+### Machine setup
+- [ ] Run through the [Set Up for Mac](/development/tutorials/set-up-for-mac/) tutorial to install the base-level dependencies needed across most of our repositories
+
+### Key reading
+- [ ] Review the [data architecture overview](/architecture-and-infrastructure/data-architecture/)
+- [ ] Work through the [Data Operations Manual](/data-operations-manual/) — pay particular attention to the Key Concepts and How-To Guides sections
+
+### Key repositories to clone
+- [ ] [Digital Land Python](https://github.com/digital-land/digital-land-python) — the core CLI and data processing library
+- [ ] [Makerules](https://github.com/digital-land/makerules) — shared make targets used across data pipeline repositories
+- [ ] [Specification](https://github.com/digital-land/specification) — dataset specifications and schemas
+- [ ] [AWS Batch Docker](https://github.com/digital-land/aws-batch-docker) — Dockerfiles and entrypoints for batch processing tasks
+
+### Get oriented
+- [ ] Run through the [Running a Collection](/development/tutorials/running-a-collection/) tutorial
+- [ ] Confirm you can set up a repository locally using:
+  ```bash
+  make init
+  make test
+  ```
+
+---
+
+## DevOps
+
+### Key reading
+- [ ] Review the [infrastructure documentation](/architecture-and-infrastructure/infrastructure/) in full, including deployment diagrams, code structure, security approach, and how-to guides
+- [ ] Review the [CI/CD strategy](/architecture-and-infrastructure/ci-cd-strategy/) in depth — you will own and maintain these pipelines
+- [ ] Review the [alerting and monitoring strategy](/architecture-and-infrastructure/alerting-and-monitoring/)
+- [ ] Review the [architecture checklist](/architecture-and-infrastructure/architecture-checklist/)
+
+### Key repositories
+- [ ] Clone the infrastructure repository and review the structure with your technical lead — this is the primary repo you will work in
+- [ ] Review the [Makerules](https://github.com/digital-land/makerules) repository as it underpins the CI/CD workflows across all other repositories
+- [ ] Review the [AWS Batch Docker](https://github.com/digital-land/aws-batch-docker) repository
+
+### Access and tooling
+- [ ] Set up [AWS Vault](/architecture-and-infrastructure/infrastructure/how-to-guides/setup-aws-vault/) for secure credential management
+- [ ] Confirm access to the relevant AWS environments with your technical lead
