@@ -35,7 +35,6 @@ Check that this has created the following files and that only the headers are in
   * column.csv  
   * combine.csv
   * concat.csv
-  * convert.csv
   * default-value.csv
   * default.csv
   * expect.csv
