@@ -92,9 +92,6 @@ Important fields:
 - `prepend` \- optional text to add before the concatenated values
 - `append` \- optional text to add after the concatenated values
 
-## [pipeline/convert](https://github.com/digital-land/specification/blob/main/content/dataset/convert.md?plain=1)
-
-_Not currently in active use. This file was intended to configure converstion behaviour for specific resources but the functionality is handled automatically by the pipeline. The only existing configuration is in [brownfield-land](https://github.com/digital-land/config/blob/main/pipeline/brownfield-land/convert.csv?plain=1) and contains no active parameters._
 
 ## [pipeline/default](https://github.com/digital-land/specification/blob/main/content/dataset/default.md?plain=1)
 
