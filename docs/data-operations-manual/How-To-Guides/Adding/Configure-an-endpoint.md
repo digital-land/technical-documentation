@@ -92,9 +92,6 @@ Important fields:
 - `prepend` \- optional text to add before the concatenated values
 - `append` \- optional text to add after the concatenated values
 
-## [pipeline/convert](https://github.com/digital-land/specification/blob/main/content/dataset/convert.md?plain=1)
-
-
 ## [pipeline/default](https://github.com/digital-land/specification/blob/main/content/dataset/default.md?plain=1)
 
 Used to populate an empty field by copying the value from another field in the same row. Only applies when the target field has no value - existing values are never overwritten. This is different to `default-value.csv` which sets a hardcoded value rather than copying from another field.
