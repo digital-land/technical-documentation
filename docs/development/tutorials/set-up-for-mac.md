@@ -31,7 +31,7 @@ The ~ above automatically locates to your user file and means you don't need to 
 
 Further on in this tutorial you'll be asked to add lines to your .zshrc file for various reasons. There are two main methods.
 
-First of all you can open the file and edit as a normal text file. This is easiest by running the below command as . files are hidden from a lot of file explorers such as Finder.
+First of all you can open the file and edit as a normal text file. This is easiest by running the below command as `.` files are hidden from a lot of file explorers such as Finder.
 
 ```
 open -e ~/.zshrc
@@ -53,7 +53,7 @@ source ~/.zshrc
 
 ### Install Homebrew
 
-When installing the majority of software on Mac, Homebrew is a very nice to use piece of software. For Mac it mimics the capability of package managers in Linux allowing us to easily install software on the command line. 
+When installing the majority of software on a Mac, Homebrew is a very nice to use piece of software. For Mac it mimics the capability of package managers in Linux allowing us to easily install software on the command line. 
 
 It has some limitations when it comes to the versions of certain software and there may be better programs out there to use. This is worth keeping in mind and perhaps updating the parts of this guide that use brew in the future. For now it is usable and gets us what we need.
 
@@ -106,6 +106,12 @@ brew install sqlite3
 ```
 
 > Tip: Do this before installing Python so that Python allows extensions with sqlite as otherwise even if sqlite3 allows them Python may not.
+
+After installing sqlite3 its worth adding this version to the `.zshrc`. Brew will print out instructions to do this, should look something like this: 
+
+```sh
+echo 'export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"' >> ~/.zshrc
+```
 
 ### Install Python & Understand Virtual Environments
 
@@ -280,7 +286,7 @@ id_ed25519
 id_ed25519.pub
 ```
 
-If you have keys then you've likely done this before. You're welcome to use one of your other keys especially if it's for other MHCG projects but we advise creating a new key for this particular project.
+If you have keys then you've likely done this before. You're welcome to use one of your other keys especially if it's for other MHCLG projects but we advise creating a new key for this particular project.
 
 To generate an ssh key use the below command, replacing your email with that on your Github account
 
@@ -355,6 +361,7 @@ Now it needs to be added to your Github account:
 * On the top right click on your profile picture
 * In the menu that comes up click on settings
 * On the left go to SSH and GPG keys
+* Click on "new SSH key" button.
 * Give it a name so you recognize which computer it's from
 * Leave the key type as authentication key
 * Use command + v to copy the key into the box
