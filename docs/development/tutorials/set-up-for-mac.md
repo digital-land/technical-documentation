@@ -369,3 +369,12 @@ Now it needs to be added to your Github account:
 
 Now you should see that the ssh key has been added to your Github account.
 You're all set! Test the key by cloning a Github repository and pushing a test branch to one.
+
+
+### Further useful but non-essential packages worth installing
+
+Running tests in some of our repositories will requires spatialite-tools
+
+```
+brew install spatialite-tools
+```
