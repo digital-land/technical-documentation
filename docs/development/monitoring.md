@@ -17,9 +17,53 @@ The most useful tool at our disposable is the delivery of key notifications in o
 
 ### Sentry
 
-As mentioned above we have integrated sentry with our appllications. This is primarily to catch unhandled and logged errors in our applications. Accounts can be set up by the tech lead. 
+We use Sentry across our applications to capture errors and track metrics. Accounts can be set up by the tech lead.
 
-There may be scope to log performance and metrics via sentry in the  future too.
+#### Logging configuration
+
+The standard Sentry logging configuration is:
+
+```python
+sentry_logging = LoggingIntegration(
+    sentry_logs_level=logging.WARNING,
+    level=logging.INFO,       # Capture INFO logs as breadcrumbs only
+    event_level=logging.ERROR, # Only send ERROR and above to Sentry as issues
+)
+```
+
+What this means in practice:
+
+- **INFO** logs are captured as breadcrumbs — they appear as context on an issue but do not create one themselves
+- **WARNING** and above are captured by Sentry's log stream
+- **ERROR** and **CRITICAL** create Sentry issues and trigger alerts
+- Handled exceptions and lower-severity log lines are not surfaced as issues
+
+#### Metrics
+
+We are implementing Sentry metrics to monitor frequent but handled error conditions — things that don't throw an unhandled exception but are worth tracking, for example:
+
+- Datasette query failures
+- Slow database queries
+- Other semi-error states that are caught and handled
+
+For each of these we define a metric and set an alert threshold. When the threshold is breached, an alert is sent to the **planning-data-alerts** Slack channel. Currently threshold breach alerts go to **planning-data-notifications**, with the intention to move them to **planning-data-alerts** as the setup matures.
+
+#### Triage process
+
+All unresolved Sentry issues appear in the **planning-data-notifications** Slack channel.
+
+Every two weeks the team holds a Sentry triage meeting to review unresolved production issues across each monitored service. For each issue the outcome is one of:
+
+1. **Ticket to fix** — a known bug, create a ticket and assign it
+2. **Ticket to investigate** — cause is unclear, create a ticket to dig into it
+3. **Archive** — noise or expected behaviour, archive the issue in Sentry
+4. **Improve the alert** — the alert lacks context; set up a better metric monitor with more detail before the next review
+
+The meeting works through each service we monitor in turn, ensuring nothing is left unresolved or unactioned. Any ticket created in the meeting should have an owner assigned before the meeting ends.
+
+#### Alert fatigue
+
+If an alert is firing repeatedly and being routinely archived or ignored, it should either be turned off or converted into a metric with a threshold. An alert that no one acts on is worse than no alert — it trains the team to ignore the channel. If you notice this pattern outside of the triage meeting, raise it rather than continuing to archive.
 
 ###  Cloudwatch Dashboards
 
