@@ -236,7 +236,9 @@ Important fields:
 
 ## [pipeline/transform](https://github.com/digital-land/specification/blob/main/content/dataset/transform.md?plain=1)
 
-Used to rename fields to match the latest specification. Maps old field names to their current replacements, applied globally across all resources. Use this when a field has been renamed in the specification and you need existing data to continue flowing through correctly.
+Maps public-facing specification column names to internal ones. This is designed for **brownfield-land only**, where there is a deliberate split between the column names providers submit and the internal field names used by the pipeline.
+
+> **Warning:** Do not use `transform.csv` for other datasets. Adding an entry for a dataset where provider-facing and internal field names are the same will cause the pipeline to silently drop that field from any source already submitting data in the current spec format. Use `column.csv` instead for column renames on other datasets.
 
 > _Example_  
 > The brownfield-land specification changed from using fields like `OrganisationURI` and `SiteNameAddress` to `organisation` and `site-address`. These changes were added to the relevant `transform.csv` to accommodate this specification change.
@@ -244,5 +246,5 @@ Used to rename fields to match the latest specification. Maps old field names to
 > See: [https://github.com/digital-land/config/blob/main/pipeline/brownfield-land/transform.csv](https://github.com/digital-land/config/blob/main/pipeline/brownfield-land/transform.csv)
 
 Important fields:
-- `field` \- the old field name in the source data
-- `replacement-field` \- the new field name in the current specification
+- `field` \- the public-facing column name submitted by providers
+- `replacement-field` \- the internal field name used by the pipeline

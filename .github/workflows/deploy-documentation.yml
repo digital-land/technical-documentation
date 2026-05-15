@@ -26,6 +26,8 @@ jobs:
       uses: actions/configure-pages@v5
     - name: Install dependencies
       run: npm ci
+    - name: Add frontmatter to markdown files
+      run: python3 add_frontmatter.py
     - name: Build with Eleventy
       run: make build
     - name: Upload artifact
