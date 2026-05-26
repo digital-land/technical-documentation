@@ -14,6 +14,7 @@ Contents:
 * Install sqlite3
 * Install Python (and understand venvs)
 * Set up SSH for Github
+* Optional but recommended setup
 
 ### Create .zshrc file
 
@@ -89,14 +90,13 @@ and
 gmake --version
 ```
 
-In our scripts we generally only call make so this can be problematic. When you installed make using brew it will have printed a statement giving you a piece of script to add to your .zshrc. For me this was `PATH="/usr/local/opt/make/libexec/gnubin:$PATH"` but it may be different depending on the Mac you have. It's worth checking against the output returned when installing make. To add this to your .zshrc you can run
+In our scripts we generally only call `make` so this can be problematic. When you installed `make` using brew it will have printed a statement giving you a piece of script to add to your .zshrc. For me this was `PATH="/usr/local/opt/make/libexec/gnubin:$PATH"` but it may be different depending on the Mac you have. It's worth checking against the output returned when installing make. To add this to your .zshrc you can run:
 
 ```sh
 echo 'PATH="/usr/local/opt/make/libexec/gnubin:$PATH"' >> ~/.zshrc
 ```
 
 ### Install sqlite3
-3.43.2 2023-10-10 13:08:14 1b37c146ee9ebb7acd0160c0ab1fd11017a419fa8a3187386ed8cb32b709aapl (64-bit)
 Mac already has a version of sqlite installed, unfortunately we can't rely on this as it doesn't allow for extensions. We use spatialite with our coding which is an extension for Geospatial querying.
 
 Luckily for us it's very easy to install with Homebrew just run
@@ -369,3 +369,63 @@ Now it needs to be added to your Github account:
 
 Now you should see that the ssh key has been added to your Github account.
 You're all set! Test the key by cloning a Github repository and pushing a test branch to one.
+
+
+---
+
+## Optional but recommended setup for your Mac
+
+The steps above will get you up and running. The things below are not strictly required but will make day-to-day development noticeably more pleasant.
+
+### VS Code
+
+VS Code is a free code editor that works well with our Python codebase. Download it from https://code.visualstudio.com.
+
+Once installed, the following extensions are worth adding (search for them in the Extensions panel on the left sidebar):
+
+* **Python** (`ms-python.python`) — syntax highlighting, linting integration, and virtual environment support
+* **Pylance** (`ms-python.vscode-pylance`) — improved type checking and autocomplete for Python
+* **GitLens** (`eamodio.gitlens`) — shows git blame information inline and makes it easier to explore history
+
+A useful VS Code tip: open your project folder with `code .` from the terminal to launch VS Code directly in that directory.
+
+### Pre-commit hooks
+
+Several of our repositories use pre-commit hooks to automatically check code formatting and style before each commit. This catches issues like Black formatting violations locally, rather than having CI fail on them minutes later.
+
+After cloning any repository, check whether it has a `.pre-commit-config.yaml` file in the root. If it does, activate your virtual environment and then run:
+
+```sh
+pre-commit install
+```
+
+You only need to do this once per repo. After that, the checks will run automatically every time you `git commit`. Some repos also have a `make init` command that does this for you alongside other setup steps — check the `Makefile` or `README` when setting up a new repo.
+
+### Spatialite-tools
+
+Running tests in some of our repositories will requires spatialite-tools
+
+```
+brew install spatialite-tools
+```
+
+### Cloning repos as sibling directories
+
+Our codebase spans multiple repositories that sometimes depend on each other or are worked on together. It helps to keep them all cloned into the same parent folder (I call mine `code`) so they sit alongside each other as siblings, rather than scattered around your machine. For example:
+
+```
+code/
+├── digital-land-python/
+├── airflow-dags/
+├── collection-task/
+├── async-request-backend/
+└── config/
+```
+
+This makes it easier to navigate between them in the terminal and in your editor, and some scripts assume a layout like this.
+
+Pick a parent folder name that works for you and clone each repository into it using SSH (see the SSH setup section above):
+
+```sh
+git clone git@github.com:digital-land/<repo-name>.git
+```
