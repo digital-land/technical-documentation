@@ -8,6 +8,88 @@ Using ADRs helps us maintain a clear decision history, supports transparency, an
 
 [[toc]]
 
+## 23. Squash commits when merging to main
+
+Date: 2026-05-29
+
+#### Status
+Approved
+
+#### Context
+Pull requests often contain many small, incremental commits — fixes, typos, reverts, and work-in-progress checkpoints — that are useful during development but add noise to the permanent history of `main`. Without a consistent merge strategy, the commit history on `main` becomes hard to read, making it difficult to understand what changed and why.
+
+#### Decision
+We will use **squash and merge** as the merge strategy when merging pull requests into `main`. All commits on a branch are collapsed into a single commit on `main`, with a message that describes the change as a whole.
+
+This applies to all repositories. Where possible, repository admins should enforce squash merging via GitHub repository settings to prevent other merge strategies being used accidentally.
+
+Guidance on how to apply this can be found in the [Git best practice documentation](../../development/best-practice/git.md#squash-commits-when-merging-to-main).
+
+#### Consequences
+
+1. **Positive Outcomes:**
+   - The `main` branch history remains clean and meaningful — each commit represents a complete, reviewed change.
+   - Developers have more freedom to commit freely on branches without worrying about the permanent record.
+   - Easier to identify what was introduced or changed when investigating bugs or reviewing history.
+
+2. **Negative Outcomes:**
+   - Individual commits from a branch are not preserved in `main` history. If granular commit history on a branch is needed after merge, it must be found in the original pull request.
+
+## 22. Use a consistent branch naming convention across all repositories
+
+Date: 2026-05-29
+
+#### Status
+Approved
+
+#### Context
+Branches across our repositories have historically been named inconsistently. This makes it harder to understand what a branch relates to at a glance, complicates searching through open branches, and creates friction when reviewing pull requests or triaging changes.
+
+GitHub provides a built-in feature to create a branch directly from an issue, which auto-generates a branch name in a consistent format. Adopting this as our standard aligns with tooling we already use and requires no extra convention to remember.
+
+#### Decision
+We have agreed to use a consistent branch naming convention across all repositories. The current agreed convention, along with examples, can be found in the [Git best practice documentation](../../development/best-practice/git.md#branch-naming).
+
+If the team decides to change the convention in future, the best practice documentation should be updated — this ADR records the decision to have a convention, not the specific format.
+
+#### Consequences
+
+1. **Positive Outcomes:**
+   - Branch names are immediately traceable to a GitHub issue, giving reviewers instant context.
+   - Consistent naming makes it easier to search and manage open branches across repositories.
+   - Aligning with GitHub's built-in branch creation from an issue means the convention requires no extra effort to follow.
+
+2. **Negative Outcomes:**
+   - Branches not linked to an issue require a judgement call on naming — teams should create an issue where practical.
+
+## 21. Use an agreed maximum Python version across all repositories
+
+Date: 2026-05-29
+
+#### Status
+Approved
+
+#### Context
+We use Python across many repositories, and different repos have historically adopted different Python versions independently. This creates inconsistency in tooling, CI configuration, and dependency management. As Python releases new versions and drops support for older ones, the lack of a shared policy makes it harder to coordinate upgrades and increases the risk of repos falling behind on security support.
+
+#### Decision
+We have agreed on a **maximum Python version** that should be used across all repositories. No repository should use a Python version higher than this maximum. Repositories may use older versions during a migration period, or where there is a specific reason to do so (for example, a platform constraint such as available AWS Lambda runtimes).
+
+The current maximum version and guidance on how to upgrade a repository can be found in the [Python best practice documentation](../../development/best-practice/python.md#managing-python-versions).
+
+When the team wishes to raise the maximum version, the decision should be discussed and the best practice documentation updated to reflect the new agreement.
+
+#### Consequences
+
+1. **Positive Outcomes:**
+   - Consistent Python version target across all repositories reduces support and tooling overhead.
+   - A single place to look up the agreed maximum version makes onboarding and repo maintenance clearer.
+   - Coordinated upgrades reduce the risk of repositories falling behind on Python security support.
+
+2. **Negative Outcomes:**
+   - Older repositories may require effort to migrate to the agreed version.
+   - Platform constraints (e.g. AWS Lambda runtimes) may occasionally require exceptions to be documented.
+
 ## 20. Use Customer-Managed KMS CMK for CloudWatch Logs encryption (CKV_AWS_158)
 
 Date: 2025-12-30
