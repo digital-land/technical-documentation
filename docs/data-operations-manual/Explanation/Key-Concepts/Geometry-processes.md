@@ -14,50 +14,7 @@ Some of these transformations are purely administrative (e.g. converting coordin
 
 ## The Pipeline at a Glance
 
-```mermaid
-flowchart TD
-    A[Raw geometry submitted by LPA\ne.g. GeoPackage, CSV with WKT, GeoJSON] --> B
-
-    B[Step 1: Parse and validate input\nAccepts WKT or GeoJSON WKT format]
-    B --> C
-
-    C{Step 2: Detect coordinate system}
-    C -- Already WGS84 --> E
-    C -- OSGB Eastings/Northings\nEPSG:27700 --> D1[Convert to WGS84\nusing PyProj + OSTN15 grid]
-    C -- Pseudo-Mercator metres\nEPSG:3857 --> D2[Convert to WGS84\nusing PyProj]
-    C -- Coordinates flipped --> D3[Flip x/y then convert]
-    D1 & D2 & D3 --> E
-
-    E[Step 3: Reduce coordinate precision\nRound all coordinates to 6 decimal places]
-    E --> F
-
-    F[Step 4: Simplify geometry\nRemove vertices within ~0.5 m of simplified boundary\nusing Ramer–Douglas–Peucker algorithm]
-    F --> G
-
-    G[Step 5: Snap to coordinate grid\nSnap all coordinates to nearest 1 m grid point]
-    G --> H
-
-    H{Step 6: Is geometry valid?}
-    H -- No --> I[Repair with make_valid]
-    H -- Yes --> J
-    I --> J
-
-    J[Step 7: Normalise geometry type\nConvert Polygon or GeometryCollection\nto MultiPolygon]
-    J --> K
-
-    K{Step 8: Is MultiPolygon valid?}
-    K -- No --> L[Apply buffer of 0\nMerges overlapping rings]
-    K -- Yes --> M
-    L --> M
-
-    M[Step 9: Re-check MultiPolygon type]
-    M --> N
-
-    N[Step 10: Fix ring winding order\nExterior rings counterclockwise\nInterior rings clockwise]
-    N --> O
-
-    O[Normalised WKT stored in Datasette\nand served on planning.data.gov.uk]
-```
+![Geometry processing pipeline diagram](/images/data-operations-manual/geometry-processes-diagram.png)
 
 ## Step-by-Step Explanation
 
