@@ -10,13 +10,16 @@ Getting a review arranged early is one of the most effective ways to avoid delay
 
 ### Checklist for the person raising the PR
 
-- [ ] The PR description clearly explains what the change does and why
-- [ ] The PR is scoped to a single concern — avoid bundling unrelated changes
-- [ ] The branch is up to date with the base branch
-- [ ] You have self-reviewed the diff before requesting a review
-- [ ] CI checks are passing
-- [ ] A reviewer has been identified and organised — ideally in standup
-- [ ] The PR link has been posted in the relevant channel with the reviewer(s) tagged
+- The PR description clearly explains what the change does and why
+- The PR is scoped to a single concern — avoid bundling unrelated changes
+- The branch is up to date with the base branch
+- You have self-reviewed the diff before requesting a review
+- CI checks are passing (These should be represented by a "Test" action)
+- A developer reviewer has been identified and organised — ideally in standup
+- If content or design changes are part of the PR please make sure a designer has been identified to review the PR
+- The PR link has been posted in the relevant channel with the reviewer(s) tagged
+
+**Note:** If content or design is changing and you need a PR from a designer it's worth making sure the changes have been deployed to development for them to review.
 
 ---
 
@@ -28,11 +31,11 @@ The reviewer's responsibility is to read the code, provide feedback, and approve
 
 ### Checklist for the person reviewing the PR
 
-- [ ] You understand what the change is trying to do before reading the code
-- [ ] The logic is correct and the approach makes sense
-- [ ] Edge cases and error handling are considered
-- [ ] No obvious security issues (e.g. untrusted input, exposed secrets, unsafe dependencies)
-- [ ] Tests cover the change adequately
-- [ ] The code is readable and consistent with the surrounding codebase
-- [ ] Feedback is specific and actionable — avoid vague comments like "tidy this up"
-- [ ] Once happy, approve the PR — do not merge it yourself unless explicitly asked to
+- You understand what the change is trying to do before reading the code
+- The logic is correct and the approach makes sense
+- Edge cases and error handling are considered
+- No obvious security issues (e.g. untrusted input, exposed secrets, unsafe dependencies)
+- Tests cover the change adequately
+- The code is readable and consistent with the surrounding codebase
+- Feedback is specific and actionable — avoid vague comments like "tidy this up"
+- Once happy, approve the PR — do not merge it yourself unless explicitly asked to

@@ -12,18 +12,18 @@ This is a curated task list aimed at developers joining the team. It covers gene
 ## General (everyone)
 
 ### People and access
-- [ ] Meet with your technical lead to understand the team structure and current priorities
-- [ ] Meet with the product manager to understand the product vision and roadmap
-- [ ] Create a GitHub account (or use an existing one) and ask your technical lead to get you added to the organisation with the correct permissions — **remove any personal access tokens from an existing account before using it**
-- [ ] Get access to the relevant Slack channels — ask your technical lead if you are unsure which ones
+- Meet with your technical lead to understand the team structure and current priorities
+- Meet with the product manager to understand the product vision and roadmap
+- Create a GitHub account (or use an existing one) and ask your technical lead to get you added to the organisation with the correct permissions — **remove any personal access tokens from an existing account before using it**
+- Get access to the relevant Slack channels — ask your technical lead if you are unsure which ones
 
 ### Reading
-- [ ] Read the [Planning Data Handbook](https://team-playbook.planning-data.dev/)
-- [ ] Read the [key development principles](/development/key-principles/)
-- [ ] Review the [deploy and release procedure](/development/deploy-and-release-procedure/)
-- [ ] Review the [Pull Request best practices](/development/best-practice/pull-requests/)
-- [ ] Review the [CI/CD strategy](/architecture-and-infrastructure/ci-cd-strategy/)
-- [ ] Read through [Onboarding in Data Operations](/data-operations-manual/Tutorials/Onboarding/) for a broad overview of the platform and the questions worth asking as you get started
+- Read the [Planning Data Handbook](https://team-playbook.planning-data.dev/)
+- Read the [key development principles](/development/key-principles/)
+- Review the [deploy and release procedure](/development/deploy-and-release-procedure/)
+- Review the [Pull Request best practices](/development/best-practice/pull-requests/)
+- Review the [CI/CD strategy](/architecture-and-infrastructure/ci-cd-strategy/)
+- Read through [Onboarding in Data Operations](/data-operations-manual/Tutorials/Onboarding/) for a broad overview of the platform and the questions worth asking as you get started
 
 ---
 

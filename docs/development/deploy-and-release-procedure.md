@@ -24,11 +24,18 @@ Before merging, it is worth validating that your changes work correctly outside 
 
 This step may not be necessary for smaller or lower-risk changes, but it is always worth considering before proceeding.
 
+To do this for applications there should be one of the following GitHub actions:
+
+-  Publish - pushes a container image to an ECR repository in the relevant environment (normally in AWS). There will then be an automatic deployment process which updates it's messages into the notifications slack channel. you can select the branch and environment you want to deploy to.
+- Publish & Deploy - does both the publishing into ECR and triggers the deployment. We haven't rolled this out across most repositories yet.
+
+
+
 ## Step 3: Get a PR review and merge into the `main` branch
 
 Before your code can be deployed to any shared environment, it must be reviewed by another developer. See the [Pull Request best practices](best-practice/pull-requests.md) for guidance on organising reviews and what both the author and reviewer are responsible for — including the important point that **merging is the responsibility of the PR author, not the reviewer**.
 
-The review process may result in further changes being requested. Ensure all tests are still passing after any updates — tests are automatically re-triggered on each push, but it is good practice to run them locally before pushing.
+The review process may result in further changes being requested. Ensure all tests are still passing after any updates — tests are automatically re-triggered on each push, but it is good practice to run them locally before pushing. If a reviewer is a designer then they may want to see the app deployed to an environment, see step 2 for this.
 
 Once the PR is approved and tests are green, merge into `main`.
 
