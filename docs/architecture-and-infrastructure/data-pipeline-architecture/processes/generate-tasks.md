@@ -4,7 +4,8 @@ title: Generate tasks
 
 # Generate tasks
 
-The generate-tasks process reads collection logs and issue data produced by the nightly pipeline runs and produces a [task](../../../data-operations-manual/Explanation/Key-Concepts/Tasks.md) table. This gives data providers a single queryable source of data quality problems they need to fix.
+The generate-tasks process reads collection logs and issue data produced by the nightly pipeline runs and produces a [task](../Key-Concepts/Tasks.md) table.
+ This gives data providers a single queryable source of data quality problems they need to fix.
 
 ## When it runs
 
@@ -31,7 +32,7 @@ For each collection in S3, the job reads three files:
 
 The output is a [Delta Lake](https://delta.io/) table written to `s3://{env}-parquet-datasets/task/`. The table is fully overwritten on each run — it always reflects the current state of all collections.
 
-The table schema matches the [task columns](../../../data-operations-manual/Explanation/Key-Concepts/Tasks.md#task-columns) defined in the key concepts page.
+The table schema matches the [task columns](../Key-Concepts/Tasks.md#task-columns) defined in the key concepts page.
 
 ## Implementation
 
