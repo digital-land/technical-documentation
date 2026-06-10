@@ -13,6 +13,7 @@ Contents:
 * Install Make
 * Install sqlite3
 * Install Python (and understand venvs)
+* Install Docker Desktop
 * Set up SSH for Github
 * Optional but recommended setup
 
@@ -205,6 +206,47 @@ workon
 You see in the aliases above that workon is used in the mkvirtualenv aliases to automatically activate a venv after creating one
 
 > Tip: If you're using more versions of Python the aliases above can easily be edited to different versions by simply changing the version of Python which is being called
+
+### Install Docker Desktop
+
+Some of our repositories use Docker to run supporting services locally or to run tests with tools such as Testcontainers. On Mac, the simplest way to get Docker running is to install Docker Desktop.
+
+Before installing, check whether your Mac uses Apple silicon or an Intel chip:
+
+```sh
+uname -m
+```
+
+If this returns `arm64`, use the Apple silicon download. If it returns `x86_64`, use the Intel download.
+
+Go to the official Docker install page and download Docker Desktop for the correct chip:
+
+* https://docs.docker.com/desktop/setup/install/mac-install/
+
+Then install it:
+
+1. Open the downloaded `Docker.dmg` file.
+2. Drag Docker into the `Applications` folder.
+3. Open Docker from `Applications`.
+4. Accept the Docker Desktop terms if they apply to your use.
+5. Choose the recommended settings when prompted.
+6. Enter your Mac password if Docker asks for permission to finish setup.
+
+
+Once Docker Desktop has started, check that the command line tools are available:
+
+```sh
+docker --version
+docker compose version
+```
+
+You can also run a small test container:
+
+```sh
+docker run hello-world
+```
+
+If the test works, Docker is ready to use. Docker Desktop needs to be running in the background whenever you run commands such as `docker build`, `docker compose up`, or tests that start containers.
 
 ### Set up SSH for Github
 
