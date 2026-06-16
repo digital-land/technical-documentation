@@ -52,6 +52,7 @@ Check that this has created the following files and that only the headers are in
 Once you are ready to add the data, make the following changes in the update the collection name for the dataset in the [specification](https://github.com/digital-land/specification) repository. 
 
 * Navigate to specification -> content -> dataset, locate the .md file corresponding to the dataset being added, and insert the relevant collection name. This step ensures that the DAG for this collection is created in Airflow.
+* Also check the `availability` field in the same .md file. This controls which Airflow environments the collection DAG will be created in. For most datasets this should be set to `production`, which makes the DAG available in all environments. If you want the collection to be visible only in development or staging initially (e.g. while testing a new feed), set it to the appropriate environment value.
 * Navigate to the [provision-rule.csv](https://github.com/digital-land/specification/blob/main/content/provision-rule.csv) and create a rule for the new dataset and any organisations that may provide this data. If you are unsure on what fields to add to the provision-rule, please speak with the Data Manager.
  
 &nbsp;
@@ -72,7 +73,7 @@ Note: If the dataset being added is a spatial dataset (i.e., it contains geometr
 
 ### 5. Check in Airflow
 
-When the collection is added to the specification, this should automatically create a new DAG in all Airflow environments. Firstly, check the collection has been created and looks correct.
+When the collection is added to the specification, this should automatically create a new DAG in the Airflow environments permitted by the `availability` field you set in Step 3.
 
 #### Verify new collection present
 
@@ -93,7 +94,7 @@ If the run was successful, there will be a green box next to the newly run workf
 
 Next, execute the collection in the [Airflow staging environment](https://pipelines.staging.planning.data.gov.uk/home). If the run is successful, share the [Planning Data staging URL](https://www.staging.planning.data.gov.uk/) with Data Design team for review.
 
-The collection will execute in production during the overnight run. If you don’t want the collection to run in production for any reason, disable the DAG for it in the [Airflow production environment](https://pipelines.planning.data.gov.uk/home).
+If you don't want the collection to run in production yet, set `availability` to `staging` or `development` in the dataset specification (Step 3) this will ensure that the new dataset will only apprear in lower environments.
 
 ####  Re-publish DAGs
 
