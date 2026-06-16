@@ -8,6 +8,38 @@ Using ADRs helps us maintain a clear decision history, supports transparency, an
 
 [[toc]]
 
+## 24. Use the dataset `availability` field to control which Airflow environments a collection DAG is created in
+
+Date: 2026-06-16
+
+#### Status
+Approved
+
+#### Context
+Collection DAGs in Airflow were previously created for any dataset that had a `collection` value set in the specification. There was no way to control which environments (development, staging, production) a collection would appear in without manually disabling the DAG in the Airflow UI. 
+
+#### Decision
+We have introduced an `availability` field to the dataset specification that controls which Airflow environments a collection DAG is created in. 
+
+The valid values are:
+
+- `production` — the collection DAG is created in all environments (development, staging, and production)
+- `staging` — the collection DAG is created in development and staging only
+- `development` — the collection DAG is created in development only
+- empty / not set — the collection DAG is not created in any environment
+
+All existing datasets have been set to `production` to preserve current behaviour. New datasets should have `availability` explicitly set; omitting it will result in no DAG being created in any environment.
+
+#### Consequences
+
+1. **Positive Outcomes:**
+   - New collections can be tested in development and staging without appearing in the production overnight run.
+   - The decision of which environments a collection runs in is version-controlled in the specification, rather than managed manually in the Airflow UI.
+
+2. **Negative Outcomes:**
+   - Datasets added to the specification without an explicit `availability` value will silently produce no DAG in any environment. Data Design must set this field when creating new dataset `.md` files.
+
+
 ## 23. Squash commits when merging to main
 
 Date: 2026-05-29
