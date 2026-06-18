@@ -211,7 +211,17 @@ You see in the aliases above that workon is used in the mkvirtualenv aliases to 
 
 Some of our repositories use Docker to run supporting services locally or to run tests with tools such as Testcontainers. On Mac, the simplest way to get Docker running is to install Docker Desktop.
 
-Before installing, check whether your Mac uses Apple silicon or an Intel chip:
+There are two ways to install Docker Desktop:
+
+* Install it using Homebrew, if you already have Homebrew installed:
+
+```sh
+brew install --cask docker-desktop
+```
+
+* Download it from the Docker website.
+
+Before downloading Docker Desktop from the Docker website, check whether your Mac uses Apple silicon or an Intel chip:
 
 ```sh
 uname -m
