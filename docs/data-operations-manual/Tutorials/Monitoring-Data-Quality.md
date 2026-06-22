@@ -300,3 +300,62 @@ Note: the script skips LPAs that updated MHCLG placeholder data in-place (i.e. t
 ### Test
 
 Once merged, confirm the retired entities are no longer active on the platform by checking [Datasette](https://datasette.planning.data.gov.uk/) for the relevant `local-plan` or `plan-timetable` entities. The retired entity numbers should now redirect (HTTP 410) rather than return active records.
+
+## Config Evening Pipeline
+
+### Overview
+
+The [Config Evening Pipeline](https://github.com/digital-land/config/blob/main/.github/workflows/config-evening-pipeline.yml) is a GitHub Actions workflow in the [Config repository](https://github.com/digital-land/config) that consolidates several nightly data maintenance tasks into a single automated run. It replaces a previous set of separate workflows that were chained together by scheduled times, making the overall process more reliable and easier to reason about.
+
+### Schedule
+
+The pipeline runs automatically at **19:00 UTC, Monday to Friday**. It can also be triggered manually from the [Actions tab](https://github.com/digital-land/config/actions/workflows/config-evening-pipeline.yml) in the Config repository.
+
+Due to delays with GitHub actions, the pipeline will typically run at 19:45 UTC (20:45 BST).
+
+### Tasks
+
+The pipeline runs the following jobs in order. Each job waits for the previous one to complete before starting.
+
+1. **Merge** — Checks for an open pull request from the `config-manager-update` branch into `main`. If one exists, it is automatically approved and squash-merged. This ensures `main` is up to date before the remaining steps run. If no PR exists, this step completes without making any changes.
+
+2. **Batch assign** — Runs the batch entity assignment script against the platform's live issue data to assign entities for resources with unknown entity issues. The scope of datasets processed rotates by day of the week:
+   - Monday, Wednesday, Friday: ODP datasets
+   - Tuesday: Mandated datasets
+   - Thursday: Single-source datasets (processed in batches of 10 resources at a time)
+
+   This job commits its changes directly to `main` after each batch, rather than waiting until the end of the pipeline.
+
+3. **Deduplicate** — Runs three scripts in sequence to retire MHCLG placeholder data:
+   - Deduplicates conservation area geographies (`deduplicate-ca-geogs.py`)
+   - Retires MHCLG conservation area data (`retire-mhclg-ca-data.py`)
+   - Retires MHCLG local plan and plan timetable data (`retire-mhclg-plan-data.py`)
+
+   If one script fails, the remaining scripts still run. All changes from this step are committed to `main` together in a single commit at the end of the job.
+
+4. **Standardise** — Reorders rows and standardises line endings across all `collection/` and `pipeline/` CSV files. This ensures consistent formatting across the repository regardless of how changes were introduced in earlier steps. Changes are committed to `main` if any are detected.
+
+5. **Upload to S3** — Syncs the `collection/` and `pipeline/` directories to S3 for each deployment environment (development, staging, production). This step runs in parallel across environments and picks up all changes committed in the earlier steps.
+
+### Commits
+
+Each stage that modifies data commits its changes to `main` independently rather than in one combined commit at the end. This approach avoids memory issues that can occur when staging a large number of file changes at once, particularly during batch entity assignment.
+
+### Failure behaviour
+
+If a job fails, the subsequent jobs in the pipeline **still run**. For example, if the deduplicate job fails, the standardise and upload-to-S3 jobs will still execute. This means a failure in one area does not prevent the rest of the pipeline from completing.
+
+At the end of the run, if any job has failed, a single alert is posted to the `#planning-data-alerts` Slack channel. The alert names each stage and its result, so it is immediately clear which part of the pipeline failed without needing to open GitHub. For batch assign failures, the alert also includes the data scope (e.g. `odp`, `mandated`, `single-source`) and, for single-source runs, the batch number that failed along with the exact `start_batch` value needed to resume the run manually.
+
+### Dry run
+
+The pipeline can be run in dry-run mode by triggering it manually from the Actions tab and setting the `dry_run` input to `true`. In this mode, every job runs and every script executes against live data, but no changes are committed to `main` and nothing is synced to S3. This is useful for testing or diagnosing issues without side effects.
+
+### Test
+
+To verify the pipeline has run correctly:
+
+- Check the [Actions tab](https://github.com/digital-land/config/actions/workflows/config-evening-pipeline.yml) to confirm all jobs completed successfully.
+- Review the commits made to `main` that evening — there should be up to three commits (batch assign, deduplicate, standardise) if each stage had changes to make. If batch assign is running for the single-source data scope then there could be more than three commits.
+- Confirm any unknown entity issues resolved by batch assign are no longer present in the [endpoint dataset issue summary](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_issue_type_summary?_sort=rowid&issue_type__exact=unknown+entity).
+- If the deduplicate step ran, verify retired entities appear in `pipeline/local-plan/old-entity.csv` and `pipeline/conservation-area/old-entity.csv` as appropriate.
