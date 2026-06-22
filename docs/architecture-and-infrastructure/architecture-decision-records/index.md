@@ -8,6 +8,42 @@ Using ADRs helps us maintain a clear decision history, supports transparency, an
 
 [[toc]]
 
+## 25. Reduce geometry simplification tolerance from `0.000005` to `0.000001`
+
+Date: 2026-06-22
+
+#### Status
+
+Approved
+
+#### Context
+
+The pipeline's `normalise_geometry` function applies a `simplify()` step to all polygon geometries before they are stored and served on the platform. The tolerance was set to `0.000005` (approximately 0.5 m on the ground at UK latitudes).
+
+An investigation was triggered by Barnet Council flagging a discrepancy between their submitted conservation area boundaries and what was displayed on the platform. Analysis of the pipeline transformation steps identified simplification as the primary cause. In one example with complex boundaries, `simplify(0.000005)` was removing approximately 80% of vertices and introducing around 1,000 m² of cumulative boundary deviation. The simplification step was originally introduced to repair invalid geometries from non-WGS84 sources (OSGB, Mercator-projected data).
+
+Two options were considered:
+
+1. **Keep the current tolerance (`0.000005`)** — maintains existing behaviour but continues to distort complex boundaries from valid WGS84 submissions.
+2. **Reduce the tolerance to `0.000001`** (approximately 0.1 m on the ground) — cuts boundary distortion by ~70% while retaining ~65% vertex reduction. Geometry sizes increase modestly.
+
+Before adopting option 2, pipeline and API performance were tested to confirm the finer tolerance did not introduce unacceptable overhead. Pipeline timing measurements across two geometry-heavy collections showed the finer tolerance was marginally faster, likely because fewer invalid shapes require the expensive `make_valid` repair path — but the overall pipeline impact is negligible (~10% of transform time). API response times for both point-in-polygon and polygon intersection queries were unaffected at warm steady-state, despite geometry payloads increasing by up to ~29% for complex datasets.
+
+#### Decision
+
+Reduce the `simplify()` tolerance in `normalise_geometry` from `0.000005` to `0.000001`.
+
+#### Consequences
+
+1. **Positive Outcomes:**
+   - Complex boundaries submitted as valid WGS84 data (e.g. conservation areas, article 4 direction areas) are stored and served with significantly less boundary distortion, more faithfully representing what data providers submitted.
+   - Pipeline processing time is marginally reduced due to fewer `make_valid` repairs triggered by over-simplified geometries.
+   - API response times are unaffected at warm steady-state, despite geometry payloads increasing in size.
+
+2. **Negative Outcomes:**
+   - Geometry payloads are slightly larger (up to ~29% for the most complex datasets such as `border`). This has no measurable impact on API response times but marginally increases total geometry storage in the database.
+   - Simple, low-vertex geometries are unaffected — the change only benefits complex, densely-surveyed boundaries where vertex spacing is smaller than the old tolerance.
+
 ## 24. Use the dataset `availability` field to control which Airflow environments a collection DAG is created in
 
 Date: 2026-06-16
