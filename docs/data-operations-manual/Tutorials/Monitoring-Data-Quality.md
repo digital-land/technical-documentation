@@ -6,63 +6,6 @@ This page explains the processes we follow to fix data quality issues that we ac
 
 Each of these sections covers a different issue, each of which are defined by our [data quality requirements](https://docs.google.com/spreadsheets/d/1kMAKOAm6Wam-AJb6R0KU-vzdvRCmLVN7PbbTAUh9Sa0/edit?gid=2142834080#gid=2142834080&fvid=1368636333).
 
-## Unknown entities
-
-To keep the datasets up-to-date on the platform, we need to check “unknown entity” issues every week and assign entities.
-The unknown entities issue usually occurs when an LPA updates their data on the endpoint we are retrieving and adds new records. These records will have reference values we do not have on the platform, hence when the system realises the new data has been added and the references of those new data are not on the platform, it will trigger an unknown entity issue.
-
-> **This process runs automatically each weekday evening as part of the [Config Evening Pipeline](#config-evening-pipeline).** The steps below are for running it manually, for example to investigate an issue or resume a failed single-source batch run.
-
-The datasets that require assigning entities are categorised into three main scopes:
-
-ODP Datasets – These datasets are supported by ODP funding. Datasets categorised as ODP can be found here [ODP Data](https://datasette.planning.data.gov.uk/digital-land?sql=select+rowid%2C+dataset%2C+cohort%2C+notes%2C+project%2C+provision_rule%2C+role%2C+specification+from+provision+where+%22project%22+%3D+%3Ap0+group+by+dataset&p0=open-digital-planning)
-
-Mandated Datasets – These are datasets that LPAs are legally required to provide, this includes brownfield-land and developer-contributions datasets.
-
-Single Source Datasets – This category includes data obtained from authoritative sources or seeded data received from the Data Design Team.
-
-The recommended steps to resolve this are as follows:
-
-1. **Setup Config Repo**
-   Clone the [Config repository](https://github.com/digital-land/config) if it has not already been done, then create and activate a virtual environment.
-
-2. **Run the Script**
-   The script can be run using the command `python3 batch_assign_entities.py`
-
-   Upon execution, the script will download the `issue_summary.csv` file to the root directory of the Config folder.
-
-   The downloaded `issue_summary.csv` includes a column called scope, this column indicates the scope for each dataset. This scope includes the categories specified above, such as ODP, Mandated and Single source.
-
-3. **Analyse Unknown Entity issues**
-   Open the `issue_summary.csv` file and apply a filter to the "scope" column to display only entries related to ODP. Begin by analysing all unknown entities issues associated with the ODP scope.
-
-   If the `count_issue` for any dataset is unusually high, verify that the entities are valid and new. `count_issue` may also be high if the LPA has recently their references for existing entities. Keep a note of endpoints with an unusually high number of `count_issue` to review once the entities have been assigned.
-
-   The command will prompt the user to confirm. Type "yes" to assign Unknown entities for ODP.
-
-   The command will prompt the user to enter scope (odp/mandated/single-source). Type "odp" to assign entities.
-
-   It will download all the resources for unknown entities into a resources folder, assign entities, and then delete the downloaded resource files. The affected dataset’s lookup.csv should now have new rows with the assigned entities. The amount of entities that needed to be assigned should be the same amount that have been added in the lookup file.
-
-   The previous assignment process which allowed Unknown entities to be automatically assigned has now been updated and provides an interactive issue summary reporting facility which highlights issues and enables corrective measures to be actioned to enhance data integrity.
-
-   Review the entities assigned for the endpoint you’ve noted. The key thing to check here is whether the references are a continuation or follow a similar format to existing lookups for that provision.
-
-   Note: If the entities belong to the Conservation Area dataset, you should check for duplicates using endpoint checker, refer Step 3 in [Validating an endpoint](https://digital-land.github.io/technical-documentation/data-operations-manual/How-To-Guides/Validating/Validate-an-endpoint/). Once the new entries for the lookup.csv have been generated, use the outputs from the `Duplicates with different entity numbers` section of the endpoint checker to replace the newly generated entity numbers for any duplicates, with the entity numbers of the existing entity that they match.
-
-4. **Assign entities for Mandated and single-source datasets**
-   Repeat Step 3 for assign entities for Mandated and single-source datasets.
-
-   Enter the scope, either mandated or single-source based on requirement.
-
-5. **Review Changes**
-   Once merged, use [endpoint_dataset_issue_type_summary table](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_issue_type_summary?_sort=rowid&issue_type__exact=unknown+entity) and check if the previous unknown entity issues are resolved.
-
-   Make a note in the ticket if you are not able to assign entities for any LPA.
-
-Success criteria:
-Ideally, the number of unknown entity errors should be zero after completing the above steps.
-
 ## Check deleted entities
 
 To keep the datasets up-to-date on the platform, we need to check entities that have been deleted from the latest resource every week. This occurs when the LPAs have deleted the entities on their endpoint but not told us. Once we have confirmed which entities have been deleted, we contact the LPAs to make sure. Once we have received confirmation, we can retire the entities.
@@ -306,6 +249,63 @@ Note: the script skips LPAs that updated MHCLG placeholder data in-place (i.e. t
 ### Test
 
 Once merged, confirm the retired entities are no longer active on the platform by checking [Datasette](https://datasette.planning.data.gov.uk/) for the relevant `local-plan` or `plan-timetable` entities. The retired entity numbers should now redirect (HTTP 410) rather than return active records.
+
+## Unknown entities
+
+To keep the datasets up-to-date on the platform, we need to check “unknown entity” issues every week and assign entities.
+The unknown entities issue usually occurs when an LPA updates their data on the endpoint we are retrieving and adds new records. These records will have reference values we do not have on the platform, hence when the system realises the new data has been added and the references of those new data are not on the platform, it will trigger an unknown entity issue.
+
+> **This process runs automatically each weekday evening as part of the [Config Evening Pipeline](#config-evening-pipeline).** The steps below are for running it manually, for example to investigate an issue or resume a failed single-source batch run.
+
+The datasets that require assigning entities are categorised into three main scopes:
+
+ODP Datasets – These datasets are supported by ODP funding. Datasets categorised as ODP can be found here [ODP Data](https://datasette.planning.data.gov.uk/digital-land?sql=select+rowid%2C+dataset%2C+cohort%2C+notes%2C+project%2C+provision_rule%2C+role%2C+specification+from+provision+where+%22project%22+%3D+%3Ap0+group+by+dataset&p0=open-digital-planning)
+
+Mandated Datasets – These are datasets that LPAs are legally required to provide, this includes brownfield-land and developer-contributions datasets.
+
+Single Source Datasets – This category includes data obtained from authoritative sources or seeded data received from the Data Design Team.
+
+The recommended steps to resolve this are as follows:
+
+1. **Setup Config Repo**
+   Clone the [Config repository](https://github.com/digital-land/config) if it has not already been done, then create and activate a virtual environment.
+
+2. **Run the Script**
+   The script can be run using the command `python3 batch_assign_entities.py`
+
+   Upon execution, the script will download the `issue_summary.csv` file to the root directory of the Config folder.
+
+   The downloaded `issue_summary.csv` includes a column called scope, this column indicates the scope for each dataset. This scope includes the categories specified above, such as ODP, Mandated and Single source.
+
+3. **Analyse Unknown Entity issues**
+   Open the `issue_summary.csv` file and apply a filter to the "scope" column to display only entries related to ODP. Begin by analysing all unknown entities issues associated with the ODP scope.
+
+   If the `count_issue` for any dataset is unusually high, verify that the entities are valid and new. `count_issue` may also be high if the LPA has recently their references for existing entities. Keep a note of endpoints with an unusually high number of `count_issue` to review once the entities have been assigned.
+
+   The command will prompt the user to confirm. Type "yes" to assign Unknown entities for ODP.
+
+   The command will prompt the user to enter scope (odp/mandated/single-source). Type "odp" to assign entities.
+
+   It will download all the resources for unknown entities into a resources folder, assign entities, and then delete the downloaded resource files. The affected dataset’s lookup.csv should now have new rows with the assigned entities. The amount of entities that needed to be assigned should be the same amount that have been added in the lookup file.
+
+   The previous assignment process which allowed Unknown entities to be automatically assigned has now been updated and provides an interactive issue summary reporting facility which highlights issues and enables corrective measures to be actioned to enhance data integrity.
+
+   Review the entities assigned for the endpoint you’ve noted. The key thing to check here is whether the references are a continuation or follow a similar format to existing lookups for that provision.
+
+   Note: If the entities belong to the Conservation Area dataset, you should check for duplicates using endpoint checker, refer Step 3 in [Validating an endpoint](https://digital-land.github.io/technical-documentation/data-operations-manual/How-To-Guides/Validating/Validate-an-endpoint/). Once the new entries for the lookup.csv have been generated, use the outputs from the `Duplicates with different entity numbers` section of the endpoint checker to replace the newly generated entity numbers for any duplicates, with the entity numbers of the existing entity that they match.
+
+4. **Assign entities for Mandated and single-source datasets**
+   Repeat Step 3 for assign entities for Mandated and single-source datasets.
+
+   Enter the scope, either mandated or single-source based on requirement.
+
+5. **Review Changes**
+   Once merged, use [endpoint_dataset_issue_type_summary table](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_issue_type_summary?_sort=rowid&issue_type__exact=unknown+entity) and check if the previous unknown entity issues are resolved.
+
+   Make a note in the ticket if you are not able to assign entities for any LPA.
+
+Success criteria:
+Ideally, the number of unknown entity errors should be zero after completing the above steps.
 
 ## Config Evening Pipeline
 
