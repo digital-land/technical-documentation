@@ -44,9 +44,12 @@ Reduce the `simplify()` tolerance in `normalise_geometry` from `0.000005` to `0.
    - Geometry payloads are slightly larger (up to ~29% for the most complex datasets such as `border`). This has no measurable impact on API response times but marginally increases total geometry storage in the database.
    - Simple, low-vertex geometries are unaffected — the change only benefits complex, densely-surveyed boundaries where vertex spacing is smaller than the old tolerance.
 
-## 24. Use the dataset `availability` field to control which Airflow environments a collection DAG is created in
+## 24. Use the dataset `environment` field to control which Airflow environments a collection DAG is created in
 
 Date: 2026-06-16
+
+> **Update 2026-06-22:** the field was renamed from `availability` to `environment` (same values and behaviour) following stakeholder feedback; the text below uses the current name.
+
 
 #### Status
 Approved
@@ -55,7 +58,7 @@ Approved
 Collection DAGs in Airflow were previously created for any dataset that had a `collection` value set in the specification. There was no way to control which environments (development, staging, production) a collection would appear in without manually disabling the DAG in the Airflow UI. 
 
 #### Decision
-We have introduced an `availability` field to the dataset specification that controls which Airflow environments a collection DAG is created in. 
+We have introduced an `environment` field to the dataset specification that controls which Airflow environments a collection DAG is created in. 
 
 The valid values are:
 
@@ -64,7 +67,7 @@ The valid values are:
 - `development` — the collection DAG is created in development only
 - empty / not set — the collection DAG is not created in any environment
 
-All existing datasets have been set to `production` to preserve current behaviour. New datasets should have `availability` explicitly set; omitting it will result in no DAG being created in any environment.
+All existing datasets have been set to `production` to preserve current behaviour. New datasets should have `environment` explicitly set; omitting it will result in no DAG being created in any environment.
 
 #### Consequences
 
@@ -73,7 +76,7 @@ All existing datasets have been set to `production` to preserve current behaviou
    - The decision of which environments a collection runs in is version-controlled in the specification, rather than managed manually in the Airflow UI.
 
 2. **Negative Outcomes:**
-   - Datasets added to the specification without an explicit `availability` value will silently produce no DAG in any environment. Data Design must set this field when creating new dataset `.md` files.
+   - Datasets added to the specification without an explicit `environment` value will silently produce no DAG in any environment. Data Design must set this field when creating new dataset `.md` files.
 
 
 ## 23. Squash commits when merging to main
