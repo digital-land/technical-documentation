@@ -307,6 +307,50 @@ The recommended steps to resolve this are as follows:
 Success criteria:
 Ideally, the number of unknown entity errors should be zero after completing the above steps.
 
+### Errors raised by the batch assign entities script
+
+The `bin/batch_assign_entities.py` script records errors in `batch_assign_summary_[scope].csv`. This output summary CSV is used in the manual assign entities process in the [Manage service](https://manage.planning.data.gov.uk/), so users can review the resources the script could not safely assign automatically. These errors are safety checks: they do not always mean the data is wrong, but they do mean the script could not safely accept the generated entity assignment without manual review.
+
+The summary file includes these useful columns:
+
+- `dataset` - the dataset or pipeline being processed
+- `resource` - the current resource hash
+- `organisation` - the organisation associated with the resource or flagged row
+- `reference` - the provider reference where the error relates to a specific entity
+- `status` - either `success` or `error`
+- `error_code` - the validation error or Python exception type
+- `message` - extra context from the script
+
+#### Terms used in these errors
+
+The script compares the latest resource for an endpoint with the previous resource we collected for the same endpoint. This is how it decides whether the entities it has just assigned look safe.
+
+- `current resource` - the latest resource being processed by the script. This is the file linked from the unknown entity issue and downloaded into the local `resource/` folder.
+- `previous resource` - the older transformed resource for the same endpoint. The script finds this from historic endpoint data and downloads it from `files.planning.data.gov.uk` so it can compare old and new data.
+- `current entity` - an entity number found in the current transformed resource after the script has run entity assignment.
+- `previous entity` - an entity number found in the previous transformed resource for the same endpoint.
+- `new entity` - a current entity that was not present in the previous resource. These are the entity numbers the script is trying to validate before accepting the generated lookup changes.
+
+For example, if the previous resource contained entities `44000001`, `44000002` and `44000003`, and the current resource contains `44000001`, `44000002`, `44000003` and `44000004`, then `44000004` is the new entity. If the current resource contains no entity numbers that were missing from the previous resource, the script raises `current_resource_no_new_entities`.
+
+| Error code | What it means | Why it is flagged | Example |
+| --- | --- | --- | --- |
+| `previous_resource_not_found` | The script could not fetch or read the previous transformed resource for that endpoint. | Without the previous resource, the script cannot tell which entities are genuinely new or whether current rows duplicate existing platform entities. | Datasette returns no previous resource hash for the endpoint, or `https://files.planning.data.gov.uk/[collection]-collection/transformed/[dataset]/[old-resource].csv` cannot be downloaded. |
+| `previous_resource_empty` | The previous transformed resource exists but has no entity rows. | If the old resource has no entities, every current entity appears new and the comparison is not reliable. | The previous transformed CSV downloads successfully but only contains headers, or contains no rows with an `entity` value. |
+| `current_resource_empty` | The current transformed resource produced by assignment has no rows. | There is nothing safe to assign, and it may mean the source file did not transform correctly. | The file in `var/cache/assign_entities/transformed/[resource].csv` is empty after `check_and_assign_entities` runs. |
+| `current_resource_no_new_entities` | The current resource does not contain any entity numbers that were not already present in the previous resource. | Unknown entity issues should normally require new lookup rows. If there are no new entities, the issue may already be resolved, the wrong resource may have been processed, or the data may have changed since the issue summary was generated. | The previous and current resources both contain entities `44000001` to `44000010`, with no additional entity numbers. |
+| `large_number_of_new_entities` | The number of new entity numbers is greater than the percentage set by `--new-entity-threshold`. The default is 10 percent of the current resource. | A large jump can indicate that the provider changed references for existing records, changed endpoint format, or caused existing things to be treated as new entities. | A current resource has 100 entities and 40 are new, so the default 10 percent threshold is exceeded. |
+| `duplicate_entity_all_fields` | A new entity matches an old entity when comparing all fact fields except `reference` and `entry-date`. The script builds a fingerprint from the remaining fact field and value pairs. | If all the compared facts match an existing entity, the provider may have changed the reference for the same real-world thing. Creating a new entity number could create a duplicate. If the previous entity has any compared fact field that the current entity does not have, or the current entity has any extra compared fact field, the fingerprints will not match and this check will not flag it as a duplicate. | A conservation area has the same name, organisation and geometry as an existing entity, but the provider changed the reference from `CA-001` to `CON-001`. If any compared fact field is present on the previous entity but absent from the current entity, this check will pass it as not being a duplicate. |
+| `duplicate_prefix_reference_organisation` | A new entity has the same `prefix`, `reference` and `organisation` as an old entity. | The same dataset, provider reference and organisation should normally resolve to the existing entity number. | Existing entity `44001234` has prefix `conservation-area`, reference `CA1` and organisation `local-authority:ABC`; the new resource contains the same combination. |
+| `duplicate_reference_organisation` | A new entity has the same `reference` and `organisation` as an old entity, regardless of prefix. | This catches duplicate provider identifiers even when another field has changed. It is broader than the prefix/reference/organisation check. | A provider republishes reference `TPO-99` for the same organisation and the script tries to create a new tree preservation order entity for it. |
+| `duplicate_reference_organisation_in_new_resource` | Two or more entities inside the current resource have the same `reference` and `organisation`. | The script cannot know whether these rows are duplicate records for the same thing or separate things with duplicated identifiers. | The current transformed resource contains two entities from `local-authority:ABC`, both with reference `CA1`. |
+| `missing_organisation` | A current entity is missing its `organisation` value. | Entity assignment depends on knowing who supplied the reference. Without the organisation, the lookup can be ambiguous or wrong. | The transformed rows for entity `44001234` include a `reference` field but no `organisation` field. |
+| `missing_reference` | A current entity is missing its `reference` value. | The lookup maps provider references to entity numbers. Without the reference, future collections cannot reliably resolve the same record. | The transformed rows for entity `44001234` include `organisation` but the `reference` field is blank. |
+| `invalid_uri_issue` | The same resource also appears in the current invalid URI issue summary. | Entity assignment may have worked, but the resource has a separate known quality issue that needs manual review before accepting the assignment. | A brownfield land resource has unknown entities and also invalid document URI values in the issue summary. |
+| Python exception name, for example `RuntimeError`, `FileNotFoundError`, `KeyError` or another exception type | The script raised an exception outside the validation checks. | The assignment did not complete normally. The `message` column and terminal output should be used to diagnose the failure. | `RuntimeError` can be raised if a required command such as `git` or `gh` fails. `FileNotFoundError` can be raised if an expected local file is missing. |
+
+Failed resource downloads are printed in the terminal summary as `Failed Downloads`; they are not written as normal validation rows because the resource was never processed.
+
 ## Config Evening Pipeline
 
 ### Overview
