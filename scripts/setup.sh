@@ -128,7 +128,7 @@ EOF
 fi
 
 # -------------------------------------------------------
-# 3. Git Configuration
+# 4. Git Configuration
 # -------------------------------------------------------
 
 section "Git Configuration"
@@ -140,6 +140,9 @@ echo "Default branch set to 'main'."
 # Set push default to current branch
 git config --global push.default current
 echo "Push default set to 'current'."
+
+# -------------------------------------------------------
+# 5. sqlite3 and other build dependencies
 # -------------------------------------------------------
 
 section "SQLite3 + build dependencies"
@@ -155,7 +158,7 @@ for pkg in sqlite xz openssl readline zlib tcl-tk libpq; do
 done
 
 # -------------------------------------------------------
-# 5. Make
+# 6. Make
 # -------------------------------------------------------
 
 section "Make"
@@ -169,7 +172,7 @@ else
 fi
 
 # -------------------------------------------------------
-# 6. pyenv
+# 7. pyenv
 # -------------------------------------------------------
 
 section "pyenv"
@@ -232,7 +235,7 @@ echo "  Official docs: https://github.com/pyenv/pyenv"
 echo "  macOS guide:   https://mac.install.guide/python/install-pyenv"
 
 # -------------------------------------------------------
-# 7. Oh My Zsh
+# 8. Oh My Zsh
 # -------------------------------------------------------
 
 section "Oh My Zsh"
@@ -248,7 +251,7 @@ else
 fi
 
 # -------------------------------------------------------
-# 8. fnm (Node version manager)
+# 9. fnm (Node version manager)
 # -------------------------------------------------------
 
 section "fnm"
@@ -274,7 +277,7 @@ else
 fi
 
 # -------------------------------------------------------
-# 9. Apps
+# 10. Apps
 # -------------------------------------------------------
 
 section "Apps"
@@ -348,7 +351,7 @@ for APP in $SELECTED; do
 done
 
 # -------------------------------------------------------
-# 10. VS Code Extensions (optional)
+# 11. VS Code Extensions (optional)
 # -------------------------------------------------------
 
 section "VS Code Extensions"
