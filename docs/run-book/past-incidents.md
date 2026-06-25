@@ -2,6 +2,51 @@
 title: Incident response history
 ---
 
+## Datasette / Check & Provide Outage 2026 - 06 - 18
+
+### In attendance
+Lead Developer
+Lead Technical Architect
+Senior Product Manager (Collecting & Managing Data)
+Senior Delivery Manager (Collecting & Managing Data)
+Dev Ops Engineers
+Data Engineers
+Software Developers
+
+### Description
+The Check & Provide service experienced an outage linked to the Datasette layer. Users were unable to access key parts of the service, including the LPA dashboard and related journeys.
+Underlying technical issue:
+- Datasette containers failed to restart successfully following issues with mounted files
+- The S3 file mount was implicated in the failure
+- Logs showed file access errors such as missing files or mount point issues
+- Health checks then failed and unhealthy instances were not added back into the service pool, leaving no healthy instances serving traffic
+- Multiple containers restarted at the same time
+
+### Incident priority
+P1
+
+### Running log
+- **Overnight on 18 June:** Alerts began appearing but were not actively monitored outside working hours
+- **08:51 on 18 June:** Issue first noted by the team during the working morning
+- **09:32 on 18 June:** P1 incident raised, with incident lead, scribe and comms lead roles assigned
+- **09:57 on 18 June:** Dedicated incident channel created for coordination
+- **Daytime on 18 June:** Team investigated logs, infrastructure, environments and potential AWS causes
+- **16:35 on 18 June:** Service restored and functioning again
+
+### Postmortem
+What was the root cause of the issue?
+
+At the time of the retro, the root cause had not been confirmed - AWS was still analysing logs provided by the team. The immediate technical failure related to Datasette containers failing to restart successfully following issues with the mounted S3 file, which caused health checks to fail and left no healthy instances serving traffic. The service was restored, but the team did not yet have enough evidence to say the underlying issue had been permanently resolved.
+
+Actions to prevent similar incidents in the future
+- Investigate and improve Sentry alert configuration for the Provide service, so alerts only resolve when error counts drop below a lower threshold rather than immediately after dipping below the alert threshold
+- Update uptime monitoring to use a dedicated health check endpoint for the Provide service, ensuring it accurately reflects service status and is not cached - consider removing Datasette from monitored URLs
+- Define and document an escalation process where, if a major incident is unresolved after approximately two hours, Lead Developer or Lead Tech Architect escalates to AWS support
+- Review and restructure alert channels to separate critical, important and routine notifications
+- Draft guidance clarifying that staging should be used as a pre-production environment, with merges to main released to production the same day where appropriate - also consider the need for additional development environments
+- Follow up with AWS to obtain the root cause analysis and share findings with the team
+- Continue the direction of moving facts into Postgres, and avoid over-engineering short-term fixes around Datasette if the strategic answer is to reduce reliance on it
+
 ## Submit POST Issue 2025 - 05 - 13
 
 ### In attendance
