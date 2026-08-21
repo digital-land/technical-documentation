@@ -221,12 +221,13 @@ Before installing Python we need to install sqlite3 and a handful of other libra
 Install everything in one go:
 
 ```sh
-brew install sqlite xz openssl readline zlib tcl-tk libpq
+brew install sqlite sqldiff xz openssl readline zlib tcl-tk libpq
 ```
 
 What each package is for:
 
 * **sqlite** — macOS ships with sqlite but it doesn't allow loadable extensions. We use SpatiaLite (a geospatial extension) in several repos, so we need the Homebrew version which does.
+* **sqldiff** — a tool used in some of our repos to compare the schemas of two SQLite databases. This is a separate Homebrew package and does not come bundled with sqlite.
 * **xz** — provides lzma compression, required for Python's `lzma` module.
 * **openssl** — required for Python's `ssl` module and for pip to fetch packages over https.
 * **readline** — provides command-line editing in Python's interactive shell.

@@ -147,7 +147,7 @@ echo "Push default set to 'current'."
 
 section "SQLite3 + build dependencies"
 
-for pkg in sqlite xz openssl readline zlib tcl-tk libpq; do
+for pkg in sqlite sqldiff xz openssl readline zlib tcl-tk libpq; do
   if brew list $pkg >/dev/null 2>&1; then
     echo "$pkg is already installed, skipping."
   else
