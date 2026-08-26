@@ -37,7 +37,7 @@ This is a curated task list aimed at developers joining the team. It covers gene
 - [ ] [Submit service](https://github.com/digital-land/submit) — tools to help data providers submit URLs for collection
 
 ### Get the applications running
-- [ ] Follow the [Submit Service tutorial](/development/tutorials/submit-tutorial/) for an overview of the application architecture and instructions to get it running locally
+- [ ] Read the [Check and Provide overview](/code-base/check-and-provide/) for what the service does and how it fits the platform, then the [architecture guide](https://digital-land.github.io/submit/tutorial-architecture.html) for how the application is put together. Setup and run instructions are in the [repository readme](https://github.com/digital-land/submit#readme)
 
 ### Best practices and conventions
 - [ ] Review the [best practices documentation](/development/best-practice/) — all projects should follow these
