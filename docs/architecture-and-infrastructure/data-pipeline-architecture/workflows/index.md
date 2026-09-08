@@ -2,20 +2,15 @@
 title: Workflows
 ---
 
-A **workflow** is a set of processes orchestrated together to produce a particular output. Each one
-is an Airflow DAG (or a family of generated DAGs) in the
-[airflow-dags repository](https://github.com/digital-land/airflow-dags).
+A **workflow** is a set of processes orchestrated together to produce a particular output. Each one is an Airflow DAG (or a family of generated DAGs) in the [airflow-dags repository](https://github.com/digital-land/airflow-dags).
 
-This is the high level view: what each workflow is for, when it runs, what it produces and which
-repositories are involved. The individual stages that workflows are built from are documented
-separately under [processes](/architecture-and-infrastructure/data-pipeline-architecture/processes).
+This is the high level view: what each workflow is for, when it runs, what it produces and which repositories are involved. The individual stages that workflows are built from are documented separately under [processes](/architecture-and-infrastructure/data-pipeline-architecture/processes).
 
 ## The workflows
 
 * [Collections](/architecture-and-infrastructure/data-pipeline-architecture/workflows/collections) - collect data from external endpoints and publish it as a dataset. One DAG per collection, generated from the specification.
 
-The following workflows are not yet documented in their own pages. Until they are, they are described
-in [batch processing and our pipelines](/architecture-and-infrastructure/data-pipeline-architecture/batch-processing).
+The following workflows are not yet documented in their own pages. Until they are, they are described in [batch processing and our pipelines](/architecture-and-infrastructure/data-pipeline-architecture/batch-processing).
 
 * **Reporting** - `build-digital-land-builder` builds `digital-land.sqlite3` and loads it into the platform, and also runs the task and provision quality jobs. `build-performance-dataset` builds `performance.sqlite3`.
 * **Configuration** - the `configuration` DAG processes our configuration files into the parquet datasets bucket and the digital land database.

@@ -6,9 +6,7 @@ title: Batch Processing & Our Pipelines
 
 The main implementation of our data architecture is via a set of pipelines which are scheduled (or manually triggered) via airflow. We schedule them once a night. 
 
-The workflows themselves are described in
-[workflows](/architecture-and-infrastructure/data-pipeline-architecture/workflows). The collections
-workflow now has its own page there; the two below will follow.
+The workflows themselves are described in [workflows](/architecture-and-infrastructure/data-pipeline-architecture/workflows). The collections workflow now has its own page there; the two below will follow.
 
 Airflow utilises DAGs to trigger a set of jobs/tasks. We have DAGs representing these pipelines, and DAGs which trigger other DAGs to run multiple pipelines in the correct order.
 
