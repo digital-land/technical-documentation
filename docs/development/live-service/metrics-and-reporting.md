@@ -2,4 +2,11 @@
 title: Metrics & Reporting
 ---
 
-We are aiming to develop our baseline metrics and how we report on Live Service issues as we iterate the team based on feedback. These pages will be updated in due course to show the metrics we have developed and our aims for how to improve them.
+## Service level agreement
+
+We aim to resolve issues raised by local planning authorities within **5 working
+days** of the ticket being raised.
+
+To report on this we need the `Source` field on live service tickets to be
+filled in - see
+[Raising a live service ticket](https://digital-land.github.io/technical-documentation/development/live-service/raise-a-request/).
