@@ -3,27 +3,27 @@ title: Plan
 ---
 
 The plan process does a combination of things specifically:
-* update the resource and log csvs after new logs have been created in  the  collect pocess
-* create a makefile which can be ran trigger following processes (for transform even in paralell)
+* update the resource and log csvs after new logs have been created in the collect process
+* create a makefile which can be run to trigger the following processes (for transform, even in parallel)
 
-This takes in very  similar information as the collect process but is mainly there to make a plan for future processes based on the  collection logs and other files
+This takes in very similar information to the collect process, but is mainly there to make a plan for future processes based on the collection logs and other files.
 
 ![Plan Process](/images/processes/plan.drawio.png)
 
 The plan process takes the collection directory where it assumes the associated files are kept:
 
-- log directory - a log json file is created the file is named after the hash of the endpoint which was checked. it is added into a `log` directoy. This diectory is patitioned by  `entry-date`.  this is produced by the collect phase
-- resource directory - a file (could be any format) nammed after the hash of the contents of a file. this data file will always be refeed to as this in our system
-- log.csv - a csv that contains relevant information from all  the  json logs. if no csv is present it assumes there is no historic logs
+- log directory - a log json file is created, named after the hash of the endpoint which was checked. It is added into a `log` directory. This directory is partitioned by `entry-date`. This is produced by the collect phase.
+- resource directory - a file (could be any format) named after the hash of the contents of a file. This data file will always be referred to as this in our system.
+- log.csv - a csv that contains relevant information from all the json logs. If no csv is present it assumes there are no historic logs.
 - resource.csv - a csv created from logs that lists all resources collected and associated information
 - endpoint.csv - contains the endpoint information
-- source.csv - contains the souce information
+- source.csv - contains the source information
 
 The outputs from the first step are as follows:
 - log.csv - an updated version of the log.csv with the additionnal logs from any recent collect process added
-- resource.csv - an updated resouce.csv which contains any new rersources gathered in more recent logs as well as updating old resources with any changed information in the  source or endpoint csvs
+- resource.csv - an updated resource.csv which contains any new resources gathered in more recent logs, as well as updating old resources with any changed information in the source or endpoint csvs
 
-the outputs from the second step
+The outputs from the second step
 
 - pipeline.mk - a file that can be used by make to process all resources and create dataset sqlite files
 
@@ -32,7 +32,7 @@ the outputs from the second step
 the plan process uses a small amount of code from digital land python repo. The two commands are found in the `commands.py` file. [`collection_save_csv`](https://github.com/digital-land/digital-land-python/blob/4a52c75b57d2c9a87e34989f3ae930ab9a7090fe/digital_land/commands.py#L129) and [collection_pipeline_makerules](https://github.com/digital-land/digital-land-python/blob/4a52c75b57d2c9a87e34989f3ae930ab9a7090fe/digital_land/commands.py#L110)
 
 
-The commands offer functional ways of building the required files but the heavy  lifting is done by  the [`Collection`](https://github.com/digital-land/digital-land-python/blob/4a52c75b57d2c9a87e34989f3ae930ab9a7090fe/digital_land/collection.py#L328) class found in in [`collection.py`](https://github.com/digital-land/digital-land-python/blob/main/digital_land/collection.py).
+The commands offer functional ways of building the required files but the heavy lifting is done by the [`Collection`](https://github.com/digital-land/digital-land-python/blob/4a52c75b57d2c9a87e34989f3ae930ab9a7090fe/digital_land/collection.py#L328) class found in [`collection.py`](https://github.com/digital-land/digital-land-python/blob/main/digital_land/collection.py).
 
 ## Batch Implementation
 
