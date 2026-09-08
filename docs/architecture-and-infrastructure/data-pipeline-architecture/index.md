@@ -7,6 +7,7 @@ Our key product is to produce a data platform which is capable of serving consum
 ## In this section
 
 * [Key Concepts](/architecture-and-infrastructure/data-pipeline-architecture/Key-Concepts) - explanations of the ideas the pipeline documentation refers to, such as tasks and provision quality
+* [Workflows](/architecture-and-infrastructure/data-pipeline-architecture/workflows) - the high level view of each orchestrated pipeline: what it produces, when it runs and which repositories are involved
 * [Processes](/architecture-and-infrastructure/data-pipeline-architecture/processes) - what each stage of the pipeline does, and the code that runs it
 * [Batch processing and our pipelines](/architecture-and-infrastructure/data-pipeline-architecture/batch-processing) - how these processes are orchestrated to update the platform each night
 
