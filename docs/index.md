@@ -9,7 +9,12 @@ Welcome to the Planning Data Wiki. This is used by the members of the team to st
 - [Data Operations Manual](/data-operations-manual/) - How data managers can control the data going in and coming out of our site
 - [Run Book](/run-book/) - A list of incidents that took place across our service
 
-Everything in this wiki is a work in progress and is likely to evolve over time!
+This run book covers incident response and procedures for resolving specific
+technical problems.
+
+If you've found a bug or something that looks wrong but the service is still
+running, start with
+[Live service triage and prioritisation](https://digital-land.github.io/technical-documentation/development/live-service/triage-process/).
 
 Please visit our [website](planning.data.gov.uk) for more information on our service!
 
