@@ -44,8 +44,7 @@ The airflow triggers an ECS task in fargate and uses the [collection-task reposi
 
 the script for all procesess ran in the ECS Task is [`run.sh`](https://github.com/digital-land/collection-task/blob/104df85861401d6088728039792a75038ee580ca/task/run.sh#L27)
 
-In that script the `make collection` target is used which leads
-to the digital-land clis:
+In that script the `make collection` target is used which leads to the digital-land clis:
 
 `digital-land ${DIGITAL_LAND_OPTS} collection-save-csv --collection-dir $(COLLECTION_DIR) --refill-todays-logs $(REFILL_TODAYS_LOGS)`
 
