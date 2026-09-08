@@ -74,9 +74,7 @@ Alerts and notifications are both sent to the same slack channel (`#planning-dat
 
 Notifications do not require esculation but may be relevant for developers.
 
-Alerts should be triaged and if neccessary riased as an incident. See our [run book](/run-book) for the incident procedure.
-
-> 🔜 We have always had one channel for system alerts and notifications. This is  beginninng to ause confusion and other problems as aerts can be ost amungst notifications and notifications can  be treated as alerts. We should look at creating two separate channels.
+Alerts should be triaged and if neccessary raised as an incident. See our [run book](/run-book) for the incident procedure.
 
 ---
 
