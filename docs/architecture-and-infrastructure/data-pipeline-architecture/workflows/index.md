@@ -9,11 +9,8 @@ This is the high level view: what each workflow is for, when it runs, what it pr
 ## The workflows
 
 * [Collections](/architecture-and-infrastructure/data-pipeline-architecture/workflows/collections) - collect data from external endpoints and publish it as a dataset. One DAG per collection, generated from the specification.
-
-The following workflows are not yet documented in their own pages. Until they are, they are described in [batch processing and our pipelines](/architecture-and-infrastructure/data-pipeline-architecture/batch-processing).
-
-* **Reporting** - `build-digital-land-builder` builds `digital-land.sqlite3` and loads it into the platform, and also runs the task and provision quality jobs. `build-performance-dataset` builds `performance.sqlite3`.
-* **Configuration** - the `configuration` DAG processes our configuration files into the parquet datasets bucket and the digital land database.
+* [Reporting](/architecture-and-infrastructure/data-pipeline-architecture/workflows/reporting) - build the platform wide databases and the cross collection task and provision quality tables.
+* [Configuration](/architecture-and-infrastructure/data-pipeline-architecture/workflows/configuration) - process the configuration files into tables the rest of the platform can query.
 
 ## Other DAGs
 
