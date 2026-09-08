@@ -1,5 +1,5 @@
 SHELL := bash
-.PHONY: init clean frontmatter
+.PHONY: init clean frontmatter check-links
 
 init: 
 	npm install
@@ -28,6 +28,6 @@ build:
 frontmatter:
 	python3 add_frontmatter.py
 
-
-
-
+# Check internal links in docs/ point at pages that exist
+check-links:
+	python3 scripts/check_links.py

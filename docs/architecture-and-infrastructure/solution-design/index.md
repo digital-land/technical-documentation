@@ -19,4 +19,4 @@ The solution architecture for the Planning Data Service has been modelled using 
 
 ### Others
 
- * [DNS Setup](/architecture-and-infrastructure/dns/)
+ * [DNS Setup](/architecture-and-infrastructure/solution-design/dns)

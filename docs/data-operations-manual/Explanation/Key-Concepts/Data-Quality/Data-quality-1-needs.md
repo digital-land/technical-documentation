@@ -98,7 +98,7 @@ Example of manual configuration:
 
 When adding a new endpoint for the listed-building-outline dataset it’s noticed that the listed-building-grade field contains the values 1, 2, and 3 rather than the I, II, and III required by the specification. These supplied values are mapped to the desired values by making an addition to the patch.csv file in the listed-building collection configuration, and a data quality issue is automatically created during processing to record this re-mapping.
 
-See our [how to configure an endpoint guide](/docs/data-operations-manual/How-To-Guides/Adding/Configure-an-endpoint.md) for more information on configuration.
+See our [how to configure an endpoint guide](/data-operations-manual/How-To-Guides/Adding/Configure-an-endpoint) for more information on configuration.
 
 The **severity level** of the data quality issue which is logged during this process indicates whether a transformation was successfully made to the desired state (severity level \= “informational” or “warning”), or whether this was not possible (severity level \= “error”).
 

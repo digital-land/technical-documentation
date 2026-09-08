@@ -55,7 +55,7 @@ This is a curated task list aimed at developers joining the team. It covers gene
 - [ ] Run through the [Set Up for Mac](/development/tutorials/set-up-for-mac/) tutorial to install the base-level dependencies needed across most of our repositories
 
 ### Key reading
-- [ ] Review the [data architecture overview](/architecture-and-infrastructure/data-architecture/)
+- [ ] Review the [data architecture overview](/architecture-and-infrastructure/data-pipeline-architecture/)
 - [ ] Work through the [Data Operations Manual](/data-operations-manual/) — pay particular attention to the Key Concepts and How-To Guides sections
 
 ### Key repositories to clone
