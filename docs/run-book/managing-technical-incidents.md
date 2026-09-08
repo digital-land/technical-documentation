@@ -4,6 +4,14 @@ title: Managing technical incidents
 
 Our incident management focuses on restoring normal operations quickly with minimal impact on users.
 
+This page covers incidents - situations where the service is down, degraded, or
+returning incorrect data and needs an immediate response.
+
+For bugs, weird data and other live service issues that are not incidents, see
+[Live service triage and prioritisation](https://digital-land.github.io/technical-documentation/development/live-service/triage-process/).
+An issue triaged as P1 or P2 becomes an incident and follows the procedure on
+this page.
+
 ## Define incident priority
 
 Define technical incident priority levels for your service’s applications. For example potential incidents include:
@@ -26,6 +34,10 @@ Assign a priority level to incidents based on their complexity, urgency and reso
 |#P2|Major|Substantial degradation of service|60 minutes (office and out of hours)|2 hours|
 |#P3|Significant|Users experiencing intermittent or degraded service due to platform issue|2 hours (office hours only)|Once after 2 business days|
 |#P4|Minor|Component failure that does not immediately impact a service, or an unsuccessful DoS attempt|1 business day (office hours only)|Once after 5 business days|
+
+This table is the single definition of priority levels across our
+documentation. The live service ticket template and triage process both refer
+back to it - if you change the levels here, update those pages too.
 
 ## Incident response procedure
 
@@ -62,8 +74,9 @@ Inform the team using the below template in the [#planning-data-live-service-and
 
 If the incident involves a data or security breach, you must also notify:
 
-- {the MHCLG security team?}
-- {anyone else?}
+- the MHCLG security team, via ServiceNow
+- members of the Digital Planning Senior Leadership Team
+- the department's Data Protection Officer, if personal data is involved
 
 ### 3. Prioritise the incident
 
