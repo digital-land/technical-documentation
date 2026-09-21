@@ -59,15 +59,15 @@ Each provision is scored on two things:
 
 Crossing these two gives six levels (plus 0 for no data at all):
 
-| Level | Label              |
-| ----- | ------------------ |
-| 0     | no data            |
-| 1     | some data          |
-| 2     | indicative data    |
-| 3     | verifiable data    |
-| 4     | authoritative data |
-| 5     | usable data        |
-| 6     | trustworthy data   |
+| Level | Label              | Description                                                                 |
+| ----- | ------------------ | --------------------------------------------------------------------------- |
+| 0     | no data            | Data is missing                                                             |
+| 1     | some data          | Contains data from an alternative source                                    |
+| 2     | indicative data    | Data from alternative sources suitable for informing indicative decisions   |
+| 3     | verifiable data    | Data which verifiably matches material information                          |
+| 4     | authoritative data | Contains some data from authoritative sources                               |
+| 5     | usable data        | Contains authoritative data suitable for informing administrative decisions |
+| 6     | trustworthy data   | Authoritative data which cites and matches material sources of information  |
 
 Authoritative status determines which half of the scale a provision sits in: 1-3 for non-authoritative provisions, 4-6 for authoritative ones. Importantly, this is **not** a hard cap on the rest of the score — a non-authoritative provision can still independently reach _verifiable_ (level 3) if its data quality is otherwise clean. Authoritative status only ever determines which half a provision sits in, not whether it can reach the top of its half.
 
