@@ -73,7 +73,7 @@ Importantly, being non-authoritative is **not** a hard cap on the rest of the sc
 
 ### Determining authoritative status
 
-Rather than inferring provenance indirectly (e.g. via a geospatial check against a provider's boundary), authoritative status is read directly from a signal the platform already computes: every dataset's own `entity` table carries a `quality` value per entity (`none`, `some`, `indicative`, `authoritative`, `usable`, or `trustworthy` — defined with a priority ordering in the `quality` reference table). A provision counts as authoritative if any of its entities reach `authoritative` priority or above.
+Rather than inferring provenance indirectly (e.g. via a geospatial check against a provider's boundary), authoritative status is read directly from a signal the platform already computes: every dataset's own `entity` table carries a `quality` value per entity, which in practice is set to either `authoritative` or `some`. A provision counts as authoritative if any of its entities are `authoritative`.
 
 This is a more reliable check than inferring provenance from geography, because a provider can be registered as the _expected_ authoritative source for a dataset while some or all of the actual data held for their area still comes from an alternative provider — the entity-level `quality` field reflects what was actually submitted, not just who's nominally responsible for it.
 
