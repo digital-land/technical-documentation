@@ -55,7 +55,7 @@ We've created a _data quality measurement framework_ to score data provisions (a
 Each provision is scored on two things:
 
 - **Authoritative** — whether the data is confirmed to actually come from the authoritative source for that dataset, rather than an alternative provider
-- **Data quality** — how good the data itself is: severe issues present (e.g. geometry errors), only minor validity/consistency issues, or no issues at all
+- **Data quality** — how good the data itself is: severe issues present, only minor validity/consistency issues, or no issues at all
 
 Crossing these two gives six levels (plus 0 for no data at all):
 
@@ -70,6 +70,8 @@ Crossing these two gives six levels (plus 0 for no data at all):
 | 6     | trustworthy data   |
 
 Authoritative status determines which half of the scale a provision sits in: 1-3 for non-authoritative provisions, 4-6 for authoritative ones. Importantly, this is **not** a hard cap on the rest of the score — a non-authoritative provision can still independently reach _verifiable_ (level 3) if its data quality is otherwise clean. Authoritative status only ever determines which half a provision sits in, not whether it can reach the top of its half.
+
+Within each half, the specific level is set by the most severe issue found on the provision: an **error** (e.g. an invalid date) scores the bottom of the half (1 or 4); a **warning** (e.g. converting the geometry's CRS to be WGS84) scores the middle (2 or 5); and no errors or warnings scores the top of the half (3 or 6). This is our current thinking on where to draw the line between severity levels, and it may become more nuanced as the framework develops.
 
 ### Determining authoritative status
 
