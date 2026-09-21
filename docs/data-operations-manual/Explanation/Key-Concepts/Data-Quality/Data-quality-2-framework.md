@@ -69,7 +69,7 @@ Crossing these two gives six levels (plus 0 for no data at all):
 | 5     | usable data        |
 | 6     | trustworthy data   |
 
-Importantly, being non-authoritative is **not** a hard cap on the rest of the score — a non-authoritative provision can still independently reach _verifiable_ (level 3) if its data quality is otherwise clean. Authoritative status only ever determines which half of the scale a provision sits in (1-3 vs 4-6), not whether it can reach the top of its half.
+Authoritative status determines which half of the scale a provision sits in: 1-3 for non-authoritative provisions, 4-6 for authoritative ones. Importantly, this is **not** a hard cap on the rest of the score — a non-authoritative provision can still independently reach _verifiable_ (level 3) if its data quality is otherwise clean. Authoritative status only ever determines which half a provision sits in, not whether it can reach the top of its half.
 
 ### Determining authoritative status
 
