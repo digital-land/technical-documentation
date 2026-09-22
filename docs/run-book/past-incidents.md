@@ -1,6 +1,52 @@
 ---
 title: Incident response history
 ---
+## IT_Incident_Post Mortem - ms-defender-incident-on-digital-land 2026 - 09 - 04
+
+### In attendance
+Lead Developer
+Lead Technical Architect
+Senior Product Manager (Collecting & Managing Data)
+Senior Delivery Manager (Collecting & Managing Data)
+Lead Data Engineers
+Senior Software Developers
+
+### Description
+Issue identified as digital-land.github.io is being reported as unsafe by MS defender on MS edge irrespective of device. It was tested and was working on non MHCLG machine (Mac/windows) on Chrome
+Underlying technical issue: None identified at present
+Head of Cyber Security advised that domain was blocked caused by its Microsoft classification.
+
+### Incident priority
+P3 - Lead Developer and Lead Technical Architect agreed that the incident primarily affected the technical specification pages and documentation URL examples hosted on GitHub Pages, with a workaround available, so it should be classified as P3 rather than a higher-severity service incident.
+
+### Running log
+**9:09am - Ben: Issue identified as digital-land.github.io is being reported as unsafe by MS defender on MS edge irrespective of device. It was tested and was working on non MHCLG machine (Mac/windows) on Chrome
+**9:15am - Ben H completed the Microsoft feedback form to say it is a safe domain - Acknowledged at 9:31am
+**9:27am - ms-defender-incident-on-digital-land channel set up with attendees outlined above
+**9:46am - Cyber emailed outlining issue
+**10.04am - Dean: SLT and CTOs office made aware of the issue by this time
+**10:07am - Tom: Recent Commits checked - don't think this is situation where we have published some form or something that makes it look like a phishing scam.
+**10.41am - Tom: check 43 repos which push to digital-land.github.io - no issues with users who pushed commits in previous 30 days
+**10.47am - Tom: Confirmed Tag manager not used on digital-land.github.io 
+**13.08 - Head of Cyber Security advised that domain is has been unblocked it for now but might take a while to refresh. It was caused by its Microsoft classification, and he will be monitoring just in case 
+
+### Postmortem
+What was the root cause of the issue?
+
+Head of Cyber Security advised that domain was blocked caused by its Microsoft classification. The reason for the change in the classification is unknown
+Notes from Head of Cyber:
+On the day the issue was reported, the URL was temporarily added to our exclusions list to restore access from MHCLG corporate devices. In hindsight, this was a reactive measure taken to minimise disruption, and the exception was removed shortly afterwards
+I reviewed the URL using our sandbox environment and did not identify any suspicious or malicious behaviour. Given this, we allowed Microsoft time to resolve the issue through their own reputation and classification processes.
+At present, we have not escalated the matter to Microsoft as the site is now accessible again and the issue did not result in any significant business impact.
+Should the issue reoccur, I would be happy to raise it with Microsoft for further investigation and root cause analysis.
+
+Actions to prevent similar incidents in the future
+Follow-up tasks:
+**Documentation Migration: Move the documentation URL examples into the existing `/guidance` area on Digital Land.info. 
+**Specification Migration: Define which specification pages are required, decide their appropriate destination, and plan their migration away from GitHub Pages with Paul and the necessary DevOps support. 
+**Repository Review: Review the GitHub Pages repositories and record which should be retained, archived, or moved, ensuring that no service-critical content remains there. 
+**Incident Notification: Document the triage decision and notification process for involving Cyber, including raising a ServiceNow ticket and emailing Cyber when the cause is unknown or could indicate unauthorised activity.
+**Incident Management Process: Write up the current incident-management and notification process for the relevant OKR, incorporating feedback from SLT and TDA as appropriate. 
 
 ## Datasette / Check & Provide Outage 2026 - 06 - 18
 
