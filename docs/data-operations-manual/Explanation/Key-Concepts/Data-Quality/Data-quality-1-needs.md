@@ -4,19 +4,31 @@ title: Introduction to Data Quality
 
 Data quality can be thought of as ‘fitness for purpose’ \- i.e. an understanding of whether a dataset is fit for its intended uses.[^1] Consequently, there is really no objective definition of “quality”, rather quality is defined in relation to the requirements that are made of the data by its intended use. Quality requirements might consider different measurable characteristics of data, which are often referred to as dimensions.
 
-The [Government data quality framework](https://www.gov.uk/government/publications/the-government-data-quality-framework/the-government-data-quality-framework#Data-quality-dimensions) lists six core data quality dimensions as:
+The [Government data quality framework](https://www.gov.uk/government/publications/the-government-data-quality-framework/the-government-data-quality-framework#Data-quality-dimensions) lists six core data quality dimensions: completeness, uniqueness, consistency, timeliness, validity and accuracy.
 
-- **Completeness**: the degree to which all required data elements are present without missing values.
+We've extended these into ten dimensions that better reflect the kinds of data we manage:
 
-- **Uniqueness**: the degree to which there is no duplication in records
+- **Authoritative**: comes from the "source of truth" for that dataset
 
-- **Consistency**: the level of harmony and conformity of data across different sources or within the same dataset: the degree of conformity across datasets or within the same dataset
+- **Valid**: meets data standards (e.g. ISO 8601)
 
-- **Timeliness**: a measure of how up to date the data is
+- **Unique**: no duplicate records
 
-- **Validity**: the degree to which the data is in the expected range and format
+- **Complete**: all required ('must') fields are present, and 'should' fields are present where expected
 
-- **Accuracy**: The degree to which data values match reality and are free from errors
+- **Has integrity**: the data is coherent and logical, with no broken links
+
+- **Has provenance**: metadata exists about where the data came from and how it was produced
+
+- **Accurate**: a true reflection of reality
+
+- **Consistent**: recorded in the same way, and actually complete and valid, across the dataset
+
+- **Timely**: available soon after the event it describes
+
+- **Current**: reflects the most recent changes
+
+The _authoritative_ dimension is used directly in our [data quality measurement framework](Data-quality-2-framework), which scores each data provision partly on whether it's confirmed as coming from its authoritative source.
 
 # Assessing data quality
 

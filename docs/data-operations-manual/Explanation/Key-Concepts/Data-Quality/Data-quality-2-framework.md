@@ -55,25 +55,27 @@ We've created a _data quality measurement framework_ to score data provisions (a
 Each provision is scored on two things:
 
 - **Authoritative** — whether the data is confirmed to actually come from the authoritative source for that dataset, rather than an alternative provider
-- **Data quality** — how good the data itself is: severe issues present (e.g. geometry errors), only minor validity/consistency issues, or no issues at all
+- **Data quality** — how good the data itself is: severe issues present, only minor validity/consistency issues, or no issues at all
 
 Crossing these two gives six levels (plus 0 for no data at all):
 
-| Level | Label                              |
-| ----- | ---------------------------------- |
-| 0     | no data                            |
-| 1     | non-authoritative                  |
-| 2     | non-authoritative usable data      |
-| 3     | non-authoritative trustworthy data |
-| 4     | authoritative data                 |
-| 5     | authoritative usable data          |
-| 6     | authoritative trustworthy data     |
+| Level | Label              | Description                                                                 |
+| ----- | ------------------ | --------------------------------------------------------------------------- |
+| 0     | no data            | Data is missing                                                             |
+| 1     | some data          | Contains data from an alternative source                                    |
+| 2     | indicative data    | Data from alternative sources suitable for informing indicative decisions   |
+| 3     | verifiable data    | Data which verifiably matches material information                          |
+| 4     | authoritative data | Contains some data from authoritative sources                               |
+| 5     | usable data        | Contains authoritative data suitable for informing administrative decisions |
+| 6     | trustworthy data   | Authoritative data which cites and matches material sources of information  |
 
-Importantly, being non-authoritative is **not** a hard cap on the rest of the score — a non-authoritative provision can still independently reach _trustworthy_ (level 3) if its data quality is otherwise clean. Authoritative status only ever determines which half of the scale a provision sits in (1-3 vs 4-6), not whether it can reach the top of its half.
+Authoritative status determines which half of the scale a provision sits in: 1-3 for non-authoritative provisions, 4-6 for authoritative ones. Importantly, this is **not** a hard cap on the rest of the score — a non-authoritative provision can still independently reach _verifiable_ (level 3) if its data quality is otherwise clean. Authoritative status only ever determines which half a provision sits in, not whether it can reach the top of its half.
+
+Within each half, the specific level is set by the most severe issue found on the provision: an **error** (e.g. an invalid date) scores the bottom of the half (1 or 4); a **warning** (e.g. flipping the X and Y coordinates) scores the middle (2 or 5); and no errors or warnings scores the top of the half (3 or 6). In the future, we will also create **notice** tasks for some issues, but these are for visibility only and explicitly don't affect the quality score. This is our current thinking on where to draw the line between severity levels, and it may become more nuanced as the framework develops.
 
 ### Determining authoritative status
 
-Rather than inferring provenance indirectly (e.g. via a geospatial check against a provider's boundary), authoritative status is read directly from a signal the platform already computes: every dataset's own `entity` table carries a `quality` value per entity (`none`, `some`, `indicative`, `authoritative`, `usable`, or `trustworthy` — defined with a priority ordering in the `quality` reference table). A provision counts as authoritative if any of its entities reach `authoritative` priority or above.
+Rather than inferring provenance indirectly (e.g. via a geospatial check against a provider's boundary), authoritative status is read directly from a signal the platform already computes: every dataset's own `entity` table carries a `quality` value per entity, which in practice is set to either `authoritative` or `some`. A provision counts as authoritative if any of its entities are `authoritative`.
 
 This is a more reliable check than inferring provenance from geography, because a provider can be registered as the _expected_ authoritative source for a dataset while some or all of the actual data held for their area still comes from an alternative provider — the entity-level `quality` field reflects what was actually submitted, not just who's nominally responsible for it.
 
