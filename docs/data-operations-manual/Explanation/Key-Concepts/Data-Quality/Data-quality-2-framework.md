@@ -88,13 +88,18 @@ Two situations override the score entirely:
 
 ## Mapping criteria to requirements
 
-Each data quality tier and the authoritative check are based around one or more data quality requirements. For example, the _usable_ tier is based on meeting several data validity requirements from the specifications, while the authoritative check is based on the entity-level quality signal described above. We track how requirements map to criteria on the [measurement tab of the data quality requirements tracker](https://mhclg.sharepoint.com/:x:/s/DigitalPlanning/IQAHk7i3ipDjSpWI0AI37fGVAUMo92OeA-L-fj3l_zKAWdc?e=BRl17l).
+Each dataset provision's quality level is determined by two things:
 
-The framework is flexible and allows us to add more criteria to a tier, adjust which datasets get which overrides, or extend the scope split further, as requirements evolve.
+- **whether the data comes from an authoritative source**, based on the entity-level quality signal described above
+- **the most severe outstanding task** for that provision in the [task table](https://files.planning.data.gov.uk/dataset/task.csv), excluding authoritativeness tasks
 
 ![data quality matrix](/images/data-operations-manual/data-quality-levels.png)
 
-(see quality reporting in the [jupyter-analysis](https://github.com/digital-land/jupyter-analysis) repo for up to date versions)
+The task table brings together everything that can raise a task: issues found when processing resources, expectation checks across the dataset, endpoint collection failures, and provision checks. Each task has a severity of critical, error, warning or notice.
+
+The tests and expectations that raise these tasks, and the severity each one is given, are listed on the [measurement tab of the data quality requirements tracker](https://mhclg.sharepoint.com/:x:/s/DigitalPlanning/IQAHk7i3ipDjSpWI0AI37fGVAUMo92OeA-L-fj3l_zKAWdc?e=BRl17l).
+
+As requirements evolve, we can add checks or change their severity without changing the structure of the framework.
 
 ## Future work
 
