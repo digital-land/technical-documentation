@@ -20,12 +20,11 @@ The pipeline runs the following jobs in order. Each job waits for the previous o
 
 1. **Merge** — Checks for an open pull request from the `config-manager-update` branch into `main`. If one exists, it is automatically approved and squash-merged. This ensures `main` is up to date before the remaining steps run. If no PR exists, this step completes without making any changes.
 
-2. **Batch assign** — Runs the batch entity assignment script against the platform's live issue data to assign entities for resources with unknown entity issues. The scope of datasets processed rotates by day of the week:
-   - Monday, Wednesday, Friday: ODP datasets
-   - Tuesday: Mandated datasets
-   - Thursday: Single-source datasets (processed in batches of 10 resources at a time)
+2. **Batch assign** — Runs the [batch entity assignment script](../../How-To-Guides/Maintaining/Assign-entities/) against the platform's live issue data to assign entities for resources with unknown entity issues. Every weeknight run processes **both ODP and mandated datasets** (as two parallel jobs in the same run) — there's no day-of-week rotation between them.
 
-   This job commits its changes directly to `main` after each batch, rather than waiting until the end of the pipeline.
+   Single-source datasets are handled separately, by their own weekly pipeline that runs **Sundays only**, processing resources in batches of 10 so a failed run can resume from where it left off rather than restarting from scratch.
+
+   This job commits its changes directly to `main` as soon as it finishes, rather than waiting until the end of the pipeline.
 
 3. **Deduplicate** — Runs four scripts in sequence to deduplicate and retire MHCLG placeholder data:
    - Deduplicates conservation area geographies (`deduplicate-ca-geogs.py`)
@@ -47,7 +46,7 @@ Each stage that modifies data commits its changes to `main` independently rather
 
 If a job fails, the subsequent jobs in the pipeline **still run**. For example, if the deduplicate job fails, the standardise and upload-to-S3 jobs will still execute. This means a failure in one area does not prevent the rest of the pipeline from completing.
 
-At the end of the run, if any job has failed, a single alert is posted to the `#planning-data-alerts` Slack channel. The alert names each stage and its result, so it is immediately clear which part of the pipeline failed without needing to open GitHub. For batch assign failures, the alert also includes the data scope (e.g. `odp`, `mandated`, `single-source`) and, for single-source runs, the batch number that failed along with the exact `start_batch` value needed to resume the run manually.
+At the end of the run, if any job has failed, a single alert is posted to the `#planning-data-alerts` Slack channel. The alert names each stage and its result (batch assign's result covers both `odp` and `mandated` in one line, since they run as parallel jobs within it), so it is immediately clear which part of the pipeline failed without needing to open GitHub.
 
 ### Manual trigger
 
@@ -57,122 +56,25 @@ The pipeline can be triggered manually from the [Actions tab](https://github.com
 
 As well as `dry_run`, the manual trigger accepts these inputs:
 
-- `scope` — overrides the day-of-week default for the batch assign job (`odp`, `mandated` or `single-source`).
+- `scope` — runs only `odp` or only `mandated`, instead of both (the scheduled run's default). `single-source` is not a valid choice here - it's handled entirely by its own separate, Sunday-only pipeline; see [Assign Entities](../../How-To-Guides/Maintaining/Assign-entities/#scope-differences) for the scope differences.
 - `resources` — a comma-separated list of specific resources to target in batch assign, instead of processing everything in scope.
-- `skip_checks` — skips batch assign's validation checks and assigns entities directly. Use with caution.
-- `new_entities_threshold` — overrides the default 10% threshold used by the `large_number_of_new_entities` check.
+- `skip_checks` — bypasses every validation check (duplicates, retention, missing fields, `current_resource_empty`, `invalid_uri_issue`) and promotes whatever is assigned unconditionally. Use with caution.
 - `commit` — whether batch assign commits its results to `main` (default `true`; set to `false` for a batch-assign-only dry run without using the top-level `dry_run` input).
-- `batch_size` / `start_batch` — used for single-source batch assign runs. To resume a run that failed partway through, set `start_batch` to the value given in the Slack failure alert, with the same `batch_size` and `scope` as the original run.
 
 ### Verify
 
 To verify the pipeline has run correctly:
 
 - Check the [Actions tab](https://github.com/digital-land/config/actions/workflows/config-evening-pipeline.yml) to confirm all jobs completed successfully.
-- Review the commits made to `main` that evening — there should be up to three commits (batch assign, deduplicate, standardise) if each stage had changes to make. If batch assign is running for the single-source data scope then there could be more than three commits.
+- Review the commits made to `main` that evening — there should be up to four commits (batch assign odp, batch assign mandated, deduplicate, standardise) if each stage had changes to make.
 - Confirm any unknown entity issues resolved by batch assign are no longer present in the [endpoint dataset issue summary](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_issue_type_summary?_sort=rowid&issue_type__exact=unknown+entity).
 - If the deduplicate step ran, verify retired entities appear in `pipeline/local-plan/old-entity.csv` and `pipeline/conservation-area/old-entity.csv` as appropriate.
 
 ## Unknown entities
 
-To keep the datasets up-to-date on the platform, we need to check “unknown entity” issues every week and assign entities.
-The unknown entities issue usually occurs when an LPA updates their data on the endpoint we are retrieving and adds new records. These records will have reference values we do not have on the platform, hence when the system realises the new data has been added and the references of those new data are not on the platform, it will trigger an unknown entity issue.
+To keep the datasets up-to-date on the platform, we need to check "unknown entity" issues and assign entities. This happens when a provider updates their data and adds records with reference values we don't already have on the platform.
 
-> **This process runs automatically each weekday evening as part of the [Config Evening Pipeline](#config-evening-pipeline).** The steps below are for running it manually, for example to investigate an issue or resume a failed single-source batch run.
-
-The datasets that require assigning entities are categorised into three main scopes:
-
-ODP Datasets – These datasets are supported by ODP funding. Datasets categorised as ODP can be found here [ODP Data](https://datasette.planning.data.gov.uk/digital-land?sql=select+rowid%2C+dataset%2C+cohort%2C+notes%2C+project%2C+provision_rule%2C+role%2C+specification+from+provision+where+%22project%22+%3D+%3Ap0+group+by+dataset&p0=open-digital-planning)
-
-Mandated Datasets – These are datasets that LPAs are legally required to provide, this includes brownfield-land and developer-contributions datasets.
-
-Single Source Datasets – This category includes data obtained from authoritative sources or seeded data received from the Data Design Team.
-
-The recommended steps to resolve this are as follows:
-
-1. **Setup Config Repo**
-   Clone the [Config repository](https://github.com/digital-land/config) if it has not already been done, then create and activate a virtual environment.
-
-2. **Run the Script**
-   The script can be run using the command `python3 .github/scripts/batch_assign_entities.py`
-
-   Upon execution, the script will download the `issue_summary.csv` file to the root directory of the Config folder.
-
-   The downloaded `issue_summary.csv` includes a column called scope, this column indicates the scope for each dataset. This scope includes the categories specified above, such as ODP, Mandated and Single source.
-
-3. **Analyse Unknown Entity issues**
-   Open the `issue_summary.csv` file and apply a filter to the "scope" column to display only entries related to ODP. Begin by analysing all unknown entities issues associated with the ODP scope.
-
-   If the `count_issue` for any dataset is unusually high, verify that the entities are valid and new. `count_issue` may also be high if the LPA has recently their references for existing entities. Keep a note of endpoints with an unusually high number of `count_issue` to review once the entities have been assigned.
-
-   The command will prompt the user to confirm. Type "yes" to assign Unknown entities for ODP.
-
-   The command will prompt the user to enter scope (odp/mandated/single-source). Type "odp" to assign entities.
-
-   It will download all the resources for unknown entities into a resources folder, assign entities, and then delete the downloaded resource files. The affected dataset’s lookup.csv should now have new rows with the assigned entities. The amount of entities that needed to be assigned should be the same amount that have been added in the lookup file.
-
-   The previous assignment process which allowed Unknown entities to be automatically assigned has now been updated and provides an interactive issue summary reporting facility which highlights issues and enables corrective measures to be actioned to enhance data integrity.
-
-   Review the entities assigned for the endpoint you’ve noted. The key thing to check here is whether the references are a continuation or follow a similar format to existing lookups for that provision.
-
-   Note: If the entities belong to the Conservation Area dataset, you should check for duplicates using endpoint checker, refer Step 3 in [Validating an endpoint](https://digital-land.github.io/technical-documentation/data-operations-manual/How-To-Guides/Validating/Validate-an-endpoint/). Once the new entries for the lookup.csv have been generated, use the outputs from the `Duplicates with different entity numbers` section of the endpoint checker to replace the newly generated entity numbers for any duplicates, with the entity numbers of the existing entity that they match.
-
-4. **Assign entities for Mandated and single-source datasets**
-   Repeat Step 3 for assign entities for Mandated and single-source datasets.
-
-   Enter the scope, either mandated or single-source based on requirement.
-
-5. **Review Changes**
-   Once merged, use [endpoint_dataset_issue_type_summary table](https://datasette.planning.data.gov.uk/performance/endpoint_dataset_issue_type_summary?_sort=rowid&issue_type__exact=unknown+entity) and check if the previous unknown entity issues are resolved.
-
-   Make a note in the ticket if you are not able to assign entities for any LPA.
-
-Success criteria:
-Ideally, the number of unknown entity errors should be zero after completing the above steps.
-
-### Errors raised by the batch assign entities script
-
-The `.github/scripts/batch_assign_entities.py` script records errors in `batch_assign_summary_[scope].csv`. This output summary CSV is used in the manual assign entities process in the [Manage service](https://manage.planning.data.gov.uk/), so users can review the resources the script could not safely assign automatically. These errors are safety checks: they do not always mean the data is wrong, but they do mean the script could not safely accept the generated entity assignment without manual review.
-
-The summary file includes these useful columns:
-
-- `dataset` - the dataset or pipeline being processed
-- `resource` - the current resource hash
-- `organisation` - the organisation associated with the resource or flagged row
-- `reference` - the provider reference where the error relates to a specific entity
-- `status` - either `success` or `error`
-- `error_code` - the validation error or Python exception type
-- `message` - extra context from the script
-
-#### Terms used in these errors
-
-The script compares the latest resource for an endpoint with the previous resource we collected for the same endpoint. This is how it decides whether the entities it has just assigned look safe.
-
-- `current resource` - the latest resource being processed by the script. This is the file linked from the unknown entity issue and downloaded into the local `resource/` folder.
-- `previous resource` - the older transformed resource for the same endpoint. The script finds this from historic endpoint data and downloads it from `files.planning.data.gov.uk` so it can compare old and new data.
-- `current entity` - an entity number found in the current transformed resource after the script has run entity assignment.
-- `previous entity` - an entity number found in the previous transformed resource for the same endpoint.
-- `new entity` - a current entity that was not present in the previous resource. These are the entity numbers the script is trying to validate before accepting the generated lookup changes.
-
-For example, if the previous resource contained entities `44000001`, `44000002` and `44000003`, and the current resource contains `44000001`, `44000002`, `44000003` and `44000004`, then `44000004` is the new entity. If the current resource contains no entity numbers that were missing from the previous resource, the script raises `current_resource_no_new_entities`.
-
-| Error code                                                                                                   | What it means                                                                                                                                                                         | Why it is flagged                                                                                                                                                                                                                                                                                                                                                                                                        | Example                                                                                                                                                                                                                                                                                                       |
-| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `previous_resource_not_found`                                                                                | The script could not fetch or read the previous transformed resource for that endpoint.                                                                                               | Without the previous resource, the script cannot tell which entities are genuinely new or whether current rows duplicate existing platform entities.                                                                                                                                                                                                                                                                     | Datasette returns no previous resource hash for the endpoint, or `https://files.planning.data.gov.uk/[collection]-collection/transformed/[dataset]/[old-resource].csv` cannot be downloaded.                                                                                                                  |
-| `previous_resource_empty`                                                                                    | The previous transformed resource exists but has no entity rows.                                                                                                                      | If the old resource has no entities, every current entity appears new and the comparison is not reliable.                                                                                                                                                                                                                                                                                                                | The previous transformed CSV downloads successfully but only contains headers, or contains no rows with an `entity` value.                                                                                                                                                                                    |
-| `current_resource_empty`                                                                                     | The current transformed resource produced by assignment has no rows.                                                                                                                  | There is nothing safe to assign, and it may mean the source file did not transform correctly.                                                                                                                                                                                                                                                                                                                            | The file in `var/cache/assign_entities/transformed/[resource].csv` is empty after `check_and_assign_entities` runs.                                                                                                                                                                                           |
-| `current_resource_no_new_entities`                                                                           | The current resource does not contain any entity numbers that were not already present in the previous resource.                                                                      | Unknown entity issues should normally require new lookup rows. If there are no new entities, the issue may already be resolved, the wrong resource may have been processed, or the data may have changed since the issue summary was generated.                                                                                                                                                                          | The previous and current resources both contain entities `44000001` to `44000010`, with no additional entity numbers.                                                                                                                                                                                         |
-| `large_number_of_new_entities`                                                                               | The number of new entity numbers is greater than the percentage set by `--new-entity-threshold`. The default is 10 percent of the current resource.                                   | A large jump can indicate that the provider changed references for existing records, changed endpoint format, or caused existing things to be treated as new entities.                                                                                                                                                                                                                                                   | A current resource has 100 entities and 40 are new, so the default 10 percent threshold is exceeded.                                                                                                                                                                                                          |
-| `duplicate_entity_all_fields`                                                                                | A new entity matches an old entity when comparing all fact fields except `reference` and `entry-date`. The script builds a fingerprint from the remaining fact field and value pairs. | If all the compared facts match an existing entity, the provider may have changed the reference for the same real-world thing. Creating a new entity number could create a duplicate. If the previous entity has any compared fact field that the current entity does not have, or the current entity has any extra compared fact field, the fingerprints will not match and this check will not flag it as a duplicate. | A conservation area has the same name, organisation and geometry as an existing entity, but the provider changed the reference from `CA-001` to `CON-001`. If any compared fact field is present on the previous entity but absent from the current entity, this check will pass it as not being a duplicate. |
-| `duplicate_prefix_reference_organisation`                                                                    | A new entity has the same `prefix`, `reference` and `organisation` as an old entity.                                                                                                  | The same dataset, provider reference and organisation should normally resolve to the existing entity number.                                                                                                                                                                                                                                                                                                             | Existing entity `44001234` has prefix `conservation-area`, reference `CA1` and organisation `local-authority:ABC`; the new resource contains the same combination.                                                                                                                                            |
-| `duplicate_reference_organisation`                                                                           | A new entity has the same `reference` and `organisation` as an old entity, regardless of prefix.                                                                                      | This catches duplicate provider identifiers even when another field has changed. It is broader than the prefix/reference/organisation check.                                                                                                                                                                                                                                                                             | A provider republishes reference `TPO-99` for the same organisation and the script tries to create a new tree preservation order entity for it.                                                                                                                                                               |
-| `duplicate_reference_organisation_in_new_resource`                                                           | Two or more entities inside the current resource have the same `reference` and `organisation`.                                                                                        | The script cannot know whether these rows are duplicate records for the same thing or separate things with duplicated identifiers.                                                                                                                                                                                                                                                                                       | The current transformed resource contains two entities from `local-authority:ABC`, both with reference `CA1`.                                                                                                                                                                                                 |
-| `missing_organisation`                                                                                       | A current entity is missing its `organisation` value.                                                                                                                                 | Entity assignment depends on knowing who supplied the reference. Without the organisation, the lookup can be ambiguous or wrong.                                                                                                                                                                                                                                                                                         | The transformed rows for entity `44001234` include a `reference` field but no `organisation` field.                                                                                                                                                                                                           |
-| `missing_reference`                                                                                          | A current entity is missing its `reference` value.                                                                                                                                    | The lookup maps provider references to entity numbers. Without the reference, future collections cannot reliably resolve the same record.                                                                                                                                                                                                                                                                                | The transformed rows for entity `44001234` include `organisation` but the `reference` field is blank.                                                                                                                                                                                                         |
-| `invalid_uri_issue`                                                                                          | The same resource also appears in the current invalid URI issue summary.                                                                                                              | Entity assignment may have worked, but the resource has a separate known quality issue that needs manual review before accepting the assignment.                                                                                                                                                                                                                                                                         | A brownfield land resource has unknown entities and also invalid document URI values in the issue summary.                                                                                                                                                                                                    |
-| Python exception name, for example `RuntimeError`, `FileNotFoundError`, `KeyError` or another exception type | The script raised an exception outside the validation checks.                                                                                                                         | The assignment did not complete normally. The `message` column and terminal output should be used to diagnose the failure.                                                                                                                                                                                                                                                                                               | `RuntimeError` can be raised if a required command such as `git` or `gh` fails. `FileNotFoundError` can be raised if an expected local file is missing.                                                                                                                                                       |
-
-Failed resource downloads are printed in the terminal summary as `Failed Downloads`; they are not written as normal validation rows because the resource was never processed.
+> **This runs automatically each weekday evening as part of the [Config Evening Pipeline](#config-evening-pipeline).** For what the batch assign script actually does, its scopes, how to run it manually, and the full list of validation findings it can raise, see [Assign Entities](../../How-To-Guides/Maintaining/Assign-entities/).
 
 ## De-duplication of conservation-area data
 
@@ -270,7 +172,7 @@ For both datasets, the script appends retired entities to `pipeline/local-plan/o
 
 Note: the script skips LPAs that updated MHCLG placeholder data in-place (i.e. their entities fall within the MHCLG range), as those records were overwritten rather than duplicated, so no retirement is needed.
 
-> **This process runs automatically each weekday evening as part of the [Config Evening Pipeline](#config-evening-pipeline).** The steps below are for running it manually, for example to investigate an issue or resume a failed single-source batch run.
+> **This process runs automatically each weekday evening as part of the [Config Evening Pipeline](#config-evening-pipeline).** The steps below are for running it manually, for example to investigate an issue.
 
 ### Task
 
