@@ -12,12 +12,28 @@ There are two types of task, each with a different source:
 
 ### Log tasks
 
-A log task is created when the pipeline **cannot reach or download data from an endpoint**. This happens when the endpoint returns a non-200 HTTP status code (e.g. 404 Not Found, 500 Internal Server Error). The task tells the LPA that their endpoint is inaccessible and needs to be checked.
+A log task is created when the pipeline **cannot collect data from an endpoint**. Only the endpoint's latest collection is used, so the task clears once the endpoint collects successfully again.
+
+This happens when:
+
+- **The endpoint is inaccessible:** it returns a non-200 HTTP status code (e.g. 404 Not Found, 500 Internal Server Error), or the connection fails. Severity `error`.
+- **The endpoint returns a 200 but no data:**
+  - **An error page or unreadable response** (e.g. a WFS `ExceptionReport`, an HTML error page, an authentication error). Severity `error`.
+  - **A valid file with no rows** (e.g. a CSV with only a header, or an empty WFS/GeoJSON `FeatureCollection`). Severity `notice`, because an empty file may be correct (e.g. the provider has nothing to publish yet).
+
+A 200 response is treated as having no data when its resource failed to convert, or when it produced no entities from at most one line. To tell an error page from a valid empty file, the pipeline reads the start of the resource: it is a valid empty file if it is a `FeatureCollection`, or if its first line is a header with at least one column that maps to the dataset's fields. A resource that has rows but produces no entities (e.g. every row is missing a reference) does not get a log task; issue tasks already cover it.
 
 The `details` field for a log task contains the HTTP status code and any exception message:
 
 ```json
 {"status": 404, "exception": "Not Found"}
+```
+
+For a 200 with no data, the exception is one of two fixed messages:
+
+```json
+{"status": 200, "exception": "Endpoint returned a response that could not be read as data"}
+{"status": 200, "exception": "Endpoint returned a valid file with no data"}
 ```
 
 ### Issue tasks
@@ -40,7 +56,7 @@ Issue tasks are grouped: multiple rows with the same issue type, field, resource
 | `endpoint` | The endpoint hash the task relates to |
 | `resource` | The resource hash (empty for log tasks where no resource was downloaded) |
 | `details` | JSON string — structure varies by `task_source`, see above |
-| `severity` | Always `error` |
+| `severity` | `error`, except log tasks for a valid file with no data, which are `notice` |
 | `responsibility` | Always `external` (provider must fix) |
 | `task_source` | Either `log` or `issue` |
 | `entry_date` | Date the task was generated |
