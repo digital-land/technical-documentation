@@ -46,6 +46,15 @@ deactivate
 
 This returns your shell to its normal state. The `.venv` folder stays in place so you can reactivate it later.
 
+## Deleting a virtual environment
+
+```sh
+# after deactivate
+rm -rf .venv
+```
+
+This will remove the virtual environment in the folder location this code is run within.
+
 ## Aliases
 
 Working with venvs involves the same commands repeatedly. The `setup.sh` script adds two aliases to `~/.zshrc` to make this faster:
