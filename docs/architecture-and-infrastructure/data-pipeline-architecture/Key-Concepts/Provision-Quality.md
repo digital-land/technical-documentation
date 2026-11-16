@@ -83,6 +83,16 @@ One row per organisation, aggregated from `provision_quality` **across all datas
 | `total_entities_owned` | Total entities owned across all datasets |
 | `quality_score` | *Reserved — empty in v1* |
 
+## Downloading the data
+
+Each of the three tables is published as a CSV:
+
+| Table | Download |
+|---|---|
+| `provision_quality` | [provision-quality.csv](https://files.planning.data.gov.uk/dataset/provision-quality.csv) |
+| `dataset_quality` | [dataset-quality.csv](https://files.planning.data.gov.uk/dataset/dataset-quality.csv) |
+| `organisation_quality` | [organisation-quality.csv](https://files.planning.data.gov.uk/dataset/organisation-quality.csv) |
+
 ## How the classification works
 
 The classification logic is reused from the original Data Design analysis. In outline, per dataset:
