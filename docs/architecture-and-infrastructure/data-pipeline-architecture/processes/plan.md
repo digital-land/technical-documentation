@@ -42,7 +42,7 @@ they are ran during a task in our collection dags in airflow. The file generatin
 
 The airflow triggers an ECS task in fargate and uses the [collection-task repository](https://github.com/digital-land/collection-task)
 
-the script for all procesess ran in the ECS Task is [`run.sh`](https://github.com/digital-land/collection-task/blob/104df85861401d6088728039792a75038ee580ca/task/run.sh#L27)
+Plan runs inside the collect task, which runs [`bin/collect.sh`](https://github.com/digital-land/collection-task/blob/main/bin/collect.sh).
 
 In that script the `make collection` target is used which leads to the digital-land clis:
 

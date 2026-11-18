@@ -44,14 +44,6 @@ they are ran during a task in our collection dags in airflow. The file generatin
 
 The airflow triggers an ECS task in fargate and uses the [collection-task repository](https://github.com/digital-land/collection-task)
 
-the script for all procesess ran in the ECS Task is [`run.sh`](https://github.com/digital-land/collection-task/blob/104df85861401d6088728039792a75038ee580ca/task/run.sh#L27)
+Each transform task runs [`bin/transform.sh`](https://github.com/digital-land/collection-task/blob/main/bin/transform.sh) for one batch of resources. It builds the collection database, downloads the resources in its batch, and transforms them in parallel with [`bin/transform_resources.py`](https://github.com/digital-land/collection-task/blob/main/bin/transform_resources.py), which runs the digital-land-python pipeline (`pipeline_run`) once per resource.
 
-In that script the `make collection` target is used which leads to the digital-land clis:
-
-`digital-land ${DIGITAL_LAND_OPTS} collection-save-csv --collection-dir $(COLLECTION_DIR) --refill-todays-logs $(REFILL_TODAYS_LOGS)`
-
-`digital-land ${DIGITAL_LAND_OPTS} collection-pipeline-makerules --collection-dir $(COLLECTION_DIR) --specification-dir $(SPECIFICATION_DIR) --pipeline-dir $(PIPELINE_DIR) --resource-dir $(COLLECTION_DIR)resource/ --incremental-loading-override $(INCREMENTAL_LOADING_OVERRIDE) > $(COLLECTION_DIR)pipeline.mk;`
-
-The arguement options are passed in by setting environment variables. defaults are chosen via make if not set.
-
-Once complete results are pushed to s3 and saved using another make target
+Once complete, the transformed files are pushed to S3 with the `make save-transformed` target, ready for the assemble step.
