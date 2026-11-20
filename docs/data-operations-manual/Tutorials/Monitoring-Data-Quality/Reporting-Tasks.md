@@ -50,6 +50,22 @@ Compares entity counts between the Platform and dataset_resource data for ODP da
 
 ---
 
+### documentation_url_tasks.py
+
+Reports live endpoints that are no longer linked from their documentation page, with guidance that can be forwarded to the LPA.
+
+**What it does:**
+
+- Reads the task table and keeps tasks with a `task_source` of `documentation-url` (raised by the task pipeline in pyspark-jobs, which checks each live endpoint is still linked from its documentation page)
+- Spreads each task's details into columns: documentation URLs, redirects, fetch errors, candidate links and any likely replacement URL
+- Adds organisation names from the organisation dataset
+- Writes guidance for each row, worded so it can be sent to the LPA
+- Sorts the most actionable results first: `not-found` (the page no longer links to the endpoint), then `documentation-url-gone` (the page no longer exists), then `unreachable` (the page couldn't be opened)
+
+**Output:** [`documentation_url_tasks.csv`](https://files.planning.data.gov.uk/reporting/documentation_url_tasks.csv)
+
+---
+
 ### duplicate_geometry_expectations.py
 
 Extracts and enriches duplicate-geometry entity matches flagged by expectation checks, with organisation and ODP context.
@@ -216,7 +232,7 @@ Extracts listed building end dates associated with organisations.
 - Enriches with organisation names from the organisation dataset
 - Outputs a CSV sorted by organisation name
 
-**Output:** [`listed-building-end-date.csv`](https://files.planning.data.gov.uk/reporting/listed-building-end-date.csv) with columns: `reference`, `end-date`, `organisation-entity`, `organisation`
+**Output:** [`listed_building_end_date.csv`](https://files.planning.data.gov.uk/reporting/listed_building_end_date.csv) with columns: `reference`, `end-date`, `organisation-entity`, `organisation`
 
 ---
 
@@ -307,6 +323,29 @@ Counts operational issues logged per day over the last 6 months.
 - Runs a SQL query against the `operational_issue` table in Datasette, grouping issue counts by entry date
 
 **Output:** [`operational_issues.csv`](https://files.planning.data.gov.uk/reporting/operational_issues.csv)
+
+**Note:** this script doesn't currently run as part of the nightly build, because its Makefile target is disabled until the script is fixed. The published CSV won't be up to date.
+
+---
+
+### plan_timetable_event_date_history.py
+
+Builds an event-date history for every plan-timetable entity from authoritative data, so users can track slippage (dates moving later) and confirm which plan events have held steady.
+
+**What it does:**
+
+- Fetches every `event-date` fact from authoritative resources (`fact_resource.priority = 2`, meaning the resource came from the organisation that owns the entity)
+- Orders the facts by entry date and resource collection date, then replays them to find each entity's first event-date and every change since, including the direction and number of days moved
+- Joins the `notes` and `actual-date` fields from the same line, so each version of the timetable carries its own context
+- Includes authoritative entities that have no event-date yet (often optional stages that haven't been scheduled)
+- Leaves out plan events owned by MHCLG (`government-organisation:D1342`), which it published on behalf of authorities
+- Adds the reference, organisation, plan and plan-event for each entity
+- Writes the same history in two layouts
+
+**Outputs:**
+
+- [`plan_timetable_event_date_history_long.csv`](https://files.planning.data.gov.uk/reporting/plan_timetable_event_date_history_long.csv) (one row for each entity's first recorded event-date, plus one row for each change)
+- [`plan_timetable_event_date_history_wide.csv`](https://files.planning.data.gov.uk/reporting/plan_timetable_event_date_history_wide.csv) (one row per entity: the first event-date, then a `REVISION` column for each change)
 
 ---
 
